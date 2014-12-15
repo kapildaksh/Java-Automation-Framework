@@ -1,0 +1,14 @@
+.classpath
+.project
+.settings
+/bin
+/build
+/dist
+/doc
+/nbproject/private/
+/target
+/test-output
+/tmp
+/path-to-file
+*.log
+*.tmp
