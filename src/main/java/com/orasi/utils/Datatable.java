@@ -17,16 +17,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.orasi.utils.database.Recordset;
 
 public class Datatable {
-	//public static String LILO_MASTER_DATA_PATH = "Z:\\Automation\\Selenium\\Data\\Page Scenarios\\Lilo\\Lilo_Master_Data.xlsx";
-	//public static String LILO_MASTER_DATA_PATH = "com/disney/composite/apps/lilo/masterdata/Lilo_Master_Data.xlsx";
-	private static String tdmURL = "QAAUTO_";
-	public static String LILO_MASTER_DATA_PATH = "MASTER_DATA_LILO_";
-	public static String DREAMS_MASTER_DATA_PATH = "MASTER_DATA_DREAMS_";
-	//public static String ALC_MASTER_DATA_PATH = "Z:\\Automation\\Selenium\\Data\\Page Scenarios\\ALC\\ALC_Master_Data.xlsx";
-	public static String ALC_MASTER_DATA_PATH = "MASTER_DATA_ALC_";
-	public static String DVC_MASTER_DATA_PATH = "MASTER_DATA_DVC_";
 
-	
+
 	private static Recordset virtualTable = null;
 	private static String virtualTablePath;
 	private static String virtualTablePage; 
@@ -47,8 +39,14 @@ public class Datatable {
 	private static int currentScenarioRow = 0;
 
 
+	/**
+	 * ****
+	 * Functionality for virtual tables as your datatable option 
+	 * ****
+	 * */
+	
 	private static Recordset getInfo(String table, String searchTest){
-		return VirtualTable.compileJSON(tdmURL + virtualTablePath + table, new VirtualTable().getRows(tdmURL + virtualTablePath+ table, "Scenario", searchTest ));
+		return VirtualTable.compileJSON(virtualTablePath + table, new VirtualTable().getRows(virtualTablePath+ table, "Scenario", searchTest ));
 	}
 	
 	public static void setVirtualtablePath(String path){
@@ -67,21 +65,23 @@ public class Datatable {
 	public static String getDataParameter(String field) {
 		return virtualTable.getValue(field);
 	}
+	/*
 	public static Object[][] getTestScenarios(String sheetName) {
-		Recordset rs = VirtualTable.compileXML(tdmURL + "UI_TEST_SCENARIO_DATA_"+WebDriverSetup.getApplicationUnderTest().toUpperCase()+"_" + sheetName, new VirtualTable().getAllTestRows(tdmURL + "UI_TEST_SCENARIO_DATA_LILO_"+ sheetName));
+		Recordset rs = VirtualTable.compileXML("UI_TEST_SCENARIO_DATA_"+WebDriverSetup.getApplicationUnderTest().toUpperCase()+"_" + sheetName, new VirtualTable().getAllTestRows("UI_TEST_SCENARIO_DATA_LILO_"+ sheetName));
 		rs.print();
 		return removeRowsWithRowNumber(rs.getArray(), 0);
-	}
+	}*/
+	
 	public static Object[][] getTestScenariosByApp(String application, String tableName) {
 		if (application.isEmpty()) throw new RuntimeException("The Application is blank");
 		if (tableName.isEmpty()) throw new RuntimeException("The Table name is blank");
-		Recordset rs = VirtualTable.compileXML(tdmURL + "UI_TEST_SCENARIO_DATA_"+application.toUpperCase()+"_" + tableName, new VirtualTable().getAllTestRows(tdmURL + "UI_TEST_SCENARIO_DATA_"+application.toUpperCase()+"_" +  tableName));
+		Recordset rs = VirtualTable.compileXML("UI_TEST_SCENARIO_DATA_"+application.toUpperCase()+"_" + tableName, new VirtualTable().getAllTestRows("UI_TEST_SCENARIO_DATA_"+application.toUpperCase()+"_" +  tableName));
 		rs.print();
 		return removeRowsWithRowNumber(rs.getArray(), 0);
 	}
 	public static Object[][] getEpicTestScenarios(String tableName) {
 		if (tableName.isEmpty()) throw new RuntimeException("The Table name is blank");
-		Recordset rs = VirtualTable.compileXML(tdmURL + "UI_TEST_SCENARIO_DATA_EPIC"+"_" + tableName, new VirtualTable().getAllTestRows(tdmURL + "UI_TEST_SCENARIO_DATA_EPIC"+"_" +  tableName));
+		Recordset rs = VirtualTable.compileXML("UI_TEST_SCENARIO_DATA_EPIC"+"_" + tableName, new VirtualTable().getAllTestRows("UI_TEST_SCENARIO_DATA_EPIC"+"_" +  tableName));
 		rs.print();
 		return removeRowsWithRowNumber(rs.getArray(), 0);
 	}
@@ -110,6 +110,11 @@ public class Datatable {
 		return virtualTable.getValue(field);
 	}
 
+	/**
+	 * ****
+	 * End of virtual table 
+	 * ****
+	 * */
 	public static void setDatatablePath(String path) {
 		datatablePath = path;
 	}

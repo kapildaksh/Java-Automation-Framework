@@ -28,6 +28,8 @@ public class TestAddNewDept {
 	
 	private String application = "";
 	private String browserUnderTest = "";
+	private String browserVersion = "";
+	private String operatingSystem = "";
 	private String runLocation = "";
 	private String environment = "";
 	private Map<String, WebDriver> drivers = new HashMap<String, WebDriver>();
@@ -43,11 +45,13 @@ public class TestAddNewDept {
 	}
 	
 	@BeforeTest( )
-	@Parameters({"runLocation","browserUnderTest","environment"})
-	public void setup(@Optional String runLocation, String browserUnderTest, String environment){
+	@Parameters({"runLocation","browserUnderTest","browserVersion","operatingSystem","environment"})
+	public void setup(@Optional String runLocation, String browserUnderTest, String browserVersion, String operatingSystem, String environment){
 		this.application = "Bluesource";
 		this.runLocation = runLocation;
 		this.browserUnderTest = browserUnderTest;
+		this.browserVersion = browserVersion;
+		this.operatingSystem = operatingSystem;
 		this.environment = environment;
 		
 	}
@@ -71,8 +75,8 @@ public class TestAddNewDept {
 	
 		String testName = new Object(){}.getClass().getEnclosingMethod().getName();
 		
-		WebDriverSetup setup = new WebDriverSetup(testName + ": " + testScenario);
-        WebDriver driver = setup.getDriver();
+		WebDriverSetup setup = new WebDriverSetup(application, browserUnderTest, browserVersion, operatingSystem, runLocation, environment);
+        WebDriver driver = setup.initialize();
 		
 		//Login
 		LoginPage loginPage = new LoginPage(driver);

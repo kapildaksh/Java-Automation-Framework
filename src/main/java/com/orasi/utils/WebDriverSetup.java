@@ -28,200 +28,51 @@ public class WebDriverSetup {
 
 
 	public WebDriver driver;
-	private String testName = "";
 	private String testEnvironment = "";
 	private String testApplication = "";
 	private String driverWindow = "";
-	private String application = "";
-	public Datatable scenario = new Datatable();
-	public ResourceBundle appURLRepository = ResourceBundle.getBundle(Constants.ENVIRONMENT_URL_PATH);
-	public String browser = null;
-	public String location = null;
+	private String operatingSystem = "";
+	private String browserVersion = "";
+	private String browser = null;
+	private String location = null;
+	private ResourceBundle appURLRepository = ResourceBundle.getBundle(Constants.ENVIRONMENT_URL_PATH);
 	private URL seleniumHubURL = null;
-	private static int TIMEOUT = 20;
-	
+		
 	public WebDriverSetup(){}
 	
-	public WebDriverSetup(String testName){
-		this.testName = testName;
-	}
-	
-	public WebDriverSetup(String testName, String application, String browserUnderTest, String runLocation, String environment){
-		boolean isGrid = false;
-		this.application = application;
-		this.testEnvironment = environment;
+
+	public WebDriverSetup(	String application, String browserUnderTest, 
+							String browserVersion, String operatingSystem,
+							String runLocation, String environment){
+
+		
+		this.testApplication = application;
 		this.browser = browserUnderTest;
+		this.browserVersion = browserVersion;
+		this.operatingSystem = operatingSystem;
 		this.location = runLocation;
-		this.testName = testName;
-		if (runLocation.toLowerCase().equals("remote")) isGrid = true;
-	
-     
-	}
-	
-	
-	public WebDriver getDriver(){
-		return driver;
-	}
-	
-	public WebDriver initialize(){
-		
-		driverSetup();
-		launchApplication(driver);
-		return this.driver;
-	}
-	
-	/*
-	public WebDriver initialize(String application, String browserUnderTest, String runLocation, String environment){
-		boolean isGrid = false;
-		this.application = application;
 		this.testEnvironment = environment;
-		if (runLocation.toLowerCase().equals("remote")) isGrid = true;		
-		new FrameworkHarness().hookToWDPro(application, environment, 20, browserUnderTest, isGrid);
-		SeleniumWrapper seleniumWrapper = new SeleniumWrapper();
-		
-		//Set the driver type based on the browserUnderTest
-		switch(browserUnderTest.toLowerCase()){
-			case "ie":
-			case "iexplorer":
-				seleniumWrapper.getConfiguration().setDriverType(DriverType.INTERNET_EXPLORER); 
-				break;
-			case "firefox":
-				seleniumWrapper.getConfiguration().setDriverType(DriverType.FIREFOX);
-				break;
-			case "chrome":
-				seleniumWrapper.getConfiguration().setDriverType(DriverType.CHROME);
-				break;
-			case "htmlunit":
-				seleniumWrapper.getConfiguration().setDriverType(DriverType.HTML_UNIT);
-				break;
-			
-		}
-		  
-		 
-       try {
-			this.driver = seleniumWrapper.initialize(testName);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-       
-       return this.driver;
-	}*/
-	
-	public void launchApplication(WebDriver driver){
-		driver.get(appURLRepository.getString(application.toUpperCase() + "_" + testEnvironment.toUpperCase()));
-		
+
 	}
 	
-	public static String getBrowserUnderTest(){
-		return System.getProperty("selenium.rc_type");
-	}
+	//Getters & Setters
 	
-	public static String getApplicationUnderTest(){
-		return System.getProperty("selenium.application");
-	}
-	
-	public static String getEnvironmentUnderTest(){
-		return System.getProperty("selenium.environment");
-	}
-	
-	public static int getDefaultTestTimeout(){
-		return Integer.parseInt(System.getProperty("selenium.default_timeout"));
-	}
-	
-	//@BeforeMethod
-	@Parameters({"runLocation","browserUnderTest"})
-	public void driverSetup(){
-		//browser = browserUnderTest;
-		//location = runLocation;
-		try {
-			seleniumHubURL = new URL(Constants.SELENIUM_HUB_URL);
-		} catch (MalformedURLException e) {
-			throw new RuntimeException("Selenium Hub URL set is not a valid URL: " + seleniumHubURL);
-		}
-
-		driver = null;
-
-		if (location.equalsIgnoreCase("local")){
-			if (browser.equalsIgnoreCase("Firefox")){
-		    	driver = new FirefoxDriver();	    	
-		    }
-		    else if(browser.equalsIgnoreCase("IE")){
-		    	DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
-		    	caps.setCapability("ignoreZoomSetting", true);
-		    	caps.setCapability("enablePersistentHover", false);
-		    	// Setting attribute nativeEvents to false enable click button in IE
-		    	//caps.setCapability("nativeEvents",true);	    	
-
-		    	File file = new File("C:\\Selenium\\WebDrivers\\IEDriverServer.exe");
-				System.setProperty("webdriver.ie.driver", file.getAbsolutePath());
-				//InternetExplorerDriverService service = new InternetExplorerDriverService.Builder().withLogFile(new File("path-to-file")).withLogLevel(InternetExplorerDriverLogLevel.TRACE).build();
-				driver = new InternetExplorerDriver(caps);
-		    }
-		    else if(browser.equalsIgnoreCase("Chrome")){
-		    	File file = new File("C:\\Selenium\\WebDrivers\\ChromeDriver.exe");
-				System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
-				driver = new ChromeDriver();		    	
-		    }
-		    else if(browser.equalsIgnoreCase("html")){	    	
-				driver = new HtmlUnitDriver(true);		    	
-		    }
-		}else if(location.equalsIgnoreCase("remote")){
-			if (browser.equalsIgnoreCase("Firefox")){
-				DesiredCapabilities caps = DesiredCapabilities.firefox();
-				caps.setPlatform(org.openqa.selenium.Platform.WINDOWS);
-		    	driver = new RemoteWebDriver(seleniumHubURL, caps);	    	
-		    }
-		    else if(browser.equalsIgnoreCase("IE")){
-		    	DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
-		    	caps.setCapability("ignoreZoomSetting", true);
-		    	caps.setPlatform(org.openqa.selenium.Platform.WINDOWS);		    	
-				driver = new RemoteWebDriver(seleniumHubURL, caps);	
-		    }
-		    else if(browser.equalsIgnoreCase("Chrome")){
-		    	DesiredCapabilities caps = DesiredCapabilities.chrome();
-				caps.setPlatform(org.openqa.selenium.Platform.WINDOWS);
-		    	driver = new RemoteWebDriver(seleniumHubURL, caps);	    		    	
-		    }
-		    else if(browser.equalsIgnoreCase("html")){	    	
-				driver = new HtmlUnitDriver(true);		    	
-		    }
-		}else{
-			throw new RuntimeException("Parameter for run [Location] was not set to 'Local' or 'Remote'");
-		}
-
-		driver.manage().timeouts().setScriptTimeout(Constants.GLOBAL_DRIVER_TIMEOUT, TimeUnit.SECONDS).implicitlyWait(Constants.GLOBAL_DRIVER_TIMEOUT, TimeUnit.SECONDS);	
-		//driver.manage().deleteAllCookies();
-		driver.manage().window().maximize();
-		setDriverWindow(driver.getWindowHandle());
-
-	}
-
-	@Parameters({"environment"})	
-	//@BeforeTest
-	public void setEnvironment(String environment){		
-		//Utility.generateCreditCardData("Visa", "Approved", "0");
-		setCurrentEnvironment(environment);	
-	}
-
-
-	private void setCurrentEnvironment(String environment){
+	public void setTestEnvironment(String environment){
 		testEnvironment = environment;
 	}
 	
-	public  String getCurrentEnvironment(){
-
+	public  String getTestEnvironment(){
 		return testEnvironment;
 	}
 
-	public  void setCurrentApplication(String application){
+	
+	public  void setTestApplication(String application){
 		testApplication= application;
 	}
 
-	public String getCurrentApplication(){
+	public String getTestApplication(){
 		return testApplication;
 	}
-
 
 	public void setDriverWindow(String window){
 		driverWindow= window;
@@ -231,20 +82,180 @@ public class WebDriverSetup {
 		return driverWindow;
 	}
 
+	public String getOperatingSystem() {
+		return operatingSystem;
+	}
+
+
+	public void setOperatingSystem(String operatingSystem) {
+		this.operatingSystem = operatingSystem;
+	}
+
+	public void setBrowserUnderTest(String browser) {
+		this.browser = browser;
+	}
+	
+	public String getBrowserUnderTest(){
+		return browser;
+	}
+	
+	public String getBrowserVersion() {
+		return browserVersion;
+	}
+
+
+	public void setBrowserVersion(String browserVersion) {
+		this.browserVersion = browserVersion;
+	}
 	
 	public  ResourceBundle getEnvironmentURLRepository(){
 		return appURLRepository;
 	}
 
 	public static void setDefaultTestTimeout(int timeout){
-		TIMEOUT = timeout;
+		System.setProperty(Constants.TEST_DRIVER_TIMEOUT, Integer.toString(timeout));
 	}
 	
-	/*public static int getDefaultTestTimeout(){
-		return TIMEOUT;
-	}*/
+	public static int getDefaultTestTimeout(){
+		return Integer.parseInt(System.getProperty(Constants.TEST_DRIVER_TIMEOUT));
+	}
 	
 	public void setDriver(WebDriver driverSession){
 		driver = driverSession;
 	}
+	
+	public WebDriver getDriver(){
+		return driver;
+	}
+	
+	/**
+	 * Initializes the webdriver, sets up the run location, driver type,
+	 * launches the application.
+	 * 
+	 * @param	None
+	 * @version	12/16/2014
+	 * @author 	Jessica Marshall
+	 * @return 	the web driver
+	 */
+	public WebDriver initialize(){
+		
+		driverSetup();
+		launchApplication();
+		return this.driver;
+	}
+	
+	
+	/**
+	 * Launches the application under test.  Gets the URL from an environment properties file
+	 * based on the application.  
+	 * 
+	 * @param	None
+	 * @version	12/16/2014
+	 * @author 	Justin Phlegar
+	 * @return 	Nothing
+	 */
+	public void launchApplication(){
+		driver.get(appURLRepository.getString(testApplication.toUpperCase() + "_" + testEnvironment.toUpperCase()));
+		
+	}
+	
+	/**
+	 * Sets up the driver type, location, browser under test 
+	 * 
+	 * @param	None
+	 * @version	12/16/2014
+	 * @author 	Justin Phlegar
+	 * @return 	Nothing 
+	 */
+	public void driverSetup(){
+
+		//Set the URL for selenium grid
+		try {
+			seleniumHubURL = new URL(Constants.SELENIUM_HUB_URL);
+		} catch (MalformedURLException e) {
+			throw new RuntimeException("Selenium Hub URL set is not a valid URL: " + seleniumHubURL);
+		}
+
+		driver = null;
+
+		//If the location is local, grab the drivers for each browser type from within the project
+		if (location.equalsIgnoreCase("local")){
+			//firefox
+			if (browser.equalsIgnoreCase("Firefox")){
+		    	driver = new FirefoxDriver();	    	
+		    }
+			//Internet explorer
+		    else if(browser.equalsIgnoreCase("IE")){
+		    	DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
+		    	caps.setCapability("ignoreZoomSetting", true);
+		    	caps.setCapability("enablePersistentHover", false);
+		    	
+		    	//File file = new File("C:\\Selenium\\WebDrivers\\IEDriverServer.exe");
+		    	File file = new File(WebDriverSetup.class.getResource(Constants.DRIVERS_PATH_LOCAL + "IEDriverServer.exe").getPath());
+				System.setProperty("webdriver.ie.driver", file.getAbsolutePath());
+				driver = new InternetExplorerDriver(caps);
+		    }
+			//Chrome
+		    else if(browser.equalsIgnoreCase("Chrome")){
+		    	//File file = new File("C:\\Selenium\\WebDrivers\\ChromeDriver.exe");
+		    	File file = new File(WebDriverSetup.class.getResource(Constants.DRIVERS_PATH_LOCAL + "ChromeDriver.exe").getPath());
+				System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
+				driver = new ChromeDriver();		    	
+		    }
+			//Headless - HTML unit driver
+		    else if(browser.equalsIgnoreCase("html")){	    	
+				driver = new HtmlUnitDriver(true);		    	
+		    }
+			//Safari
+		    else if(browser.equalsIgnoreCase("safari")){
+		    	//TODO - Enter code for this
+		    }
+		    else {
+		    	throw new RuntimeException("Parameter not set for browser type");
+		    }
+		
+		//Code for running on the selenium grid
+		}else if(location.equalsIgnoreCase("remote")){
+			//firefox
+			if (browser.equalsIgnoreCase("Firefox")){
+				DesiredCapabilities caps = DesiredCapabilities.firefox();
+				caps.setPlatform(org.openqa.selenium.Platform.WINDOWS);
+		    	driver = new RemoteWebDriver(seleniumHubURL, caps);	    	
+		    }
+			//internet explorer
+		    else if(browser.equalsIgnoreCase("IE")){
+		    	DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
+		    	caps.setCapability("ignoreZoomSetting", true);
+		    	caps.setPlatform(org.openqa.selenium.Platform.WINDOWS);		    	
+				driver = new RemoteWebDriver(seleniumHubURL, caps);	
+		    }
+			//chrome
+		    else if(browser.equalsIgnoreCase("Chrome")){
+		    	DesiredCapabilities caps = DesiredCapabilities.chrome();
+				caps.setPlatform(org.openqa.selenium.Platform.WINDOWS);
+		    	driver = new RemoteWebDriver(seleniumHubURL, caps);	    		    	
+		    }
+			//headless - HTML unit driver
+		    else if(browser.equalsIgnoreCase("html")){	    	
+				driver = new HtmlUnitDriver(true);		    	
+		    }
+		    else if(browser.equals("safari")){
+		    	//TODO need code for this
+		    }
+		    else {
+		    	throw new RuntimeException("Parameter not set for browser type");
+		    }
+		}else{
+			throw new RuntimeException("Parameter for run [Location] was not set to 'Local' or 'Remote'");
+		}
+
+		driver.manage().timeouts().setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT, TimeUnit.SECONDS).implicitlyWait(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT, TimeUnit.SECONDS);	
+		//driver.manage().deleteAllCookies();
+		driver.manage().window().maximize();
+		setDriverWindow(driver.getWindowHandle());
+
+	}
+
+
+
 }

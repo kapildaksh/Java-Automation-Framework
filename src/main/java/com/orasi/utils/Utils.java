@@ -515,7 +515,7 @@ public class Utils {
      * @throws Exception
      */
     public static void waitForUrlLoaded(WebDriver driver, String url) throws Exception {
-        waitForUrlLoaded(driver, url, Constants.GLOBAL_DRIVER_TIMEOUT);
+        waitForUrlLoaded(driver, url, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
     }
     
     public static void waitForUrlLoaded(WebDriver driver, String url, long timeout) throws Exception {
@@ -623,7 +623,7 @@ public class Utils {
                 return urlStr.equals(driverUrl);
             }
         };
-        Wait<WebDriver> wait = new WebDriverWait(driver, Constants.GLOBAL_DRIVER_TIMEOUT);
+        Wait<WebDriver> wait = new WebDriverWait(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
         try {
             wait.until(condition);
         } catch(Exception ex) {
@@ -682,7 +682,7 @@ public class Utils {
                 return driver.getCurrentUrl().contains(urlStr);
             }
         };
-        Wait<WebDriver> wait = new WebDriverWait(driver, Constants.GLOBAL_DRIVER_TIMEOUT);
+        Wait<WebDriver> wait = new WebDriverWait(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
         try {
             wait.until(condition);
         } catch(Exception ex) {
@@ -1054,7 +1054,7 @@ public class Utils {
     public static boolean waitForVisibleElement(WebDriver driver, WebElement element) throws Exception {
         final WebElement webElement = element;
         ExpectedCondition<WebElement> condition = ExpectedConditions.visibilityOf(webElement);
-        Wait<WebDriver> wait = new WebDriverWait(driver, Constants.GLOBAL_DRIVER_TIMEOUT);
+        Wait<WebDriver> wait = new WebDriverWait(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
         boolean isSuccessful = false;
         try {
             wait.until(condition);

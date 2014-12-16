@@ -18,6 +18,11 @@ public class Constants {
     
     /** Location of datasheets csv files in the project */
     final static public String BLUESOURCE_CSV_PATH = "/com/orasi/bluesource/";
+    
+    /** Location of drivers in project */
+    final static public String DRIVERS_PATH_LOCAL = "/com/orasi/drivers/";
+    final static public String DRIVERS_PATH_REMOTE = "C:\\Selenium\\WebDrivers\\";
+    		
     		
     /** An alias for File.separator */
     final static public String DIR_SEPARATOR = File.separator;
@@ -32,16 +37,20 @@ public class Constants {
     final static public String NEW_LINE = LINE_SEPARATOR;
     
     /** The default timeout in seconds, should be a generous default time */
-    final static public long GLOBAL_DRIVER_TIMEOUT = 60;
+    final static public int DEFAULT_GLOBAL_DRIVER_TIMEOUT = 60;
     
     /** The timeout (seconds) for finding web elements on a page, shouldn't be too long */
-    final static public long ELEMENT_TIMEOUT = 10;
+    final static public int ELEMENT_TIMEOUT = 10;
     
     /** The timeout (seconds) for page/DOM/transitions, should also be a generous */
-    final static public long PAGE_TIMEOUT = 60;
+    final static public int PAGE_TIMEOUT = 60;
     
     /** Selenium hub URL */
     final static public String SELENIUM_HUB_URL = "http://dnhprpptst01.disid.disney.com:4444/wd/hub";
+    
+    /** System properties */
+    public static final String BROWSER_PROPERTY = "selenium.browser";
+    public static final String TEST_DRIVER_TIMEOUT = "selenium.test_driver_timeout";
     
 	/**
      * Defaults to "./" if there's an exception of any sort.
