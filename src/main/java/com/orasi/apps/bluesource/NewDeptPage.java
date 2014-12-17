@@ -32,7 +32,7 @@ public class NewDeptPage {
 	}
 	
 	public boolean pageLoaded(){
-		return new PageLoaded().isPageHTMLLoaded(this.getClass(), driver, txtDept); 
+		return new PageLoaded().isElementLoaded(this.getClass(), driver, txtDept); 
 		  
 	}
 	

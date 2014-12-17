@@ -36,7 +36,7 @@ public class EmployeeSummaryPage {
 	}
 	
 	public boolean pageLoaded(){
-		return new PageLoaded().isPageHTMLLoaded(this.getClass(), driver, lnkViewTimeOff); 
+		return new PageLoaded().isElementLoaded(this.getClass(), driver, lnkViewTimeOff); 
 		  
 	}
 	

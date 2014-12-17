@@ -2,6 +2,8 @@
 package com.orasi.utils;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -9,6 +11,8 @@ import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
+import org.codehaus.jackson.JsonGenerator.Feature;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -16,12 +20,15 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.safari.SafariDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
+
+
 
 
 public class WebDriverSetup {
@@ -52,6 +59,7 @@ public class WebDriverSetup {
 		this.operatingSystem = operatingSystem;
 		this.location = runLocation;
 		this.testEnvironment = environment;
+		
 
 	}
 	
@@ -180,25 +188,24 @@ public class WebDriverSetup {
 
 		//If the location is local, grab the drivers for each browser type from within the project
 		if (location.equalsIgnoreCase("local")){
-			//firefox
+			
+			DesiredCapabilities caps = null;
+			File file = null;
 			if (browser.equalsIgnoreCase("Firefox")){
 		    	driver = new FirefoxDriver();	    	
 		    }
 			//Internet explorer
 		    else if(browser.equalsIgnoreCase("IE")){
-		    	DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
+		    	caps = DesiredCapabilities.internetExplorer();
 		    	caps.setCapability("ignoreZoomSetting", true);
 		    	caps.setCapability("enablePersistentHover", false);
-		    	
-		    	//File file = new File("C:\\Selenium\\WebDrivers\\IEDriverServer.exe");
-		    	File file = new File(WebDriverSetup.class.getResource(Constants.DRIVERS_PATH_LOCAL + "IEDriverServer.exe").getPath());
+		    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "IEDriverServer.exe").getPath());
 				System.setProperty("webdriver.ie.driver", file.getAbsolutePath());
 				driver = new InternetExplorerDriver(caps);
 		    }
 			//Chrome
 		    else if(browser.equalsIgnoreCase("Chrome")){
-		    	//File file = new File("C:\\Selenium\\WebDrivers\\ChromeDriver.exe");
-		    	File file = new File(WebDriverSetup.class.getResource(Constants.DRIVERS_PATH_LOCAL + "ChromeDriver.exe").getPath());
+		    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "ChromeDriver.exe").getPath());
 				System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 				driver = new ChromeDriver();		    	
 		    }
@@ -208,7 +215,7 @@ public class WebDriverSetup {
 		    }
 			//Safari
 		    else if(browser.equalsIgnoreCase("safari")){
-		    	//TODO - Enter code for this
+		    	driver = new SafariDriver();
 		    }
 		    else {
 		    	throw new RuntimeException("Parameter not set for browser type");
@@ -216,40 +223,50 @@ public class WebDriverSetup {
 		
 		//Code for running on the selenium grid
 		}else if(location.equalsIgnoreCase("remote")){
+			
+			DesiredCapabilities caps = null;
+			
 			//firefox
 			if (browser.equalsIgnoreCase("Firefox")){
-				DesiredCapabilities caps = DesiredCapabilities.firefox();
-				caps.setPlatform(org.openqa.selenium.Platform.WINDOWS);
-		    	driver = new RemoteWebDriver(seleniumHubURL, caps);	    	
+				caps = DesiredCapabilities.firefox();
+				caps.setVersion(browserVersion);
+				    	
 		    }
 			//internet explorer
 		    else if(browser.equalsIgnoreCase("IE")){
-		    	DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
+		    	caps = DesiredCapabilities.internetExplorer();
 		    	caps.setCapability("ignoreZoomSetting", true);
-		    	caps.setPlatform(org.openqa.selenium.Platform.WINDOWS);		    	
-				driver = new RemoteWebDriver(seleniumHubURL, caps);	
+		    	caps.setVersion(browserVersion);
+		    	
 		    }
 			//chrome
 		    else if(browser.equalsIgnoreCase("Chrome")){
-		    	DesiredCapabilities caps = DesiredCapabilities.chrome();
-				caps.setPlatform(org.openqa.selenium.Platform.WINDOWS);
-		    	driver = new RemoteWebDriver(seleniumHubURL, caps);	    		    	
+		    	caps = DesiredCapabilities.chrome();
+		    	caps.setVersion(browserVersion);
+		    	   		    	
 		    }
 			//headless - HTML unit driver
-		    else if(browser.equalsIgnoreCase("html")){	    	
-				driver = new HtmlUnitDriver(true);		    	
+		    else if(browser.equalsIgnoreCase("html")){	
+		    	caps = DesiredCapabilities.htmlUnitWithJs();
+		    			    	
 		    }
+			//safari
 		    else if(browser.equals("safari")){
-		    	//TODO need code for this
+		    	caps = DesiredCapabilities.safari();
 		    }
 		    else {
 		    	throw new RuntimeException("Parameter not set for browser type");
 		    }
+			
+			caps.setPlatform(org.openqa.selenium.Platform.valueOf(operatingSystem));
+	    	driver = new RemoteWebDriver(seleniumHubURL, caps);	
+	    	
 		}else{
 			throw new RuntimeException("Parameter for run [Location] was not set to 'Local' or 'Remote'");
 		}
 
 		driver.manage().timeouts().setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT, TimeUnit.SECONDS).implicitlyWait(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT, TimeUnit.SECONDS);	
+		setDefaultTestTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
 		//driver.manage().deleteAllCookies();
 		driver.manage().window().maximize();
 		setDriverWindow(driver.getWindowHandle());

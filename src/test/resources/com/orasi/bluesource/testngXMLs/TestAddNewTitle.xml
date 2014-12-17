@@ -4,6 +4,8 @@
 	<parameter name="browserUnderTest" value="chrome" />
 	<parameter name="environment" value="staging" />
 	<parameter name="runLocation" value="local"/>
+	<parameter name="browserVersion" value=""/>
+	<parameter name="operatingSystem" value=""/>
 	<!-- <parameter name="runLocation" value="remote"</parameter> -->
   <test name="Test">
     <classes>

@@ -60,7 +60,7 @@ public class TimeOffDetailsPage {
 	}
 	
 	public boolean pageLoaded(){
-		return new PageLoaded().isPageHTMLLoaded(this.getClass(), driver, txtDateRequested); 
+		return new PageLoaded().isElementLoaded(this.getClass(), driver, txtDateRequested); 
 		  
 	}
 	

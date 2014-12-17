@@ -74,7 +74,7 @@ public class AddNewEmployeePage {
 	}
 	
 	public boolean pageLoaded(){
-		return new PageLoaded().isPageHTMLLoaded(this.getClass(), driver, txtUsername); 
+		return new PageLoaded().isElementLoaded(this.getClass(), driver, txtUsername); 
 		  
 	}
 	

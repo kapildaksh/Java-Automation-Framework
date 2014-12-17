@@ -33,7 +33,7 @@ public class DepartmentsPage {
 	}
 	
 	public boolean pageLoaded(){
-		return new PageLoaded().isPageHTMLLoaded(this.getClass(), driver, lnkAddDept); 
+		return new PageLoaded().isElementLoaded(this.getClass(), driver, lnkAddDept); 
 		  
 	}
 	

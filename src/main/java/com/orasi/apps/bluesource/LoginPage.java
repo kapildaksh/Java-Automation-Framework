@@ -37,7 +37,7 @@ public class LoginPage {
 	}
 	
 	public boolean pageLoaded(){
-		return new PageLoaded().isPageHTMLLoaded(this.getClass(), driver, btnLogin); 
+		return new PageLoaded().isElementLoaded(this.getClass(), driver, btnLogin); 
 		  
 	}
 	

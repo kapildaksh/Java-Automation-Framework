@@ -30,7 +30,7 @@ public class NewTitlePage {
 	}
 	
 	public boolean pageLoaded(){
-		return new PageLoaded().isPageHTMLLoaded(this.getClass(), driver, txtTitle); 
+		return new PageLoaded().isElementLoaded(this.getClass(), driver, txtTitle); 
 		  
 	}
 	

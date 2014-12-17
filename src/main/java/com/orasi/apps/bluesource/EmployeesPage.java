@@ -44,7 +44,7 @@ public class EmployeesPage {
 	}
 	
 	public boolean pageLoaded(){
-		return new PageLoaded().isPageHTMLLoaded(this.getClass(), driver, btnAdd); 
+		return new PageLoaded().isElementLoaded(this.getClass(), driver, btnAdd); 
 		  
 	}
 	

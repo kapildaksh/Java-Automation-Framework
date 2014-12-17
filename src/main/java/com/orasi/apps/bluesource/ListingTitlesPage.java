@@ -42,7 +42,8 @@ public class ListingTitlesPage {
 	}
 	
 	public boolean pageLoaded(){
-		return new PageLoaded().isPageHTMLLoaded(this.getClass(), driver, lnkNewTitle); 
+		//return new PageLoaded().isElementLoaded(this.getClass(), driver, lnkNewTitle); 
+		return new PageLoaded().isDomInteractive(driver);
 		  
 	}
 	
