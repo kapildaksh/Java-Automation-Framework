@@ -17,6 +17,8 @@ import org.testng.annotations.Test;
 import com.orasi.utils.Constants;
 import com.orasi.utils.WebDriverSetup;
 import com.orasi.utils.Datatable;
+import com.orasi.utils.dataProviders.CSVDataProvider;
+import com.orasi.utils.dataProviders.ExcelDataProvider;
 import com.orasi.apps.bluesource.ListingTitlesPage;
 import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.NewTitlePage;
@@ -35,7 +37,7 @@ public class TestAddNewTitle {
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			return Datatable.getTestScenarios(Constants.BLUESOURCE_CSV_PATH + "TestAddNewTitle.xlsx", "TestAddNewTitle");
+			return CSVDataProvider.getTestScenarioData(Constants.BLUESOURCE_CSV_PATH + "TestAddNewTitle.csv");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -70,7 +72,7 @@ public class TestAddNewTitle {
 	 * @Return: N/A
 	 */
 	@Test(dataProvider = "dataScenario")
-	public void testCreateNewTitle(String role, String newTitle ){
+	public void testCreateNewTitle(String testScenario, String role, String newTitle ){
 		
 		
 		String testName = new Object(){}.getClass().getEnclosingMethod().getName();

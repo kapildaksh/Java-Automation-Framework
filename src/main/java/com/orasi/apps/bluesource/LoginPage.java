@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
-import com.orasi.core.interfaces.impl.internal.PageLoaded;
+import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Constants;
 
 

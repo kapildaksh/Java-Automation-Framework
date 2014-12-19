@@ -8,7 +8,7 @@ import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
-import com.orasi.core.interfaces.impl.internal.PageLoaded;
+import com.orasi.utils.PageLoaded;
 public class NewDeptPage {
 
 	static WebDriver driver;

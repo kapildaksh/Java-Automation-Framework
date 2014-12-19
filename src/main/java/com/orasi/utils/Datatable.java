@@ -25,9 +25,6 @@ public class Datatable {
 	private static String virtualTableScenario;
 	
 	private static String datatablePath;
-	private static String datatableSheet;
-	private static int datatableRow;
-	private static Object[][] datatableData;
 
 	private static XSSFSheet ExcelWSheet;
 	private static XSSFWorkbook ExcelWBook;
@@ -115,19 +112,13 @@ public class Datatable {
 	 * End of virtual table 
 	 * ****
 	 * */
+	
 	public static void setDatatablePath(String path) {
 		datatablePath = path;
 	}
 
-	public static void setDatatableSheet(String sheet) {
-		datatableSheet = sheet;
-		Datatable.setExcelFile();
-	}
 
-	public static void setDatatableRow(int row) {
-		datatableRow = row;
-		Datatable.setTableInfo();
-	}
+
 
 	private void setCurrentScenario(String scenario) {
 		currentScenario = scenario;
@@ -307,185 +298,12 @@ public class Datatable {
 		}
 	}
 
-	public static String getTestCaseName(String sTestCase) {
-		String value = sTestCase;
-		try {
-			int posi = value.indexOf("@");
-			value = value.substring(0, posi);
-			posi = value.lastIndexOf(".");
-			value = value.substring(posi + 1);
-			return value;
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	public static int getRowContains(String sTestCaseName, int colNum) {
-		int i;
-		try {
-			int rowCount = Datatable.getRowUsed();
-			for (i = 0; i < rowCount; i++) {
-				if (Datatable.getCellData(i, colNum).equalsIgnoreCase(
-						sTestCaseName)) {
-					break;
-				}
-			}
-			return i;
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	public static int getRowUsed() {
-		try {
-			int RowCount = ExcelWSheet.getLastRowNum();
-			return RowCount;
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			throw new RuntimeException(e.getMessage());
-		}
-
-	}
-
-	// This method is to set the File path and to open the Excel file, Pass
-	// Excel Path and Sheetname as Arguments to this method
-	public static void setExcelFile() {
-		try {
-			// Open the Excel file
-			FileInputStream ExcelFile = new FileInputStream(datatablePath);
-			// Access the required test data sheet
-			ExcelWBook = new XSSFWorkbook(ExcelFile);
-			ExcelWSheet = ExcelWBook.getSheet(datatableSheet);
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	public static void setExcelFile(String SheetName) {
-		try {
-			// Open the Excel file
-			FileInputStream ExcelFile = new FileInputStream(datatablePath);
-			// Access the required test data sheet
-			ExcelWBook = new XSSFWorkbook(ExcelFile);
-			ExcelWSheet = ExcelWBook.getSheet(SheetName);
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	public static void setTableInfo() {
-		String[][] tabArray = null;
-		try {
-			FileInputStream ExcelFile = new FileInputStream(datatablePath);
-			// Access the required test data sheet
-			ExcelWBook = new XSSFWorkbook(ExcelFile);
-			ExcelWSheet = ExcelWBook.getSheet(datatableSheet);
-			XSSFFormulaEvaluator.evaluateAllFormulaCells(ExcelWBook);
-
-			int startCol = 1;
-			int totalCols = ExcelWSheet.getRow(datatableRow).getLastCellNum() - 1;
-
-			tabArray = new String[totalCols][2];
-			for (int col = startCol; col <= totalCols; col++) {
-				ExcelWSheet.getRow(datatableRow).getCell(col);
-
-				tabArray[col - 1][0] = getCellData(0, col);
-				if (ExcelWSheet
-						.getRow(datatableRow)
-						.getCell(
-								col,
-								ExcelWSheet.getRow(datatableRow).CREATE_NULL_AS_BLANK)
-						.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-					ExcelWSheet
-							.getRow(datatableRow)
-							.getCell(col)
-							.setCellType(
-									ExcelWSheet.getRow(datatableRow).getCell(
-											col).CELL_TYPE_STRING);
-					tabArray[col - 1][1] = String.valueOf(ExcelWSheet.getRow(
-							datatableRow).getCell(col));
-				} else if (ExcelWSheet
-						.getRow(datatableRow)
-						.getCell(
-								col,
-								ExcelWSheet.getRow(datatableRow).CREATE_NULL_AS_BLANK)
-						.getCellType() == Cell.CELL_TYPE_FORMULA) {
-					ExcelWSheet
-							.getRow(datatableRow)
-							.getCell(col)
-							.setCellType(
-									ExcelWSheet.getRow(datatableRow).getCell(
-											col).CELL_TYPE_FORMULA);
-					XSSFCell cell = ExcelWSheet.getRow(datatableRow).getCell(
-							col);
-					tabArray[col - 1][1] = String.valueOf(cell
-							.getStringCellValue());
-
-				} else if (ExcelWSheet
-						.getRow(datatableRow)
-						.getCell(
-								col,
-								ExcelWSheet.getRow(datatableRow).CREATE_NULL_AS_BLANK)
-						.getCellType() == Cell.CELL_TYPE_BOOLEAN) {
-					ExcelWSheet
-							.getRow(datatableRow)
-							.getCell(col)
-							.setCellType(
-									ExcelWSheet.getRow(datatableRow).getCell(
-											col).CELL_TYPE_STRING);
-					tabArray[col - 1][1] = String.valueOf(ExcelWSheet.getRow(
-							datatableRow).getCell(col));
-				} else if (ExcelWSheet.getRow(datatableRow).getCell(col)
-						.getCellType() == Cell.CELL_TYPE_BLANK) {
-					tabArray[col - 1][1] = "";
-
-				} else {
-
-					tabArray[col - 1][1] = getCellData(datatableRow, col);
-				}
-
-				System.out.println(tabArray[col - 1][0] + " | "
-						+ tabArray[col - 1][1]);
-
-			}
-
-		} catch (FileNotFoundException e) {
-			System.out.println("Could not read the Excel sheet");
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("Could not read the Excel sheet");
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		datatableData = tabArray;
-	}
 
 
-/*	
-	public static String getDataParameter(String field) {
-		String value = "";
-		for (int row = 0; row < datatableData.length; row++) {
-			if (field.equals(datatableData[row][0].toString())) {
-				value = datatableData[row][1].toString();
-				break;
-			}
-		}
-		return value;
-	}
 
-	public static String getDataParameter(String sheet, String scenario,
-			String field) {
-		String value = "";
-		setDatatableSheet(sheet);
-		setDatatableRow(Datatable.getRowContains(scenario, 0));
-		for (int row = 0; row < datatableData.length; row++) {
-			if (field.equals(datatableData[row][0].toString())) {
-				value = datatableData[row][1].toString();
-				break;
-			}
-		}
-		return value;
-	}
-	*/
+
+
+
+
+
 }

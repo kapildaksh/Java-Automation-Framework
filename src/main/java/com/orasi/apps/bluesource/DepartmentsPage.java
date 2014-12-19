@@ -11,7 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
-import com.orasi.core.interfaces.impl.internal.PageLoaded;
+import com.orasi.utils.PageLoaded;
 public class DepartmentsPage {
 	
 	static WebDriver driver;

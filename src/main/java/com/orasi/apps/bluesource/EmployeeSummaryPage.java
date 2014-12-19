@@ -14,7 +14,7 @@ import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
-import com.orasi.core.interfaces.impl.internal.PageLoaded;
+import com.orasi.utils.PageLoaded;
 
 public class EmployeeSummaryPage {
 	static WebDriver driver;

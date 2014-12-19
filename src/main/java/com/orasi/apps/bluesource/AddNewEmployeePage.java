@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 
-import com.orasi.core.interfaces.impl.internal.PageLoaded;
+import com.orasi.utils.PageLoaded;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
