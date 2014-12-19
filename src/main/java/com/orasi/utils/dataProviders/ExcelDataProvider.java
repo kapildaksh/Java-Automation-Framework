@@ -54,7 +54,7 @@ public class ExcelDataProvider {
 
 			int startRow = 1;
 
-			int startCol = 1;
+			int startCol = 0;
 
 			int ci, cj;
 
@@ -62,7 +62,7 @@ public class ExcelDataProvider {
 
 			// you can write a function as well to get Column count
 
-			int totalCols = ExcelWSheet.getRow(startRow).getLastCellNum() - 1;
+			int totalCols = ExcelWSheet.getRow(startRow).getLastCellNum();
 
 			tabArray = new String[totalRows][totalCols];
 
@@ -70,10 +70,8 @@ public class ExcelDataProvider {
 
 			for (int i = startRow; i <= totalRows; i++, ci++) {
 				cj = 0;
-				System.out.println("Test Scenario: " + getCellData(i, 1));
-				for (int j = startCol; j <= totalCols; j++, cj++) {
-					if (j == startCol)
-						addScenarioList(getCellData(i, j - 1));
+				
+				for (int j = startCol; j < totalCols; j++, cj++) {
 					tabArray[ci][cj] = getCellData(i, j);
 					System.out.println(getCellData(0,j) + ": " + tabArray[ci][cj]);
 				}
@@ -106,32 +104,30 @@ public class ExcelDataProvider {
 
 			int startRow = 1;
 
-			int startCol = 1;
+			int startCol = 0;
 
 			int ci, cj;
 
-			// int totalRows = ExcelWSheet.getLastRowNum();
+			
 
 			// you can write a function as well to get Column count
 
-			int totalCols = ExcelWSheet.getRow(startRow).getLastCellNum() - 1;
+			int totalCols = ExcelWSheet.getRow(startRow).getLastCellNum();
 
 			tabArray = new String[1][totalCols];
 
 			ci = 0;
 
-			// for (int i=startRow;i<=totalRows;i++, ci++) {
+			
 			cj = 0;
-			System.out.println("Test Scenario: " + getCellData(rowToRun, 1));
-			for (int j = startCol; j <= totalCols; j++, cj++) {
-				if (j == startCol)
-					addScenarioList(getCellData(rowToRun, j - 1));
+			
+			for (int j = startCol; j < totalCols; j++, cj++) {
 				tabArray[ci][cj] = getCellData(rowToRun, j);
 				System.out.println(tabArray[ci][cj]);
 			}
 			System.out.println("");
 		}
-		// }
+		
 		catch (FileNotFoundException e) {
 			System.out.println("Could not read the Excel sheet");
 			e.printStackTrace();
@@ -155,13 +151,5 @@ public class ExcelDataProvider {
 	}
 	
 	
-	private static void addScenarioList(String scenario) {
-		if (listScenarios == null) {
-			listScenarios = new String[1];
-		} else {
-			listScenarios = Arrays.copyOf(listScenarios,
-					listScenarios.length + 1);
-		}
-		listScenarios[listScenarios.length - 1] = scenario;
-	}
+
 }

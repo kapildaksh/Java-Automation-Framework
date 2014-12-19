@@ -37,7 +37,7 @@ public class TestAddNewTitle {
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			return CSVDataProvider.getTestScenarioData(Constants.BLUESOURCE_CSV_PATH + "TestAddNewTitle.csv");
+			return ExcelDataProvider.getTestScenarioData(Constants.BLUESOURCE_CSV_PATH + "TestAddNewTitle.xlsx", "TestAddNewTitle");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
