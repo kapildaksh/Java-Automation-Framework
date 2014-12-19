@@ -3,7 +3,10 @@ package com.orasi.core.interfaces.impl;
 import com.orasi.core.interfaces.RadioGroup;
 import com.orasi.utils.TestReporter;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.testng.Assert;
 import org.testng.Reporter;
 
 import java.sql.Timestamp;
@@ -13,126 +16,29 @@ import java.util.List;
  * Wrapper around a WebElement for the Select class in Selenium.
  */
 public class RadioGroupImpl extends ElementImpl implements RadioGroup {
-    private final org.openqa.selenium.support.ui.Select innerSelect;
+	public List<WebElement> radioButtons = null;
     private java.util.Date date= new java.util.Date();
-    /**
-     * Wraps a WebElement with RadioGroup functionality.
-     *
-     * @param element to wrap up
-     */
-    public RadioGroupImpl(WebElement element) {
+    private int numberOfRadioButtons;
+    private int currentIndex;
+    
+    public RadioGroupImpl(WebElement element, WebDriver driver) {
         super(element);
-        this.innerSelect = new org.openqa.selenium.support.ui.Select(element);
+        this.radioButtons = element.findElements(By.tagName("input"));
+        Assert.assertNotEquals(radioButtons.size(), 0, "No radio buttons were found for the element ["+element+"].");
+        this.currentIndex = -1;
     }
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @return boolean if this is a multiselect.
-     * @see org.openqa.selenium.support.ui.Select#isMultiple()
-     */
-    public boolean isMultiple() {
-        return innerSelect.isMultiple();
+    
+    public void setNumberOfRadioButtons(){
+    	numberOfRadioButtons = radioButtons.size();
     }
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @param index index to select
-     * @see org.openqa.selenium.support.ui.Select#deselectByIndex(int)
-     */
-    public void deselectByIndex(int index) {
-        innerSelect.deselectByIndex(index);
+    
+    public int getNumberOfRadioButtons(){
+    	setNumberOfRadioButtons();
+    	return numberOfRadioButtons;
     }
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @param value the value to select.
-     * @see org.openqa.selenium.support.ui.Select#selectByValue(String)
-     */
-    public void selectByValue(String value) {
-    	TestReporter.log(" Select [ " + value + " ] from RadioGroup [ @FindBy: " + getElementLocatorInfo() + " ]");
-        innerSelect.selectByValue(value);
-    }
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @return WebElement of the first selected option.
-     * @see org.openqa.selenium.support.ui.Select#getFirstSelectedOption()
-     */
-    public WebElement getFirstSelectedOption() {
-        return innerSelect.getFirstSelectedOption();
-    }
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @param text visible text to select
-     * @see org.openqa.selenium.support.ui.Select#selectByVisibleText(String)
-     */
-    public void selectByVisibleText(String text) {
-    	TestReporter.log(" Select [ " + text + " ] from RadioGroup [ @FindBy: " + getElementLocatorInfo() + " ]");
-        innerSelect.selectByVisibleText(text);
-    }
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @param value value to deselect
-     * @see org.openqa.selenium.support.ui.Select#deselectByValue(String)
-     */
-    public void deselectByValue(String value) {
-        innerSelect.deselectByValue(value);
-    }
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @see org.openqa.selenium.support.ui.Select#deselectAll()
-     */
-    public void deselectAll() {
-        innerSelect.deselectAll();
-    }
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @return List of WebElements selected in the select
-     * @see org.openqa.selenium.support.ui.Select#getAllSelectedOptions()
-     */
-    public List<WebElement> getAllSelectedOptions() {
-        return innerSelect.getAllSelectedOptions();
-    }
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @return list of all options in the select.
-     * @see org.openqa.selenium.support.ui.Select#getOptions()
-     */
-    public List<WebElement> getOptions() {
-        return innerSelect.getOptions();
-    }
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @param text text to deselect by visible text
-     * @see org.openqa.selenium.support.ui.Select#deselectByVisibleText(String)
-     */
-    public void deselectByVisibleText(String text) {
-        innerSelect.deselectByVisibleText(text);
-    }
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @param index index to select
-     * @see org.openqa.selenium.support.ui.Select#selectByIndex(int)
-     */
-    public void selectByIndex(int index) {
-        innerSelect.selectByIndex(index);
-    }
+    
+    public void selectByIndex(int index){
+    	this.currentIndex = index;
+    	new ElementImpl(radioButtons.get(currentIndex)).click();
+    } 
 }

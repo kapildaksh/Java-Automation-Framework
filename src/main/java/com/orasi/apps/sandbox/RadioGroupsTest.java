@@ -1,10 +1,13 @@
 package com.orasi.apps.sandbox;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import com.orasi.utils.PageLoaded;
 import com.orasi.core.interfaces.*;
+import com.orasi.core.interfaces.impl.RadioGroupImpl;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 
 public class RadioGroupsTest {
@@ -18,7 +21,7 @@ public class RadioGroupsTest {
 	// ** Page Elements **
 	// *******************
 
-	@FindBy(css = "//input[@type='radio']")
+	@FindBy(xpath = "/html/body/div/div/div/article/div/ol[2]/li[3]/div/form")
 	private RadioGroup rad_1;
 	
 	@FindBy(id = "page-header")
@@ -58,6 +61,8 @@ public class RadioGroupsTest {
 	public void testInteractions() {
 		initialize();
 		
-		
+		RadioGroup rads = new RadioGroupImpl(driver.findElement(By.xpath("/html/body/div/div/div/article/div/ol[2]/li[3]/div/form")), driver);
+
+		rads.selectByIndex(1);
 	}
 }
