@@ -1,5 +1,7 @@
 package com.orasi.utils.database;
 
+import com.orasi.utils.Constants;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -75,7 +77,7 @@ public abstract class Database {
 		
 	    Connection connection = null;
 		try {
-			String tns = getClass().getResource("/com/disney/api/soapServices/core/dataFactory/database/tnsnames.ora").getPath().toString();
+			String tns = getClass().getResource(Constants.TNSNAMES_PATH + "tnsnames.ora").getPath().toString();
 			tns = tns.substring(0, tns.lastIndexOf("/"));
 			System.setProperty("oracle.net.tns_admin", tns);
 			

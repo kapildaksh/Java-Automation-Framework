@@ -17,7 +17,6 @@ import org.testng.annotations.Test;
 import com.orasi.utils.Constants;
 import com.orasi.utils.Screenshot;
 import com.orasi.utils.WebDriverSetup;
-import com.orasi.utils.Datatable;
 import com.orasi.utils.dataProviders.CSVDataProvider;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
 import com.orasi.apps.bluesource.ListingTitlesPage;

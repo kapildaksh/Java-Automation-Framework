@@ -650,11 +650,6 @@ public class XMLTools extends BaseSoapService{
 			} else {
 				// report error
 			}
-		case "fx:conversationid":
-			return Randomness.generateConversationId();
-				
-		case "fx:messageid":
-			return Randomness.generateMessageId();
 					
 		default:
 			throw new RuntimeException("The command [" + command + " ] is not a valid command");

@@ -8,10 +8,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 public class Randomness {
 
-	public static String generateConversationId() {
-		return "Automation-JUnit." + randomAlphaNumeric(32);
-	}
-
 	public static String generateMessageId() {
 		return randomAlphaNumeric(8) + "-" + randomAlphaNumeric(6) + "-"
 				+ randomAlphaNumeric(6) + "-" + randomAlphaNumeric(6) + "-"

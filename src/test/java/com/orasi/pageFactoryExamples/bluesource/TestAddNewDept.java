@@ -9,7 +9,6 @@ import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -17,12 +16,10 @@ import org.testng.annotations.Test;
 import com.orasi.utils.Constants;
 import com.orasi.utils.Screenshot;
 import com.orasi.utils.WebDriverSetup;
-import com.orasi.utils.Datatable;
+import com.orasi.utils.dataProviders.ExcelDataProvider;
 import com.orasi.apps.bluesource.DepartmentsPage;
-import com.orasi.apps.bluesource.ListingTitlesPage;
 import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.NewDeptPage;
-import com.orasi.apps.bluesource.NewTitlePage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 
 public class TestAddNewDept {
@@ -38,7 +35,7 @@ public class TestAddNewDept {
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			return Datatable.getTestScenarios(Constants.BLUESOURCE_CSV_PATH + "TestAddNewDept.csv", "TestAddNewDept");
+			return ExcelDataProvider.getTestScenarioData(Constants.BLUESOURCE_CSV_PATH + "TestAddNewDept.csv", "TestAddNewDept");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

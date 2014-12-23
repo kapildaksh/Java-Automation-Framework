@@ -3,8 +3,8 @@ package com.orasi.utils.database.databaseImpl;
 import com.orasi.utils.database.Database;
 
 public class OracleDatabase extends Database {
-	private String dbGeneralUsername = "APPDEV_RO";
-	private String dbGeneralPassword = "APPDEV_RO#1";
+	private String dbGeneralUsername = "";
+	private String dbGeneralPassword = "";
 	
 	public OracleDatabase(String environment, String tnsName){
 		setDbDriver("oracle.jdbc.driver.OracleDriver");

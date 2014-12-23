@@ -765,59 +765,7 @@ public abstract class BaseSoapService{
 			}
 		}
 
-		// Set Context Address Role
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(), xpath + "/addressRole", "UNKNOWN");
-
-		// Set Context Conversation Id
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/conversationId",
-				Randomness.generateConversationId());
-
-		// Set Context Message Id
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/messageId",
-				Randomness.generateMessageId());
-
-		// Set Context Party 1 Id
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/party1Id", "UNKNOWN");
-
-		// Set Context Party 1 Type
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/party1Type", "UNKNOWN");
-
-		// Set Context Party 2 Id
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/party2Id", "UNKNOWN");
-
-		// Set Context Party 2 Type
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/party2Type", "UNKNOWN");
-
-		// Set Context Path Host Name
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/pathHostName", "UNKNOWN");
-
-		// Set Context Path Id
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/pathId", "UNKNOWN");
-
-		// Set Context Principle Id
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/principalId", "UNKNOWN");
-
-		// Set Context Principal Method
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/principalMethod", "UNKNOWN");
-
-		// Set Context Principal Role
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/principalRole", "UNKNOWN");
-
-		// Set Context Principal URI
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/principalUri", "UNKNOWN");
-
-		// Set Context Principal Value
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/principalValue", "UNKNOWN");
-
-		// Set Context Request Timestamp
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/requestTimeStamp",
-				Randomness.generateCurrentXMLDatetime());
-
-		// Set Context Address Role
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/toAddressRole", "UNKNOWN");
-
-		// Set Context User Name
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/userName", "AutoJUnit.user");
+		
 	}
 
 	protected String sendGetRequest(String strUrl) throws Exception {
