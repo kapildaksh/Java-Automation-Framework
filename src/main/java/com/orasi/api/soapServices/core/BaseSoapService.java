@@ -45,7 +45,6 @@ import org.apache.xmlbeans.XmlException;
 import org.jaxen.SimpleNamespaceContext;
 import org.testng.Reporter;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.eviware.soapui.impl.wsdl.WsdlInterface;
@@ -53,7 +52,6 @@ import com.eviware.soapui.impl.wsdl.WsdlOperation;
 import com.eviware.soapui.impl.wsdl.WsdlProject;
 import com.eviware.soapui.impl.wsdl.support.wsdl.WsdlImporter;
 import com.eviware.soapui.support.SoapUIException;
-import com.orasi.utils.Randomness;
 import com.orasi.utils.XMLTools;
 
 @SuppressWarnings("deprecation")
@@ -609,98 +607,6 @@ public abstract class BaseSoapService{
 		}
 	}
 
-	/*
-
-	/**
-	 * @summary Main validation function that validates and reports findings
-	 * @author Justin Phlegar
-	 * @version Created: 08/28/2014
-	 * @param doc Document: XML Document to evalute
-	 * @param xpath String: xpath to evaluate
-	 * @param value String: Depending on value given, will validate the xpath node or attribute value,
-	 *  		  	<br><br><b>Value syntax expressions:</b>
-	 *	            <br><b>value="abc"</b>  -- Indirectly states that the node value will be validated and expected to be "abc"
-	 *  	        <br><b>value="value:abc"</b>  -- Directly states that the node value will be validated and expected to be "abc"
-	 *      	    <br><b>value="attribute:attrName,abc"</b>  -- Directly states that the node attribute "attrName" will be validated and expected to be "abc"
-	 *            
-	 *//*
-	private boolean validateNodeValueByXPath(Document doc, String xpath, String regexValue) {
-		XPathFactory xPathFactory = XPathFactory.newInstance();
-		XPath xPath = xPathFactory.newXPath();
-		XPathExpression expr;
-		NodeList nList = null;
-		String xPathValue = "";
-		String errorMessage = "";
-		
-		//Find the node based on xpath expression
-		try {
-			expr = xPath.compile(xpath);
-			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-		}catch (XPathExpressionException xpe) {
-			errorMessage = "Failed to build xpath. Please check format.";
-			//throw new RuntimeException("Xpath evaluation failed with xpath [ " + xpath + " ] ", xpe.getCause());	
-		}
-		
-		//Ensure an element was found, if not then throw error and fail
-		if (nList.item(0) == null && errorMessage.isEmpty()) {
-			errorMessage = "No xpath was found with the given path ";
-			//throw new RuntimeException("No xpath was found with the given path ");
-		}
-		
-		if (errorMessage.isEmpty()){
-			//Handle prefix types
-			if (regexValue.trim().toLowerCase().contains("value:")) {
-				
-				//Node value was specifically stated. Find value of node to validate based on xpath
-				regexValue = regexValue.substring(regexValue.indexOf(":") + 1,
-						regexValue.length()).trim();
-				xPathValue = nList.item(0).getTextContent();
-			} else if (regexValue.trim().toLowerCase().contains("attribute")) {
-				//Node attribute was specifically stated. Find attribute of node to validate based on xpath and attribute name
-				regexValue = regexValue.substring(0,
-						regexValue.indexOf(":") + 1).trim();
-				String[] attributeParams = regexValue.split(",");
-				NamedNodeMap attr = nList.item(0).getAttributes();
-				Node nodeAttr = attr.getNamedItem(attributeParams[0]);
-				xPathValue = nodeAttr.getTextContent();
-			} else {
-				//Default path. Get node value based on xpath
-				xPathValue = nList.item(0).getTextContent();
-			}
-		}
-
-		Regex regex = new Regex();
-
-		//Validate expected value with actual value and report in html table 
-		if(!errorMessage.isEmpty()){
-			buffer.append("<tr><td style='width: 100px; color: black; text-align: left;'>"
-					+ xpath + "</td>");
-			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
-					+ regexValue + "</td>");
-			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
-					+ errorMessage + "</td>");
-			buffer.append("<td style='width: 100px; color: red; text-align: center;'><b>Fail</b></td></tr>");
-		}else if (regex.match(regexValue, xPathValue)) {		
-			buffer.append("<tr><td style='width: 100px; color: black; text-align: left;'>"
-					+ xpath + "</td>");
-			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
-					+ regexValue + "</td>");
-			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
-					+ xPathValue + "</td>");
-			buffer.append("<td style='width: 100px; color: green; text-align: center;'><b>Pass</b></td></tr>");
-		} else {
-			buffer.append("<tr><td style='width: 100px; color: black; text-align: left;'>"
-					+ xpath + "</td>");
-			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
-					+ regexValue + "</td>");
-			buffer.append("<td style='width: 100px; color: black; text-align: center;'>"
-					+ xPathValue + "</td>");
-			buffer.append("<td style='width: 100px; color: red; text-align: center;'><b>Fail</b></td></tr>");
-		}
-		//return boolean
-		return regex.match(regexValue, xPathValue);
-	}*/
-
 	/**
 	 * @summary Validate XML Repsonse and reports findings
 	 * @author Justin Phlegar
@@ -736,88 +642,6 @@ public abstract class BaseSoapService{
 	public boolean validateResponse(String resourcePath, String scenario) {
 		return validateNodeValueByXPath(getResponseDocument(),
 				getTestScenario(resourcePath, scenario));
-	}
-
-	protected void generateServiceContext() {
-
-		XPathFactory xPathFactory = XPathFactory.newInstance();
-		XPath xPath = xPathFactory.newXPath();
-		XPathExpression expr;
-		NodeList nList = null;
-		String xpath = "//serviceContext";
-		Document doc = getRequestDocument();
-		try {
-			expr = xPath.compile(xpath);
-			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-		} catch (XPathExpressionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		if (nList.item(0) == null) {
-			xpath = "//context";
-			try {
-				expr = xPath.compile(xpath);
-				nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-			} catch (XPathExpressionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		// Set Context Address Role
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(), xpath + "/addressRole", "UNKNOWN");
-
-		// Set Context Conversation Id
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/conversationId",
-				Randomness.generateConversationId());
-
-		// Set Context Message Id
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/messageId",
-				Randomness.generateMessageId());
-
-		// Set Context Party 1 Id
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/party1Id", "UNKNOWN");
-
-		// Set Context Party 1 Type
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/party1Type", "UNKNOWN");
-
-		// Set Context Party 2 Id
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/party2Id", "UNKNOWN");
-
-		// Set Context Party 2 Type
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/party2Type", "UNKNOWN");
-
-		// Set Context Path Host Name
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/pathHostName", "UNKNOWN");
-
-		// Set Context Path Id
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/pathId", "UNKNOWN");
-
-		// Set Context Principle Id
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/principalId", "UNKNOWN");
-
-		// Set Context Principal Method
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/principalMethod", "UNKNOWN");
-
-		// Set Context Principal Role
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/principalRole", "UNKNOWN");
-
-		// Set Context Principal URI
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/principalUri", "UNKNOWN");
-
-		// Set Context Principal Value
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/principalValue", "UNKNOWN");
-
-		// Set Context Request Timestamp
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/requestTimeStamp",
-				Randomness.generateCurrentXMLDatetime());
-
-		// Set Context Address Role
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/toAddressRole", "UNKNOWN");
-
-		// Set Context User Name
-		XMLTools.setRequestNodeValueByXPath(getRequestDocument(),xpath + "/userName", "AutoJUnit.user");
 	}
 
 	protected String sendGetRequest(String strUrl) throws Exception {
@@ -869,7 +693,6 @@ public abstract class BaseSoapService{
 
 		try {
 			responseXML = sendGetRequest(url);
-			responseXML = removeTDMXMLAttributes(responseXML);
 			responseDoc = XMLTools.makeXMLDocument(responseXML);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -934,16 +757,6 @@ public abstract class BaseSoapService{
 	private String getFirstNodeValueByTagName(Document doc, String tag) {
 		NodeList nList = doc.getElementsByTagName(tag);
 		return nList.item(0).getTextContent();
-	}
-
-
-	private String removeTDMXMLAttributes(String xml) {
-		xml = xml
-				.replace(
-						"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>",
-						"");
-		xml = xml.trim();
-		return xml;
 	}
 
 	public boolean validateRepsonseXML() {
