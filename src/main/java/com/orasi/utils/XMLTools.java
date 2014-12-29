@@ -686,6 +686,7 @@ public class XMLTools extends BaseSoapService {
 	case "fx:empty":
 	    XMLTools.enterWhitepace(doc, xpath);
 	    return "XMLUpdated";
+	    
 	case "fx:getdatetime":
 	    daysOut = params[1].split(":");
 	    if (daysOut[0].trim().equalsIgnoreCase("DaysOut")) {
