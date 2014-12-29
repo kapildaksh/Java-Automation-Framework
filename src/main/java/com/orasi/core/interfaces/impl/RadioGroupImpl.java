@@ -52,7 +52,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
      * @see org.openqa.selenium.support.ui.Select#selectByValue(String)
      */
     public void selectByValue(String value) {
-    	TestReporter.log(" Select [ " + value + " ] from RadioGroup [ @FindBy: " + getElementLocatorInfo() + " ]");
+    	TestReporter.debugLog(" Select [ " + value + " ] from RadioGroup [ @FindBy: " + getElementLocatorInfo() + " ]");
         innerSelect.selectByValue(value);
     }
 
@@ -73,7 +73,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
      * @see org.openqa.selenium.support.ui.Select#selectByVisibleText(String)
      */
     public void selectByVisibleText(String text) {
-    	TestReporter.log(" Select [ " + text + " ] from RadioGroup [ @FindBy: " + getElementLocatorInfo() + " ]");
+    	TestReporter.debugLog(" Select [ " + text + " ] from RadioGroup [ @FindBy: " + getElementLocatorInfo() + " ]");
         innerSelect.selectByVisibleText(text);
     }
 

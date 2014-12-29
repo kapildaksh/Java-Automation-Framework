@@ -29,7 +29,7 @@ public class ButtonImpl extends ElementImpl implements Button {
     @Override
     public void click() {
 
-    	TestReporter.log("Click Button [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+    	TestReporter.debugLog("Click Button [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 
     	getWrappedElement().click();
     	//JavascriptExecutor jse = (JavascriptExecutor)WebDriverSetup.driver;
@@ -40,7 +40,7 @@ public class ButtonImpl extends ElementImpl implements Button {
     @Override
     public void jsClick(WebDriver driver){
 
-    	TestReporter.log("Click Button [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+    	TestReporter.debugLog("Click Button [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 
     	JavascriptExecutor jse = (JavascriptExecutor)driver;
     	jse.executeScript("arguments[0].click();", element );

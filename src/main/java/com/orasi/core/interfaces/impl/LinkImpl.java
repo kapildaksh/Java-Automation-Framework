@@ -28,14 +28,14 @@ public class LinkImpl extends ElementImpl implements Link {
     
     @Override
     public void jsClick(WebDriver driver) {
-    	TestReporter.log(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+    	TestReporter.debugLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
     	JavascriptExecutor executor = (JavascriptExecutor)driver;
     	executor.executeScript("arguments[0].click();", element);
     }
     
     @Override
     public void click() {
-    	TestReporter.log(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+    	TestReporter.debugLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
     	getWrappedElement().click();
     }
     

@@ -42,14 +42,14 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
 
     public void check() {
         if (!isChecked()) {
-            TestReporter.log(" Checking the Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+            TestReporter.debugLog(" Checking the Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
             toggle();
         }
     }
 
     public void uncheck() {
         if (isChecked()) {
-            TestReporter.log(" Unchecking the Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+            TestReporter.debugLog(" Unchecking the Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
             toggle();
         }
     }
@@ -62,13 +62,13 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
     	Element obj = new ElementImpl(getWrappedElement());
     	obj.syncEnabled(driver);
         if (!isChecked()) {
-            TestReporter.log(" Checking the Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+            TestReporter.debugLog(" Checking the Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
             toggle();
         }
         
         if (!isChecked()) {
         	dateAfter= new java.util.Date();
-        	TestReporter.log(" Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>] was not checked successfully.");
+        	TestReporter.debugLog(" Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>] was not checked successfully.");
             throw new RuntimeException("Checkbox [ @FindBy: " + getElementLocatorInfo()  + " ] was not checked successfully.");           
         }else{
         	dateAfter= new java.util.Date();
@@ -81,18 +81,18 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
     	Element obj = new ElementImpl(getWrappedElement());
     	obj.syncEnabled(driver);
         if (isChecked()) {
-            TestReporter.log(" Checking the Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+            TestReporter.debugLog(" Checking the Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
             toggle();
         }
         
         if (isChecked()) {
         	dateAfter= new java.util.Date();
-        	TestReporter.log(" Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>] was not checked successfully.");
+        	TestReporter.debugLog(" Checkbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>] was not checked successfully.");
             throw new RuntimeException("Checkbox [ @FindBy: " + getElementLocatorInfo()  + " ] was not checked successfully.");
            
         }else{
         	dateAfter= new java.util.Date();
-        	TestReporter.log(" VALIDATED the Checkbox was <b> CHECKED </b> successfully."); 
+        	TestReporter.debugLog(" VALIDATED the Checkbox was <b> CHECKED </b> successfully."); 
         }
     }   
 }
