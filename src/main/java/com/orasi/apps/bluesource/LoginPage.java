@@ -25,7 +25,7 @@ public class LoginPage {
 	@FindBy(id = "employee_password")
 	private  Textbox txtPassword;
 	
-	@FindBy(name = "committ")
+	@FindBy(name = "commit")
 	private static  Button btnLogin;
 	
 	// *********************

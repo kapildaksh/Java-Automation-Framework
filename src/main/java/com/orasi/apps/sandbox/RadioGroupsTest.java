@@ -25,11 +25,7 @@ public class RadioGroupsTest {
 	private RadioGroup rad_1;
 	
 	@FindBy(id = "page-header")
-	private Element elePageHeader;
-	
-	@FindBy(xpath = "//div[@class='fix-article-body-width nine columns']")
-	private RadioGroup div;
-	
+	private Element elePageHeader;	
 
 	// *********************
 	// ** Build page area **
@@ -41,13 +37,11 @@ public class RadioGroupsTest {
 
 	public boolean pageLoaded() {
 		return new PageLoaded().isElementLoaded(this.getClass(), driver, elePageHeader);
-
 	}
 
 	public boolean pageLoaded(Element element) {
 		return new PageLoaded().isElementLoaded(this.getClass(), driver,
 				element);
-
 	}
 
 	public RadioGroupsTest initialize() {
@@ -60,9 +54,23 @@ public class RadioGroupsTest {
 
 	public void testInteractions() {
 		initialize();
+		pageLoaded();
 		
-		RadioGroup rads = new RadioGroupImpl(driver.findElement(By.xpath("/html/body/div/div/div/article/div/ol[2]/li[3]/div/form")), driver);
-
-		rads.selectByIndex(1);
+		rad_1.scrollIntoView(driver);
+		
+		int numberOfRadioButtons = rad_1.getNumberOfRadioButtons();
+		
+		
+		for(int i = 0; i < numberOfRadioButtons; i++){
+			rad_1.selectByIndex(i);
+			System.out.println(rad_1.getSelectedIndex());
+			System.out.println(rad_1.getSelectedOption());
+		}
+		
+		//rad_1.getAllOptions();
+		rad_1.selectByOption("one");
+		
+		System.out.println(rad_1.getSelectedOption());
+		System.out.println(rad_1.getSelectedIndex());
 	}
 }
