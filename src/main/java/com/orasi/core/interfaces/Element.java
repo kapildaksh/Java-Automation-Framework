@@ -361,4 +361,6 @@ public interface Element extends WebElement, WrapsElement, Locatable {
 	public void highlight(WebDriver driver);
 	
 	public void mouseHover();
+	
+	public void scrollIntoView(WebDriver driver);
 }

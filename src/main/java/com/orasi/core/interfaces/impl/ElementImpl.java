@@ -1083,4 +1083,8 @@ public class ElementImpl implements Element {
     	Point xy = element.getLocation();
     //	new Mouse(WebDriverSetup.driver).hover(xy.getX(), xy.getY());
     }
+    
+    public void scrollIntoView(WebDriver driver){
+    	((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+    }
 }

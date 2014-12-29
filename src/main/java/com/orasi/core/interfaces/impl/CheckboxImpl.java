@@ -29,13 +29,9 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
 
     public void toggle() {
         getWrappedElement().click();
-    	//JavascriptExecutor executor = (JavascriptExecutor)WebDriverSetup.driver;
-    	//executor.executeScript("arguments[0].click();", element);
-
     }
 
     public void jsToggle(WebDriver driver) {
-        //getWrappedElement().click();
     	JavascriptExecutor executor = (JavascriptExecutor)driver;
     	executor.executeScript("arguments[0].click();", element);
     }

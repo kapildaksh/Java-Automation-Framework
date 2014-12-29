@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import com.orasi.core.interfaces.impl.CheckboxImpl;
 import com.orasi.core.interfaces.impl.internal.ImplementedBy;
 
-
 /**
  * Interface that wraps a WebElement in CheckBox functionality.
  */

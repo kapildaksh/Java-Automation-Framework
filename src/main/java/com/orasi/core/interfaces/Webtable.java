@@ -15,7 +15,7 @@ public interface Webtable extends Element {
     /**
      * Get the row count of the Webtable
      */
-    int getRowCount();
+    int getRowCount(WebDriver driver);
 
     /**
      * Get the column count for the Webtable on a specified Row
