@@ -32,9 +32,9 @@ import com.orasi.utils.database.Recordset;
 
 public class VirtualTable {
 	private enum BaseURL{
-		DEV{ public String toString() {return "http://tdm-win2008r2-a.wdw-ilab.wdw.disney.com:8080/TDMWeb";}},
-		TEST{ public String toString() {return "http://tdm-win2008r2-b.wdw-ilab.wdw.disney.com:8080/TDMWeb";}},
-		PROD{ public String toString() {return "http://dmweb.wdw-ilab.wdw.disney.com:8081/TDMWeb";}}
+		DEV{ public String toString() {return "";}},
+		TEST{ public String toString() {return "";}},
+		PROD{ public String toString() {return "";}}
 	}
 	
 	private enum Rows{

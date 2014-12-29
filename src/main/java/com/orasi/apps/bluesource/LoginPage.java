@@ -2,10 +2,7 @@ package com.orasi.apps.bluesource;
 import java.util.ResourceBundle;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Textbox;
@@ -38,7 +35,7 @@ public class LoginPage {
 	
 	public boolean pageLoaded(){
 		return new PageLoaded().isElementLoaded(this.getClass(), driver, btnLogin); 
-		  
+		//return new PageLoaded().isDomComplete(driver);  
 	}
 	
 	public LoginPage initialize() {
@@ -64,8 +61,7 @@ public class LoginPage {
 		
 		 
 		driver.switchTo().defaultContent();
-		WebDriverWait wait = new WebDriverWait(driver, 10);
-		wait.until(ExpectedConditions.elementToBeClickable(txtUsername));
+		
 		txtUsername.safeSet(username);
 		txtPassword.safeSet(password);
 		btnLogin.click();

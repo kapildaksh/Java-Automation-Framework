@@ -10,20 +10,18 @@ import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestReporter;
+import com.orasi.utils.Screenshot;
 import com.orasi.utils.WebDriverSetup;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
 import com.orasi.apps.bluesource.DepartmentsPage;
-import com.orasi.apps.bluesource.ListingTitlesPage;
 import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.NewDeptPage;
-import com.orasi.apps.bluesource.NewTitlePage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 
 public class TestAddNewDept {
@@ -59,6 +57,11 @@ public class TestAddNewDept {
     @AfterMethod(groups = { "regression" })
     public synchronized void closeSession(ITestResult test) {
 	WebDriver driver = drivers.get(test.getMethod().getMethodName());
+
+	// if is a failure, then take a screenshot
+	if (test.getStatus() == ITestResult.FAILURE) {
+	    new Screenshot().takeScreenShot(test, driver);
+	}
 	driver.quit();
     }
 
@@ -128,7 +131,5 @@ public class TestAddNewDept {
 
 	// logout
 	topNavigationBar.logout();
-
     }
-
 }

@@ -1,103 +1,66 @@
 package com.orasi.core.interfaces;
 
-import com.orasi.core.interfaces.impl.RadioGroupImpl;
-import com.orasi.core.interfaces.impl.internal.ImplementedBy;
+import java.util.List;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
+import com.orasi.core.interfaces.impl.RadioGroupImpl;
+import com.orasi.core.interfaces.impl.internal.ImplementedBy;
 
 /**
  * Interface for a select element.
  */
 @ImplementedBy(RadioGroupImpl.class)
 public interface RadioGroup extends Element {
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @return boolean if this is a multiselect.
-     * @see org.openqa.selenium.support.ui.Select#isMultiple()
-     */
-    boolean isMultiple();
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @param index index to select
-     * @see org.openqa.selenium.support.ui.Select#deselectByIndex(int)
-     */
-    void deselectByIndex(int index);
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @param value the value to select.
-     * @see org.openqa.selenium.support.ui.Select#selectByValue(String)
-     */
-    void selectByValue(String value);
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @return WebElement of the first selected option.
-     * @see org.openqa.selenium.support.ui.Select#getFirstSelectedOption()
-     */
-    WebElement getFirstSelectedOption();
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @param text visible text to select
-     * @see org.openqa.selenium.support.ui.Select#selectByVisibleText(String)
-     */
-    void selectByVisibleText(String text);
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @param value value to deselect
-     * @see org.openqa.selenium.support.ui.Select#deselectByValue(String)
-     */
-    void deselectByValue(String value);
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @see org.openqa.selenium.support.ui.Select#deselectAll()
-     */
-    void deselectAll();
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @return List of WebElements selected in the select
-     * @see org.openqa.selenium.support.ui.Select#getAllSelectedOptions()
-     */
-    List<WebElement> getAllSelectedOptions();
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @return list of all options in the select.
-     * @see org.openqa.selenium.support.ui.Select#getOptions()
-     */
-    List<WebElement> getOptions();
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @param text text to deselect by visible text
-     * @see org.openqa.selenium.support.ui.Select#deselectByVisibleText(String)
-     */
-    void deselectByVisibleText(String text);
-
-    /**
-     * Wraps Selenium's method.
-     *
-     * @param index index to select
-     * @see org.openqa.selenium.support.ui.Select#selectByIndex(int)
-     */
-    void selectByIndex(int index);
-
+	
+	/**
+	 * Sets the number of radio buttons found in the group
+	 */
+	public void setNumberOfRadioButtons();
+	
+	/**
+	 * Returns the number of radio buttons found in the group
+	 */
+	public int getNumberOfRadioButtons();
+	
+	/**
+	 * Allows a radio button to be selected by its index
+	 */
+	public void selectByIndex(int index);
+	
+	/**
+	 * Returns a List<String> of all options in the radio group
+	 */
+	public List<String> getAllOptions();
+	
+	/**
+	 * Allows a radio button to be selected by its value/option text
+	 */
+	public void selectByOption(String option);
+	
+	/**
+	 * Sets the number of values/options found in the radio group
+	 */
+	public void setNumberOfOptions();
+	
+	/**
+	 * Returns the number of values/options found in the radio group
+	 */
+	public int getNumberOfOptions();
+	
+	/**
+	 * Sets the value/option of the selected radio button
+	 */
+	public void setSelectedOption();
+	
+	/**
+	 * Returns the value/option of the selected radio button
+	 */
+	public String getSelectedOption();
+	
+	/**
+	 * Returns the index of the selected radio button
+	 */
+	public int getSelectedIndex();
 }

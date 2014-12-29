@@ -22,7 +22,9 @@ public class Constants {
     /** Location of drivers in project */
     final static public String DRIVERS_PATH_LOCAL = "/com/orasi/drivers/";
     final static public String DRIVERS_PATH_REMOTE = "C:\\Selenium\\WebDrivers\\";
-    		
+    
+    /** Location of tnsnames in project */
+    final static public String TNSNAMES_PATH = "/com/orasi/database/";
     		
     /** An alias for File.separator */
     final static public String DIR_SEPARATOR = File.separator;

@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestReporter;
+import com.orasi.utils.Screenshot;
 import com.orasi.utils.WebDriverSetup;
 import com.orasi.utils.dataProviders.CSVDataProvider;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -54,11 +55,16 @@ public class TestAddNewTitle {
 	this.environment = environment;
 
     }
-
+    
     @AfterMethod(groups = { "regression" })
-    public synchronized void closeSession(ITestResult test) {
+    public synchronized void closeSession(ITestResult test){
 	System.out.println(test.getMethod().getMethodName());
-	WebDriver driver = drivers.get(test.getMethod().getMethodName());
+	WebDriver driver = drivers.get(test.getMethod().getMethodName());   
+	
+	//if is a failure, then take a screenshot
+	if (test.getStatus() == ITestResult.FAILURE){
+		new Screenshot().takeScreenShot(test, driver);
+	}
 	driver.quit();
     }
 
