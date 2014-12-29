@@ -16,17 +16,17 @@ import com.orasi.utils.Constants;
 
 
 public class LoginPage {
-	static WebDriver driver;
+	private WebDriver driver;
 	
 	//all the page elements
 	@FindBy(id = "employee_username")
 	private Textbox txtUsername;
 	
 	@FindBy(id = "employee_password")
-	private  Textbox txtPassword;
+	private Textbox txtPassword;
 	
 	@FindBy(name = "commit")
-	private static  Button btnLogin;
+	private Button btnLogin;
 	
 	// *********************
 	// ** Build page area **

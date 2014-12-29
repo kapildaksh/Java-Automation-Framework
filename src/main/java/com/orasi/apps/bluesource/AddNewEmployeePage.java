@@ -18,12 +18,11 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 
 public class AddNewEmployeePage {
 
-	private static WebDriver driver;
-	private static StringBuffer verificationErrors = new StringBuffer();
+	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
 
 	//All the page elements:
-	@FindBy(id = "employee_username")
-	static
+	@FindBy(id = "employee_username")	
 	private Textbox txtUsername;
 	
 	@FindBy(id = "employee_first_name")

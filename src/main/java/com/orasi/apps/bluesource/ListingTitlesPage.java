@@ -10,21 +10,17 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
-import com.orasi.core.interfaces.Listbox;
-import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
 
 public class ListingTitlesPage {
 	
-	private static WebDriver driver;
+	private WebDriver driver;
 	
 	//All the page elements
-	@FindBy(linkText = "New Title")
-	static
+	@FindBy(linkText = "New Title")	
 	private Link lnkNewTitle;
 	
 	@FindBy(xpath = "//h1[text() = 'Listing titles']")

@@ -19,11 +19,10 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
 
 public class EmployeesPage {
-	static WebDriver driver;
+	private WebDriver driver;
 	
 	//All the page elements
-	@FindBy(css = "button[type = 'submit']")
-	static
+	@FindBy(css = "button[type = 'submit']")	
 	private Button btnAdd;
 	
 	@FindBy(css = "input[id = 'search-bar']")
@@ -54,7 +53,7 @@ public class EmployeesPage {
 	 }
 	
 	// *****************************************
-	// ***Page Interactions ***
+	// ***Page Interactions ***trfd
 	// *****************************************
 	
 	//Click the add button

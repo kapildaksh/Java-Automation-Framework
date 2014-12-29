@@ -11,11 +11,11 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
 public class NewDeptPage {
 
-	static WebDriver driver;
+	private WebDriver driver;
 
 	//All the page elements
 	@FindBy(id = "department_name")
-	private static Textbox txtDept;
+	private Textbox txtDept;
 	
 	@FindBy(id = "department_department_id")
 	private Textbox txtParentDept;
