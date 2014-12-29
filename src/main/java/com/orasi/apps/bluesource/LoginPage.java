@@ -25,7 +25,7 @@ public class LoginPage {
 	@FindBy(id = "employee_password")
 	private  Textbox txtPassword;
 	
-	@FindBy(name = "commit")
+	@FindBy(name = "committ")
 	private static  Button btnLogin;
 	
 	// *********************
@@ -38,7 +38,7 @@ public class LoginPage {
 	
 	public boolean pageLoaded(){
 		return new PageLoaded().isElementLoaded(this.getClass(), driver, btnLogin); 
-		  
+		//return new PageLoaded().isDomComplete(driver);  
 	}
 	
 	public LoginPage initialize() {
@@ -64,8 +64,7 @@ public class LoginPage {
 		
 		 
 		driver.switchTo().defaultContent();
-		WebDriverWait wait = new WebDriverWait(driver, 10);
-		wait.until(ExpectedConditions.elementToBeClickable(txtUsername));
+		
 		txtUsername.safeSet(username);
 		txtPassword.safeSet(password);
 		btnLogin.click();

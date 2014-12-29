@@ -1,5 +1,7 @@
 package com.orasi.utils;
 
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -49,6 +51,8 @@ public class PageLoaded {
 		this.clazz = clazz;		
 		int count = 0;
 		
+		//set the timeout for looking for an element to 1 second as we are doing a loop and then refreshing the elements
+		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
 
 		try{
 			
@@ -56,7 +60,6 @@ public class PageLoaded {
 				if (count == this.timeout){
 					break;
 				}else{
-					Sleeper.sleep(500);
 					count++;
 					initialize();
 				}
@@ -64,11 +67,16 @@ public class PageLoaded {
 		}catch( NullPointerException | NoSuchElementException |StaleElementReferenceException e){
 			// do nothing
 		}
+		
+		//set the timeout for looking for an element back to the default timeout
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
+		
 		if (count < this.timeout){
 			return true;
 		}else{
 			return false;
 		}
+		
 	}
 	
 	/**
@@ -118,7 +126,7 @@ public class PageLoaded {
 		} while (obj.equals(false));
 		
 		
-		if (count < this.timeout){
+		if (count < this.timeout*2){
 			return true;
 		}else{
 			return false;
@@ -186,7 +194,7 @@ public class PageLoaded {
 		} while (obj.equals(false));
 		
 		
-		if (count < this.timeout){
+		if (count < this.timeout*2){
 			return true;
 		}else{
 			return false;

@@ -15,6 +15,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.orasi.utils.Constants;
+import com.orasi.utils.Screenshot;
 import com.orasi.utils.WebDriverSetup;
 import com.orasi.utils.Datatable;
 import com.orasi.utils.dataProviders.CSVDataProvider;
@@ -36,12 +37,7 @@ public class TestAddNewTitle {
 	
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
-		try {
-			return ExcelDataProvider.getTestScenarioData(Constants.BLUESOURCE_CSV_PATH + "TestAddNewTitle.xlsx", "TestAddNewTitle");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		return ExcelDataProvider.getTestScenarioData(Constants.BLUESOURCE_CSV_PATH + "TestAddNewTitle.xlsx", "TestAddNewTitle");
 	}
 	
 	@BeforeTest( )
@@ -59,8 +55,13 @@ public class TestAddNewTitle {
 	@AfterMethod( groups = {"regression", "housekeeping"})
 	public synchronized void closeSession(ITestResult test){
 		System.out.println(test.getMethod().getMethodName());
-		 WebDriver driver = drivers.get(test.getMethod().getMethodName());     
-		 driver.quit();
+		WebDriver driver = drivers.get(test.getMethod().getMethodName());   
+		
+		//if is a failure, then take a screenshot
+		if (test.getStatus() == ITestResult.FAILURE){
+			new Screenshot().takeScreenShot(test, driver);
+		}
+		driver.quit();
     }
 	
 	/**

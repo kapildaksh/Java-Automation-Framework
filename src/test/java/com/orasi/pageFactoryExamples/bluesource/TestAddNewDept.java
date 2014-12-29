@@ -15,6 +15,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.orasi.utils.Constants;
+import com.orasi.utils.Screenshot;
 import com.orasi.utils.WebDriverSetup;
 import com.orasi.utils.Datatable;
 import com.orasi.apps.bluesource.DepartmentsPage;
@@ -58,8 +59,13 @@ public class TestAddNewDept {
 	
 	@AfterMethod( groups = {"regression", "housekeeping"})
 	public synchronized void closeSession(ITestResult test){
-		 WebDriver driver = drivers.get(test.getMethod().getMethodName());     
-		 driver.quit();
+		 WebDriver driver = drivers.get(test.getMethod().getMethodName());   
+		 
+		//if is a failure, then take a screenshot
+		if (test.getStatus() == ITestResult.FAILURE){
+			new Screenshot().takeScreenShot(test, driver);
+		}
+		driver.quit();
     }
 	
 	/**
