@@ -1,4 +1,6 @@
-package com.orasi.utils;
+//Prepping for removal
+
+/*package com.orasi.utils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,11 +38,11 @@ public class Datatable {
 	private static int currentScenarioRow = 0;
 
 
-	/**
+	*//**
 	 * ****
 	 * Functionality for virtual tables as your datatable option 
 	 * ****
-	 * */
+	 * *//*
 	
 	private static Recordset getInfo(String table, String searchTest){
 		return VirtualTable.compileJSON(virtualTablePath + table, new VirtualTable().getRows(virtualTablePath+ table, "Scenario", searchTest ));
@@ -62,12 +64,12 @@ public class Datatable {
 	public static String getDataParameter(String field) {
 		return virtualTable.getValue(field);
 	}
-	/*
+	
 	public static Object[][] getTestScenarios(String sheetName) {
 		Recordset rs = VirtualTable.compileXML("UI_TEST_SCENARIO_DATA_"+WebDriverSetup.getApplicationUnderTest().toUpperCase()+"_" + sheetName, new VirtualTable().getAllTestRows("UI_TEST_SCENARIO_DATA_LILO_"+ sheetName));
 		rs.print();
 		return removeRowsWithRowNumber(rs.getArray(), 0);
-	}*/
+	}
 	
 	public static Object[][] getTestScenariosByApp(String application, String tableName) {
 		if (application.isEmpty()) throw new RuntimeException("The Application is blank");
@@ -107,11 +109,11 @@ public class Datatable {
 		return virtualTable.getValue(field);
 	}
 
-	/**
+	*//**
 	 * ****
 	 * End of virtual table 
 	 * ****
-	 * */
+	 * *//*
 	
 	public static void setDatatablePath(String path) {
 		datatablePath = path;
@@ -149,7 +151,7 @@ public class Datatable {
 		String[][] tabArray = null;
 		try {
 			FileInputStream ExcelFile = new FileInputStream(datatablePath);
-			// Access the required test data sheet
+			// Access the required test data s*heet
 			ExcelWBook = new XSSFWorkbook(ExcelFile);
 			ExcelWSheet = ExcelWBook.getSheet(SheetName);
 
@@ -307,3 +309,4 @@ public class Datatable {
 
 
 }
+*/
