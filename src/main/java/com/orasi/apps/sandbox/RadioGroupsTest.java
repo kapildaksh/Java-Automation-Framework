@@ -1,13 +1,17 @@
 package com.orasi.apps.sandbox;
 
+import java.util.Timer;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import com.orasi.utils.PageLoaded;
+import com.orasi.utils.WebDriverSetup;
 import com.orasi.core.interfaces.*;
 import com.orasi.core.interfaces.impl.RadioGroupImpl;
+import com.orasi.core.interfaces.impl.WebtableImpl;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 
 public class RadioGroupsTest {
@@ -21,11 +25,13 @@ public class RadioGroupsTest {
 	// ** Page Elements **
 	// *******************
 
-	@FindBy(xpath = "/html/body/div/div/div/article/div/ol[2]/li[3]/div/form")
-	private RadioGroup rad_1;
+	@FindBy(xpath = "//*[@id='content']/table[1]")
+	//@FindBy(css = "#content > table:nth-child(15)")
+	private Webtable tblTable;
 	
-	@FindBy(id = "page-header")
-	private Element elePageHeader;	
+	@FindBy(xpath = "//*[@id='content']/table[1]/tbody/tr/td[2]/table")
+	//@FindBy(css = "#content > table:nth-child(15) > tbody > tr > td:nth-child(2) > table")
+	private Webtable newTable;
 
 	// *********************
 	// ** Build page area **
@@ -36,7 +42,7 @@ public class RadioGroupsTest {
 	}
 
 	public boolean pageLoaded() {
-		return new PageLoaded().isElementLoaded(this.getClass(), driver, elePageHeader);
+		return new PageLoaded().isElementLoaded(this.getClass(), driver, tblTable);
 	}
 
 	public boolean pageLoaded(Element element) {
@@ -53,24 +59,40 @@ public class RadioGroupsTest {
 	// *****************************************
 
 	public void testInteractions() {
+//		WebDriverSetup.setDefaultTestTimeout(1);
 		initialize();
 		pageLoaded();
 		
-		rad_1.scrollIntoView(driver);
+		int loopCounter;
+		int rowCount;
 		
-		int numberOfRadioButtons = rad_1.getNumberOfRadioButtons();
-		
-		
-		for(int i = 0; i < numberOfRadioButtons; i++){
-			rad_1.selectByIndex(i);
-			System.out.println(rad_1.getSelectedIndex());
-			System.out.println(rad_1.getSelectedOption());
+
+		long startTime = System.currentTimeMillis();
+		rowCount = tblTable.getRowCount(driver);
+		long stopTime = System.currentTimeMillis();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Table 1 row count: " + String.valueOf(rowCount));
+		System.out.println("Time for table 1 row count: " + String.valueOf((float)elapsedTime/1000) + " seconds");
+		for(loopCounter = 1; loopCounter <= rowCount; loopCounter++){
+			startTime = System.currentTimeMillis();
+			System.out.println("Table 1, row "+String.valueOf(loopCounter)+" column count: " + tblTable.getColumnCount(driver, loopCounter));
+			stopTime = System.currentTimeMillis();
+			elapsedTime = stopTime - startTime;
+			System.out.println("Time for table 1 row "+String.valueOf(loopCounter)+" column count: " + String.valueOf((float)elapsedTime/1000) + " seconds");
 		}
 		
-		//rad_1.getAllOptions();
-		rad_1.selectByOption("one");
-		
-		System.out.println(rad_1.getSelectedOption());
-		System.out.println(rad_1.getSelectedIndex());
+		startTime = System.currentTimeMillis();
+		rowCount = newTable.getRowCount(driver);
+		stopTime = System.currentTimeMillis();
+		elapsedTime = stopTime - startTime;
+		System.out.println("Table 2 row count:" + String.valueOf(rowCount));
+		System.out.println("Time for table 2 row count: " + String.valueOf((float)elapsedTime/1000) + " seconds");
+		for(loopCounter = 1; loopCounter <= rowCount; loopCounter++){
+			startTime = System.currentTimeMillis();
+			System.out.println("Table 2, row "+String.valueOf(loopCounter)+" column count: " + newTable.getColumnCount(driver, loopCounter));
+			stopTime = System.currentTimeMillis();
+			elapsedTime = stopTime - startTime;
+			System.out.println("Time for table 2 row "+String.valueOf(loopCounter)+" column count: " + String.valueOf((float)elapsedTime/1000) + " seconds");	
+		}
 	}
 }
