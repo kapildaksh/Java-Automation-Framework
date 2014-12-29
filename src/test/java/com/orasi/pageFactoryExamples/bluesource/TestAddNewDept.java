@@ -39,13 +39,8 @@ public class TestAddNewDept {
 
     @DataProvider(name = "dataScenario")
     public Object[][] scenarios() {
-	try {
-	    return new ExcelDataProvider(Constants.BLUESOURCE_CSV_PATH
-		    + "TestAddNewDept.xlsx", "TestAddNewDept").getTestData();
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
-	return null;
+	return new ExcelDataProvider(Constants.BLUESOURCE_CSV_PATH
+		+ "TestAddNewDept.xlsx", "TestAddNewDept").getTestData();
     }
 
     @BeforeTest(groups = { "regression" })
