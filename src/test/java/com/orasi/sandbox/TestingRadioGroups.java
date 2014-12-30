@@ -1,4 +1,4 @@
-package com.orasi.pageFactoryExamples.sandbox;
+package com.orasi.sandbox;
 
 import java.util.HashMap;
 import java.util.Map;

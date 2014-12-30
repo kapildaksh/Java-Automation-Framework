@@ -189,7 +189,7 @@
 		</dependency>
 	</dependencies>
 	<properties>
-		<testNGSourceDirectory>src/test/resources/com/orasi/bluesource/testngXMLs</testNGSourceDirectory>
+		<testNGSourceDirectory>src/test/resources/bluesource/testngXMLs</testNGSourceDirectory>
 	</properties>
 	<build>
 		<pluginManagement>

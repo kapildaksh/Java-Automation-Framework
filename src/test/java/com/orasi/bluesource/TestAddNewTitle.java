@@ -1,4 +1,4 @@
-package com.orasi.pageFactoryExamples.bluesource;
+package com.orasi.bluesource;
 
 import java.util.HashMap;
 import java.util.Map;
