@@ -76,7 +76,7 @@ public class TestAddNewDept {
     @Test(dataProvider = "dataScenario", groups = { "regression" })
     public void testCreateNewDept(String testScenario, String role,
 	    String newDept) {
-
+	
 	String testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 
@@ -87,14 +87,13 @@ public class TestAddNewDept {
 
 	// Login
 	LoginPage loginPage = new LoginPage(driver);
-	Assert.assertTrue(loginPage.pageLoaded(),
+	TestReporter.assertTrue(loginPage.pageLoaded(),
 		"Verify login page is displayed");
 	loginPage.login(role);
 
 	// Verify user is logged in
 	TopNavigationBar topNavigationBar = new TopNavigationBar(driver);
-	Assert.assertTrue(topNavigationBar.isLoggedIn());
-	TestReporter.log("User was logged in successfully");
+	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
 
 	// Navigate to the dept page
 	topNavigationBar.clickAdminLink();
@@ -102,32 +101,29 @@ public class TestAddNewDept {
 
 	// Verify navigated to the dept page
 	DepartmentsPage deptPage = new DepartmentsPage(driver);
-	Assert.assertTrue(deptPage.pageLoaded(),
+	TestReporter.assertTrue(deptPage.pageLoaded(),
 		"Verify list of departments page is displayed");
-	TestReporter.log("Navigated to the department page");
 
 	// Add a new dept
 	deptPage.clickAddDeptLink();
 	NewDeptPage newDeptPage = new NewDeptPage(driver);
-	Assert.assertTrue(newDeptPage.pageLoaded(),
+	TestReporter.assertTrue(newDeptPage.pageLoaded(),
 		"Verify add new department page is displayed");
 	newDeptPage.CreateNewDept(newDept);
 
 	// Verify the dept is added
-	Assert.assertTrue(deptPage.isSuccessMsgDisplayed());
+	TestReporter.assertTrue(deptPage.isSuccessMsgDisplayed(), "Validate success message appears");
 	TestReporter.log("New Dept was created: " + newDept);
 
 	// Verify the dept is displayed on the dept results table
-	Assert.assertTrue(deptPage.searchTableByDept(newDept));
-	Reporter.log("New dept was found in table of titles");
+	TestReporter.assertTrue(deptPage.searchTableByDept(newDept), "Validate new department exists in table");
 
 	// Delete the new dept
 	deptPage.deleteDept(newDept);
 
 	// Verify the title is deleted
 	DepartmentsPage refreshedPage = new DepartmentsPage(driver);
-	Assert.assertTrue(refreshedPage.isSuccessMsgDisplayed());
-	TestReporter.log("New dept was deleted successfully");
+	TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(), "Validate success message appears");
 
 	// logout
 	topNavigationBar.logout();
