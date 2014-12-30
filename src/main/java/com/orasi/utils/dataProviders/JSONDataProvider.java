@@ -1,5 +1,6 @@
 package com.orasi.utils.dataProviders;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.utils.types.IteratorMap;
@@ -7,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -64,8 +66,8 @@ public class JSONDataProvider {
     /**
      * This gets the test data from a JSON file.  It returns all the data 
      * as an Iterator of Object[]. It accepts an associative array and
-     * passes the key name and value to the test function. It is up to the
-     * test function to query the value.
+     * passes the key name and value to the test function. A structure
+     * is needed to parse the data and pass to the test object.
      * 
      * {@code
      *      {
@@ -83,16 +85,18 @@ public class JSONDataProvider {
      * 
      * @version	12/30/2014
      * @author 	Brian Becker
+     * @param   structure
      * @return 	Iterator of Object[]
      * @throws  java.lang.Throwable
      */
-    public Iterator<Object[]> getDataMap() throws Throwable {
+    public Iterator<Object[]> getDataMap(Class structure) throws Throwable {
         ObjectMapper map = new ObjectMapper();
-        final JsonNode root = map.readValue(mapData, JsonNode.class);
-        return new IteratorMap<String, Object[]>(root.fieldNames()) {
+        JavaType type = map.getTypeFactory().constructMapType(HashMap.class, String.class, structure);
+        final HashMap<Object, Object> data = map.readValue(mapData, type);
+        return new IteratorMap<Object, Object[]>(data.keySet().iterator()) {
             @Override
-            public Object[] apply(String o) {
-                return new Object[] { o, root.get(o) };
+            public Object[] apply(Object o) {
+                return new Object[] { o, data.get(o) };
             }
         };
     }
