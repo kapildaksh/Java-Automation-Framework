@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  * 
- * @author SonHuy.Pham@Disney.com
+ * @author 
  */
 public class SimpleDate {
 

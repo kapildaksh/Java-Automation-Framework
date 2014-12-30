@@ -767,8 +767,6 @@ public class XMLTools extends BaseSoapService {
 	    } else {
 		// report error
 	    }
-	case "fx:conversationid":
-	    return Randomness.generateConversationId();
 
 	case "fx:messageid":
 	    return Randomness.generateMessageId();
