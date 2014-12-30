@@ -1,7 +1,6 @@
 package com.orasi.core.interfaces.impl;
 
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import com.orasi.core.interfaces.Button;
@@ -35,9 +34,5 @@ public class ButtonImpl extends ElementImpl implements Button {
 
     	JavascriptExecutor jse = (JavascriptExecutor)driver;
     	jse.executeScript("arguments[0].click();", element );
-    }
-    
-    public void mouseClick(){
-    	Point xy = element.getLocation();
     }
 }

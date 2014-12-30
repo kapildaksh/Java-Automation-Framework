@@ -1,5 +1,7 @@
 package com.orasi.core.interfaces;
 
+import javax.naming.directory.NoSuchAttributeException;
+
 import com.orasi.core.interfaces.impl.WebtableImpl;
 import com.orasi.core.interfaces.impl.internal.ImplementedBy;
 
@@ -13,60 +15,60 @@ import org.openqa.selenium.WebElement;
 public interface Webtable extends Element {
 
     /**
-     * Get the row count of the Webtable
+     * @summary - Get the row count of the Webtable
      */
     int getRowCount(WebDriver driver);
 
     /**
-     * Get the column count for the Webtable on a specified Row
+     * @summary - Get the column count for the Webtable on a specified Row
      */
-    int getColumnCount(WebDriver driver, int row);
+    int getColumnCount(WebDriver driver, int row) throws NoSuchAttributeException;
 
     /**
-     * Get cell data of the specified row and Column in a Webtable
+     * @summary - Get cell data of the specified row and Column in a Webtable
      */
-    String getCellData( WebDriver driver, int row, int column);
-    
-
-    /**
-     * Return the Cell of the specified row and Column in a Webtable
-     */
-    WebElement getCell( WebDriver driver, int row, int column);
+    String getCellData( WebDriver driver, int row, int column) throws NoSuchAttributeException;
     
 
     /**
-     * Click cell in the specified row and Column in a Webtable
+     * @summary - Return the Cell of the specified row and Column in a Webtable
      */
-    void clickCell( WebDriver driver, int row, int column);
+    WebElement getCell( WebDriver driver, int row, int column) throws NoSuchAttributeException;
+    
+
+    /**
+     * @summary - Click cell in the specified row and Column in a Webtable
+     */
+    void clickCell( WebDriver driver, int row, int column) throws NoSuchAttributeException;
     
     
     /**
-     * Get Row number where text is found
+     * @summary - Get Row number where text is found
      */
     int getRowWithCellText(WebDriver driver, String text);
 
     /**
-     * Get Row number where text is found in a specific column
+     * @summary - Get Row number where text is found in a specific column
      */    
     int getRowWithCellText( WebDriver driver, String text, int columnPosition);
 
     /**
-     * Get Row number where text is found in a specific column and starting row
+     * @summary - Get Row number where text is found in a specific column and starting row
      */    
     int getRowWithCellText( WebDriver driver, String text, int columnPosition, int startRow);
     
     /**
-     * Get Column number where text is found
+     * @summary - Get Column number where text is found
      */  
     int getColumnWithCellText(WebDriver driver, String text);
     
     /**
-     * Get Column number where text is found in a specific row
+     * @summary - Get Column number where text is found in a specific row
      */  
     int getColumnWithCellText(WebDriver driver, String text, int rowPosition);
     
     /**
-     * Get Row number where text is found within a specific column - using 'contains'
+     * @summary - Get Row number where text is found within a specific column - using 'contains'
      */    
     int getRowThatContainsCellText( WebDriver driver, String text, int columnPosition);
   

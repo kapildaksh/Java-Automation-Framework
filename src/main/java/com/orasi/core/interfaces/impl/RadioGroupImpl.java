@@ -18,7 +18,6 @@ import javax.naming.directory.NoSuchAttributeException;
  */
 public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	private List<WebElement> radioButtons = null;
-	private java.util.Date date = new java.util.Date();
 	private int numberOfRadioButtons;
 	private int currentIndex;
 	private Element radGroup;
@@ -27,10 +26,8 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	private String selectedOption;
 
 	/**
-	 * Wraps a WebElement with radioGroup functionality.
-	 *
-	 * @param element
-	 *            to wrap up
+	 * Wraps a WebElement as an Element with radioGroup functionality.
+	 * @param element - element to wrap up
 	 * @throws NoSuchAttributeException
 	 */
 	public RadioGroupImpl(final WebElement element) {
@@ -43,31 +40,39 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 		currentIndex = getCurrentIndex();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.orasi.core.interfaces.RadioGroup#setNumberOfRadioButtons()
+	/**
+	 * @summary - Defines the number of radio buttons in the group by the 
+	 * 		number of 'input' tags found in the wrapped object
 	 */
 	public void setNumberOfRadioButtons() {
 		numberOfRadioButtons = radioButtons.size();
 	}
 
+	/**
+	 * @summary - Defines the number of radio buttons and return the integer count
+	 */
 	public int getNumberOfRadioButtons() {
 		setNumberOfRadioButtons();
 		return numberOfRadioButtons;
 	}
 
+	/**
+	 * @summary - Sets the current index for this instance, selects the radio button 
+	 * 		by index and sets the selected option for this instance
+	 */
 	public void selectByIndex(int index) {
 		currentIndex = index;
 		new ElementImpl(radioButtons.get(currentIndex)).click();
 		setSelectedOption();
 	}
 
+	/**
+	 * @summary - Defines and returns a List<String> of all options for the radio group
+	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getAllOptions() {
 		List<WebElement> options = radGroup.findElements(By.xpath("label"));
-		stringOptions = (List<String>) FixedSizeList.decorate(Arrays
-				.asList(new String[options.size()]));
+		stringOptions = (List<String>) FixedSizeList.decorate(Arrays.asList(new String[options.size()]));
 		int loopCounter = 0;
 
 		for (WebElement option : options) {
@@ -77,17 +82,28 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 
 		return stringOptions;
 	}
-
+	
+	/**
+	 * @summary - Defines a List<String> of all options for this instance as well as the 
+	 * 		number of options for the radio group 
+	 */
 	public void setNumberOfOptions() {
 		getAllOptions();
 		numberOfOptions = stringOptions.size();
 	}
 
+	/**
+	 * @summary - Defines the number of options and return the integer count
+	 */
 	public int getNumberOfOptions() {
 		setNumberOfOptions();
 		return numberOfOptions;
 	}
 
+	/**
+	 * @summary - Defines all options for this instance, selects an option by the string parameter 
+	 * 		and sets the selected option for this instance
+	 */
 	public void selectByOption(String option) {
 		getAllOptions();
 		for (int loopCounter = 0; loopCounter < stringOptions.size(); loopCounter++) {
@@ -102,20 +118,38 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 		setSelectedOption();
 	}
 
+	/**
+	 * @summary - Defines a List<String> of all options for this instance and defines the currently 
+	 * 		selected option, if any
+	 */
 	public void setSelectedOption() {
 		getAllOptions();
 		selectedOption = stringOptions.get(currentIndex).toString();
 	}
 
+	/**
+	 * @summary - Defines a List<String> of all options for this instance and defines the currently 
+	 * 		selected option, if any and returns the String value of the selected option
+	 */
 	public String getSelectedOption() {
 		setSelectedOption();
 		return this.selectedOption;
 	}
 
+	/**
+	 * @summary - Returns the integer index of the currently selected radio button
+	 */
 	public int getSelectedIndex() {
 		return currentIndex;
 	}
 
+	/**
+	 * @summary - Loops through all radio buttons for one that possesses an attribute 
+	 * 		that indicates the button is selected.
+	 * NOTE: Within the method, the field "String[] attributes" is a string array for possible values 
+	 * 		that could indicate radio button  is selected/checked. This array can be appended with new 
+	 * 		attributes that indicate an option is selected/checked.
+	 */
 	private int getCurrentIndex() {
 		String[] attributes = { "checked" };
 		int loopCounter = 0;

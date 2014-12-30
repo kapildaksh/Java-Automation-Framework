@@ -15,7 +15,6 @@ import com.orasi.utils.TestReporter;
  * Wrapper class like Select that wraps basic checkbox functionality.
  */ 
 public class CheckboxImpl extends ElementImpl implements Checkbox {
-	//private java.util.Date date= new java.util.Date();
 	private java.util.Date dateAfter= new java.util.Date();
     /**
      * Wraps a WebElement with checkbox functionality.
