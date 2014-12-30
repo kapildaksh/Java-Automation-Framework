@@ -8,6 +8,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+/**
+ * This is a basic JSON data provider, which will take a JSON file in the
+ * following format.
+ * 
+ * {@code
+ *      [
+ *          [ "Col1", "Col2", "Col3", "Col4" ],
+ *          [ 1, 2, 3, 4 ]
+ *      ]
+ * }
+ * 
+ * @version     12/30/2014
+ * @author      Brian Becker
+ */
 public class JSONDataProvider {
     
     // File path of JSON data
