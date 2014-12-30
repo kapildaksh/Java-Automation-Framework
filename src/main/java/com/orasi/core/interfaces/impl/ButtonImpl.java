@@ -1,7 +1,6 @@
 package com.orasi.core.interfaces.impl;
 
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import com.orasi.core.interfaces.Button;
@@ -24,21 +23,16 @@ public class ButtonImpl extends ElementImpl implements Button {
     @Override
     public void click() {
 
-    	TestReporter.debugLog("Click Button [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+    	TestReporter.log("Click Button [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 
     	getWrappedElement().click(); 
     }
     
     @Override
     public void jsClick(WebDriver driver){
-
-    	TestReporter.debugLog("Click Button [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+    	TestReporter.log("Click Button [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 
     	JavascriptExecutor jse = (JavascriptExecutor)driver;
     	jse.executeScript("arguments[0].click();", element );
-    }
-    
-    public void mouseClick(){
-    	Point xy = element.getLocation();
     }
 }

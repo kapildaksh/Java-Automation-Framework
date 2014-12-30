@@ -1,7 +1,9 @@
-package com.orasi.pageFactoryExamples.sandbox;
+package com.orasi.sandbox;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.naming.directory.NoSuchAttributeException;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -53,7 +55,7 @@ public class TestingRadioGroups {
 	}
 
 	/**
-	 * @throws Exception
+	 * @throws NoSuchAttributeException 
 	 * @Summary: Adds a housekeeper to the schedule
 	 * @Precondition:NA
 	 * @Author: Jessica Marshall
@@ -62,7 +64,7 @@ public class TestingRadioGroups {
 	 */
 	// @Test(dataProvider = "dataScenario")
 	@Test
-	public void testRadioGroups() {
+	public void testRadioGroups() throws NoSuchAttributeException {
 
 		String testName = new Object() {
 		}.getClass().getEnclosingMethod().getName();

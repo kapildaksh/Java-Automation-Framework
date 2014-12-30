@@ -21,9 +21,5 @@ public interface Button extends Element {
      * @param driver - Current active WebDriver object
      */
 	public void jsClick(WebDriver driver);
-	
-    /**
-     * @summary - Perform a mouse click on the button
-     */
-	public void mouseClick() ;
+
 }

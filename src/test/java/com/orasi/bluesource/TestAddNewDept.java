@@ -1,4 +1,4 @@
-package com.orasi.pageFactoryExamples.bluesource;
+package com.orasi.bluesource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,6 @@ import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -19,14 +18,13 @@ import com.orasi.utils.Constants;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.Screenshot;
 import com.orasi.utils.WebDriverSetup;
-import com.orasi.utils.dataProviders.CSVDataProvider;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
-import com.orasi.apps.bluesource.ListingTitlesPage;
+import com.orasi.apps.bluesource.DepartmentsPage;
 import com.orasi.apps.bluesource.LoginPage;
-import com.orasi.apps.bluesource.NewTitlePage;
+import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 
-public class TestAddNewTitle {
+public class TestAddNewDept {
 
     private String application = "";
     private String browserUnderTest = "";
@@ -38,8 +36,8 @@ public class TestAddNewTitle {
 
     @DataProvider(name = "dataScenario")
     public Object[][] scenarios() {
-	return new ExcelDataProvider(Constants.BLUESOURCE_CSV_PATH
-		+ "TestAddNewTitle.xlsx", "TestAddNewTitle").getTestData();
+	return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
+		+ "TestAddNewDept.xlsx", "TestAddNewDept").getTestData();
     }
 
     @BeforeTest(groups = { "regression" })
@@ -55,15 +53,14 @@ public class TestAddNewTitle {
 	this.environment = environment;
 
     }
-    
+
     @AfterMethod(groups = { "regression" })
-    public synchronized void closeSession(ITestResult test){
-	System.out.println(test.getMethod().getMethodName());
-	WebDriver driver = drivers.get(test.getMethod().getMethodName());   
-	
-	//if is a failure, then take a screenshot
-	if (test.getStatus() == ITestResult.FAILURE){
-		new Screenshot().takeScreenShot(test, driver);
+    public synchronized void closeSession(ITestResult test) {
+	WebDriver driver = drivers.get(test.getMethod().getMethodName());
+
+	// if is a failure, then take a screenshot
+	if (test.getStatus() == ITestResult.FAILURE) {
+	    new Screenshot().takeScreenShot(test, driver);
 	}
 	driver.quit();
     }
@@ -77,18 +74,16 @@ public class TestAddNewTitle {
      * @Return: N/A
      */
     @Test(dataProvider = "dataScenario", groups = { "regression" })
-    public void testCreateNewTitle(String testScenario, String role,
-	    String newTitle) {
-
+    public void testCreateNewDept(String testScenario, String role,
+	    String newDept) {
+	
 	String testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
-	TestReporter.setPrintToConsole(true);
+
 	WebDriverSetup setup = new WebDriverSetup(application,
 		browserUnderTest, browserVersion, operatingSystem, runLocation,
 		environment);
 	WebDriver driver = setup.initialize();
-	System.out.println(testName);
-	drivers.put(testName, driver);
 
 	// Login
 	LoginPage loginPage = new LoginPage(driver);
@@ -99,47 +94,38 @@ public class TestAddNewTitle {
 	// Verify user is logged in
 	TopNavigationBar topNavigationBar = new TopNavigationBar(driver);
 	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
-	TestReporter.log("User was logged in successfully");
 
-	// Navigate to the title page
+	// Navigate to the dept page
 	topNavigationBar.clickAdminLink();
-	topNavigationBar.clickTitlesLink();
+	topNavigationBar.clickDepartmentsLink();
 
-	// Verify navigated to the title page
-	ListingTitlesPage listingTitlesPage = new ListingTitlesPage(driver);
-	TestReporter.assertTrue(listingTitlesPage.pageLoaded(),
-		"Verify listing titles page is displayed");
-	TestReporter.log("Navigated to the listing titles page");
+	// Verify navigated to the dept page
+	DepartmentsPage deptPage = new DepartmentsPage(driver);
+	TestReporter.assertTrue(deptPage.pageLoaded(),
+		"Verify list of departments page is displayed");
 
-	// Click new title
-	listingTitlesPage.clickNewTitle();
-	TestReporter.log("Navigated to the new title page");
+	// Add a new dept
+	deptPage.clickAddDeptLink();
+	NewDeptPage newDeptPage = new NewDeptPage(driver);
+	TestReporter.assertTrue(newDeptPage.pageLoaded(),
+		"Verify add new department page is displayed");
+	newDeptPage.CreateNewDept(newDept);
 
-	// Instantiate the New titles page and create a new title
-	NewTitlePage newTitlePage = new NewTitlePage(driver);
-	TestReporter.assertTrue(newTitlePage.pageLoaded(),
-		"Verify create new title page is displayed");
-	newTitlePage.createNewTitle(newTitle);
+	// Verify the dept is added
+	TestReporter.assertTrue(deptPage.isSuccessMsgDisplayed(), "Validate success message appears");
+	TestReporter.log("New Dept was created: " + newDept);
 
-	// Verify the title was created
-	TestReporter.assertTrue(listingTitlesPage.isSuccessMsgDisplayed(), "Validate success message appears");
-	TestReporter.log("New Title was created: " + newTitle);
+	// Verify the dept is displayed on the dept results table
+	TestReporter.assertTrue(deptPage.searchTableByDept(newDept), "Validate new department exists in table");
 
-	// Verify the title is displayed on the title results table
-	TestReporter.assertTrue(listingTitlesPage.searchTableByTitle(newTitle), "Validate new title appears in table");
-	TestReporter.log("New title was found in table of titles");
-
-	// Delete the new title
-	listingTitlesPage.deleteTitle(newTitle);
+	// Delete the new dept
+	deptPage.deleteDept(newDept);
 
 	// Verify the title is deleted
-	ListingTitlesPage refreshedPage = new ListingTitlesPage(driver);
+	DepartmentsPage refreshedPage = new DepartmentsPage(driver);
 	TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(), "Validate success message appears");
-	TestReporter.log("New title was deleted successfully");
 
 	// logout
 	topNavigationBar.logout();
-
     }
-
 }
