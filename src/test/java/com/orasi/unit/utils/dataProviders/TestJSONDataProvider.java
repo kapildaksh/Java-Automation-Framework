@@ -11,7 +11,9 @@ import com.orasi.utils.dataProviders.JSONDataProvider;
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -20,6 +22,16 @@ import org.testng.annotations.Test;
  * @author brian.becker
  */
 public class TestJSONDataProvider {
+    
+    public class DiningTest {
+        public List<String> diningList;
+        public class DiningInfo {
+            public Date date;
+            public String time;
+            public int partySize;
+        }
+        public DiningInfo diningInfo;
+    }
     
     public Path getFilePath(String name) throws Throwable {
         return Paths.get(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH + name).toURI());
@@ -31,9 +43,20 @@ public class TestJSONDataProvider {
 	return new JSONDataProvider(getFilePath("TestJSONDining.json")).getDataMap(JsonNode.class);
     }
     
+    @DataProvider(name = "dataDiningStrict")
+    public Iterator<Object[]> dataDiningNodeStrict() throws Throwable {
+        // System.out.println(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH + "TestJSONDining.json").toString());
+	return new JSONDataProvider(getFilePath("TestJSONDining.json")).getDataMap(DiningTest.class);
+    }
+    
     @Test(dataProvider = "dataDining")
     public void testDiningNode(String name, JsonNode node) {
         System.out.println(name + ": " + node.path("diningList").toString());
+    }
+    
+    @Test(dataProvider = "dataDiningStrict")
+    public void testDiningNodeStrict(String name, DiningTest node) {
+        System.out.println(name + ": " + node.toString());
     }
     
 }
