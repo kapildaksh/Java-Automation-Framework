@@ -40,8 +40,8 @@ public class JSONDataProvider {
         final Iterator<ArrayList<Object>> data = map.readValue(this.mapData, LinkedList.class).listIterator();
         return new IteratorMap<ArrayList<Object>, Object[]>(data) {
             @Override
-            public Object[] next() {
-                return data.next().toArray();
+            public Object[] apply(ArrayList<Object> objs) {
+                return objs.toArray();
             }
         };
     }

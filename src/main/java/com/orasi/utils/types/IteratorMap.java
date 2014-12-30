@@ -12,26 +12,30 @@ import java.util.Iterator;
  * of collections.
  * 
  * @author brian.becker
- * @param <S>   Input type of mapping function
+ * @param <S>
  * @param <T>   Output type of mapping function
  */
 public abstract class IteratorMap <S,T> implements Iterator <T> {
     private final Iterator<S> data;
     
-    public IteratorMap(Iterator<S> data) {
+    public IteratorMap(Iterator data) {
         this.data = data;
     }
     
     @Override
     public boolean hasNext() {
-        return data.hasNext();
+        return this.data.hasNext();
     }
 
     @Override
-    public abstract T next();
+    public T next() {
+        return this.apply(this.data.next());
+    }
+    
+    public abstract T apply(S value);
 
     @Override
     public void remove() {
-        throw new UnsupportedOperationException("Data providers are read only."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("IteratorMap implements a one-way mapping."); //To change body of generated methods, choose Tools | Templates.
     }
 }
