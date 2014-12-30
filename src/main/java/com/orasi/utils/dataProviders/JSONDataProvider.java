@@ -32,13 +32,12 @@ public class JSONDataProvider {
      * This gets the test data from a csv file.  It returns all the data 
      * as a 2d array
      * 
-     * @param	filePath		the file path of the CSV file
      * @version	12/30/2014
      * @author 	Brian Becker
      * @return 	Iterator of Object[]
      * @throws  java.lang.Throwable
      */
-    public Iterator<Object[]> getTestScenarioData(String filePath) throws Throwable {
+    public Iterator<Object[]> getTestScenarioData() throws Throwable {
         ObjectMapper map = new ObjectMapper();
         Collection<Object[]> list = new LinkedList<>();
         Iterator<Object[]> data = map.readValue(this.mapData, Iterator.class);
