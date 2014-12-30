@@ -7,7 +7,7 @@
 	<parameter name="runLocation" value="local" />
 	<test name="TestingRadioGroups">
 		<classes>
-			<class name="com.orasi.pageFactoryExamples.sandbox.TestingRadioGroups" />
+			<class name="com.orasi.sandbox.TestingRadioGroups" />
 		</classes>
 	</test> <!-- TestingRadioGroups -->
 </suite> <!-- TestingRadioGroups -->
