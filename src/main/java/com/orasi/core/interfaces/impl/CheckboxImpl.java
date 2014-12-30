@@ -88,5 +88,5 @@ public class CheckboxImpl extends ElementImpl implements Checkbox {
         	dateAfter= new java.util.Date();
         	TestReporter.log(" VALIDATED the Checkbox was <b> CHECKED </b> successfully."); 
         }
-    }   
+    } 
 }

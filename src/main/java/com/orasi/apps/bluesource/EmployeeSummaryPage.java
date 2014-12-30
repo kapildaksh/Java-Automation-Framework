@@ -17,14 +17,13 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
 
 public class EmployeeSummaryPage {
-	static WebDriver driver;
+	private WebDriver driver;
 	
 	//All the page elements
 	@FindBy(xpath = "//*[@id='accordion']/div/div[6]/div[1]/a[2]")
 	private Link lnkManageTimeOff;
 	
 	@FindBy(linkText = "View")
-	static
 	private Link lnkViewTimeOff;
 	
 	// *********************

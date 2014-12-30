@@ -71,5 +71,4 @@ public interface Webtable extends Element {
      * @summary - Get Row number where text is found within a specific column - using 'contains'
      */    
     int getRowThatContainsCellText( WebDriver driver, String text, int columnPosition);
-  
 }

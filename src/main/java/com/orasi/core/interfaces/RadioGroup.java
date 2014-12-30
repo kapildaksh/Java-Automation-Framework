@@ -75,4 +75,5 @@ public interface RadioGroup extends Element {
 	 * @return int - index of the selected radio button
 	 */
 	public int getSelectedIndex();
+
 }

@@ -1,17 +1,12 @@
 package com.orasi.apps.sandbox;
 
-import java.util.Timer;
+import javax.naming.directory.NoSuchAttributeException;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import com.orasi.utils.PageLoaded;
-import com.orasi.utils.WebDriverSetup;
 import com.orasi.core.interfaces.*;
-import com.orasi.core.interfaces.impl.RadioGroupImpl;
-import com.orasi.core.interfaces.impl.WebtableImpl;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 
 public class RadioGroupsTest {
@@ -58,14 +53,12 @@ public class RadioGroupsTest {
 	// ***Page Interactions ***
 	// *****************************************
 
-	public void testInteractions() {
-//		WebDriverSetup.setDefaultTestTimeout(1);
+	public void testInteractions() throws NoSuchAttributeException {
 		initialize();
 		pageLoaded();
 		
 		int loopCounter;
 		int rowCount;
-		
 
 		long startTime = System.currentTimeMillis();
 		rowCount = tblTable.getRowCount(driver);
