@@ -10,6 +10,10 @@
 	    <id>eviware</id>
 	    <url>http://www.eviware.com/repository/maven2/</url>
 	  </repository>
+          <repository>
+              <id>maven</id>
+              <url>http://repo.maven.apache.org/maven2/</url>
+          </repository>
 	</repositories>
 	
     <dependencies>
@@ -106,11 +110,6 @@
             <version>0.9.8</version>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-lgpl</artifactId>
-            <version>1.9.13</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>3.10-FINAL</version>
@@ -187,9 +186,12 @@
             <artifactId>jaxen</artifactId>
             <version>1.1</version>
         </dependency>
-		
-
-	</dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.4.4</version>
+        </dependency>
+    </dependencies>
 	<properties>
 		<testNGSourceDirectory>src/test/resources</testNGSourceDirectory>
 	</properties>
