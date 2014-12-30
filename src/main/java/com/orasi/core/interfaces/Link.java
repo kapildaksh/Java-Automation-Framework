@@ -7,13 +7,19 @@ import com.orasi.core.interfaces.impl.internal.ImplementedBy;
 
 
 /**
- * Interface that wraps a WebElement in Button functionality. 
+ * Interface that wraps a WebElement in Link functionality. 
  */
 @ImplementedBy(LinkImpl.class)
 public interface Link extends Element {
-    
- 
+	
+    /**
+     * @summary - Click the button using the default Selenium click
+     */
     public void click();
+    
+    /**
+     * @summary - Click the link using a JavascriptExecutor click
+     * @param driver - Current active WebDriver object
+     */
     public void jsClick(WebDriver driver);
-    public void mouseClick();
 }

@@ -8,9 +8,9 @@ import com.orasi.core.interfaces.Label;
  * Wraps a label on a html form with some behavior.
  */
 public class LabelImpl extends ElementImpl implements Label {
-	private java.util.Date date= new java.util.Date();
+	//private java.util.Date date= new java.util.Date();
     /**
-     * Creates a Element for a given WebElement.
+     * Creates an Element for a given WebElement.
      *
      * @param element element to wrap up
      */

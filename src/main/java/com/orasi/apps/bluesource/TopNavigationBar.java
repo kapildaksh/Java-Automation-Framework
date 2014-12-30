@@ -14,11 +14,11 @@ import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 
 public class TopNavigationBar {
-	private static WebDriver driver;
+	private WebDriver driver;
 	
 	//All the page elements:
 	@FindBy(linkText = "Logout")
-	private static Link lnkLogout;
+	private Link lnkLogout;
 	
 	@FindBy(xpath = "//a[text() = 'Admin ']")
 	private Link lnkAdminDrop;

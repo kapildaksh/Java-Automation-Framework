@@ -21,11 +21,11 @@ import com.orasi.utils.PageLoaded;
 
 public class TimeOffDetailsPage {
 	
-	private static WebDriver driver;
+	private WebDriver driver;
 	
 	//All the page elements
 	@FindBy(id = "new_vacation_date_requested")
-	private static Textbox txtDateRequested;
+	private Textbox txtDateRequested;
 	
 	@FindBy(id = "new_vacation_start_date")
 	private Textbox txtStartDate;

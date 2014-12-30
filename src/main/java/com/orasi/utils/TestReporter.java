@@ -12,12 +12,19 @@ public class TestReporter {
 		Reporter.log("<br/><b><font size = 4>Step: " + step + "</font></b><br/>");
 	}
 	
+	/* public static void logScenario(){
+		Reporter.log("<br/><b><font size = 4>Data Scenario: " + Datatable.getCurrentScenario()+ "</font></b><br/>");
+	}*/
 	 
 	 public static void logScenario(String scenario){
 		Reporter.log("<br/><b><font size = 4>Data Scenario: " + scenario + "</font></b><br/>");
 		}
 	 
+	 public static void debugLog(String message){
+		 Reporter.log(new Timestamp(new java.util.Date().getTime()) + " :: " + message + "<br />");			
+	 }
+	 
 	 public static void log(String message){
-		 Reporter.log(new Timestamp(new java.util.Date().getTime()) + " :: "+ message + "<br />");			
+		 Reporter.log(new Timestamp(new java.util.Date().getTime()) + " :: <b><u>" + message + "</u></b><br />");			
 	 }
 }

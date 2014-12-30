@@ -12,11 +12,11 @@ import com.orasi.utils.PageLoaded;
 
 public class NewTitlePage {
 	
-	private static WebDriver driver;
+	private WebDriver driver;
 
 	//All the page elements
 	@FindBy(id = "title_name")
-	private static Textbox txtTitle;
+	private Textbox txtTitle;
 	
 	@FindBy(name = "commit")
 	private Button btnCreateTitle;

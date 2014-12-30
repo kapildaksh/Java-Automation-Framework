@@ -14,7 +14,7 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
 public class DepartmentsPage {
 	
-	static WebDriver driver;
+	private WebDriver driver;
 	
 	//All the page elements
 	@FindBy(linkText = "Add Department")
