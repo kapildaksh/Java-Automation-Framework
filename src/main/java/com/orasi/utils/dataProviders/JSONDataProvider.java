@@ -1,14 +1,12 @@
 package com.orasi.utils.dataProviders;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.orasi.utils.types.IteratorMap;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
-//import org.codehaus.jackson.JsonParser;
 
 public class JSONDataProvider {
     
@@ -29,8 +27,8 @@ public class JSONDataProvider {
     
     
     /**
-     * This gets the test data from a csv file.  It returns all the data 
-     * as a 2d array
+     * This gets the test data from a JSON file.  It returns all the data 
+     * as an Iterator of Object[].
      * 
      * @version	12/30/2014
      * @author 	Brian Becker
@@ -39,9 +37,13 @@ public class JSONDataProvider {
      */
     public Iterator<Object[]> getTestScenarioData() throws Throwable {
         ObjectMapper map = new ObjectMapper();
-        Collection<Object[]> list = new LinkedList<>();
-        Iterator<Object[]> data = map.readValue(this.mapData, Iterator.class);
-        return data;
+        final Iterator<ArrayList<Object>> data = map.readValue(this.mapData, LinkedList.class).listIterator();
+        return new IteratorMap<ArrayList<Object>, Object[]>(data) {
+            @Override
+            public Object[] next() {
+                return data.next().toArray();
+            }
+        };
     }
 
 }
