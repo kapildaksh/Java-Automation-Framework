@@ -216,18 +216,9 @@
 					</executions>
 					<configuration>				
 
-						<!-- Run a specific testNG suite 	
-						<suiteXmlFiles>
-							<suiteXmlFile>${project.build.testOutputDirectory}/suite_room_only_e2e.xml</suiteXmlFile>
-						</suiteXmlFiles>-->
 
-						<!-- parameterized testNG suite via maven 
 						<suiteXmlFiles>
-							<suiteXmlFile>${testNGSourceDirectory}/${suiteXmlFile}</suiteXmlFile>
-						</suiteXmlFiles>
-						-->
-						<suiteXmlFiles>
-							<suiteXmlFile>${testNGSourceDirectory}/suite_housekeeping.xml</suiteXmlFile>
+							<suiteXmlFile>${testNGSourceDirectory}/bluesource/testngXMLS/TestAddNewTitle.xml</suiteXmlFile>
 						</suiteXmlFiles>
 					</configuration>
 				</plugin>

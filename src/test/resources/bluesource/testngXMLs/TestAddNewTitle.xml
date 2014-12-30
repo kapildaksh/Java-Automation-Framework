@@ -9,7 +9,7 @@
 	<!-- <parameter name="runLocation" value="remote"</parameter> -->
   <test name="Test">
     <classes>
-      <class name="com.orasi.pageFactoryExamples.bluesource.TestAddNewTitle"/>
+      <class name="com.orasi.bluesource.TestAddNewTitle"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
