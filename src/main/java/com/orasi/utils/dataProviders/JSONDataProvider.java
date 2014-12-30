@@ -1,13 +1,12 @@
 package com.orasi.utils.dataProviders;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.utils.types.IteratorMap;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -32,8 +31,8 @@ public class JSONDataProvider {
      * @author      Brian Becker
      * @throws      java.lang.Throwable
      */
-    public JSONDataProvider(String filePath) throws Throwable {
-        this.mapData = Files.readAllBytes(Paths.get(filePath));
+    public JSONDataProvider(Path filePath) throws Throwable {
+        this.mapData = Files.readAllBytes(filePath);
     }
     
     /**
@@ -66,37 +65,32 @@ public class JSONDataProvider {
     /**
      * This gets the test data from a JSON file.  It returns all the data 
      * as an Iterator of Object[]. It accepts an associative array and
-     * passes the key name and value to the test function. A structure
-     * is needed to parse the data and pass to the test object.
+     * passes the key name and value to the test function. A structure is
+     * needed for parsing the data.
      * 
      * {@code
      *      {
      *          "TestCase1":
-     *              [ "Col1", "Col2", "Col3", "Col4" ],
+     *              { "Col1": 1, "Col2": 2, "Col3": 3, "Col4": 4 },
      *          "TestCase2":
-     *              [ 1, 2, 3, 4 ],
-     *          "TestCase3":
-     *              {
-     *                  "A": 1,
-     *                  "B": 2
-     *              }
+     *              { "Col5": 5, "Col6": 6, "Col7": 7, "Col8": 8 }
      *      }
      * }
      * 
      * @version	12/30/2014
      * @author 	Brian Becker
-     * @param   structure
+     * @param   structure               provide a class which defines a test case instance
      * @return 	Iterator of Object[]
      * @throws  java.lang.Throwable
      */
-    public Iterator<Object[]> getDataMap(Class structure) throws Throwable {
+    public Iterator<Object[]> getDataMap(final Class structure) throws Throwable {
         ObjectMapper map = new ObjectMapper();
         JavaType type = map.getTypeFactory().constructMapType(HashMap.class, String.class, structure);
         final HashMap<Object, Object> data = map.readValue(mapData, type);
         return new IteratorMap<Object, Object[]>(data.keySet().iterator()) {
             @Override
             public Object[] apply(Object o) {
-                return new Object[] { o, data.get(o) };
+                return new Object[] { o, structure.cast(data.get(o)) };
             }
         };
     }
