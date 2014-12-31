@@ -66,8 +66,4 @@ public class LoginPage {
 		txtPassword.safeSet(password);
 		btnLogin.click();
 	}
-	
-
-	  
-
 }
