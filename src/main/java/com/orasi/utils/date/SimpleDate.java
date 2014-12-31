@@ -1,5 +1,6 @@
 package com.orasi.utils.date;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,6 +24,10 @@ public class SimpleDate {
     public Calendar getCalendar() {
         return calendar;
     }
+    
+    public static Timestamp getTimestamp(){
+   	return new Timestamp(new java.util.Date().getTime());
+       }
 
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
