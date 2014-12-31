@@ -5,17 +5,17 @@
  */
 package com.orasi.unit.utils.dataProviders;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.utils.Constants;
 import com.orasi.utils.dataProviders.JSONDataProvider;
-import java.nio.file.FileSystem;
+import com.orasi.utils.types.IteratorMap;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.commons.collections.iterators.ArrayIterator;
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -24,6 +24,8 @@ import org.testng.annotations.Test;
  * @author brian.becker
  */
 public class TestJSONDataProvider {
+    
+    private static final String[] diningList = { "napa-rose", "goofys-kitchen" };
     
     public static class DiningTest {
         public List<String> diningList;
@@ -53,12 +55,22 @@ public class TestJSONDataProvider {
     
     @Test(dataProvider = "dataDining")
     public void testDiningNode(String name, JsonNode node) {
-        System.out.println(name + ": " + node.path("diningList").toString());
+        JsonNode nlist = node.path("diningList");
+        Iterator<String> i1 = new IteratorMap<JsonNode, String>(nlist.iterator()) {
+            @Override
+            public String apply(JsonNode o) {
+                return o.asText();
+            }
+        };
+        Iterator<String> i2 = new ArrayIterator(diningList);
+        Assert.assertEquals(i1, i2);
     }
     
     @Test(dataProvider = "dataDiningClass")
     public void testDiningNodeClass(String name, DiningTest node) {
-        System.out.println(name + ": " + node.diningList.toString());
+        Iterator<String> i1 = node.diningList.iterator();
+        Iterator<String> i2 = new ArrayIterator(diningList);
+        Assert.assertEquals(i1, i2);        
     }
     
 }

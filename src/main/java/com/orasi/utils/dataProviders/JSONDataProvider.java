@@ -54,17 +54,21 @@ public class JSONDataProvider {
      * @version	12/30/2014
      * @author 	Brian Becker
      * @return 	Iterator of Object[]
-     * @throws  java.lang.Throwable
      */
-    public Iterator<Object[]> getData() throws Throwable {
-        ObjectMapper map = new ObjectMapper();
-        final Iterator<ArrayList<Object>> data = map.readValue(mapData, LinkedList.class).listIterator();
-        return new IteratorMap<ArrayList<Object>, Object[]>(data) {
-            @Override
-            public Object[] apply(ArrayList<Object> objs) {
-                return objs.toArray();
-            }
-        };
+    public Iterator<Object[]> getData() {
+        try {
+            ObjectMapper map = new ObjectMapper();
+            final Iterator<ArrayList<Object>> data = map.readValue(mapData, LinkedList.class).listIterator();
+            return new IteratorMap<ArrayList<Object>, Object[]>(data) {
+                @Override
+                public Object[] apply(ArrayList<Object> objs) {
+                    return objs.toArray();
+                }
+            };
+        } catch (IOException ex) {
+            Logger.getLogger(JSONDataProvider.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Collections.EMPTY_LIST.iterator();
     }
 
     /**
@@ -86,7 +90,6 @@ public class JSONDataProvider {
      * @author 	Brian Becker
      * @param   structure               provide a class which defines a test case instance
      * @return 	Iterator of Object[]
-     * @throws  java.lang.Throwable
      */
     public Iterator<Object[]> getDataMap(final Class structure) { try {
         //throws Throwable {
