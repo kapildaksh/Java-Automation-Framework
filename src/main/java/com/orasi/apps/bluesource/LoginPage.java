@@ -57,13 +57,15 @@ public class LoginPage {
 		final ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
 		username = userCredentialRepo.getString("BLUESOURCE_" + role.toUpperCase());
-		password = userCredentialRepo.getString("BLUESOURCE_PASSWORD");
+		//password = userCredentialRepo.getString("BLUESOURCE_PASSWORD");
+		password = userCredentialRepo.getString("BLUESOURCE_ENCODED_PASSWORD");
 		
 		 
 		driver.switchTo().defaultContent();
 		
 		txtUsername.safeSet(username);
-		txtPassword.safeSet(password);
+		//txtPassword.safeSet(password);
+		txtPassword.setSecure(password);
 		btnLogin.click();
 	}
 	
