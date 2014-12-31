@@ -7,7 +7,6 @@ import com.orasi.utils.types.IteratorMap;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,8 +16,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This is a basic JSON data provider, which will take in a few formats
- * of JSON file.
+ * This is a basic JSON data provider. Instances can be held in either a 2d
+ * array or in an associative array. Instances themselves can either be 2d
+ * arrays of "objects" which are passed as parameters to the test case, or
+ * they may be structured data. Structured data can be accessed either through
+ * the JsonNode object, or custom objects which you provide to this class.
+ * 
+ * NOTE: Where JSON itself is the structure that should be passed into a test
+ * case, you should escape it and use any data provider you like. This is for
+ * passing object-like data to test cases.
  * 
  * @version     12/30/2014
  * @author      Brian Becker

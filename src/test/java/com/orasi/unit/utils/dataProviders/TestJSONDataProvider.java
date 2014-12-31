@@ -20,12 +20,20 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
- *
- * @author brian.becker
+ * These are some basic tests for the JSON Data Provider, in both node based
+ * traversal and a class mapping. This allows passing very large and complex
+ * structures into test cases for things such as web services.
+ * 
+ * NOTE: Where JSON itself is the structure that should be passed into a test
+ * case, you should escape it and use any data provider you like. This is for
+ * passing object-like data to test cases.
+ * 
+ * @author Brian Becker
  */
 public class TestJSONDataProvider {
     
-    private static final String[] diningList = { "napa-rose", "goofys-kitchen" };
+    private static final String[] DINING_LIST = { "napa-rose", "goofys-kitchen" };
+    private static final int PARTY_SIZE = 1;
     
     public static class DiningTest {
         public List<String> diningList;
@@ -41,19 +49,19 @@ public class TestJSONDataProvider {
         return Paths.get(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH + name).toURI());
     }
 
-    @DataProvider(name = "dataDining")
+    @DataProvider(name = "dataDiningNode")
     public Iterator<Object[]> dataDiningNode() throws Throwable {
         // System.out.println(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH + "TestJSONDining.json").toString());
 	return new JSONDataProvider(getFilePath("TestJSONDining.json")).getDataMap(JsonNode.class);
     }
     
     @DataProvider(name = "dataDiningClass")
-    public Iterator<Object[]> dataDiningNodeClass() throws Throwable {
+    public Iterator<Object[]> dataDiningClass() throws Throwable {
         // System.out.println(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH + "TestJSONDining.json").toString());
 	return new JSONDataProvider(getFilePath("TestJSONDining.json")).getDataMap(DiningTest.class);
     }
     
-    @Test(dataProvider = "dataDining")
+    @Test(dataProvider = "dataDiningNode")
     public void testDiningNode(String name, JsonNode node) {
         JsonNode nlist = node.path("diningList");
         Iterator<String> i1 = new IteratorMap<JsonNode, String>(nlist.iterator()) {
@@ -62,15 +70,17 @@ public class TestJSONDataProvider {
                 return o.asText();
             }
         };
-        Iterator<String> i2 = new ArrayIterator(diningList);
+        Iterator<String> i2 = new ArrayIterator(DINING_LIST);
         Assert.assertEquals(i1, i2);
+        Assert.assertEquals(node.path("diningInfo").path("partySize").asInt(), 1);
     }
     
     @Test(dataProvider = "dataDiningClass")
-    public void testDiningNodeClass(String name, DiningTest node) {
+    public void testDiningClass(String name, DiningTest node) {
         Iterator<String> i1 = node.diningList.iterator();
-        Iterator<String> i2 = new ArrayIterator(diningList);
-        Assert.assertEquals(i1, i2);        
+        Iterator<String> i2 = new ArrayIterator(DINING_LIST);
+        Assert.assertEquals(i1, i2);
+        Assert.assertEquals(node.diningInfo.partySize, PARTY_SIZE);
     }
     
 }
