@@ -5,6 +5,8 @@
  */
 package com.orasi.unit.utils.dataProviders;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.utils.Constants;
 import com.orasi.utils.dataProviders.JSONDataProvider;
@@ -23,7 +25,7 @@ import org.testng.annotations.Test;
  */
 public class TestJSONDataProvider {
     
-    public class DiningTest {
+    public static class DiningTest {
         public List<String> diningList;
         public class DiningInfo {
             public Date date;
@@ -43,8 +45,8 @@ public class TestJSONDataProvider {
 	return new JSONDataProvider(getFilePath("TestJSONDining.json")).getDataMap(JsonNode.class);
     }
     
-    @DataProvider(name = "dataDiningStrict")
-    public Iterator<Object[]> dataDiningNodeStrict() throws Throwable {
+    @DataProvider(name = "dataDiningClass")
+    public Iterator<Object[]> dataDiningNodeClass() throws Throwable {
         // System.out.println(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH + "TestJSONDining.json").toString());
 	return new JSONDataProvider(getFilePath("TestJSONDining.json")).getDataMap(DiningTest.class);
     }
@@ -54,9 +56,9 @@ public class TestJSONDataProvider {
         System.out.println(name + ": " + node.path("diningList").toString());
     }
     
-    @Test(dataProvider = "dataDiningStrict")
-    public void testDiningNodeStrict(String name, DiningTest node) {
-        System.out.println(name + ": " + node.toString());
+    @Test(dataProvider = "dataDiningClass")
+    public void testDiningNodeClass(String name, DiningTest node) {
+        System.out.println(name + ": " + node.diningList.toString());
     }
     
 }

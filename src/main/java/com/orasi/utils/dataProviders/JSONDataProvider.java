@@ -1,15 +1,20 @@
 package com.orasi.utils.dataProviders;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.utils.types.IteratorMap;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This is a basic JSON data provider, which will take in a few formats
@@ -83,8 +88,10 @@ public class JSONDataProvider {
      * @return 	Iterator of Object[]
      * @throws  java.lang.Throwable
      */
-    public Iterator<Object[]> getDataMap(final Class structure) throws Throwable {
+    public Iterator<Object[]> getDataMap(final Class structure) { try {
+        //throws Throwable {
         ObjectMapper map = new ObjectMapper();
+        map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JavaType type = map.getTypeFactory().constructMapType(HashMap.class, String.class, structure);
         final HashMap<Object, Object> data = map.readValue(mapData, type);
         return new IteratorMap<Object, Object[]>(data.keySet().iterator()) {
@@ -93,6 +100,10 @@ public class JSONDataProvider {
                 return new Object[] { o, structure.cast(data.get(o)) };
             }
         };
+        } catch (IOException ex) {
+            Logger.getLogger(JSONDataProvider.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Collections.EMPTY_LIST.iterator();
     }
 
 }
