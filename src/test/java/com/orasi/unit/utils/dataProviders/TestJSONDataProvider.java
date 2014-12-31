@@ -46,7 +46,7 @@ public class TestJSONDataProvider {
     }
     
     public Path getFilePath(String name) throws Throwable {
-        return Paths.get(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH + name).toURI());
+        return Paths.get(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH).toURI()).resolve(name);
     }
 
     @DataProvider(name = "dataDiningNode")
