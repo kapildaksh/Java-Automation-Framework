@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.utils.Constants;
 import com.orasi.utils.dataProviders.JSONDataProvider;
 import com.orasi.utils.types.IteratorMap;
+import edu.emory.mathcs.backport.java.util.Arrays;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -59,6 +60,21 @@ public class TestJSONDataProvider {
 	return JSONDataProvider.createHashStructured(getFilePath("TestJSONDining.json"), DiningTest.class).getData();
     }
     
+    @DataProvider(name = "dataArray")
+    public Iterator<Object[]> dataArray() throws Throwable {
+	return JSONDataProvider.createArrayParams(getFilePath("TestJSONArray.json")).getData();
+    }
+    
+    @DataProvider(name = "dataArrayNode")
+    public Iterator<Object[]> dataArrayNode() throws Throwable {
+	return JSONDataProvider.createArrayNode(getFilePath("TestJSONArray.json")).getData();
+    }
+    
+    @DataProvider(name = "dataArrayArray")
+    public Iterator<Object[]> dataArrayArray() throws Throwable {
+	return JSONDataProvider.createArrayStructured(getFilePath("TestJSONArray.json"), int[].class).getData();
+    }
+    
     @Test(dataProvider = "dataDiningNode")
     public void testDiningNode(String name, JsonNode node) {
         JsonNode nlist = node.path("diningList");
@@ -79,6 +95,23 @@ public class TestJSONDataProvider {
         Iterator<String> i2 = new ArrayIterator(DINING_LIST);
         Assert.assertEquals(i1, i2);
         Assert.assertEquals(node.diningInfo.partySize, PARTY_SIZE);
+    }
+    
+    @Test(dataProvider = "dataArray")
+    public void testArray(int a, int b, int c, int d, int e) {
+        System.out.println(a + " " + b + " " + c + " " + d + " " + e);
+    }
+    
+    @Test(dataProvider = "dataArrayNode")
+    public void testArrayNode(JsonNode a) {
+        System.out.println("Read JSON Node Data");
+    }
+    
+    @Test(dataProvider = "dataArrayArray")
+    public void testArrayArray(int[] a) {
+        for(int v : a)
+            System.out.print(v + " ");
+        System.out.println("Read Array Data");
     }
     
 }
