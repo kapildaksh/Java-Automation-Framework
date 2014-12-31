@@ -109,31 +109,46 @@ public class TestJSONDataProvider {
     
     @Test(dataProvider = "dataArray")
     public void testArray(int a, int b, int c, int d, int e) {
-        System.out.println(a + " " + b + " " + c + " " + d + " " + e);
+        Assert.assertTrue(a == 1 || a == 5);
+        Assert.assertTrue(b == 2 || b == 4);
+        Assert.assertTrue(c == 3 || c == 3);
+        Assert.assertTrue(d == 4 || d == 2);
+        Assert.assertTrue(e == 5 || e == 1);
     }
     
     @Test(dataProvider = "dataArrayNode")
     public void testArrayNode(JsonNode a) {
-        System.out.println("Read JSON Node Data");
+        Iterator<Integer> it = new IteratorMap<JsonNode, Integer>(a.iterator()) {
+            @Override
+            public Integer apply(JsonNode i) {
+                return i.asInt();
+            }
+        };
+        
+        if(it.next().equals(1)) {
+            Assert.assertEquals(it, new ArrayIterator(new Integer[] { 2, 3, 4, 5 }));
+        } else {
+            Assert.assertEquals(it, new ArrayIterator(new Integer[] { 4, 3, 2, 1 }));
+        }
     }
     
     @Test(dataProvider = "dataArrayArray")
     public void testArrayArray(int[] a) {
-        for(int v : a)
-            System.out.print(v + " ");
-        System.out.println("Read Array Data");
+        Assert.assertTrue(java.util.Arrays.equals(a, new int[] {1, 2, 3, 4, 5}) || java.util.Arrays.equals(a, new int[] { 5, 4, 3, 2, 1 }));
     }
     
     @Test(dataProvider = "dataHashParams")
     public void testHashParams(int a, int b, int c, int d, int e) {
-        System.out.println(a + " " + b + " " + c + " " + d + " " + e);
+        Assert.assertTrue(a == 1 || a == 5);
+        Assert.assertTrue(b == 2 || b == 4);
+        Assert.assertTrue(c == 3 || c == 3);
+        Assert.assertTrue(d == 4 || d == 2);
+        Assert.assertTrue(e == 5 || e == 1);
     }
     
     @Test(dataProvider = "dataHashArray")
     public void testHashArray(String name, int[] a) {
-        for(int v : a)
-            System.out.print(v + " ");
-        System.out.println(name);
+        Assert.assertTrue(java.util.Arrays.equals(a, new int[] {1, 2, 3, 4, 5}) || java.util.Arrays.equals(a, new int[] { 5, 4, 3, 2, 1 }));
     }
     
 }
