@@ -32,7 +32,8 @@ public class ByAngularRepeaterColumn extends ByAngular.BaseBy {
         throw new UnsupportedOperationException("This locator zooms in on a multiple cells, findElement() is meaningless");
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public List<WebElement> findElements(SearchContext searchContext) {
         if (searchContext instanceof WebDriver) {
             searchContext = null;

@@ -47,7 +47,8 @@ public class ByAngularBinding extends By {
         return (WebElement) jse.executeScript(makeJsBy("[0]"), context);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public List<WebElement> findElements(SearchContext searchContext) {
         if (searchContext instanceof WebDriver) {
             searchContext = null;

@@ -9,7 +9,6 @@ import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import com.orasi.core.angular.ByAngular;
-import com.orasi.utils.WebDriverSetup;
 
 public class AngularElementLocator implements ElementLocator {
 	  private final WebDriver driver;
@@ -24,7 +23,8 @@ public class AngularElementLocator implements ElementLocator {
 	  }
 	  
 	  //@Override
-	  public WebElement findElement() {
+	  @SuppressWarnings("static-access")
+	public WebElement findElement() {
 		  RemoteWebElement element = null;
 		  if (!ngLocator.ngModel().toString().isEmpty()){
 			  element = (RemoteWebElement) driver.findElement(ng.model(ngLocator.ngModel()));
@@ -37,7 +37,7 @@ public class AngularElementLocator implements ElementLocator {
 		  return element;
 	  }
 	  
-	  @SuppressWarnings("unchecked")// @Override
+	  @SuppressWarnings({ "static-access" })// @Override
 	  public List<WebElement> findElements() {
 		  
 		  List<WebElement> elements = null;

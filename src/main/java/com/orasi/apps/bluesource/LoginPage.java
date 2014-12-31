@@ -10,8 +10,6 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Constants;
 
-
-
 public class LoginPage {
 	private WebDriver driver;
 	
@@ -68,8 +66,4 @@ public class LoginPage {
 		txtPassword.setSecure(password);
 		btnLogin.click();
 	}
-	
-
-	  
-
 }
