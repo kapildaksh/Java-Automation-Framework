@@ -85,7 +85,8 @@ public class ByAngularButtonText  extends ByAngular.BaseBy {
         return o;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public List<WebElement> findElements(SearchContext searchContext) {
         if (searchContext instanceof WebDriver) {
             searchContext = null;

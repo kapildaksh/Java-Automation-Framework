@@ -62,7 +62,8 @@ public class ByAngularRepeater extends ByAngular.BaseBy {
         return (WebElement) o;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public List<WebElement> findElements(SearchContext searchContext) {
         if (searchContext instanceof WebDriver) {
             searchContext = null;
