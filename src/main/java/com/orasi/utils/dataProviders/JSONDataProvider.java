@@ -96,10 +96,10 @@ public class JSONDataProvider {
      * The test methods will be called with the following parameter spec:
      * testFunction([structure] value);
      * 
-     * @param filePath      Path of JSON file
-     * @param structure     Structure of JSON instance entries
+     * @param   filePath      Path of JSON file
+     * @param   structure     Structure of JSON instance entries
      * @return
-     * @throws Throwable 
+     * @throws  Throwable 
      */
     public static JSONDataProvider createArrayStructured(Path filePath, Class structure) throws Throwable {
         ObjectMapper map = new ObjectMapper();
@@ -113,9 +113,9 @@ public class JSONDataProvider {
      * of an array type, but the array elements themselves may be any
      * primitive type.
      * 
-     * @param filePath      Path of JSON file
+     * @param   filePath      Path of JSON file
      * @return
-     * @throws Throwable 
+     * @throws  Throwable 
      */
     public static JSONDataProvider createHashParams(Path filePath) throws Throwable {
         ObjectMapper map = new ObjectMapper();
@@ -128,9 +128,9 @@ public class JSONDataProvider {
      * functions such as .path("elementName") to traverse and retrieve values.
      * See the Jackson API for more details regarding the JsonNode Class.
      *
-     * @param filePath      Path of JSON file
+     * @param   filePath      Path of JSON file
      * @return
-     * @throws Throwable 
+     * @throws  Throwable 
      */
     public static JSONDataProvider createHashNode(Path filePath) throws Throwable {
         return createHashStructured(filePath, JsonNode.class);
@@ -144,10 +144,10 @@ public class JSONDataProvider {
      * The test methods will be called with the following parameter spec:
      * testFunction([structure] value);
      * 
-     * @param filePath      Path of JSON file
-     * @param structure     Structure of JSON instance entries
+     * @param   filePath      Path of JSON file
+     * @param   structure     Structure of JSON instance entries
      * @return
-     * @throws Throwable 
+     * @throws  Throwable 
      */
     public static JSONDataProvider createHashStructured(Path filePath, Class structure) throws Throwable {
         ObjectMapper map = new ObjectMapper();
@@ -175,6 +175,7 @@ public class JSONDataProvider {
      * 
      * @version	12/30/2014
      * @author 	Brian Becker
+     * @warning Handles exceptions, returning empty iterators on failure
      * @return 	Iterator of Object[]
      */
     public Iterator<Object[]> getData() {
