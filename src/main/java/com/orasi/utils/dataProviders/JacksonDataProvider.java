@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.orasi.utils.types.IteratorMap;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,10 +30,10 @@ import org.apache.commons.collections.iterators.ArrayIterator;
  * @version     12/30/2014
  * @author      Brian Becker
  */
-public class JSONDataProvider {
+public class JacksonDataProvider {
     
     // Keep an instance of the object mapper around for reading the data
-    private final ObjectMapper map;
+    private ObjectMapper map;
     // Data type which the provider is going to use to map json
     private final JavaType dataType;
     
@@ -53,11 +54,21 @@ public class JSONDataProvider {
      * @param       wrapParams              parameter wrapping needed
      * @throws      java.lang.Throwable
      */
-    public JSONDataProvider(Path filePath, ObjectMapper map, JavaType dataType, boolean wrapParams) throws Throwable {
+    public JacksonDataProvider(Path filePath, ObjectMapper map, JavaType dataType, boolean wrapParams) throws Throwable {
         this.mapData = Files.readAllBytes(filePath);
         this.map = map;
         this.dataType = dataType;
         this.wrapParams = wrapParams;
+    }
+    
+    /**
+     * This switches the Jackson mapping to the XML.
+     * 
+     * @return this
+     */
+    public JacksonDataProvider forXML() {
+        this.map = new XmlMapper();
+        return this;
     }
     
     /**
@@ -69,10 +80,10 @@ public class JSONDataProvider {
      * @return
      * @throws Throwable 
      */
-    public static JSONDataProvider createArrayParams(Path filePath) throws Throwable {
+    public static JacksonDataProvider createArrayParams(Path filePath) throws Throwable {
         ObjectMapper map = new ObjectMapper();
         JavaType dt = map.getTypeFactory().constructArrayType(map.getTypeFactory().constructArrayType(Object.class));
-        return new JSONDataProvider(filePath, map, dt, false);
+        return new JacksonDataProvider(filePath, map, dt, false);
     }
     
     /**
@@ -84,7 +95,7 @@ public class JSONDataProvider {
      * @return
      * @throws Throwable 
      */
-    public static JSONDataProvider createArrayNode(Path filePath) throws Throwable {
+    public static JacksonDataProvider createArrayNode(Path filePath) throws Throwable {
         return createArrayStructured(filePath, JsonNode.class);
     }
     
@@ -101,11 +112,11 @@ public class JSONDataProvider {
      * @return
      * @throws  Throwable 
      */
-    public static JSONDataProvider createArrayStructured(Path filePath, Class structure) throws Throwable {
+    public static JacksonDataProvider createArrayStructured(Path filePath, Class structure) throws Throwable {
         ObjectMapper map = new ObjectMapper();
         map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JavaType dt = map.getTypeFactory().constructArrayType(structure);
-        return new JSONDataProvider(filePath, map, dt, true);
+        return new JacksonDataProvider(filePath, map, dt, true);
     }
     
     /**
@@ -117,10 +128,10 @@ public class JSONDataProvider {
      * @return
      * @throws  Throwable 
      */
-    public static JSONDataProvider createHashParams(Path filePath) throws Throwable {
+    public static JacksonDataProvider createHashParams(Path filePath) throws Throwable {
         ObjectMapper map = new ObjectMapper();
         JavaType dt = map.getTypeFactory().constructMapType(HashMap.class, map.getTypeFactory().constructType(String.class), map.getTypeFactory().constructArrayType(Object.class));
-        return new JSONDataProvider(filePath, map, dt, false);
+        return new JacksonDataProvider(filePath, map, dt, false);
     }
     
     /**
@@ -132,7 +143,7 @@ public class JSONDataProvider {
      * @return
      * @throws  Throwable 
      */
-    public static JSONDataProvider createHashNode(Path filePath) throws Throwable {
+    public static JacksonDataProvider createHashNode(Path filePath) throws Throwable {
         return createHashStructured(filePath, JsonNode.class);
     }
     
@@ -149,22 +160,22 @@ public class JSONDataProvider {
      * @return
      * @throws  Throwable 
      */
-    public static JSONDataProvider createHashStructured(Path filePath, Class structure) throws Throwable {
+    public static JacksonDataProvider createHashStructured(Path filePath, Class structure) throws Throwable {
         ObjectMapper map = new ObjectMapper();
         map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JavaType dt = map.getTypeFactory().constructMapType(HashMap.class, String.class, structure);
-        return new JSONDataProvider(filePath, map, dt, true);        
+        return new JacksonDataProvider(filePath, map, dt, true);        
     }
 
     /**
      * This gets the test data from a JSON file, given the file is in an
      * appropriate format for the JSON provider configuration. The outer
-     * level must either be an array or a hash map, because it must be
-     * able to be iterated through.
-     * 
-     * Example of JSONDataProvider configured to output parameters from a
-     * JSON file with a root-level hash table.
-     * {@code
+ level must either be an array or a hash map, because it must be
+ able to be iterated through.
+ 
+ Example of JacksonDataProvider configured to output parameters from a
+ JSON file with a root-level hash table.
+ {@code
      *      {
      *          "TestCase1":
      *              [1, 2, 3, 4, 5],
@@ -204,7 +215,7 @@ public class JSONDataProvider {
                 };
             }
         } catch (Exception ex) {
-            Logger.getLogger(JSONDataProvider.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JacksonDataProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
         return Collections.EMPTY_LIST.iterator();
     }

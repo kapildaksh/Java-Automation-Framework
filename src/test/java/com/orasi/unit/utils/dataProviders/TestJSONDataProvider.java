@@ -7,7 +7,7 @@ package com.orasi.unit.utils.dataProviders;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.utils.Constants;
-import com.orasi.utils.dataProviders.JSONDataProvider;
+import com.orasi.utils.dataProviders.JacksonDataProvider;
 import com.orasi.utils.types.IteratorMap;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -51,37 +51,37 @@ public class TestJSONDataProvider {
 
     @DataProvider(name = "dataDiningNode")
     public Iterator<Object[]> dataDiningNode() throws Throwable {
-        return JSONDataProvider.createHashNode(getFilePath("TestJSONDining.json")).getData();
+        return JacksonDataProvider.createHashNode(getFilePath("TestJSONDining.json")).getData();
     }
     
     @DataProvider(name = "dataDiningClass")
     public Iterator<Object[]> dataDiningClass() throws Throwable {
-	return JSONDataProvider.createHashStructured(getFilePath("TestJSONDining.json"), DiningTest.class).getData();
+	return JacksonDataProvider.createHashStructured(getFilePath("TestJSONDining.json"), DiningTest.class).getData();
     }
     
     @DataProvider(name = "dataArray")
     public Iterator<Object[]> dataArray() throws Throwable {
-	return JSONDataProvider.createArrayParams(getFilePath("TestJSONArray.json")).getData();
+	return JacksonDataProvider.createArrayParams(getFilePath("TestJSONArray.json")).getData();
     }
     
     @DataProvider(name = "dataArrayNode")
     public Iterator<Object[]> dataArrayNode() throws Throwable {
-	return JSONDataProvider.createArrayNode(getFilePath("TestJSONArray.json")).getData();
+	return JacksonDataProvider.createArrayNode(getFilePath("TestJSONArray.json")).getData();
     }
     
     @DataProvider(name = "dataArrayArray")
     public Iterator<Object[]> dataArrayArray() throws Throwable {
-	return JSONDataProvider.createArrayStructured(getFilePath("TestJSONArray.json"), int[].class).getData();
+	return JacksonDataProvider.createArrayStructured(getFilePath("TestJSONArray.json"), int[].class).getData();
     }
     
     @DataProvider(name = "dataHashParams")
     public Iterator<Object[]> dataHashParams() throws Throwable {
-	return JSONDataProvider.createHashParams(getFilePath("TestJSONHashArray.json")).getData();
+	return JacksonDataProvider.createHashParams(getFilePath("TestJSONHashArray.json")).getData();
     }
     
     @DataProvider(name = "dataHashArray")
     public Iterator<Object[]> dataHashArray() throws Throwable {
-	return JSONDataProvider.createHashStructured(getFilePath("TestJSONHashArray.json"), int[].class).getData();
+	return JacksonDataProvider.createHashStructured(getFilePath("TestJSONHashArray.json"), int[].class).getData();
     }
     
     @Test(dataProvider = "dataDiningNode")
