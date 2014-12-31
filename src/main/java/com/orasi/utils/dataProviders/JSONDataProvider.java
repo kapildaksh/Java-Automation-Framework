@@ -185,7 +185,10 @@ public class JSONDataProvider {
                 return new IteratorMap<Entry<Object, Object>, Object[]>(hm.entrySet().iterator()) {
                     @Override
                     public Object[] apply(Entry<Object, Object> value) {
-                        return new Object[] { value.getKey(), value.getValue() };
+                        if(wrapParams) {
+                            return new Object[] { value.getKey(), value.getValue() };
+                        }
+                        return (Object[]) value.getValue();
                     }
                 };
             } else {

@@ -75,6 +75,16 @@ public class TestJSONDataProvider {
 	return JSONDataProvider.createArrayStructured(getFilePath("TestJSONArray.json"), int[].class).getData();
     }
     
+    @DataProvider(name = "dataHashParams")
+    public Iterator<Object[]> dataHashParams() throws Throwable {
+	return JSONDataProvider.createHashParams(getFilePath("TestJSONHashArray.json")).getData();
+    }
+    
+    @DataProvider(name = "dataHashArray")
+    public Iterator<Object[]> dataHashArray() throws Throwable {
+	return JSONDataProvider.createHashStructured(getFilePath("TestJSONHashArray.json"), int[].class).getData();
+    }
+    
     @Test(dataProvider = "dataDiningNode")
     public void testDiningNode(String name, JsonNode node) {
         JsonNode nlist = node.path("diningList");
@@ -112,6 +122,18 @@ public class TestJSONDataProvider {
         for(int v : a)
             System.out.print(v + " ");
         System.out.println("Read Array Data");
+    }
+    
+    @Test(dataProvider = "dataHashParams")
+    public void testHashParams(int a, int b, int c, int d, int e) {
+        System.out.println(a + " " + b + " " + c + " " + d + " " + e);
+    }
+    
+    @Test(dataProvider = "dataHashArray")
+    public void testHashArray(String name, int[] a) {
+        for(int v : a)
+            System.out.print(v + " ");
+        System.out.println(name);
     }
     
 }
