@@ -11,20 +11,22 @@ public class Constants {
     final static public int CURRENT_DAY = Calendar.getInstance().get(Calendar.DATE);
 	
     /** Location of the environment URLs properties file */
-    final static public String ENVIRONMENT_URL_PATH = "com.orasi.utils.EnvironmentURLs";
+    final static public String ENVIRONMENT_URL_PATH = "EnvironmentURLs";
+   		
     
     /** Location of the user credentials properties file */
-    final static public String USER_CREDENTIALS_PATH = "com.orasi.utils.UserCredentials";
+    final static public String USER_CREDENTIALS_PATH = "UserCredentials";
+  
     
-    /** Location of datasheets csv files in the project */
-    final static public String BLUESOURCE_CSV_PATH = "/com/orasi/bluesource/";
+    /** Location of data provider files in the project  */
+    final static public String BLUESOURCE_DATAPROVIDER_PATH = "/bluesource/dataProviders/";
     
     /** Location of drivers in project */
-    final static public String DRIVERS_PATH_LOCAL = "/com/orasi/drivers/";
+    final static public String DRIVERS_PATH_LOCAL = "/drivers/";
     final static public String DRIVERS_PATH_REMOTE = "C:\\Selenium\\WebDrivers\\";
     
     /** Location of tnsnames in project */
-    final static public String TNSNAMES_PATH = "/com/orasi/database/";
+    final static public String TNSNAMES_PATH = "/database/";
     		
     /** An alias for File.separator */
     final static public String DIR_SEPARATOR = File.separator;
@@ -67,4 +69,8 @@ public class Constants {
         }
         return "." + Constants.DIR_SEPARATOR;
     }
+
+
+
 }
+

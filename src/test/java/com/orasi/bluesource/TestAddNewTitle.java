@@ -1,4 +1,4 @@
-package com.orasi.pageFactoryExamples.bluesource;
+package com.orasi.bluesource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +38,7 @@ public class TestAddNewTitle {
 
     @DataProvider(name = "dataScenario")
     public Object[][] scenarios() {
-	return new ExcelDataProvider(Constants.BLUESOURCE_CSV_PATH
+	return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
 		+ "TestAddNewTitle.xlsx", "TestAddNewTitle").getTestData();
     }
 
@@ -82,7 +82,7 @@ public class TestAddNewTitle {
 
 	String testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
-
+	TestReporter.setPrintToConsole(true);
 	WebDriverSetup setup = new WebDriverSetup(application,
 		browserUnderTest, browserVersion, operatingSystem, runLocation,
 		environment);
@@ -92,14 +92,13 @@ public class TestAddNewTitle {
 
 	// Login
 	LoginPage loginPage = new LoginPage(driver);
-	Assert.assertTrue(loginPage.pageLoaded(),
+	TestReporter.assertTrue(loginPage.pageLoaded(),
 		"Verify login page is displayed");
 	loginPage.login(role);
 
 	// Verify user is logged in
 	TopNavigationBar topNavigationBar = new TopNavigationBar(driver);
-	Assert.assertTrue(topNavigationBar.isLoggedIn());
-	TestReporter.log("User was logged in successfully");
+	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
 
 	// Navigate to the title page
 	topNavigationBar.clickAdminLink();
@@ -107,35 +106,31 @@ public class TestAddNewTitle {
 
 	// Verify navigated to the title page
 	ListingTitlesPage listingTitlesPage = new ListingTitlesPage(driver);
-	Assert.assertTrue(listingTitlesPage.pageLoaded(),
+	TestReporter.assertTrue(listingTitlesPage.pageLoaded(),
 		"Verify listing titles page is displayed");
-	TestReporter.log("Navigated to the listing titles page");
 
 	// Click new title
 	listingTitlesPage.clickNewTitle();
-	TestReporter.log("Navigated to the new title page");
 
 	// Instantiate the New titles page and create a new title
 	NewTitlePage newTitlePage = new NewTitlePage(driver);
-	Assert.assertTrue(newTitlePage.pageLoaded(),
+	TestReporter.assertTrue(newTitlePage.pageLoaded(),
 		"Verify create new title page is displayed");
 	newTitlePage.createNewTitle(newTitle);
 
 	// Verify the title was created
-	Assert.assertTrue(listingTitlesPage.isSuccessMsgDisplayed());
+	TestReporter.assertTrue(listingTitlesPage.isSuccessMsgDisplayed(), "Validate success message appears");
 	TestReporter.log("New Title was created: " + newTitle);
 
 	// Verify the title is displayed on the title results table
-	Assert.assertTrue(listingTitlesPage.searchTableByTitle(newTitle));
-	TestReporter.log("New title was found in table of titles");
+	TestReporter.assertTrue(listingTitlesPage.searchTableByTitle(newTitle), "Validate new title appears in table");
 
 	// Delete the new title
 	listingTitlesPage.deleteTitle(newTitle);
 
 	// Verify the title is deleted
 	ListingTitlesPage refreshedPage = new ListingTitlesPage(driver);
-	Assert.assertTrue(refreshedPage.isSuccessMsgDisplayed());
-	TestReporter.log("New title was deleted successfully");
+	TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(), "Validate success message appears");
 
 	// logout
 	topNavigationBar.logout();
