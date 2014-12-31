@@ -55,7 +55,7 @@ import com.eviware.soapui.support.SoapUIException;
 import com.orasi.utils.XMLTools;
 
 @SuppressWarnings("deprecation")
-public abstract class BaseSoapService{
+public abstract class SoapService{
 
 	private String strEnvironment = null;
 	private String strServiceURL = null;

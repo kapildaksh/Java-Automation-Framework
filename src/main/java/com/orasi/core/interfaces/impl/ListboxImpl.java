@@ -1,6 +1,7 @@
 package com.orasi.core.interfaces.impl;
 
 import com.orasi.core.interfaces.Listbox;
+import com.orasi.utils.TestReporter;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -21,7 +22,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      * @param element - element to wrap up
      */
     public ListboxImpl(WebElement element) {
-        super(element);
+        super(element);        
         this.innerSelect = new org.openqa.selenium.support.ui.Select(element);
     }
   
@@ -33,20 +34,26 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     @Override
     public void select(String text) {
 		if (!text.isEmpty()){
-			try{
-				Reporter.log(new Timestamp(date.getTime()) + " :: Select option [ <b>" + text.toString() + "</b> ] from Listbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b>]<br />");
-				innerSelect.selectByVisibleText(text);            
+			try{   
+			    try{
+				innerSelect.selectByVisibleText(text);
+			    }catch(RuntimeException rte){
+			        TestReporter.interfaceLog("Select option [ <b>" + text.toString() + "</b> ] from Listbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b>]", true);
+			        throw rte;
+			    }	
+			    
+			    TestReporter.interfaceLog("Select option [ <b>" + text.toString() + "</b> ] from Listbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 			}catch (NoSuchElementException e){
 				String optionList = "";
 				List<WebElement> optionsList= innerSelect.getOptions();
 				for(WebElement option : optionsList){
 					optionList += option.getText() + " | ";
 				}
-				Reporter.log(new Timestamp(date.getTime()) + " :: The value of <b>[ " + text + "</b> ] was not found in Listbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b>]. Acceptable values are " + optionList +" ]<br />");
+				TestReporter.interfaceLog(" The value of <b>[ " + text + "</b> ] was not found in Listbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b>]. Acceptable values are " + optionList +" ]");
 				throw new NoSuchElementException("The value of [ " + text + " ] was not found in Listbox [  @FindBy: " + getElementLocatorInfo()  + " ]. Acceptable values are " + optionList );
 			}       	
 		}else{
-			Reporter.log(new Timestamp(date.getTime()) + " :: Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]<br />");
+		    TestReporter.interfaceLog("Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
 		}
     }
 

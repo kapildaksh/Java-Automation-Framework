@@ -3,6 +3,7 @@ package com.orasi.core.interfaces.impl;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import com.orasi.core.interfaces.Button;
 import com.orasi.utils.TestReporter;
 
@@ -23,16 +24,29 @@ public class ButtonImpl extends ElementImpl implements Button {
     @Override
     public void click() {
 
-    	TestReporter.log("Click Button [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
-
-    	getWrappedElement().click(); 
+    	//TestReporter.log("Click Button [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+ 	try{
+ 	   getWrappedElement().click(); 
+    	}catch(RuntimeException rte){
+    	    TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() + "</b>]", true);
+    	    throw rte;
+    	}
+ 	
+ 	TestReporter.interfaceLog(" Clicked [ <b>@FindBy: " + getElementLocatorInfo() + "</b>]");
+    	
     }
     
     @Override
-    public void jsClick(WebDriver driver){
-    	TestReporter.log("Click Button [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
-
+    public void jsClick(WebDriver driver){    	
     	JavascriptExecutor jse = (JavascriptExecutor)driver;
-    	jse.executeScript("arguments[0].click();", element );
+    	
+    	try{
+    	    jse.executeScript("arguments[0].click();", element );
+     	}catch(RuntimeException rte){
+     	    TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() +"</b>]", true);
+     	    throw rte;
+     	}
+  	 TestReporter.interfaceLog(" Clicked [ <b>@FindBy: " + getElementLocatorInfo() + "</b>]");
+    	
     }
 }
