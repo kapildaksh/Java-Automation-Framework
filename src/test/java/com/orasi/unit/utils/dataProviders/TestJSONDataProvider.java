@@ -51,14 +51,12 @@ public class TestJSONDataProvider {
 
     @DataProvider(name = "dataDiningNode")
     public Iterator<Object[]> dataDiningNode() throws Throwable {
-        // System.out.println(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH + "TestJSONDining.json").toString());
-	return new JSONDataProvider(getFilePath("TestJSONDining.json")).getDataMap(JsonNode.class);
+        return JSONDataProvider.createHashNode(getFilePath("TestJSONDining.json")).getData();
     }
     
     @DataProvider(name = "dataDiningClass")
     public Iterator<Object[]> dataDiningClass() throws Throwable {
-        // System.out.println(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH + "TestJSONDining.json").toString());
-	return new JSONDataProvider(getFilePath("TestJSONDining.json")).getDataMap(DiningTest.class);
+	return JSONDataProvider.createHashStructured(getFilePath("TestJSONDining.json"), DiningTest.class).getData();
     }
     
     @Test(dataProvider = "dataDiningNode")

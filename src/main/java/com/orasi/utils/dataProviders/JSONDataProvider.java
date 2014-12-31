@@ -2,6 +2,7 @@ package com.orasi.utils.dataProviders;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.utils.types.IteratorMap;
 import java.io.IOException;
@@ -31,50 +32,66 @@ import java.util.logging.Logger;
  */
 public class JSONDataProvider {
     
+    private final ObjectMapper map;
+    private final JavaType dataType;
+    
     // File path of JSON data
     private final byte[] mapData;
     
     /**
-     * This creates the JSON Data provider with a given file path.
+     * This creates the JSON Data provider with a given file path, instance
+     * structure, as well as instance array or hash map.
      * 
      * @param       filePath                file path of the JSON file
      * @version     12/30/2014
      * @author      Brian Becker
+     * @param       map                     object mapper used to create type
+     * @param       dataType                data type of test
      * @throws      java.lang.Throwable
      */
-    public JSONDataProvider(Path filePath) throws Throwable {
+    public JSONDataProvider(Path filePath, ObjectMapper map, JavaType dataType) throws Throwable {
         this.mapData = Files.readAllBytes(filePath);
+        this.map = map;
+        this.dataType = dataType;
     }
     
-    /**
-     * This gets the test data from a JSON file.  It returns all the data 
-     * as an Iterator of Object[]. It accepts a 2d array JSON file.
-     * 
-     * {@code
-     *      [
-     *          [ "Col1", "Col2", "Col3", "Col4" ],
-     *          [ 1, 2, 3, 4 ]
-     *      ]
-     * }
-     * 
-     * @version	12/30/2014
-     * @author 	Brian Becker
-     * @return 	Iterator of Object[]
-     */
-    public Iterator<Object[]> getData() {
-        try {
-            ObjectMapper map = new ObjectMapper();
-            final Iterator<ArrayList<Object>> data = map.readValue(mapData, LinkedList.class).listIterator();
-            return new IteratorMap<ArrayList<Object>, Object[]>(data) {
-                @Override
-                public Object[] apply(ArrayList<Object> objs) {
-                    return objs.toArray();
-                }
-            };
-        } catch (IOException ex) {
-            Logger.getLogger(JSONDataProvider.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return Collections.EMPTY_LIST.iterator();
+    public static JSONDataProvider createArrayParams(Path filePath) throws Throwable {
+        ObjectMapper map = new ObjectMapper();
+        //JavaType is = map.getTypeFactory().constructType(Object.class);
+        JavaType dt = map.getTypeFactory().constructArrayType(map.getTypeFactory().constructArrayType(Object.class));
+        return new JSONDataProvider(filePath, map, dt);
+    }
+    
+    public static JSONDataProvider createArrayNode(Path filePath) throws Throwable {
+        ObjectMapper map = new ObjectMapper();
+        JavaType dt = map.getTypeFactory().constructArrayType(map.getTypeFactory().constructArrayType(JsonNode.class));
+        return new JSONDataProvider(filePath, map, dt);
+    }
+    
+    public static JSONDataProvider createArrayStructured(Path filePath, Class structure) throws Throwable {
+        ObjectMapper map = new ObjectMapper();
+        map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        JavaType dt = map.getTypeFactory().constructArrayType(map.getTypeFactory().constructArrayType(structure));
+        return new JSONDataProvider(filePath, map, dt);
+    }
+    
+    public static JSONDataProvider createHashParams(Path filePath) throws Throwable {
+        ObjectMapper map = new ObjectMapper();
+        JavaType dt = map.getTypeFactory().constructMapType(HashMap.class, map.getTypeFactory().constructType(String.class), map.getTypeFactory().constructArrayType(Object.class));
+        return new JSONDataProvider(filePath, map, dt);
+    }
+    
+    public static JSONDataProvider createHashNode(Path filePath) throws Throwable {
+        ObjectMapper map = new ObjectMapper();
+        JavaType dt = map.getTypeFactory().constructMapType(HashMap.class, String.class, JsonNode.class);
+        return new JSONDataProvider(filePath, map, dt);
+    }
+    
+    public static JSONDataProvider createHashStructured(Path filePath, Class structure) throws Throwable {
+        ObjectMapper map = new ObjectMapper();
+        map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        JavaType dt = map.getTypeFactory().constructMapType(HashMap.class, String.class, structure);
+        return new JSONDataProvider(filePath, map, dt);        
     }
 
     /**
@@ -94,21 +111,13 @@ public class JSONDataProvider {
      * 
      * @version	12/30/2014
      * @author 	Brian Becker
-     * @param   structure               provide a class which defines a test case instance
      * @return 	Iterator of Object[]
      */
-    public Iterator<Object[]> getDataMap(final Class structure) { try {
-        //throws Throwable {
-        ObjectMapper map = new ObjectMapper();
-        map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        JavaType type = map.getTypeFactory().constructMapType(HashMap.class, String.class, structure);
-        final HashMap<Object, Object> data = map.readValue(mapData, type);
-        return new IteratorMap<Object, Object[]>(data.keySet().iterator()) {
-            @Override
-            public Object[] apply(Object o) {
-                return new Object[] { o, structure.cast(data.get(o)) };
-            }
-        };
+    public Iterator<Object[]> getData() {
+        try {
+            Iterator<Object[]> ito = this.map.readValue(mapData, dataType);
+            System.out.println("Whoops");
+            return ito;
         } catch (IOException ex) {
             Logger.getLogger(JSONDataProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
