@@ -23,5 +23,10 @@
                 <class name="com.orasi.sandbox.TestJSONDataProvider" />
         </classes>
     </test>
+    <test name="TestingXMLDataProvider">
+        <classes>
+                <class name="com.orasi.sandbox.TestXMLDataProvider" />
+        </classes>
+    </test>
 
 </suite>

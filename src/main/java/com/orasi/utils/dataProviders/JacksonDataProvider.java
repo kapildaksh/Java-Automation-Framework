@@ -58,17 +58,7 @@ public class JacksonDataProvider implements DataProvider {
         this.dataType = dataType;
         this.wrapParams = wrapParams;
     }
-    
-    /**
-     * This switches the Jackson mapping to the XML.
-     * 
-     * @return this
-     */
-    public JacksonDataProvider forXML() {
-        this.map = new XmlMapper();
-        return this;
-    }
-    
+
     /**
      * This gets the test data from a data file, given the file is in an
      * appropriate format for the data provider configuration. The outer
@@ -91,6 +81,7 @@ public class JacksonDataProvider implements DataProvider {
      * @warning Handles exceptions, returning empty iterators on failure
      * @return 	Iterator of Object[]
      */
+    @Override
     public Iterator<Object[]> getData() {
         try {
             Object is = this.map.readValue(mapData, dataType);
