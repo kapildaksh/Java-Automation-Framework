@@ -16,15 +16,27 @@ import java.nio.file.Path;
 import java.util.HashMap;
 
 /**
- *
- * @author brian.becker
+ * The Jackson Data Provider factory provides a convenient way of setting
+ * up one of six "structures" for instances, with a variety of different
+ * document formats.
+ * 
+ * The structures are as follows:
+ *      Root is an array, instances are parameters to function (in an array)
+ *      Root is an array, instances are a traversable JsonNode
+ *      Root is an array, instances are custom classes
+ *      Root is a hash, instances are parameters to function (in an array)
+ *      Root is a hash, instances are a traversable JsonNode
+ *      Root is an array, instances are custom classes
+ * 
+ * To get the benefits of structured data, you simply define a structure in
+ * Java which will be automatically filled in.
+ * 
+ * @author Brian Becker
  */
 public class JacksonDataProviderFactory {
    
-    private Path filePath;
-    private ObjectMapper map;
-    private JavaType dataType;
-    private boolean wrapParams;
+    private final Path filePath;
+    private final ObjectMapper map;
 
     /**
      * The Jackson Data Provider factory can be used to construct any type
