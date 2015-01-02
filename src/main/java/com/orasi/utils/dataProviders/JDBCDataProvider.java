@@ -6,7 +6,6 @@
 package com.orasi.utils.dataProviders;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,12 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.ArrayHandler;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.sqlite.SQLiteDataSource;
-import org.sqlite.SQLiteJDBCLoader;
 
 /**
  * This is a database data provider. It takes a URL for a given SQL server
@@ -60,38 +54,37 @@ public class JDBCDataProvider implements DataProvider {
             final Connection conn = this.user != null ? this.dataSource.getConnection(this.user, this.pass) : this.dataSource.getConnection();
             final PreparedStatement ps = conn.prepareStatement( "select * from " + StringEscapeUtils.escapeSql(this.table) );
             final ResultSet rs = ps.executeQuery();
-            return new Iterator<Object[]>() {
-                @Override
-                public boolean hasNext() {
-                    try {
-                        return !rs.isLast();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(JDBCDataProvider.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    return false;
-                }
+            if(rs.next()) {
+                return new Iterator<Object[]>() {
+                    private boolean hNext = true;
 
-                @Override
-                public Object[] next() {
-                    try {
-                        rs.next();
-                        int cols = rs.getMetaData().getColumnCount();
-                        List<Object> items = new ArrayList<>();
-                        for(int i = 1; i <= cols; i++) {
-                            items.add(rs.getObject(i));
+                    @Override
+                    public boolean hasNext() {
+                            return this.hNext;
+                    }
+
+                    @Override
+                    public Object[] next() {
+                        try {
+                            int cols = rs.getMetaData().getColumnCount();
+                            List<Object> items = new ArrayList<>();
+                            for(int i = 1; i <= cols; i++) {
+                                items.add(rs.getObject(i));
+                            }
+                            this.hNext = rs.next();
+                            return items.toArray();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(JDBCDataProvider.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        return items.toArray();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(JDBCDataProvider.class.getName()).log(Level.SEVERE, null, ex);
+                        return null;
                     }
-                    return null;
-                }
 
-                @Override
-                public void remove() {
-                    throw new UnsupportedOperationException("Write to test database not supported."); //To change body of generated methods, choose Tools | Templates.
-                }
-            };
+                    @Override
+                    public void remove() {
+                        throw new UnsupportedOperationException("Write to test database not supported."); //To change body of generated methods, choose Tools | Templates.
+                    }
+                };
+            }
         } catch (Throwable ex) {
             Logger.getLogger(JacksonDataProvider.class.getName()).log(Level.SEVERE, null, ex);
         }

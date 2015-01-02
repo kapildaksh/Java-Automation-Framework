@@ -6,6 +6,8 @@
 package com.orasi.sandbox;
 
 import com.orasi.utils.Constants;
+import com.orasi.utils.dataProviders.JDBCDataProviderFactory;
+import com.orasi.utils.dataProviders.JacksonDataProviderFactory;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
@@ -29,14 +31,14 @@ public class TestSQLiteDataProvider {
         return Paths.get(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH).toURI()).resolve(name);
     }
 
-    //@DataProvider(name = "quickTestSQLite")
-    //public Iterator<Object[]> dataQuickTestSQLite() throws Throwable {
-    //    // return JacksonDataProviderFactory.getCsvFactory(getFilePath("QuickTestSQLite.db")).createArrayParams().getData();
-    //}
+    @DataProvider(name = "quickTestSQLite")
+    public Iterator<Object[]> dataQuickTestSQLite() throws Throwable {
+        return JDBCDataProviderFactory.createSQLite(getFilePath("TestSQLiteQuick.db"), "numbers").getData();
+    }
     
     @Test(dataProvider = "quickTestSQLite")
-    public void testQuickTestSQLite(String a, String b, String c, String d, String e) {
-        Assert.assertTrue("1".equals(a) || "5".equals(a));
+    public void testQuickTestSQLite(Object a, Object b, Object c, Object d, Object e) {
+        System.out.println(a + " " + b + " " + c + " " + d + " " + e);
     }
     
 }
