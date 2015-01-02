@@ -33,5 +33,10 @@
                 <class name="com.orasi.sandbox.TestYAMLDataProvider" />
         </classes>
     </test>
+    <test name="TestingCSVDataProvider">
+        <classes>
+                <class name="com.orasi.sandbox.TestCSVDataProvider" />
+        </classes>
+    </test>
 
 </suite>

@@ -20,11 +20,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
- * These are some basic tests for the JSON Data Provider, in both node based
+ * These are some basic tests for the YAML Data Provider, in both node based
  * traversal and a class mapping. This allows passing very large and complex
  * structures into test cases for things such as web services.
  * 
- * NOTE: Where JSON itself is the structure that should be passed into a test
+ * NOTE: Where YAML itself is the structure that should be passed into a test
  * case, you should escape it and use any data provider you like. This is for
  * passing object-like data to test cases.
  * 
