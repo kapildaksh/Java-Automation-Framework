@@ -2,6 +2,7 @@ package com.orasi.core.interfaces.impl;
 
 import com.orasi.core.interfaces.RadioGroup;
 import com.orasi.core.interfaces.Element;
+import com.orasi.utils.TestReporter;
 
 import org.apache.commons.collections.list.FixedSizeList;
 import org.openqa.selenium.By;
@@ -62,7 +63,14 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	 */
 	public void selectByIndex(int index) {
 		currentIndex = index;
-		new ElementImpl(radioButtons.get(currentIndex)).click();
+		try{
+                    new ElementImpl(radioButtons.get(currentIndex)).click();
+		    }catch(RuntimeException rte){
+			TestReporter.interfaceLog("Select option <b> [ " + currentIndex + " ] </b> from the radio group [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
+		        throw rte;
+		    }
+		TestReporter.interfaceLog("Select option <b> [ " + currentIndex + " ] </b> from the radio group [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
+		
 		setSelectedOption();
 	}
 
@@ -110,14 +118,22 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 			if (stringOptions.get(loopCounter).trim()
 					.equalsIgnoreCase(option.trim())) {
 				currentIndex = loopCounter;
-				new ElementImpl(radioButtons.get(currentIndex)).click();
+
+				    try{
+					new ElementImpl(radioButtons.get(currentIndex)).click();
+				    }catch(RuntimeException rte){
+				        TestReporter.interfaceLog("Select option <b> [ " + option + " ] </b> from the radio group [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
+				        throw rte;
+				    }
+				    TestReporter.interfaceLog("Select option <b> [ " + option + " ] </b> from the radio group [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+				
 				getSelectedOption();
 				break;
 			}
 		}
 		setSelectedOption();
 	}
-
+	
 	/**
 	 * @summary - Defines a List<String> of all options for this instance and defines the currently 
 	 * 		selected option, if any

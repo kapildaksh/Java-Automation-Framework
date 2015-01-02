@@ -26,6 +26,7 @@ import org.testng.Reporter;
 import com.orasi.core.interfaces.Element;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.WebDriverSetup;
+import com.orasi.utils.date.SimpleDate;
 
 /**
  * An implementation of the Element interface. Delegates its work to an
@@ -41,13 +42,19 @@ public class ElementImpl implements Element {
 		this.element = element;
 	}
 
+	    
 	/**
 	 * @see org.openqa.selenium.WebElement#click()
 	 */
 	public void click() {
-
-		element.click();
-		Reporter.log(new Timestamp(date.getTime())
+	    	try{
+	    	    element.click();
+	    	}catch(RuntimeException rte){
+	    	    TestReporter.interfaceLog(SimpleDate.getTimestamp()
+        		+ " :: Clicked [ <font size = 2 color=\"red\"><b>@FindBy: " + getElementLocatorInfo()
+        		+ " </font></b>]");
+	    	}
+		TestReporter.interfaceLog(SimpleDate.getTimestamp()
 				+ " :: Clicked [ <b>@FindBy: " + getElementLocatorInfo()
 				+ " </b>]");
 	}
@@ -57,7 +64,7 @@ public class ElementImpl implements Element {
 		executor.executeScript(
 				"arguments[0].scrollIntoView(true);arguments[0].click();",
 				element);
-		Reporter.log(new Timestamp(date.getTime())
+		TestReporter.interfaceLog(SimpleDate.getTimestamp()
 				+ " :: Clicked [ <b>@FindBy: " + getElementLocatorInfo()
 				+ " </b>]");
 	}
@@ -68,7 +75,7 @@ public class ElementImpl implements Element {
 
 	public void focusClick(WebDriver driver) {
 		new Actions(driver).moveToElement(element).click().perform();
-		Reporter.log(new Timestamp(date.getTime())
+		TestReporter.interfaceLog(SimpleDate.getTimestamp()
 				+ " :: Focus Clicked [ <b>@FindBy: " + getElementLocatorInfo()
 				+ " </b>]");
 	}
@@ -170,7 +177,7 @@ public class ElementImpl implements Element {
 	public void sendKeys(CharSequence... keysToSend) {
 		if (keysToSend.toString() != "") {
 			element.sendKeys(keysToSend);
-			Reporter.log(new Timestamp(date.getTime()) + " :: Send Keys [ <b>"
+			TestReporter.interfaceLog(SimpleDate.getTimestamp() + " :: Send Keys [ <b>"
 					+ keysToSend.toString()
 					+ "</b> ] to Textbox [ <b>@FindBy: "
 					+ getElementLocatorInfo() + " </b> ]");
@@ -209,7 +216,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 		By locator = getElementLocator();
 		loopTimeout = WebDriverSetup.getDefaultTestTimeout() * 10;
-		TestReporter.debugLog("<i> Syncing to element [ <b>@FindBy: "
+		TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>PRESENT</b> in DOM within [ "
 				+ WebDriverSetup.getDefaultTestTimeout() + " ] seconds.</i>");
@@ -226,7 +233,7 @@ public class ElementImpl implements Element {
 
 		if (!found) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>PRESENT</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -253,7 +260,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 		By locator = getElementLocator();
 		loopTimeout = timeout * 10;
-		TestReporter.debugLog("::<i> Syncing to element [ <b>@FindBy: "
+		TestReporter.interfaceLog("::<i> Syncing to element [ <b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>PRESENT</b> in DOM within [ " + timeout
 				+ " ] seconds.</i>");
@@ -272,7 +279,7 @@ public class ElementImpl implements Element {
 
 		if (!found) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>PRESENT</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -300,7 +307,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 		By locator = getElementLocator();
 		loopTimeout = timeout * 10;
-		TestReporter.debugLog("<i> Syncing to element [ <b>@FindBy: "
+		TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>PRESENT</b> in DOM within [ " + timeout
 				+ " ] seconds.</i>");
@@ -320,7 +327,7 @@ public class ElementImpl implements Element {
 
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>PRESENT</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -348,7 +355,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 
 		loopTimeout = WebDriverSetup.getDefaultTestTimeout() * 10;
-		TestReporter.debugLog("<i> Syncing to element [ <b>@FindBy: "
+		TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>VISISBLE</b> within [ "
 				+ WebDriverSetup.getDefaultTestTimeout() + " ] seconds.</i>");
@@ -367,7 +374,7 @@ public class ElementImpl implements Element {
 
 		if (!found) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>VISIBLE</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -394,7 +401,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 
 		loopTimeout = Long.valueOf(timeout) * 10;
-		TestReporter.debugLog("<i> Syncing to element [ <b>@FindBy: "
+		TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>VISISBLE</b> within [ " + timeout
 				+ " ] seconds.</i>");
@@ -413,7 +420,7 @@ public class ElementImpl implements Element {
 
 		if (!found) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>VISIBLE</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -442,7 +449,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 
 		loopTimeout = Integer.valueOf(timeout) * 10;
-		TestReporter.debugLog("<i>Syncing to element [<b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>VISIBLE/<b> within [ " + timeout
 				+ " ] seconds.</i>");
@@ -461,7 +468,7 @@ public class ElementImpl implements Element {
 
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>VISIBLE</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -489,7 +496,7 @@ public class ElementImpl implements Element {
 		double seconds;
 
 		loopTimeout = WebDriverSetup.getDefaultTestTimeout() * 10;
-		TestReporter.debugLog("<i>Syncing to element [ <b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to element [ <b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>HIDDEN</b> within [ "
 				+ WebDriverSetup.getDefaultTestTimeout() + " ] seconds.</i>");
@@ -511,7 +518,7 @@ public class ElementImpl implements Element {
 						TimeUnit.SECONDS);
 		if (!found) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>HIDDEN</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -539,7 +546,7 @@ public class ElementImpl implements Element {
 		double seconds;
 
 		loopTimeout = Long.valueOf(timeout) * 10;
-		TestReporter.debugLog("<i>Syncing to element [<b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
@@ -560,7 +567,7 @@ public class ElementImpl implements Element {
 
 		if (!found) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>HIDDEN</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -587,7 +594,7 @@ public class ElementImpl implements Element {
 		long loopTimeout = 0;
 
 		loopTimeout = Long.valueOf(timeout) * 10;
-		TestReporter.debugLog("<i>Syncing to element [<b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
@@ -607,7 +614,7 @@ public class ElementImpl implements Element {
 
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>HIDDEN</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -635,7 +642,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 
 		loopTimeout = WebDriverSetup.getDefaultTestTimeout() * 10;
-		TestReporter.debugLog("<i>Syncing to element [<b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>ENABLED</b> within [ <b>"
 				+ WebDriverSetup.getDefaultTestTimeout()
@@ -657,7 +664,7 @@ public class ElementImpl implements Element {
 
 		if (!found) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>ENABLED</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -686,7 +693,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 
 		loopTimeout = Long.valueOf(timeout) * 10;
-		TestReporter.debugLog("<i>Syncing to element [<b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
@@ -707,7 +714,7 @@ public class ElementImpl implements Element {
 
 		if (!found) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>ENABLED</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -736,7 +743,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 
 		loopTimeout = Integer.valueOf(timeout) * 10;
-		TestReporter.debugLog("<i>Syncing to element [<b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
@@ -756,7 +763,7 @@ public class ElementImpl implements Element {
 
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>ENABLED</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -784,7 +791,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 
 		loopTimeout = WebDriverSetup.getDefaultTestTimeout() * 10;
-		TestReporter.debugLog("<i>Syncing to element [<b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>DISABLED</b> within [ <b>"
 				+ WebDriverSetup.getDefaultTestTimeout()
@@ -806,7 +813,7 @@ public class ElementImpl implements Element {
 
 		if (!found) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>DISABLED</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -836,7 +843,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 
 		loopTimeout = Long.valueOf(timeout) * 10;
-		TestReporter.debugLog("<i>Syncing to element [<b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
@@ -857,7 +864,7 @@ public class ElementImpl implements Element {
 
 		if (!found) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>DISABLED</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -886,7 +893,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 
 		loopTimeout = Integer.valueOf(timeout) * 10;
-		TestReporter.debugLog("<i>Syncing to element [<b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
@@ -906,7 +913,7 @@ public class ElementImpl implements Element {
 
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] is not <b>DISABLED</b> on the page after [ "
 					+ (dateAfter.getTime() - date.getTime()) / 1000.0
@@ -934,7 +941,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 
 		loopTimeout = WebDriverSetup.getDefaultTestTimeout() * 10;
-		TestReporter.debugLog("<i>Syncing to text in element [<b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to text in element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be displayed within [ <b>"
 				+ WebDriverSetup.getDefaultTestTimeout()
@@ -956,7 +963,7 @@ public class ElementImpl implements Element {
 
 		if (!found) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] did not contain the text [ " + text
 					+ " ] after [ " + (dateAfter.getTime() - date.getTime())
@@ -986,7 +993,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 
 		loopTimeout = Long.valueOf(timeout) * 10;
-		TestReporter.debugLog("<i>Syncing to text in element [<b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to text in element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be displayed within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
@@ -1007,7 +1014,7 @@ public class ElementImpl implements Element {
 
 		if (!found) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] did not contain the text [ " + text
 					+ " ] after [ " + (dateAfter.getTime() - date.getTime())
@@ -1036,7 +1043,7 @@ public class ElementImpl implements Element {
 		double loopTimeout = 0;
 
 		loopTimeout = Integer.valueOf(timeout) * 10;
-		TestReporter.debugLog("<i>Syncing to text in element [<b>@FindBy: "
+		TestReporter.interfaceLog("<i>Syncing to text in element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be displayed within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
@@ -1056,7 +1063,7 @@ public class ElementImpl implements Element {
 
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
-			TestReporter.debugLog("<i>Element [<b>@FindBy: "
+			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
 					+ getElementLocatorInfo()
 					+ " </b>] did not contain the text [ " + text
 					+ " ] after [ " + (dateAfter.getTime() - date.getTime())

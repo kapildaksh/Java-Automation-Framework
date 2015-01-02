@@ -15,6 +15,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.orasi.utils.Base64Coder;
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.Screenshot;
@@ -79,7 +80,6 @@ public class TestAddNewTitle {
     @Test(dataProvider = "dataScenario", groups = { "regression" })
     public void testCreateNewTitle(String testScenario, String role,
 	    String newTitle) {
-
 	String testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	TestReporter.setPrintToConsole(true);

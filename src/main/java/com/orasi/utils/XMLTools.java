@@ -34,9 +34,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.orasi.api.soapServices.core.BaseSoapService;
+import com.orasi.api.soapServices.core.SoapService;
 
-public class XMLTools extends BaseSoapService {
+public class XMLTools extends SoapService {
 
     public static Document addAttribute(Document doc, String nodeName,
 	    String xpath) {

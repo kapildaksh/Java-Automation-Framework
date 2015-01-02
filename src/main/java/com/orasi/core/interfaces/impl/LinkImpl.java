@@ -2,6 +2,7 @@ package com.orasi.core.interfaces.impl;
 
 import com.orasi.core.interfaces.Link;
 import com.orasi.utils.TestReporter;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -22,14 +23,26 @@ public class LinkImpl extends ElementImpl implements Link {
     
     @Override
     public void jsClick(WebDriver driver) {
-    	TestReporter.debugLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
     	JavascriptExecutor executor = (JavascriptExecutor)driver;
-    	executor.executeScript("arguments[0].click();", element);
+    	try{
+    	    executor.executeScript("arguments[0].click();", element);
+    	}catch(RuntimeException rte){
+    	    TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
+    	    throw rte;
+    	}
+    	TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+        
     }
     
     @Override
-    public void click() {
-    	TestReporter.debugLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
-    	getWrappedElement().click();
+    public void click() {    	
+        try{
+            getWrappedElement().click();
+        }catch(RuntimeException rte){
+            TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
+            throw rte;
+        }
+    	TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+    	
     }
 }
