@@ -27,7 +27,7 @@ import java.util.HashMap;
  *      Root is an array, instances are custom classes
  *      Root is a hash, instances are parameters to function (in an array)
  *      Root is a hash, instances are a traversable JsonNode
- *      Root is an array, instances are custom classes
+ *      Root is a hash, instances are custom classes
  * 
  * To get the benefits of structured data, you simply define a structure in
  * Java which will be automatically filled in.
@@ -70,7 +70,9 @@ public class JacksonDataProviderFactory {
      */
     public static JacksonDataProviderFactory getXmlFactory(Path filePath) {
         JacksonXmlModule module = new JacksonXmlModule();
-        return new JacksonDataProviderFactory(filePath, new XmlMapper(module));
+        module.setDefaultUseWrapper(false);
+        XmlMapper mapper = new XmlMapper(module);
+        return new JacksonDataProviderFactory(filePath, mapper);
     }
     
     /**
