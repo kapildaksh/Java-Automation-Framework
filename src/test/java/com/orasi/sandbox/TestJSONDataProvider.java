@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.orasi.unit.utils.dataProviders;
+package com.orasi.sandbox;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.utils.Constants;

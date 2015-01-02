@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="com.orasi_Java-Automation-Framework_jar_1.0">
 
@@ -18,10 +18,10 @@
     </test>
     -->
     
-    <test name="All tests for com.orasi_Java-Automation-Framework_jar_1.0">
-        <packages>
-            <package name="com.orasi.unit.utils.dataProviders"/>
-        </packages>
+    <test name="TestingJSONDataProvider">
+        <classes>
+                <class name="com.orasi.sandbox.TestJSONDataProvider" />
+        </classes>
     </test>
 
 </suite>
