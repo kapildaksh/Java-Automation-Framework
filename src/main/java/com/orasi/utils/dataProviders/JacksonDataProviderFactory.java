@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -92,7 +93,9 @@ public class JacksonDataProviderFactory {
      * @return      Factory which constructs CSV providers
      */
     public static JacksonDataProviderFactory getCsvFactory(Path filePath) {
-        return new JacksonDataProviderFactory(filePath, new CsvMapper());
+        CsvMapper mapper = new CsvMapper();
+        mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY);
+        return new JacksonDataProviderFactory(filePath, mapper);
     }
 
     /**

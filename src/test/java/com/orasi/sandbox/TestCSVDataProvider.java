@@ -6,27 +6,25 @@
 package com.orasi.sandbox;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.orasi.utils.Constants;
 import com.orasi.utils.dataProviders.JacksonDataProviderFactory;
 import com.orasi.utils.types.IteratorMap;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import org.apache.commons.collections.iterators.ArrayIterator;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
- * These are some basic tests for the JSON Data Provider, in both node based
+ * These are some basic tests for the CSV Data Provider, in both node based
  * traversal and a class mapping. This allows passing very large and complex
  * structures into test cases for things such as web services.
  * 
- * NOTE: Where JSON itself is the structure that should be passed into a test
- * case, you should escape it and use any data provider you like. This is for
- * passing object-like data to test cases.
+ * NOTE: CSV is a popular choice for tabular data which doesn't have a lot of
+ * structure. It's an effective way to specify method parameters.
  * 
  * @author Brian Becker
  */
@@ -38,30 +36,30 @@ public class TestCSVDataProvider {
 
     @DataProvider(name = "dataArrayCSV")
     public Iterator<Object[]> dataArrayCSV() throws Throwable {
-        return JacksonDataProviderFactory.getJsonFactory(getFilePath("TestJSONArray.json")).createArrayParams().getData();
+        return JacksonDataProviderFactory.getCsvFactory(getFilePath("TestCSVArray.csv")).createArrayParams().getData();
     }
     
     @DataProvider(name = "dataArrayNodeCSV")
     public Iterator<Object[]> dataArrayNodeCSV() throws Throwable {
-        return JacksonDataProviderFactory.getJsonFactory(getFilePath("TestJSONArray.json")).createArrayNode().getData();
+        return JacksonDataProviderFactory.getCsvFactory(getFilePath("TestCSVArray.csv")).createArrayNode().getData();
     }
     
     @DataProvider(name = "dataArrayArrayCSV")
     public Iterator<Object[]> dataArrayArrayCSV() throws Throwable {
-        return JacksonDataProviderFactory.getJsonFactory(getFilePath("TestJSONArray.json")).createArrayStructured(int[].class).getData();
+        return JacksonDataProviderFactory.getCsvFactory(getFilePath("TestCSVArray.csv")).createArrayStructured(int[].class).getData();
     }
     
     @Test(dataProvider = "dataArrayCSV")
-    public void testArrayCSV(int a, int b, int c, int d, int e) {
-        Assert.assertTrue(a == 1 || a == 5);
-        Assert.assertTrue(b == 2 || b == 4);
-        Assert.assertTrue(c == 3 || c == 3);
-        Assert.assertTrue(d == 4 || d == 2);
-        Assert.assertTrue(e == 5 || e == 1);
+    public void testArrayCSV(String a, String b, String c, String d, String e) {
+        Assert.assertTrue("1".equals(a) || "5".equals(a));
+        Assert.assertTrue("2".equals(b) || "4".equals(b));
+        Assert.assertTrue("3".equals(c) || "3".equals(c));
+        Assert.assertTrue("4".equals(d) || "2".equals(d));
+        Assert.assertTrue("5".equals(e) || "1".equals(e));
     }
     
     @Test(dataProvider = "dataArrayNodeCSV")
-    public void testArrayNodeCSV(JsonNode a) {
+    public void testArrayNodeCSV(ArrayNode a) {
         Iterator<Integer> it = new IteratorMap<JsonNode, Integer>(a.iterator()) {
             @Override
             public Integer apply(JsonNode i) {
