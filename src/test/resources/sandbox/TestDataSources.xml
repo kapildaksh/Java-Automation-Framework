@@ -28,5 +28,10 @@
                 <class name="com.orasi.sandbox.TestXMLDataProvider" />
         </classes>
     </test>
+    <test name="TestingYAMLDataProvider">
+        <classes>
+                <class name="com.orasi.sandbox.TestYAMLDataProvider" />
+        </classes>
+    </test>
 
 </suite>
