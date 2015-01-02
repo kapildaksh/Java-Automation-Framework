@@ -30,7 +30,7 @@ import org.apache.commons.collections.iterators.ArrayIterator;
 public class JacksonDataProvider implements DataProvider {
     
     // Keep an instance of the object mapper around for reading the data
-    private ObjectMapper map;
+    private final ObjectMapper map;
     // Data type which the provider is going to use to map raw data
     private final JavaType dataType;
     

@@ -34,6 +34,11 @@ public class TestCSVDataProvider {
         return Paths.get(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH).toURI()).resolve(name);
     }
 
+    @DataProvider(name = "dataActuallyValidCSV")
+    public Iterator<Object[]> dataActuallyValidCSV() throws Throwable {
+        return JacksonDataProviderFactory.getCsvFactory(getFilePath("TestCSVActuallyValid.csv")).createArrayParams().getData();
+    }
+    
     @DataProvider(name = "dataArrayCSV")
     public Iterator<Object[]> dataArrayCSV() throws Throwable {
         return JacksonDataProviderFactory.getCsvFactory(getFilePath("TestCSVArray.csv")).createArrayParams().getData();
@@ -56,6 +61,21 @@ public class TestCSVDataProvider {
         Assert.assertTrue("3".equals(c) || "3".equals(c));
         Assert.assertTrue("4".equals(d) || "2".equals(d));
         Assert.assertTrue("5".equals(e) || "1".equals(e));
+    }
+    
+    @Test(dataProvider = "dataActuallyValidCSV")
+    public void testActuallyValidCSV(String a, String b, String c, String d, String e) throws Throwable {
+        switch (e) {
+            case "3":
+                Assert.assertEquals(a, "Testing, Testing, 1, 2, 3");
+                break;
+            case "4":
+                Assert.assertEquals(e, "This\nis actually valid\n");
+            case "2":
+                Assert.assertEquals(c, "We can have \"escaped\" quotes");
+                Assert.assertNotEquals(a, "Testing, Testing, 1, 2, 3");
+                break;
+        }
     }
     
     @Test(dataProvider = "dataArrayNodeCSV")
