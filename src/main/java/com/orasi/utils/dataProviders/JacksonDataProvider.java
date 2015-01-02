@@ -15,15 +15,15 @@ import java.util.logging.Logger;
 import org.apache.commons.collections.iterators.ArrayIterator;
 
 /**
- * This is a basic JSON data provider. Instances can be held in either a 2d
+ * This is a structured data provider. Instances can be held in either a 2d
  * array or in an associative array. Instances themselves can either be 2d
  * arrays of "objects" which are passed as parameters to the test case, or
  * they may be structured data. Structured data can be accessed either through
  * the JsonNode object, or custom objects which you provide to this class.
  * 
- * NOTE: Where JSON itself is the structure that should be passed into a test
- * case, you should escape it and use any data provider you like. This is for
- * passing object-like data to test cases.
+ * NOTE: Where JSON or other raw data itself is the structure that should be
+ * passed into a test case, you should escape it and use any data provider you
+ * like. This is for passing object-like data to test cases.
  * 
  * @version     12/30/2014
  * @author      Brian Becker
@@ -32,19 +32,19 @@ public class JacksonDataProvider {
     
     // Keep an instance of the object mapper around for reading the data
     private ObjectMapper map;
-    // Data type which the provider is going to use to map json
+    // Data type which the provider is going to use to map raw data
     private final JavaType dataType;
     
-    // JSON data
+    // Raw Data
     private final byte[] mapData;
     // Wrapping parameters for non-params based method calls
     private final boolean wrapParams;
     
     /**
-     * This creates the JSON Data provider with a given file path, instance
+     * This creates the Jackson Data provider with a given file path, instance
      * structure, as well as instance array or hash map.
      * 
-     * @param       filePath                file path of the JSON file
+     * @param       filePath                file path of the data file
      * @version     12/30/2014
      * @author      Brian Becker
      * @param       map                     object mapper used to create type
@@ -70,8 +70,8 @@ public class JacksonDataProvider {
     }
     
     /**
-     * This gets the test data from a JSON file, given the file is in an
-     * appropriate format for the JSON provider configuration. The outer
+     * This gets the test data from a data file, given the file is in an
+     * appropriate format for the data provider configuration. The outer
      * level must either be an array or a hash map, because it must be
      * able to be iterated through.
      * 

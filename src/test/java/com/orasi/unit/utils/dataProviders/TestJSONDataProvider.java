@@ -7,7 +7,6 @@ package com.orasi.unit.utils.dataProviders;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.utils.Constants;
-import com.orasi.utils.dataProviders.JacksonDataProvider;
 import com.orasi.utils.dataProviders.JacksonDataProviderFactory;
 import com.orasi.utils.types.IteratorMap;
 import java.nio.file.Path;
