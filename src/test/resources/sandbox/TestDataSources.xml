@@ -38,5 +38,10 @@
                 <class name="com.orasi.sandbox.TestCSVDataProvider" />
         </classes>
     </test>
+    <test name="TestSQLiteDataProvider">
+        <classes>
+                <class name="com.orasi.sandbox.TestSQLiteDataProvider" />
+        </classes>
+    </test>
 
 </suite>

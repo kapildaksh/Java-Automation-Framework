@@ -5,7 +5,6 @@
  */
 package com.orasi.utils.dataProviders;
 
-import com.orasi.utils.types.IteratorMap;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,7 +16,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sql.DataSource;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.ArrayHandler;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.sqlite.SQLiteDataSource;
+import org.sqlite.SQLiteJDBCLoader;
 
 /**
  * This is a database data provider. It takes a URL for a given SQL server
@@ -27,12 +32,16 @@ import org.apache.commons.lang.StringEscapeUtils;
  * @author Brian Becker
  */
 public class JDBCDataProvider implements DataProvider {
-    private final String url;
+    private final DataSource dataSource;
     private final String table;
-    
-    public JDBCDataProvider(String url, String table) {
-        this.url = url;
+    private final String user;
+    private final String pass;
+
+    public JDBCDataProvider(DataSource dataSource, String table, String user, String pass) {
+        this.dataSource = dataSource;
         this.table = table;
+        this.user = user;
+        this.pass = pass;
     }
     
     /**
@@ -48,8 +57,8 @@ public class JDBCDataProvider implements DataProvider {
     @Override
     public Iterator<Object[]> getData() {
         try {
-            Connection conn = DriverManager.getConnection(url);
-            PreparedStatement ps = conn.prepareStatement( "select * from " + StringEscapeUtils.escapeSql(this.table) );
+            final Connection conn = this.user != null ? this.dataSource.getConnection(this.user, this.pass) : this.dataSource.getConnection();
+            final PreparedStatement ps = conn.prepareStatement( "select * from " + StringEscapeUtils.escapeSql(this.table) );
             final ResultSet rs = ps.executeQuery();
             return new Iterator<Object[]>() {
                 @Override
