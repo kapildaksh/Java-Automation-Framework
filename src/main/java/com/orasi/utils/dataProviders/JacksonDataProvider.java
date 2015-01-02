@@ -1,8 +1,6 @@
 package com.orasi.utils.dataProviders;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.orasi.utils.types.IteratorMap;
@@ -72,110 +70,14 @@ public class JacksonDataProvider {
     }
     
     /**
-     * This is an array with params test case entries. The entries must be
-     * of an array type, but the array elements themselves may be any
-     * primitive type.
-     * 
-     * @param filePath      Path of JSON file
-     * @return
-     * @throws Throwable 
-     */
-    public static JacksonDataProvider createArrayParams(Path filePath) throws Throwable {
-        ObjectMapper map = new ObjectMapper();
-        JavaType dt = map.getTypeFactory().constructArrayType(map.getTypeFactory().constructArrayType(Object.class));
-        return new JacksonDataProvider(filePath, map, dt, false);
-    }
-    
-    /**
-     * This is an array with node test case entries. You may use special
-     * functions such as .path("elementName") to traverse and retrieve values.
-     * See the Jackson API for more details regarding the JsonNode Class.
-     * 
-     * @param filePath      Path of JSON file
-     * @return
-     * @throws Throwable 
-     */
-    public static JacksonDataProvider createArrayNode(Path filePath) throws Throwable {
-        return createArrayStructured(filePath, JsonNode.class);
-    }
-    
-    /**
-     * This is an array with structured test case entries. The structured
-     * entries can be any class. You may use int[].class if you want a numeric
-     * array, for instance, or you can use a user-defined class.
-     * 
-     * The test methods will be called with the following parameter spec:
-     * testFunction([structure] value);
-     * 
-     * @param   filePath      Path of JSON file
-     * @param   structure     Structure of JSON instance entries
-     * @return
-     * @throws  Throwable 
-     */
-    public static JacksonDataProvider createArrayStructured(Path filePath, Class structure) throws Throwable {
-        ObjectMapper map = new ObjectMapper();
-        map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        JavaType dt = map.getTypeFactory().constructArrayType(structure);
-        return new JacksonDataProvider(filePath, map, dt, true);
-    }
-    
-    /**
-     * This is a hash table with params test case entries. The entries must be
-     * of an array type, but the array elements themselves may be any
-     * primitive type.
-     * 
-     * @param   filePath      Path of JSON file
-     * @return
-     * @throws  Throwable 
-     */
-    public static JacksonDataProvider createHashParams(Path filePath) throws Throwable {
-        ObjectMapper map = new ObjectMapper();
-        JavaType dt = map.getTypeFactory().constructMapType(HashMap.class, map.getTypeFactory().constructType(String.class), map.getTypeFactory().constructArrayType(Object.class));
-        return new JacksonDataProvider(filePath, map, dt, false);
-    }
-    
-    /**
-     * This is a hash table with node test case entries. You may use special
-     * functions such as .path("elementName") to traverse and retrieve values.
-     * See the Jackson API for more details regarding the JsonNode Class.
-     *
-     * @param   filePath      Path of JSON file
-     * @return
-     * @throws  Throwable 
-     */
-    public static JacksonDataProvider createHashNode(Path filePath) throws Throwable {
-        return createHashStructured(filePath, JsonNode.class);
-    }
-    
-    /**
-     * This is a hash table with structured test case entries. The structured
-     * entries can be any class. You may use int[].class if you want a numeric
-     * array, for instance, or you can use a user-defined class.
-     * 
-     * The test methods will be called with the following parameter spec:
-     * testFunction([structure] value);
-     * 
-     * @param   filePath      Path of JSON file
-     * @param   structure     Structure of JSON instance entries
-     * @return
-     * @throws  Throwable 
-     */
-    public static JacksonDataProvider createHashStructured(Path filePath, Class structure) throws Throwable {
-        ObjectMapper map = new ObjectMapper();
-        map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        JavaType dt = map.getTypeFactory().constructMapType(HashMap.class, String.class, structure);
-        return new JacksonDataProvider(filePath, map, dt, true);        
-    }
-
-    /**
      * This gets the test data from a JSON file, given the file is in an
      * appropriate format for the JSON provider configuration. The outer
- level must either be an array or a hash map, because it must be
- able to be iterated through.
- 
- Example of JacksonDataProvider configured to output parameters from a
- JSON file with a root-level hash table.
- {@code
+     * level must either be an array or a hash map, because it must be
+     * able to be iterated through.
+     * 
+     * Example of JacksonDataProvider configured to output parameters from a
+     * JSON file with a root-level hash table
+     * {@code
      *      {
      *          "TestCase1":
      *              [1, 2, 3, 4, 5],
