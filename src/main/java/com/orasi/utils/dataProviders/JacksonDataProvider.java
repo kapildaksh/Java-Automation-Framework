@@ -28,7 +28,7 @@ import org.apache.commons.collections.iterators.ArrayIterator;
  * @version     12/30/2014
  * @author      Brian Becker
  */
-public class JacksonDataProvider {
+public class JacksonDataProvider implements DataProvider {
     
     // Keep an instance of the object mapper around for reading the data
     private ObjectMapper map;
