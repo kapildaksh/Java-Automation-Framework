@@ -6,12 +6,10 @@
 package com.orasi.sandbox;
 
 import com.orasi.utils.Constants;
-import com.orasi.utils.dataProviders.JDBCDataProviderFactory;
-import com.orasi.utils.dataProviders.JacksonDataProviderFactory;
+import com.orasi.utils.dataProviders.DataProviderFactory;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
-import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -33,7 +31,7 @@ public class TestSQLiteDataProvider {
 
     @DataProvider(name = "quickTestSQLite")
     public Iterator<Object[]> dataQuickTestSQLite() throws Throwable {
-        return JDBCDataProviderFactory.createSQLite(getFilePath("TestSQLiteQuick.db"), "numbers").getData();
+        return DataProviderFactory.getJdbcFactory().createSQLite(getFilePath("TestSQLiteQuick.db"), "numbers").getData();
     }
     
     @Test(dataProvider = "quickTestSQLite")

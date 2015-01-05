@@ -7,7 +7,7 @@ package com.orasi.sandbox;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.utils.Constants;
-import com.orasi.utils.dataProviders.JacksonDataProviderFactory;
+import com.orasi.utils.dataProviders.DataProviderFactory;
 import com.orasi.utils.types.IteratorMap;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -51,37 +51,37 @@ public class TestJSONDataProvider {
 
     @DataProvider(name = "dataDiningNode")
     public Iterator<Object[]> dataDiningNode() throws Throwable {
-        return JacksonDataProviderFactory.getJsonFactory(getFilePath("TestJSONDining.json")).createHashNode().getData();
+        return DataProviderFactory.getJsonFactory(getFilePath("TestJSONDining.json")).createHashNode().getData();
     }
     
     @DataProvider(name = "dataDiningClass")
     public Iterator<Object[]> dataDiningClass() throws Throwable {
-        return JacksonDataProviderFactory.getJsonFactory(getFilePath("TestJSONDining.json")).createHashStructured(DiningTest.class).getData();
+        return DataProviderFactory.getJsonFactory(getFilePath("TestJSONDining.json")).createHashStructured(DiningTest.class).getData();
     }
     
     @DataProvider(name = "dataArray")
     public Iterator<Object[]> dataArray() throws Throwable {
-        return JacksonDataProviderFactory.getJsonFactory(getFilePath("TestJSONArray.json")).createArrayParams().getData();
+        return DataProviderFactory.getJsonFactory(getFilePath("TestJSONArray.json")).createArrayParams().getData();
     }
     
     @DataProvider(name = "dataArrayNode")
     public Iterator<Object[]> dataArrayNode() throws Throwable {
-        return JacksonDataProviderFactory.getJsonFactory(getFilePath("TestJSONArray.json")).createArrayNode().getData();
+        return DataProviderFactory.getJsonFactory(getFilePath("TestJSONArray.json")).createArrayNode().getData();
     }
     
     @DataProvider(name = "dataArrayArray")
     public Iterator<Object[]> dataArrayArray() throws Throwable {
-        return JacksonDataProviderFactory.getJsonFactory(getFilePath("TestJSONArray.json")).createArrayStructured(int[].class).getData();
+        return DataProviderFactory.getJsonFactory(getFilePath("TestJSONArray.json")).createArrayStructured(int[].class).getData();
     }
     
     @DataProvider(name = "dataHashParams")
     public Iterator<Object[]> dataHashParams() throws Throwable {
-        return JacksonDataProviderFactory.getJsonFactory(getFilePath("TestJSONHashArray.json")).createHashParams().getData();
+        return DataProviderFactory.getJsonFactory(getFilePath("TestJSONHashArray.json")).createHashParams().getData();
     }
     
     @DataProvider(name = "dataHashArray")
     public Iterator<Object[]> dataHashArray() throws Throwable {
-        return JacksonDataProviderFactory.getJsonFactory(getFilePath("TestJSONHashArray.json")).createHashStructured(int[].class).getData();
+        return DataProviderFactory.getJsonFactory(getFilePath("TestJSONHashArray.json")).createHashStructured(int[].class).getData();
     }
     
     @Test(dataProvider = "dataDiningNode")
