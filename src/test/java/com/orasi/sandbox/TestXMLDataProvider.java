@@ -54,37 +54,37 @@ public class TestXMLDataProvider {
 
     @DataProvider(name = "xmlDataDiningNode")
     public Iterator<Object[]> dataXMLDiningNode() throws Throwable {
-        return DataProviderFactory.getXmlFactory(getFilePath("TestXMLDining.xml")).createHashNode().getData();
+        return DataProviderFactory.getXmlFactory().createHashNode(getFilePath("TestXMLDining.xml")).getData();
     }
     
     @DataProvider(name = "xmlDataDiningClass")
     public Iterator<Object[]> dataXMLDiningClass() throws Throwable {
-        return DataProviderFactory.getXmlFactory(getFilePath("TestXMLDining.xml")).createHashStructured(DiningTest.class).getData();
+        return DataProviderFactory.getXmlFactory().createHashStructured(getFilePath("TestXMLDining.xml"), DiningTest.class).getData();
     }
     
     @DataProvider(name = "xmlDataArray")
     public Iterator<Object[]> dataXMLArray() throws Throwable {
-        return DataProviderFactory.getXmlFactory(getFilePath("TestXMLArray.xml")).createArrayParams().getData();
+        return DataProviderFactory.getXmlFactory().createArrayParams(getFilePath("TestXMLArray.xml")).getData();
     }
     
     @DataProvider(name = "xmlDataArrayNode")
     public Iterator<Object[]> dataXMLArrayNode() throws Throwable {
-        return DataProviderFactory.getXmlFactory(getFilePath("TestXMLArray.xml")).createArrayNode().getData();
+        return DataProviderFactory.getXmlFactory().createArrayNode(getFilePath("TestXMLArray.xml")).getData();
     }
     
     @DataProvider(name = "xmlDataArrayArray")
     public Iterator<Object[]> dataXMLArrayArray() throws Throwable {
-        return DataProviderFactory.getXmlFactory(getFilePath("TestXMLArray.xml")).createArrayStructured(int[].class).getData();
+        return DataProviderFactory.getXmlFactory().createArrayStructured(getFilePath("TestXMLArray.xml"), int[].class).getData();
     }
     
     @DataProvider(name = "xmlDataHashParams")
     public Iterator<Object[]> dataXMLHashParams() throws Throwable {
-        return DataProviderFactory.getXmlFactory(getFilePath("TestXMLHashArray.xml")).createHashParams().getData();
+        return DataProviderFactory.getXmlFactory().createHashParams(getFilePath("TestXMLHashArray.xml")).getData();
     }
     
     @DataProvider(name = "xmlDataHashArray")
     public Iterator<Object[]> dataXMLHashArray() throws Throwable {
-        return DataProviderFactory.getXmlFactory(getFilePath("TestXMLHashArray.xml")).createHashStructured(int[].class).getData();
+        return DataProviderFactory.getXmlFactory().createHashStructured(getFilePath("TestXMLHashArray.xml"), int[].class).getData();
     }
     
     @Test(dataProvider = "xmlDataDiningNode")

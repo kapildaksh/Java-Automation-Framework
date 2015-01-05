@@ -36,22 +36,22 @@ public class TestCSVDataProvider {
 
     @DataProvider(name = "dataActuallyValidCSV")
     public Iterator<Object[]> dataActuallyValidCSV() throws Throwable {
-        return DataProviderFactory.getCsvFactory(getFilePath("TestCSVActuallyValid.csv")).createArrayParams().getData();
+        return DataProviderFactory.getCsvFactory().createArrayParams(getFilePath("TestCSVActuallyValid.csv")).getData();
     }
     
     @DataProvider(name = "dataArrayCSV")
     public Iterator<Object[]> dataArrayCSV() throws Throwable {
-        return DataProviderFactory.getCsvFactory(getFilePath("TestCSVArray.csv")).createArrayParams().getData();
+        return DataProviderFactory.getCsvFactory().createArrayParams(getFilePath("TestCSVArray.csv")).getData();
     }
     
     @DataProvider(name = "dataArrayNodeCSV")
     public Iterator<Object[]> dataArrayNodeCSV() throws Throwable {
-        return DataProviderFactory.getCsvFactory(getFilePath("TestCSVArray.csv")).createArrayNode().getData();
+        return DataProviderFactory.getCsvFactory().createArrayNode(getFilePath("TestCSVArray.csv")).getData();
     }
     
     @DataProvider(name = "dataArrayArrayCSV")
     public Iterator<Object[]> dataArrayArrayCSV() throws Throwable {
-        return DataProviderFactory.getCsvFactory(getFilePath("TestCSVArray.csv")).createArrayStructured(int[].class).getData();
+        return DataProviderFactory.getCsvFactory().createArrayStructured(getFilePath("TestCSVArray.csv"), int[].class).getData();
     }
     
     @Test(dataProvider = "dataArrayCSV")

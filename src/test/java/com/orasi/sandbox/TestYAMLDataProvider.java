@@ -51,37 +51,37 @@ public class TestYAMLDataProvider {
 
     @DataProvider(name = "dataDiningNodeYAML")
     public Iterator<Object[]> dataDiningNodeYAML() throws Throwable {
-        return DataProviderFactory.getYamlFactory(getFilePath("TestYAMLDining.yaml")).createHashNode().getData();
+        return DataProviderFactory.getYamlFactory().createHashNode(getFilePath("TestYAMLDining.yaml")).getData();
     }
     
     @DataProvider(name = "dataDiningClassYAML")
     public Iterator<Object[]> dataDiningClassYAML() throws Throwable {
-        return DataProviderFactory.getYamlFactory(getFilePath("TestYAMLDining.yaml")).createHashStructured(DiningTest.class).getData();
+        return DataProviderFactory.getYamlFactory().createHashStructured(getFilePath("TestYAMLDining.yaml"), DiningTest.class).getData();
     }
     
     @DataProvider(name = "dataArrayYAML")
     public Iterator<Object[]> dataArrayYAML() throws Throwable {
-        return DataProviderFactory.getYamlFactory(getFilePath("TestYAMLArray.yaml")).createArrayParams().getData();
+        return DataProviderFactory.getYamlFactory().createArrayParams(getFilePath("TestYAMLArray.yaml")).getData();
     }
     
     @DataProvider(name = "dataArrayNodeYAML")
     public Iterator<Object[]> dataArrayNodeYAML() throws Throwable {
-        return DataProviderFactory.getYamlFactory(getFilePath("TestYAMLArray.yaml")).createArrayNode().getData();
+        return DataProviderFactory.getYamlFactory().createArrayNode(getFilePath("TestYAMLArray.yaml")).getData();
     }
     
     @DataProvider(name = "dataArrayArrayYAML")
     public Iterator<Object[]> dataArrayArrayYAML() throws Throwable {
-        return DataProviderFactory.getYamlFactory(getFilePath("TestYAMLArray.yaml")).createArrayStructured(int[].class).getData();
+        return DataProviderFactory.getYamlFactory().createArrayStructured(getFilePath("TestYAMLArray.yaml"), int[].class).getData();
     }
     
     @DataProvider(name = "dataHashParamsYAML")
     public Iterator<Object[]> dataHashParamsYAML() throws Throwable {
-        return DataProviderFactory.getYamlFactory(getFilePath("TestYAMLHashArray.yaml")).createHashParams().getData();
+        return DataProviderFactory.getYamlFactory().createHashParams(getFilePath("TestYAMLHashArray.yaml")).getData();
     }
     
     @DataProvider(name = "dataHashArrayYAML")
     public Iterator<Object[]> dataHashArrayYAML() throws Throwable {
-        return DataProviderFactory.getYamlFactory(getFilePath("TestYAMLHashArray.yaml")).createHashStructured(int[].class).getData();
+        return DataProviderFactory.getYamlFactory().createHashStructured(getFilePath("TestYAMLHashArray.yaml"), int[].class).getData();
     }
     
     @Test(dataProvider = "dataDiningNodeYAML")
