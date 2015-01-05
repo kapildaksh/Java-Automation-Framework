@@ -5,6 +5,7 @@
  */
 package com.orasi.utils.dataProviders;
 
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.sql.DataSource;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
@@ -47,7 +47,7 @@ public class JDBCDataProvider implements DataProvider {
         this.user = user;
         this.pass = pass;
     }
-    
+        
     /**
      * This retrieves the data from the database engine, but it iterates over
      * a result set rather than dumping everything in memory to a list, which

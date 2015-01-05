@@ -8,7 +8,7 @@ package com.orasi.sandbox;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.orasi.utils.Constants;
-import com.orasi.utils.dataProviders.DataProviderFactory;
+import com.orasi.utils.dataProviders.DataProviders;
 import com.orasi.utils.types.IteratorMap;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,22 +36,22 @@ public class TestCSVDataProvider {
 
     @DataProvider(name = "dataActuallyValidCSV")
     public Iterator<Object[]> dataActuallyValidCSV() throws Throwable {
-        return DataProviderFactory.getCsvFactory().createArrayParams(getFilePath("TestCSVActuallyValid.csv")).getData();
+        return DataProviders.createCsvFactory().createArrayParams(getFilePath("TestCSVActuallyValid.csv")).getData();
     }
     
     @DataProvider(name = "dataArrayCSV")
     public Iterator<Object[]> dataArrayCSV() throws Throwable {
-        return DataProviderFactory.getCsvFactory().createArrayParams(getFilePath("TestCSVArray.csv")).getData();
+        return DataProviders.createCsvFactory().createArrayParams(getFilePath("TestCSVArray.csv")).getData();
     }
     
     @DataProvider(name = "dataArrayNodeCSV")
     public Iterator<Object[]> dataArrayNodeCSV() throws Throwable {
-        return DataProviderFactory.getCsvFactory().createArrayNode(getFilePath("TestCSVArray.csv")).getData();
+        return DataProviders.createCsvFactory().createArrayNode(getFilePath("TestCSVArray.csv")).getData();
     }
     
     @DataProvider(name = "dataArrayArrayCSV")
     public Iterator<Object[]> dataArrayArrayCSV() throws Throwable {
-        return DataProviderFactory.getCsvFactory().createArrayStructured(getFilePath("TestCSVArray.csv"), int[].class).getData();
+        return DataProviders.createCsvFactory().createArrayStructured(getFilePath("TestCSVArray.csv"), int[].class).getData();
     }
     
     @Test(dataProvider = "dataArrayCSV")

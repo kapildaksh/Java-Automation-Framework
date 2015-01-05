@@ -5,17 +5,13 @@
  */
 package com.orasi.utils.dataProviders;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvParser;
-import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Jackson Data Provider factory provides a convenient way of setting
@@ -38,6 +34,9 @@ import java.util.HashMap;
 public class JacksonDataProviderFactory {
    
     private final ObjectMapper map;
+             
+    private static final TypeReference ARRAY_PARAMS = new TypeReference<Object[][]>() {};
+    private static final TypeReference HASH_PARAMS = new TypeReference<Map<String, Object[]>>() {};
 
     /**
      * The Jackson Data Provider factory can be used to construct any type
@@ -60,8 +59,7 @@ public class JacksonDataProviderFactory {
      * @throws Throwable 
      */
     public JacksonDataProvider createArrayParams(Path filePath) throws Throwable {
-        JavaType dt = this.map.getTypeFactory().constructArrayType(this.map.getTypeFactory().constructArrayType(Object.class));
-        return new JacksonDataProvider(filePath, this.map, dt, false);
+        return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructType(ARRAY_PARAMS.getType()), false);
     }
 
     /**
@@ -92,8 +90,7 @@ public class JacksonDataProviderFactory {
      */
     public JacksonDataProvider createArrayStructured(Path filePath, Class structure) throws Throwable {
         map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        JavaType dt = this.map.getTypeFactory().constructArrayType(structure);
-        return new JacksonDataProvider(filePath, this.map, dt, true);
+        return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructArrayType(structure), true);
     }
 
     /**
@@ -106,8 +103,7 @@ public class JacksonDataProviderFactory {
      * @throws  Throwable 
      */
     public JacksonDataProvider createHashParams(Path filePath) throws Throwable {
-        JavaType dt = this.map.getTypeFactory().constructMapType(HashMap.class, this.map.getTypeFactory().constructType(String.class), this.map.getTypeFactory().constructArrayType(Object.class));
-        return new JacksonDataProvider(filePath, this.map, dt, false);
+        return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructType(HASH_PARAMS.getType()), false);
     }
 
     /**
@@ -138,8 +134,7 @@ public class JacksonDataProviderFactory {
      */
     public JacksonDataProvider createHashStructured(Path filePath, Class structure) throws Throwable {
         this.map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        JavaType dt = this.map.getTypeFactory().constructMapType(HashMap.class, String.class, structure);
-        return new JacksonDataProvider(filePath, this.map, dt, true);        
+        return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructMapType(HashMap.class, String.class, structure), true);        
     }
     
 }

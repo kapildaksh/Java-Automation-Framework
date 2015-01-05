@@ -1,6 +1,8 @@
 package com.orasi.utils.dataProviders;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.utils.types.IteratorMap;
 import java.nio.file.Files;
@@ -28,6 +30,14 @@ import org.apache.commons.collections.iterators.ArrayIterator;
  * @author      Brian Becker
  */
 public class JacksonDataProvider implements DataProvider {
+    
+    public enum LayoutType {
+        ARRAY, HASH
+    }
+    
+    public enum InstanceType {
+        PARAMS, NODE, STRUCTURED
+    }
     
     // Keep an instance of the object mapper around for reading the data
     private final ObjectMapper map;
@@ -57,7 +67,7 @@ public class JacksonDataProvider implements DataProvider {
         this.dataType = dataType;
         this.wrapParams = wrapParams;
     }
-
+    
     /**
      * This gets the test data from a data file, given the file is in an
      * appropriate format for the data provider configuration. The outer
