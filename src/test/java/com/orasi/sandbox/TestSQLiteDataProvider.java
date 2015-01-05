@@ -35,7 +35,7 @@ public class TestSQLiteDataProvider {
 
     @DataProvider(name = "quickTestSQLite")
     public Iterator<Object[]> dataQuickTestSQLite() throws Throwable {
-        return DataProviderFactory.getSqliteFactory().createTable(getFilePath("TestSQLiteQuick.db"), "numbers").getData();
+        return DataProviderFactory.getSqliteFactory().createFileTable(getFilePath("TestSQLiteQuick.db"), "numbers").getData();
     }
     
     @Test(dataProvider = "quickTestSQLite")

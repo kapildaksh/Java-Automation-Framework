@@ -11,8 +11,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.orasi.utils.dataProviders.JDBCDataProviderFactory.ConnectionUrlType;
 
 /**
  *
@@ -26,7 +25,7 @@ public class DataProviderFactory {
      * @return      Factory which constructs SQLite providers.
      */
     public static JDBCDataProviderFactory getSqliteFactory() {
-        return new JDBCDataProviderFactory("org.sqlite.JDBC", "sqlite");
+        return new JDBCDataProviderFactory(ConnectionUrlType.FILE, "org.sqlite.JDBC", "jdbc:sqlite:");
     }
     
     /**
@@ -35,7 +34,16 @@ public class DataProviderFactory {
      * @return      Factory which constructs Excel providers.
      */
     public static JDBCDataProviderFactory getExcelFactory() {
-        return new JDBCDataProviderFactory("com.googlecode.sqlsheet.Driver", "xls:file");
+        return new JDBCDataProviderFactory(ConnectionUrlType.FILE, "com.googlecode.sqlsheet.Driver", "jdbc:xls:file:");
+    }
+    
+    /**
+     * Get a factory to create JDBC MySQL Data Providers.
+     * 
+     * @return      Factory which constructs MySQL providers.
+     */
+    public static JDBCDataProviderFactory getMysqlFactory() {
+        return new JDBCDataProviderFactory(ConnectionUrlType.SERVER, "com.mysql.jdbc.Driver", "jdbc:mysql:");
     }
     
     /**

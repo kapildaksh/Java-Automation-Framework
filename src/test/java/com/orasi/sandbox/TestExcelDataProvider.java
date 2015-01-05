@@ -26,7 +26,7 @@ public class TestExcelDataProvider {
     
     @DataProvider(name = "quickTestExcel")
     public Iterator<Object[]> dataQuickTestExcel() throws Throwable {
-        return DataProviderFactory.getExcelFactory().createTable(getFilePath("TestAddNewTitle.xlsx"), "TestAddNewTitle").getData();
+        return DataProviderFactory.getExcelFactory().createFileTable(getFilePath("TestAddNewTitle.xlsx"), "TestAddNewTitle").getData();
     }
     
     @Test(dataProvider = "quickTestExcel")

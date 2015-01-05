@@ -6,9 +6,6 @@
 package com.orasi.utils.dataProviders;
 
 import java.nio.file.Path;
-import java.sql.DriverManager;
-import javax.sql.DataSource;
-import org.sqlite.SQLiteDataSource;
 
 /**
  * This is a JDBCDataProviderFactory, which will create various data
@@ -18,6 +15,11 @@ import org.sqlite.SQLiteDataSource;
  */
 public class JDBCDataProviderFactory {
     
+    public enum ConnectionUrlType {
+        FILE, SERVER
+    }
+    
+    private final ConnectionUrlType urlType;
     private final String dbClass;
     private final String dbSpec;
     private String dbUrl;
@@ -26,10 +28,12 @@ public class JDBCDataProviderFactory {
      * Create a new factory which creates a given type of database specified
      * by the dbSpec string.
      * 
+     * @param urlType
      * @param dbClass
      * @param dbSpec 
      */
-    public JDBCDataProviderFactory(String dbClass, String dbSpec) {
+    public JDBCDataProviderFactory(ConnectionUrlType urlType, String dbClass, String dbSpec) {
+        this.urlType = urlType;
         this.dbClass = dbClass;
         this.dbSpec = dbSpec;
     }
@@ -42,9 +46,28 @@ public class JDBCDataProviderFactory {
      * @return 
      * @throws java.lang.Throwable 
      */
-    public JDBCDataProvider createTable(Path filePath, String table) throws Throwable {
+    public JDBCDataProvider createFileTable(Path filePath, String table) throws Throwable {
+        if(this.urlType != ConnectionUrlType.FILE)
+            throw new UnsupportedOperationException("This database does not support files");
         Class.forName(this.dbClass);
-        this.dbUrl = "jdbc:" + this.dbSpec + ":" + filePath.toString();
+        this.dbUrl = this.dbSpec + filePath.toString();
+        return new JDBCDataProvider(this.dbUrl, table, null, null);
+    }
+    
+    /**
+     * Create a new JDBCDataProvider which uses the given host, db, and table.
+     * 
+     * @param host      Hostname
+     * @param db        Database Name
+     * @param table     Table
+     * @return
+     * @throws java.lang.Throwable
+     */
+    public JDBCDataProvider createServerTable(String host, String db, String table) throws Throwable {
+        if(this.urlType != ConnectionUrlType.SERVER)
+            throw new UnsupportedOperationException("This database does not support servers");
+        Class.forName(this.dbClass);
+        this.dbUrl = this.dbSpec + "//" + host + "/" + db;
         return new JDBCDataProvider(this.dbUrl, table, null, null);
     }
     

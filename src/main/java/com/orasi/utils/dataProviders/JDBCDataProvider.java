@@ -32,6 +32,15 @@ public class JDBCDataProvider implements DataProvider {
     private final String user;
     private final String pass;
 
+    /**
+     * Create a new JDBC Data Provider, with a data source URL, a table,
+     * and a username and password to authenticate with.
+     * 
+     * @param dataSourceUrl
+     * @param table
+     * @param user
+     * @param pass 
+     */
     public JDBCDataProvider(String dataSourceUrl, String table, String user, String pass) {
         this.dataSourceUrl = dataSourceUrl;
         this.table = table;
@@ -82,7 +91,7 @@ public class JDBCDataProvider implements DataProvider {
 
                     @Override
                     public void remove() {
-                        throw new UnsupportedOperationException("Write to test database not supported."); //To change body of generated methods, choose Tools | Templates.
+                        throw new UnsupportedOperationException("Write to test database not supported.");
                     }
                 };
             }
