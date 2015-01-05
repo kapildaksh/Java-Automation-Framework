@@ -31,46 +31,42 @@ public class DataProviderFactory {
     /**
      * Get a factory to create Jackson Json Data Providers.
      * 
-     * @param       filePath    Path to data file
      * @return      Factory which constructs JSON providers.
      */
-    public static JacksonDataProviderFactory getJsonFactory(Path filePath) {
-        return new JacksonDataProviderFactory(filePath, new ObjectMapper());
+    public static JacksonDataProviderFactory getJsonFactory() {
+        return new JacksonDataProviderFactory(new ObjectMapper());
     }
     
     /**
      * Get a factory to create Jackson XML Data Providers.
      * 
-     * @param       filePath    Path to data file
      * @return      Factory which constructs XML providers.
      */
-    public static JacksonDataProviderFactory getXmlFactory(Path filePath) {
+    public static JacksonDataProviderFactory getXmlFactory() {
         JacksonXmlModule module = new JacksonXmlModule();
         module.setDefaultUseWrapper(false);
         XmlMapper mapper = new XmlMapper(module);
-        return new JacksonDataProviderFactory(filePath, mapper);
+        return new JacksonDataProviderFactory(mapper);
     }
     
     /**
      * Get a factory to create YAML Data Providers.
      * 
-     * @param       filePath    Path to data file
      * @return      Factory which constructs YAML providers.
      */
-    public static JacksonDataProviderFactory getYamlFactory(Path filePath) {
-        return new JacksonDataProviderFactory(filePath, new ObjectMapper(new YAMLFactory()));
+    public static JacksonDataProviderFactory getYamlFactory() {
+        return new JacksonDataProviderFactory(new ObjectMapper(new YAMLFactory()));
     }
     
     /**
      * Get a factory to create Jackson CSV Data Providers.
      * 
-     * @param       filePath    Path to data file
      * @return      Factory which constructs CSV providers
      */
-    public static JacksonDataProviderFactory getCsvFactory(Path filePath) {
+    public static JacksonDataProviderFactory getCsvFactory() {
         CsvMapper mapper = new CsvMapper();
         mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY);
-        return new JacksonDataProviderFactory(filePath, mapper);
+        return new JacksonDataProviderFactory(mapper);
     }
     
 }

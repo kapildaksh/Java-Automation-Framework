@@ -37,7 +37,6 @@ import java.util.HashMap;
  */
 public class JacksonDataProviderFactory {
    
-    private final Path filePath;
     private final ObjectMapper map;
 
     /**
@@ -45,11 +44,9 @@ public class JacksonDataProviderFactory {
      * of provider that Jackson natively supports. Helper constructors are
      * provided for JSON, XML, YAML, and CSV.
      * 
-     * @param filePath  Path to data file
      * @param map       Jackson object-mapper
      */
-    public JacksonDataProviderFactory(Path filePath, ObjectMapper map) {
-        this.filePath = filePath;
+    public JacksonDataProviderFactory(ObjectMapper map) {
         this.map = map;
     }
 
@@ -58,10 +55,11 @@ public class JacksonDataProviderFactory {
      * of an array type, but the array elements themselves may be any
      * primitive type.
      * 
+     * @param   filePath      Path of structured data
      * @return
      * @throws Throwable 
      */
-    public JacksonDataProvider createArrayParams() throws Throwable {
+    public JacksonDataProvider createArrayParams(Path filePath) throws Throwable {
         JavaType dt = this.map.getTypeFactory().constructArrayType(this.map.getTypeFactory().constructArrayType(Object.class));
         return new JacksonDataProvider(filePath, this.map, dt, false);
     }
@@ -71,11 +69,12 @@ public class JacksonDataProviderFactory {
      * functions such as .path("elementName") to traverse and retrieve values.
      * See the Jackson API for more details regarding the JsonNode Class.
      * 
+     * @param   filePath      Path of structured data
      * @return
      * @throws Throwable 
      */
-    public JacksonDataProvider createArrayNode() throws Throwable {
-        return createArrayStructured(JsonNode.class);
+    public JacksonDataProvider createArrayNode(Path filePath) throws Throwable {
+        return createArrayStructured(filePath, JsonNode.class);
     }
 
     /**
@@ -86,11 +85,12 @@ public class JacksonDataProviderFactory {
      * The test methods will be called with the following parameter spec:
      * testFunction([structure] value);
      * 
+     * @param   filePath      Path of structured data
      * @param   structure     Structure of JSON instance entries
      * @return
      * @throws  Throwable 
      */
-    public JacksonDataProvider createArrayStructured(Class structure) throws Throwable {
+    public JacksonDataProvider createArrayStructured(Path filePath, Class structure) throws Throwable {
         map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JavaType dt = this.map.getTypeFactory().constructArrayType(structure);
         return new JacksonDataProvider(filePath, this.map, dt, true);
@@ -100,11 +100,12 @@ public class JacksonDataProviderFactory {
      * This is a hash table with params test case entries. The entries must be
      * of an array type, but the array elements themselves may be any
      * primitive type.
-     * 
+     *
+     * @param   filePath      Path of structured data
      * @return
      * @throws  Throwable 
      */
-    public JacksonDataProvider createHashParams() throws Throwable {
+    public JacksonDataProvider createHashParams(Path filePath) throws Throwable {
         JavaType dt = this.map.getTypeFactory().constructMapType(HashMap.class, this.map.getTypeFactory().constructType(String.class), this.map.getTypeFactory().constructArrayType(Object.class));
         return new JacksonDataProvider(filePath, this.map, dt, false);
     }
@@ -114,11 +115,12 @@ public class JacksonDataProviderFactory {
      * functions such as .path("elementName") to traverse and retrieve values.
      * See the Jackson API for more details regarding the JsonNode Class.
      *
+     * @param   filePath      Path of structured data
      * @return
      * @throws  Throwable 
      */
-    public JacksonDataProvider createHashNode() throws Throwable {
-        return createHashStructured(JsonNode.class);
+    public JacksonDataProvider createHashNode(Path filePath) throws Throwable {
+        return createHashStructured(filePath, JsonNode.class);
     }
 
     /**
@@ -129,11 +131,12 @@ public class JacksonDataProviderFactory {
      * The test methods will be called with the following parameter spec:
      * testFunction([structure] value);
      * 
-     * @param   structure     Structure of JSON instance entries
+     * @param   filePath      Path of structured data
+     * @param   structure     Structure of instance entries
      * @return
      * @throws  Throwable 
      */
-    public JacksonDataProvider createHashStructured(Class structure) throws Throwable {
+    public JacksonDataProvider createHashStructured(Path filePath, Class structure) throws Throwable {
         this.map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JavaType dt = this.map.getTypeFactory().constructMapType(HashMap.class, String.class, structure);
         return new JacksonDataProvider(filePath, this.map, dt, true);        
