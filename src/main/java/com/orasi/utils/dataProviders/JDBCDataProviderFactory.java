@@ -15,7 +15,7 @@ import org.sqlite.SQLiteDataSource;
  * @author Brian Becker
  */
 public class JDBCDataProviderFactory {
-    
+       
     /**
      * Create a new JDBCDataProvider which uses a SQLite database as storage.
      * 
@@ -23,7 +23,7 @@ public class JDBCDataProviderFactory {
      * @param table
      * @return 
      */
-    public static JDBCDataProvider createSQLite(Path filePath, String table) {
+    public JDBCDataProvider createSQLite(Path filePath, String table) {
         SQLiteDataSource ds = new SQLiteDataSource();
         System.out.println(filePath.toString());
         ds.setUrl("jdbc:sqlite:" + filePath.toString());
