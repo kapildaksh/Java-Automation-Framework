@@ -9,7 +9,11 @@ import com.orasi.utils.Constants;
 import com.orasi.utils.dataProviders.DataProviderFactory;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -31,12 +35,16 @@ public class TestSQLiteDataProvider {
 
     @DataProvider(name = "quickTestSQLite")
     public Iterator<Object[]> dataQuickTestSQLite() throws Throwable {
-        return DataProviderFactory.getJdbcFactory().createSQLite(getFilePath("TestSQLiteQuick.db"), "numbers").getData();
+        return DataProviderFactory.getSqliteFactory().createTable(getFilePath("TestSQLiteQuick.db"), "numbers").getData();
     }
     
     @Test(dataProvider = "quickTestSQLite")
     public void testQuickTestSQLite(Object a, Object b, Object c, Object d, Object e) {
-        System.out.println(a + " " + b + " " + c + " " + d + " " + e);
+        Integer v[] = new Integer[] { (Integer)a, (Integer)b, (Integer)c, (Integer)d, (Integer)e };
+        List<Integer> list1 = Arrays.asList(v);
+        List<Integer> list2 = Arrays.asList(new Integer[] {1, 2, 3, 4, 5});
+        Collections.sort(list1);
+        Assert.assertEquals(list1, list2);
     }
     
 }

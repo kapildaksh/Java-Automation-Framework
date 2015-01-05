@@ -6,6 +6,7 @@
 package com.orasi.utils.dataProviders;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,13 +27,13 @@ import org.apache.commons.lang.StringEscapeUtils;
  * @author Brian Becker
  */
 public class JDBCDataProvider implements DataProvider {
-    private final DataSource dataSource;
+    private final String dataSourceUrl;
     private final String table;
     private final String user;
     private final String pass;
 
-    public JDBCDataProvider(DataSource dataSource, String table, String user, String pass) {
-        this.dataSource = dataSource;
+    public JDBCDataProvider(String dataSourceUrl, String table, String user, String pass) {
+        this.dataSourceUrl = dataSourceUrl;
         this.table = table;
         this.user = user;
         this.pass = pass;
@@ -51,7 +52,7 @@ public class JDBCDataProvider implements DataProvider {
     @Override
     public Iterator<Object[]> getData() {
         try {
-            final Connection conn = this.user != null ? this.dataSource.getConnection(this.user, this.pass) : this.dataSource.getConnection();
+            final Connection conn = this.user != null ? DriverManager.getConnection(this.dataSourceUrl, user, pass) : DriverManager.getConnection(this.dataSourceUrl);
             final PreparedStatement ps = conn.prepareStatement( "select * from " + StringEscapeUtils.escapeSql(this.table) );
             final ResultSet rs = ps.executeQuery();
             if(rs.next()) {

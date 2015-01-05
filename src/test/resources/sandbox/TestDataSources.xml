@@ -43,5 +43,10 @@
                 <class name="com.orasi.sandbox.TestSQLiteDataProvider" />
         </classes>
     </test>
+    <test name="TestExcelDataProvider">
+        <classes>
+                <class name="com.orasi.sandbox.TestExcelDataProvider" />
+        </classes>
+    </test>
 
 </suite>
