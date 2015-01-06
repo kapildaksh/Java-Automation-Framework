@@ -5,7 +5,6 @@
  */
 package com.orasi.utils.types;
 
-import java.util.Collections;
 import java.util.Iterator;
 
 /**

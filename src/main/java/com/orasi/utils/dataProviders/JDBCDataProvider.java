@@ -5,6 +5,7 @@
  */
 package com.orasi.utils.dataProviders;
 
+import com.orasi.utils.types.IteratorResultSet;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -57,41 +58,10 @@ public class JDBCDataProvider implements DataProvider {
             final Connection conn = DriverManager.getConnection(this.dataSourceUrl);
             final PreparedStatement ps = conn.prepareStatement( "select * from " + StringEscapeUtils.escapeSql(this.table) );
             final ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
-                return new Iterator<Object[]>() {
-                    private boolean hNext = true;
-
-                    @Override
-                    public boolean hasNext() {
-                            return this.hNext;
-                    }
-
-                    @Override
-                    public Object[] next() {
-                        try {
-                            int cols = rs.getMetaData().getColumnCount();
-                            List<Object> items = new ArrayList<>();
-                            for(int i = 1; i <= cols; i++) {
-                                items.add(rs.getObject(i));
-                            }
-                            this.hNext = rs.next();
-                            return items.toArray();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(JDBCDataProvider.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    public void remove() {
-                        throw new UnsupportedOperationException("Write to test database not supported.");
-                    }
-                };
-            }
-        } catch (Throwable ex) {
-            Logger.getLogger(JacksonDataProvider.class.getName()).log(Level.SEVERE, null, ex);
+            return new IteratorResultSet(rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(JDBCDataProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
         return Collections.EMPTY_LIST.iterator();
     }
-
 }
