@@ -162,11 +162,8 @@ public class RestService {
 	        System.out.println(jo.length());
 	        System.out.println(jo.names());
 	        System.out.println();
-	        
-	        StringWriter sw = new StringWriter();
-	        JSONWriter writer = new JSONWriter(sw);
-	        transformer.transform(new DOMSource(getXmlResponseDocument()),
-					new StreamResult(sw))
+	     
+	        //getJsonResponse();
 		}
 		
 		return rawResponse.toString();
@@ -341,27 +338,30 @@ public class RestService {
 		return jsonResponse;
 	}
 	
-	public String getXmlResponse() {
-		StringWriter sw = new StringWriter();
-		TransformerFactory tf = TransformerFactory.newInstance();
-		Transformer transformer = null;
-		try {
-			transformer = tf.newTransformer();
-		} catch (TransformerConfigurationException e) {
-			throw new RuntimeException("Failed to create XML Transformer");
-		}
-		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-		transformer.setOutputProperty(OutputKeys.METHOD, "json");
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+	/**
+	 * @summary Returns the number of nodes for a given xpath. Useful for determining if indexing is need to access multiple sibling nodes
+	 * @precondition Requires XML Document to be loaded by using
+	 *               {@link #setResponseDocument}
+	 * @author Waightstill W. Avery
+	 * @version Created 01/06/2015
+	 * @param path - string, xpath
+	 * @return integer, number of nodes found with the given xpath
+	 */
+	public int getNumberOfChildNodesByXpath(String path) throws XPathExpressionException{
+	    //creating an XPathFactory:
+	    XPathFactory factory = XPathFactory.newInstance();
+	    //using this factory to create an XPath object: 
+	    XPath xpath = factory.newXPath();
 
-		try {
-			transformer.transform(new DOMSource(getXmlResponseDocument()),
-					new StreamResult(sw));
-		} catch (TransformerException e) {
-			throw new RuntimeException(
-					"Failed to transform Response XML Document. Ensure XML Document has been successfully loaded.");
-		}
-		return sw.toString();
+	    // XPath Query for showing all nodes value
+	    XPathExpression expr = xpath.compile(path);
+	    Object result = expr.evaluate(this.xmlResponseDocument, XPathConstants.NODESET);
+	    NodeList nodes = (NodeList) result;
+	    
+	    for(int nodesList = 0; nodesList < nodes.item(0).getChildNodes().getLength(); nodesList++){
+	    	System.out.println(nodes.item(0).getChildNodes().item(nodesList).getNodeName());
+	    }
+	    
+	    return nodes.item(0).getChildNodes().getLength();
 	}
 }

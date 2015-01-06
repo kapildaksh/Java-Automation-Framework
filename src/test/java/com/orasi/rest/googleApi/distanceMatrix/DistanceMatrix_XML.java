@@ -1,4 +1,4 @@
-package com.orasi.rest.googleApi;
+package com.orasi.rest.googleApi.distanceMatrix;
 
 import javax.xml.xpath.XPathExpressionException;
 
@@ -13,7 +13,7 @@ import com.orasi.api.restServices.core.RestService;
 import com.orasi.utils.Constants;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
 
-public class Geocode_XML {
+public class DistanceMatrix_XML {
 	String application;
 	String runLocation;
 	String operatingSystem;
@@ -63,10 +63,11 @@ public class Geocode_XML {
 		rest = new RestService();
 		rest.setDefaultResponseFormat("xml");
 		rest.sendGetRequest(
-				"https://maps.googleapis.com/maps/api/geocode/"+rest.getDefaultResponseFormat()+"?sensor=false&address=7025 Albert Pick Rd Greensboro NC, 27409",
+				"https://maps.googleapis.com/maps/api/distancematrix/"+rest.getDefaultResponseFormat()+"?origins=Vancouver+BC|Seattle&destinations=San+Francisco|Victoria+BC&mode=bicycling&language=fr-FR&key=AIzaSyCxSJ0TnCqhYAK4LjJc-MVyllrY0BfXYNc",
 				rest.getDefaultResponseFormat());
 
-		int numberOfNodes = rest.getNumberOfNodesByXpath("/GeocodeResponse/result/address_component");
+		int numberOfNodes = rest.getNumberOfNodesByXpath("/DistanceMatrixResponse");
+		int numberOfChildNodes = rest.getNumberOfChildNodesByXpath("/DistanceMatrixResponse");
 		validateAddressValue("street_number", "7025", numberOfNodes);
 		validateAddressValue("route", "Albert Pick Road", numberOfNodes);
 		validateAddressValue("postal_code", "27409", numberOfNodes);

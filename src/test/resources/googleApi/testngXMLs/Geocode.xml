@@ -7,7 +7,7 @@
 	<test name="Geocode">
 		<classes>
 			<!-- <class name="com.orasi.rest.googleApi.Geocode_XML" /> -->
-			<class name="com.orasi.rest.googleApi.Geocode_JSON" />
+			<class name="com.orasi.rest.googleApi.geoCode.Geocode_JSON" />
 		</classes>
 	</test> <!-- Geocode -->
 </suite> <!-- Geocode -->

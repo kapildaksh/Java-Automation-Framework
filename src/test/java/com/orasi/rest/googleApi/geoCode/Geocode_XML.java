@@ -1,4 +1,4 @@
-package com.orasi.rest.googleApi;
+package com.orasi.rest.googleApi.geoCode;
 
 import javax.xml.xpath.XPathExpressionException;
 
@@ -13,7 +13,7 @@ import com.orasi.api.restServices.core.RestService;
 import com.orasi.utils.Constants;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
 
-public class Geocode_JSON {
+public class Geocode_XML {
 	String application;
 	String runLocation;
 	String operatingSystem;
@@ -49,7 +49,7 @@ public class Geocode_JSON {
     /**
      * @throws XPathExpressionException
      * @throws JSONException 
-     * @Summary: Invokes the Google "Geocode" API REST service and validates the JSON response
+     * @Summary: Invokes the Google "Geocode" API REST service and validates the XML response
      * @Precondition:NA
      * @Author: Jessica Marshall
      * @Version: 10/6/2014
@@ -57,14 +57,20 @@ public class Geocode_JSON {
      */
 	@Test(dataProvider = "dataScenario", groups = { "rest" })
 	public void main(String testScenario, String streetNumber, String streetNumberTagert,
-			String streetname, String streetNameTarget,
-			String postalCode, String postalCodeTarget,
-			String city, String cityTarget, String fullAddress) throws XPathExpressionException, JSONException {
+						String streetname, String streetNameTarget,
+						String postalCode, String postalCodeTarget,
+						String city, String cityTarget, String fullAddress) throws XPathExpressionException, JSONException {
 		rest = new RestService();
-		rest.setDefaultResponseFormat("json");
+		rest.setDefaultResponseFormat("xml");
 		rest.sendGetRequest(
 				"https://maps.googleapis.com/maps/api/geocode/"+rest.getDefaultResponseFormat()+"?sensor=false&address=7025 Albert Pick Rd Greensboro NC, 27409",
 				rest.getDefaultResponseFormat());
+
+		int numberOfNodes = rest.getNumberOfNodesByXpath("/GeocodeResponse/result/address_component");
+		validateAddressValue("street_number", "7025", numberOfNodes);
+		validateAddressValue("route", "Albert Pick Road", numberOfNodes);
+		validateAddressValue("postal_code", "27409", numberOfNodes);
+		validateAddressValue("political", "Greensboro", numberOfNodes);
 	}
 
 	private void validateAddressValue(String tagetValue, String value,
