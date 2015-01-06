@@ -107,6 +107,22 @@ public class DataProviders {
         initDriver("com.microsoft.jdbc.sqlserver.SQLServerDriver");
         return new JDBCDataProvider("jdbc:microsoft:sqlserver://" + host + ":" + port + ";databaseName=" + db + ";user=" + user + ";password=" + pass, table);
     }
+    
+    /**
+     * Get a PostgreSQL JDBC Data Provider
+     * 
+     * @param       host        Host that database is located on
+     * @param       port        Port which database is listening on
+     * @param       db          Database name
+     * @param       table       Table name
+     * @param       user        User which has read access to table
+     * @param       pass        Password for user
+     * @return      A PostgreSQL provider
+     */
+    public static JDBCDataProvider createPostgresqlProvider(String host, int port, String db, String table, String user, String pass) {
+        initDriver("org.postgresql.Driver");
+        return new JDBCDataProvider("jdbc:postgresql://" + host + ":" + port + "/" + db + "?user=" + user + "&password=" + pass, table);
+    }
 
        
     /**
