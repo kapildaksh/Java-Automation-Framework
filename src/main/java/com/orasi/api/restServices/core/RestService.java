@@ -29,6 +29,7 @@ import com.orasi.utils.documentConverter.StringToDocumentToString;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -137,11 +138,35 @@ public class RestService {
 			System.out.println("Raw Response");
 			System.out.println(rawResponse.toString());
 			
-	        //JSONArray jsonarray = new JSONArray(response.toString());
 	        Object [][] json = JSONDataProvider.compileJSON("", rawResponse.toString());
+	        
+	        for(int outerArrayCounter = 0; outerArrayCounter < json.length; outerArrayCounter++){
+	        	for(int innerArrayCounter = 0; innerArrayCounter < json[outerArrayCounter].length; innerArrayCounter++){
+	        		System.out.println("jsonArrayObject["+String.valueOf(outerArrayCounter)+"]["+String.valueOf(innerArrayCounter)+"] = "+json[outerArrayCounter][innerArrayCounter]);
+	        	}
+	        }
+	        
+	        System.out.println();
+	        
 	        JSONArray jsonarray = new JSONArray(json[1][0].toString());
+	        for(int outerLoopCounter = 0; outerLoopCounter < jsonarray.getJSONObject(0).names().length(); outerLoopCounter++){
+	        	System.out.println("jsonArrayObjectName["+String.valueOf(outerLoopCounter)+"] = "+jsonarray.getJSONObject(0).names().get(outerLoopCounter));
+	        }
+	        System.out.println("Number of names: "+String.valueOf(jsonarray.getJSONObject(0).names().length()));
 	        setJsonResponseStringArray(json);
 	        setJsonResponseArray(jsonarray);
+	        
+	        JSONObject jo = new JSONObject(rawResponse.toString());
+	        
+	        System.out.println();
+	        System.out.println(jo.length());
+	        System.out.println(jo.names());
+	        System.out.println();
+	        
+	        StringWriter sw = new StringWriter();
+	        JSONWriter writer = new JSONWriter(sw);
+	        transformer.transform(new DOMSource(getXmlResponseDocument()),
+					new StreamResult(sw))
 		}
 		
 		return rawResponse.toString();
@@ -314,5 +339,29 @@ public class RestService {
 	
 	public JSONArray setJsonResponseArray(){
 		return jsonResponse;
+	}
+	
+	public String getXmlResponse() {
+		StringWriter sw = new StringWriter();
+		TransformerFactory tf = TransformerFactory.newInstance();
+		Transformer transformer = null;
+		try {
+			transformer = tf.newTransformer();
+		} catch (TransformerConfigurationException e) {
+			throw new RuntimeException("Failed to create XML Transformer");
+		}
+		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+		transformer.setOutputProperty(OutputKeys.METHOD, "json");
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+
+		try {
+			transformer.transform(new DOMSource(getXmlResponseDocument()),
+					new StreamResult(sw));
+		} catch (TransformerException e) {
+			throw new RuntimeException(
+					"Failed to transform Response XML Document. Ensure XML Document has been successfully loaded.");
+		}
+		return sw.toString();
 	}
 }

@@ -65,12 +65,6 @@ public class Geocode_JSON {
 		rest.sendGetRequest(
 				"https://maps.googleapis.com/maps/api/geocode/"+rest.getDefaultResponseFormat()+"?sensor=false&address=7025 Albert Pick Rd Greensboro NC, 27409",
 				rest.getDefaultResponseFormat());
-
-		int numberOfNodes = rest.getNumberOfNodesByXpath("/GeocodeResponse/result/address_component");
-		validateAddressValue("street_number", "7025", numberOfNodes);
-		validateAddressValue("route", "Albert Pick Road", numberOfNodes);
-		validateAddressValue("postal_code", "27409", numberOfNodes);
-		validateAddressValue("political", "Greensboro", numberOfNodes);
 	}
 
 	private void validateAddressValue(String tagetValue, String value,
