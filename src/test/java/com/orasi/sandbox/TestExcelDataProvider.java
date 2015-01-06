@@ -7,7 +7,6 @@ package com.orasi.sandbox;
 
 import com.orasi.utils.Constants;
 import com.orasi.utils.dataProviders.DataProviders;
-import com.orasi.utils.dataProviders.JDBCDataProvider;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
@@ -27,7 +26,7 @@ public class TestExcelDataProvider {
     
     @DataProvider(name = "quickTestExcel")
     public Iterator<Object[]> dataQuickTestExcel() throws Throwable {
-        return DataProviders.createExcel(getFilePath("TestAddNewTitle.xlsx"), "TestAddNewTitle").getData(); //getFilePath("TestAddNewTitle.xlsx"), "TestAddNewTitle").getData();
+        return DataProviders.createExcelProvider(getFilePath("TestAddNewTitle.xlsx"), "TestAddNewTitle").getData(); //getFilePath("TestAddNewTitle.xlsx"), "TestAddNewTitle").getData();
     }
     
     @Test(dataProvider = "quickTestExcel")

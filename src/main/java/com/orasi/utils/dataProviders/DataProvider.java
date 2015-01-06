@@ -8,7 +8,10 @@ package com.orasi.utils.dataProviders;
 import java.util.Iterator;
 
 /**
- *
+ * A generic data provider interface, with which we can use to get data as
+ * an Iterator of Object[]. This is the format which TestNG expects its data
+ * for test cases.
+ * 
  * @author Brian Becker
  */
 public interface DataProvider {

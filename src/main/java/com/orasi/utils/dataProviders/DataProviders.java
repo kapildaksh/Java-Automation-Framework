@@ -16,15 +16,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author brian.becker
+ * Various static methods for constructing different types of data table
+ * providers.
+ * 
+ * @author Brian Becker
  */
 public class DataProviders {
     
     /**
      * Initialize a SQL driver and catch exceptions.
      * 
-     * @param driverName 
+     * @param       driverName 
      */
     private static void initDriver(String driverName) {
         try {
@@ -35,41 +37,61 @@ public class DataProviders {
     }
     
     /**
-     * Get a factory to create JDBC SQLite Data Providers.
+     * Get a SQLite JDBC Data Provider
      * 
-     * @param filePath
-     * @param table
-     * @return      Factory which constructs SQLite providers.
+     * @param       filePath    File where database is located
+     * @param       table       Table in database
+     * @return      A SQLite provider
      */
-    public static JDBCDataProvider createSqlite(Path filePath, String table) {
-        return new JDBCDataProvider("jdbc:sqlite:" + filePath.toString(), table, null, null);
+    public static JDBCDataProvider createSqliteProvider(Path filePath, String table) {
+        initDriver("org.sqlite.JDBC");
+        return new JDBCDataProvider("jdbc:sqlite:" + filePath.toString(), table);
     }
     
     /**
-     * Get a factory to create JDBC Excel Data Providers.
+     * Get an Excel JDBC Data Provider
      * 
-     * @param filePath
-     * @param table
-     * @return      Factory which constructs Excel providers.
+     * @param       filePath    File where database is located
+     * @param       table       Table in database
+     * @return      An Excel provider
      */
-    public static JDBCDataProvider createExcel(Path filePath, String table) {
+    public static JDBCDataProvider createExcelProvider(Path filePath, String table) {
         initDriver("com.googlecode.sqlsheet.Driver");
-        return new JDBCDataProvider("jdbc:xls:file:" + filePath.toString(), table, null, null);
+        return new JDBCDataProvider("jdbc:xls:file:" + filePath.toString(), table);
     }
     
     /**
-     * Get a factory to create JDBC MySQL Data Providers.
+     * Get a MySQL JDBC Data Provider
      * 
-     * @param host
-     * @param db
-     * @param table
-     * @param user
-     * @param pass
-     * @return      Factory which constructs MySQL providers.
+     * @param       host        Host that database is located on
+     * @param       port        Port which database is listening on
+     * @param       db          Database name
+     * @param       table       Table name
+     * @param       user        User which has read access to table
+     * @param       pass        Password for user
+     * @return      A MySQL provider
      */
-    public static JDBCDataProvider createMysql(String host, String db, String table, String user, String pass) {
-        return new JDBCDataProvider("jdbc:mysql://" + host + "/" + db, table, user, pass);
+    public static JDBCDataProvider createMysqlProvider(String host, int port, String db, String table, String user, String pass) {
+        initDriver("com.mysql.jdbc.Driver");
+        return new JDBCDataProvider("jdbc:mysql://" + host + ":" + port + "/" + db + "?user=" + user + "&password=" + pass, table);
     }
+    
+    /**
+     * Get an Oracle JDBC Data Provider
+     * 
+     * @param       host        Host that database is located on
+     * @param       port        Port which database is listening on
+     * @param       db          Database name
+     * @param       table       Table name
+     * @param       user        User which has read access to table
+     * @param       pass        Password for user
+     * @return      An Oracle provider
+     */
+    public static JDBCDataProvider createOracleProvider(String host, int port, String db, String table, String user, String pass) {
+        initDriver("oracle.jdbc.OracleDriver");
+        return new JDBCDataProvider("jdbc:oracle:thin:" + user + "/" + pass + "@" + host + ":" + port + ":" + db, table);
+    }
+
        
     /**
      * Get a factory to create Jackson Json Data Providers.

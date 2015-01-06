@@ -5,7 +5,6 @@
  */
 package com.orasi.utils.dataProviders;
 
-import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -29,8 +28,6 @@ import org.apache.commons.lang.StringEscapeUtils;
 public class JDBCDataProvider implements DataProvider {
     private final String dataSourceUrl;
     private final String table;
-    private final String user;
-    private final String pass;
 
     /**
      * Create a new JDBC Data Provider, with a data source URL, a table,
@@ -38,14 +35,10 @@ public class JDBCDataProvider implements DataProvider {
      * 
      * @param dataSourceUrl
      * @param table
-     * @param user
-     * @param pass 
      */
-    public JDBCDataProvider(String dataSourceUrl, String table, String user, String pass) {
+    public JDBCDataProvider(String dataSourceUrl, String table) {
         this.dataSourceUrl = dataSourceUrl;
         this.table = table;
-        this.user = user;
-        this.pass = pass;
     }
         
     /**
@@ -61,7 +54,7 @@ public class JDBCDataProvider implements DataProvider {
     @Override
     public Iterator<Object[]> getData() {
         try {
-            final Connection conn = this.user != null ? DriverManager.getConnection(this.dataSourceUrl, user, pass) : DriverManager.getConnection(this.dataSourceUrl);
+            final Connection conn = DriverManager.getConnection(this.dataSourceUrl);
             final PreparedStatement ps = conn.prepareStatement( "select * from " + StringEscapeUtils.escapeSql(this.table) );
             final ResultSet rs = ps.executeQuery();
             if(rs.next()) {

@@ -7,7 +7,6 @@ package com.orasi.sandbox;
 
 import com.orasi.utils.Constants;
 import com.orasi.utils.dataProviders.DataProviders;
-import com.orasi.utils.dataProviders.JDBCDataProvider;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -36,7 +35,7 @@ public class TestSQLiteDataProvider {
 
     @DataProvider(name = "quickTestSQLite")
     public Iterator<Object[]> dataQuickTestSQLite() throws Throwable {
-        return DataProviders.createSqlite(getFilePath("TestSQLiteQuick.db"), "numbers").getData(); //createFileTable(getFilePath("TestSQLiteQuick.db"), "numbers").getData();
+        return DataProviders.createSqliteProvider(getFilePath("TestSQLiteQuick.db"), "numbers").getData(); //createFileTable(getFilePath("TestSQLiteQuick.db"), "numbers").getData();
     }
     
     @Test(dataProvider = "quickTestSQLite")
