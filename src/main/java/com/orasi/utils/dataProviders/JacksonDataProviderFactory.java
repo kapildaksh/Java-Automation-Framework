@@ -29,7 +29,8 @@ import java.util.Map;
  * To get the benefits of structured data, you simply define a structure in
  * Java which will be automatically filled in.
  * 
- * @author Brian Becker
+ * @version 1/06/2015
+ * @author  Brian Becker
  */
 public class JacksonDataProviderFactory {
    
@@ -43,6 +44,8 @@ public class JacksonDataProviderFactory {
      * of provider that Jackson natively supports. Helper constructors are
      * provided for JSON, XML, YAML, and CSV.
      * 
+     * @version 1/06/2015
+     * @author  Brian Becker
      * @param map       Jackson object-mapper
      */
     public JacksonDataProviderFactory(ObjectMapper map) {
@@ -54,6 +57,8 @@ public class JacksonDataProviderFactory {
      * of an array type, but the array elements themselves may be any
      * primitive type.
      * 
+     * @version 1/06/2015
+     * @author  Brian Becker
      * @param   filePath      Path of structured data
      * @return
      * @throws Throwable 
@@ -67,6 +72,8 @@ public class JacksonDataProviderFactory {
      * functions such as .path("elementName") to traverse and retrieve values.
      * See the Jackson API for more details regarding the JsonNode Class.
      * 
+     * @version 1/06/2015
+     * @author  Brian Becker
      * @param   filePath      Path of structured data
      * @return
      * @throws Throwable 
@@ -83,6 +90,8 @@ public class JacksonDataProviderFactory {
      * The test methods will be called with the following parameter spec:
      * testFunction([structure] value);
      * 
+     * @version 1/06/2015
+     * @author  Brian Becker
      * @param   filePath      Path of structured data
      * @param   structure     Structure of JSON instance entries
      * @return
@@ -98,6 +107,8 @@ public class JacksonDataProviderFactory {
      * of an array type, but the array elements themselves may be any
      * primitive type.
      *
+     * @version 1/06/2015
+     * @author  Brian Becker
      * @param   filePath      Path of structured data
      * @return
      * @throws  Throwable 
@@ -111,6 +122,8 @@ public class JacksonDataProviderFactory {
      * functions such as .path("elementName") to traverse and retrieve values.
      * See the Jackson API for more details regarding the JsonNode Class.
      *
+     * @version 1/06/2015
+     * @author  Brian Becker
      * @param   filePath      Path of structured data
      * @return
      * @throws  Throwable 
@@ -127,6 +140,8 @@ public class JacksonDataProviderFactory {
      * The test methods will be called with the following parameter spec:
      * testFunction([structure] value);
      * 
+     * @version 1/06/2015
+     * @author  Brian Becker
      * @param   filePath      Path of structured data
      * @param   structure     Structure of instance entries
      * @return

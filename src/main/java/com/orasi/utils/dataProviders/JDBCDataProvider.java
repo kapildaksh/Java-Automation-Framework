@@ -22,7 +22,8 @@ import org.apache.commons.lang.StringEscapeUtils;
  * and a table name. It can be used with any database that is supported by
  * the Java JDBC API.
  * 
- * @author Brian Becker
+ * @version 01/06/2015
+ * @author  Brian Becker
  */
 public class JDBCDataProvider implements DataProvider {
     private final String dataSourceUrl;
@@ -32,8 +33,10 @@ public class JDBCDataProvider implements DataProvider {
      * Create a new JDBC Data Provider, with a data source URL, a table,
      * and a username and password to authenticate with.
      * 
-     * @param dataSourceUrl
-     * @param table
+     * @version 01/06/2015
+     * @author  Brian Becker
+     * @param   dataSourceUrl
+     * @param   table
      */
     public JDBCDataProvider(String dataSourceUrl, String table) {
         this.dataSourceUrl = dataSourceUrl;
