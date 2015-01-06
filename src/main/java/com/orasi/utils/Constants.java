@@ -20,6 +20,7 @@ public class Constants {
     
     /** Location of data provider files in the project  */
     final static public String BLUESOURCE_DATAPROVIDER_PATH = "/bluesource/dataProviders/";
+    final static public String GOOGLEAPI_DATAPROVIDER_PATH = "/googleApi/dataProviders/";
     
     /** Location of drivers in project */
     final static public String DRIVERS_PATH_LOCAL = "/drivers/";
