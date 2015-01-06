@@ -85,7 +85,7 @@ public class TestYAMLDataProvider {
     }
     
     @Test(dataProvider = "dataDiningNodeYAML")
-    public void testDiningNodeYAML(String name, JsonNode node) {
+    public void testDiningNodeYAML(JsonNode node) {
         JsonNode nlist = node.path("diningList");
         Iterator<String> i1 = new IteratorMap<JsonNode, String>(nlist.iterator()) {
             @Override
@@ -99,7 +99,7 @@ public class TestYAMLDataProvider {
     }
     
     @Test(dataProvider = "dataDiningClassYAML")
-    public void testDiningClassYAML(String name, DiningTest node) {
+    public void testDiningClassYAML(DiningTest node) {
         Iterator<String> i1 = node.diningList.iterator();
         Iterator<String> i2 = new ArrayIterator(DINING_LIST);
         Assert.assertEquals(i1, i2);
@@ -146,7 +146,7 @@ public class TestYAMLDataProvider {
     }
     
     @Test(dataProvider = "dataHashArrayYAML")
-    public void testHashArrayYAML(String name, int[] a) {
+    public void testHashArrayYAML(int[] a) {
         Assert.assertTrue(java.util.Arrays.equals(a, new int[] {1, 2, 3, 4, 5}) || java.util.Arrays.equals(a, new int[] { 5, 4, 3, 2, 1 }));
     }
     

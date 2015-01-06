@@ -85,7 +85,7 @@ public class TestJSONDataProvider {
     }
     
     @Test(dataProvider = "dataDiningNode")
-    public void testDiningNode(String name, JsonNode node) {
+    public void testDiningNode(JsonNode node) {
         JsonNode nlist = node.path("diningList");
         Iterator<String> i1 = new IteratorMap<JsonNode, String>(nlist.iterator()) {
             @Override
@@ -99,7 +99,7 @@ public class TestJSONDataProvider {
     }
     
     @Test(dataProvider = "dataDiningClass")
-    public void testDiningClass(String name, DiningTest node) {
+    public void testDiningClass(DiningTest node) {
         Iterator<String> i1 = node.diningList.iterator();
         Iterator<String> i2 = new ArrayIterator(DINING_LIST);
         Assert.assertEquals(i1, i2);
@@ -146,7 +146,7 @@ public class TestJSONDataProvider {
     }
     
     @Test(dataProvider = "dataHashArray")
-    public void testHashArray(String name, int[] a) {
+    public void testHashArray(int[] a) {
         Assert.assertTrue(java.util.Arrays.equals(a, new int[] {1, 2, 3, 4, 5}) || java.util.Arrays.equals(a, new int[] { 5, 4, 3, 2, 1 }));
     }
     

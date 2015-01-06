@@ -5,13 +5,12 @@
  */
 package com.orasi.utils.dataProviders;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The Jackson Data Provider factory provides a convenient way of setting
@@ -35,9 +34,6 @@ import java.util.Map;
 public class JacksonDataProviderFactory {
    
     private final ObjectMapper map;
-             
-    private static final TypeReference ARRAY_PARAMS = new TypeReference<Object[][]>() {};
-    private static final TypeReference HASH_PARAMS = new TypeReference<Map<String, Object[]>>() {};
 
     /**
      * The Jackson Data Provider factory can be used to construct any type
@@ -61,10 +57,10 @@ public class JacksonDataProviderFactory {
      * @author  Brian Becker
      * @param   filePath      Path of structured data
      * @return
-     * @throws Throwable 
+     * @throws  Exception 
      */
-    public JacksonDataProvider createArrayParams(Path filePath) throws Throwable {
-        return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructType(ARRAY_PARAMS.getType()), false);
+    public JacksonDataProvider createArrayParams(Path filePath) throws Exception {
+        return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructCollectionType(ArrayList.class, Object[].class), false);
     }
 
     /**
@@ -76,9 +72,9 @@ public class JacksonDataProviderFactory {
      * @author  Brian Becker
      * @param   filePath      Path of structured data
      * @return
-     * @throws Throwable 
+     * @throws  Exception 
      */
-    public JacksonDataProvider createArrayNode(Path filePath) throws Throwable {
+    public JacksonDataProvider createArrayNode(Path filePath) throws Exception {
         return createArrayStructured(filePath, JsonNode.class);
     }
 
@@ -95,11 +91,11 @@ public class JacksonDataProviderFactory {
      * @param   filePath      Path of structured data
      * @param   structure     Structure of JSON instance entries
      * @return
-     * @throws  Throwable 
+     * @throws  Exception 
      */
-    public JacksonDataProvider createArrayStructured(Path filePath, Class structure) throws Throwable {
+    public JacksonDataProvider createArrayStructured(Path filePath, Class structure) throws Exception {
         map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructArrayType(structure), true);
+        return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructCollectionType(ArrayList.class, structure), true);
     }
 
     /**
@@ -111,10 +107,10 @@ public class JacksonDataProviderFactory {
      * @author  Brian Becker
      * @param   filePath      Path of structured data
      * @return
-     * @throws  Throwable 
+     * @throws  Exception 
      */
-    public JacksonDataProvider createHashParams(Path filePath) throws Throwable {
-        return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructType(HASH_PARAMS.getType()), false);
+    public JacksonDataProvider createHashParams(Path filePath) throws Exception {
+        return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructMapType(HashMap.class, String.class, Object[].class), false);
     }
 
     /**
@@ -126,9 +122,9 @@ public class JacksonDataProviderFactory {
      * @author  Brian Becker
      * @param   filePath      Path of structured data
      * @return
-     * @throws  Throwable 
+     * @throws  Exception 
      */
-    public JacksonDataProvider createHashNode(Path filePath) throws Throwable {
+    public JacksonDataProvider createHashNode(Path filePath) throws Exception {
         return createHashStructured(filePath, JsonNode.class);
     }
 
@@ -145,9 +141,9 @@ public class JacksonDataProviderFactory {
      * @param   filePath      Path of structured data
      * @param   structure     Structure of instance entries
      * @return
-     * @throws  Throwable 
+     * @throws  Exception 
      */
-    public JacksonDataProvider createHashStructured(Path filePath, Class structure) throws Throwable {
+    public JacksonDataProvider createHashStructured(Path filePath, Class structure) throws Exception {
         this.map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructMapType(HashMap.class, String.class, structure), true);        
     }

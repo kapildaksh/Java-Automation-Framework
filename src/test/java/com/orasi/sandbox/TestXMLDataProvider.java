@@ -88,7 +88,7 @@ public class TestXMLDataProvider {
     }
     
     @Test(dataProvider = "xmlDataDiningNode")
-    public void testXMLDiningNode(String name, JsonNode node) {
+    public void testXMLDiningNode(JsonNode node) {
         JsonNode nlist = node.path("diningList");
         Iterator<String> i1 = new IteratorMap<JsonNode, String>(nlist.iterator()) {
             @Override
@@ -105,7 +105,7 @@ public class TestXMLDataProvider {
     }
     
     @Test(dataProvider = "xmlDataDiningClass")
-    public void testXMLDiningClass(String name, DiningTest node) {
+    public void testXMLDiningClass(DiningTest node) {
         Assert.assertFalse(Collections.disjoint(node.diningList.values(), Lists.newArrayList(DINING_LIST)));
     }
     
@@ -149,7 +149,7 @@ public class TestXMLDataProvider {
     }
     
     @Test(dataProvider = "xmlDataHashArray")
-    public void testXMLHashArray(String name, int[] a) {
+    public void testXMLHashArray(int[] a) {
         Assert.assertTrue(java.util.Arrays.equals(a, new int[] {1, 2, 3, 4, 5}) || java.util.Arrays.equals(a, new int[] { 5, 4, 3, 2, 1 }));
     }
     

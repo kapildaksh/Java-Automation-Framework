@@ -2,16 +2,15 @@ package com.orasi.utils.dataProviders;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.orasi.utils.types.CollectionWrappers;
 import com.orasi.utils.types.IteratorMap;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.collections.iterators.ArrayIterator;
 
 /**
  * This is a structured data provider. Instances can be held in either a 2d
@@ -49,9 +48,9 @@ public class JacksonDataProvider implements DataProvider {
      * @param       map                     object mapper used to create type
      * @param       dataType                data type of test
      * @param       wrapParams              parameter wrapping needed
-     * @throws      java.lang.Throwable
+     * @throws      java.lang.Exception
      */
-    public JacksonDataProvider(Path filePath, ObjectMapper map, JavaType dataType, boolean wrapParams) throws Throwable {
+    public JacksonDataProvider(Path filePath, ObjectMapper map, JavaType dataType, boolean wrapParams) throws Exception {
         this.mapData = Files.readAllBytes(filePath);
         this.map = map;
         this.dataType = dataType;
@@ -83,29 +82,16 @@ public class JacksonDataProvider implements DataProvider {
     @Override
     public Iterator<Object[]> getData() {
         try {
-            Object is = this.map.readValue(mapData, dataType);
-            if(is instanceof HashMap) {
-                HashMap hm = (HashMap) is;
-                return new IteratorMap<Entry<Object, Object>, Object[]>(hm.entrySet().iterator()) {
-                    @Override
-                    public Object[] apply(Entry<Object, Object> value) {
-                        if(wrapParams) {
-                            return new Object[] { value.getKey(), value.getValue() };
-                        }
-                        return (Object[]) value.getValue();
+            Collection is = CollectionWrappers.values(this.map.readValue(mapData, dataType));
+            return new IteratorMap<Object, Object[]>(is.iterator()) {
+                @Override
+                public Object[] apply(Object value) {
+                    if(wrapParams) {
+                        return new Object[] { value };
                     }
-                };
-            } else {
-                return new IteratorMap<Object, Object[]>(new ArrayIterator(is)) {
-                    @Override
-                    public Object[] apply(Object value) {
-                        if(wrapParams) {
-                            return new Object[] { value };
-                        }
-                        return (Object[]) value;
-                    }
-                };
-            }
+                    return (Object[]) value;
+                }
+            };
         } catch (Exception ex) {
             Logger.getLogger(JacksonDataProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
