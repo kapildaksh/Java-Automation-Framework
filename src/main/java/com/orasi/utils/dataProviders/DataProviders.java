@@ -12,6 +12,7 @@ import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.nio.file.Path;
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,6 +38,17 @@ public class DataProviders {
         }
     }
     
+    // {0} File
+    public static final String SQLITE_URI = "jdbc:sqlite:{0}";
+    public static final String EXCEL_URI = "jdbc:xls:file:{0}";
+    
+    // {0} Host {1} Port {2} Database {3} User {4} Password
+    public static final String MYSQL_URI = "jdbc:mysql://{0}:{1}/{2}?user={3}&password={4}";
+    public static final String ORACLE_URI = "jdbc:oracle:thin:{3}/{4}@{0}:{1}:{2}";
+    public static final String MSSQL_URI = "jdbc:microsoft:sqlserver://{0}:{1};databaseName={2};user={3};password={4}";
+    public static final String POSTGRESQL_URI = "jdbc:postgresql://{0}:{1}/{2}?user={3}&password={4}";
+    public static final String DB2_URI = "jdbc:db2://{0}:{1}/{2}:user={3};password={4}";
+
     /**
      * Get a SQLite JDBC Data Provider
      * 
@@ -48,7 +60,7 @@ public class DataProviders {
      */
     public static JDBCDataProvider createSqliteProvider(Path filePath, String table) {
         initDriver("org.sqlite.JDBC");
-        return new JDBCDataProvider("jdbc:sqlite:" + filePath.toString(), table);
+        return new JDBCDataProvider(MessageFormat.format(SQLITE_URI, filePath.toString()), table);
     }
     
     /**
@@ -62,7 +74,7 @@ public class DataProviders {
      */
     public static JDBCDataProvider createExcelProvider(Path filePath, String table) {
         initDriver("com.googlecode.sqlsheet.Driver");
-        return new JDBCDataProvider("jdbc:xls:file:" + filePath.toString(), table);
+        return new JDBCDataProvider(MessageFormat.format(EXCEL_URI, filePath.toString()), table);
     }
     
     /**
@@ -80,7 +92,7 @@ public class DataProviders {
      */
     public static JDBCDataProvider createMysqlProvider(String host, int port, String db, String table, String user, String pass) {
         initDriver("com.mysql.jdbc.Driver");
-        return new JDBCDataProvider("jdbc:mysql://" + host + ":" + port + "/" + db + "?user=" + user + "&password=" + pass, table);
+        return new JDBCDataProvider(MessageFormat.format(MYSQL_URI, host, port, db, user, pass), table);
     }
     
     /**
@@ -98,7 +110,7 @@ public class DataProviders {
      */
     public static JDBCDataProvider createOracleProvider(String host, int port, String db, String table, String user, String pass) {
         initDriver("oracle.jdbc.OracleDriver");
-        return new JDBCDataProvider("jdbc:oracle:thin:" + user + "/" + pass + "@" + host + ":" + port + ":" + db, table);
+        return new JDBCDataProvider(MessageFormat.format(ORACLE_URI, host, port, db, user, pass), table);
     }
     
     /**
@@ -116,7 +128,7 @@ public class DataProviders {
      */
     public static JDBCDataProvider createMssqlProvider(String host, int port, String db, String table, String user, String pass) {
         initDriver("com.microsoft.jdbc.sqlserver.SQLServerDriver");
-        return new JDBCDataProvider("jdbc:microsoft:sqlserver://" + host + ":" + port + ";databaseName=" + db + ";user=" + user + ";password=" + pass, table);
+        return new JDBCDataProvider(MessageFormat.format(MSSQL_URI, host, port, db, user, pass), table);
     }
     
     /**
@@ -134,7 +146,7 @@ public class DataProviders {
      */
     public static JDBCDataProvider createPostgresqlProvider(String host, int port, String db, String table, String user, String pass) {
         initDriver("org.postgresql.Driver");
-        return new JDBCDataProvider("jdbc:postgresql://" + host + ":" + port + "/" + db + "?user=" + user + "&password=" + pass, table);
+        return new JDBCDataProvider(MessageFormat.format(POSTGRESQL_URI, host, port, db, user, pass), table);
     }
     
     /**
@@ -152,7 +164,7 @@ public class DataProviders {
      */
     public static JDBCDataProvider createDB2Provider(String host, int port, String db, String table, String user, String pass) {
         initDriver("COM.ibm.db2.jdbc.app.DB2Driver");
-        return new JDBCDataProvider("jdbc:db2://" + host + ":" + port + "/"+ db + ":user=" + user + ";password=" + pass, table);
+        return new JDBCDataProvider(MessageFormat.format(DB2_URI, host, port, db, user, pass), table);
     }
 
        
