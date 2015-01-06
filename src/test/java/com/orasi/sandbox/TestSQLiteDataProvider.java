@@ -39,8 +39,8 @@ public class TestSQLiteDataProvider {
     }
     
     @Test(dataProvider = "quickTestSQLite")
-    public void testQuickTestSQLite(Object a, Object b, Object c, Object d, Object e) {
-        Integer v[] = new Integer[] { (Integer)a, (Integer)b, (Integer)c, (Integer)d, (Integer)e };
+    public void testQuickTestSQLite(Integer a, Integer b, Integer c, Integer d, Integer e) {
+        Integer v[] = new Integer[] { a, b, c, d, e };
         List<Integer> list1 = Arrays.asList(v);
         List<Integer> list2 = Arrays.asList(new Integer[] {1, 2, 3, 4, 5});
         Collections.sort(list1);

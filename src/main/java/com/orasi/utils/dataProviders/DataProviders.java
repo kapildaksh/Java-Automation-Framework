@@ -32,7 +32,7 @@ public class DataProviders {
         try {
             Class.forName(driverName);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(JDBCDataProvider.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DataProviders.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
