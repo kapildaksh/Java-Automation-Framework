@@ -123,6 +123,22 @@ public class DataProviders {
         initDriver("org.postgresql.Driver");
         return new JDBCDataProvider("jdbc:postgresql://" + host + ":" + port + "/" + db + "?user=" + user + "&password=" + pass, table);
     }
+    
+    /**
+     * Get an IBM DB2 JDBC Data Provider
+     * 
+     * @param       host        Host that database is located on
+     * @param       port        Port which database is listening on
+     * @param       db          Database name
+     * @param       table       Table name
+     * @param       user        User which has read access to table
+     * @param       pass        Password for user
+     * @return      An IBM DB2 provider
+     */
+    public static JDBCDataProvider createDB2Provider(String host, int port, String db, String table, String user, String pass) {
+        initDriver("COM.ibm.db2.jdbc.app.DB2Driver");
+        return new JDBCDataProvider("jdbc:db2://" + host + ":" + port + "/"+ db + ":user=" + user + ";password=" + pass, table);
+    }
 
        
     /**
