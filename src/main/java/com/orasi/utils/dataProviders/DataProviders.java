@@ -91,6 +91,22 @@ public class DataProviders {
         initDriver("oracle.jdbc.OracleDriver");
         return new JDBCDataProvider("jdbc:oracle:thin:" + user + "/" + pass + "@" + host + ":" + port + ":" + db, table);
     }
+    
+    /**
+     * Get a MSSQL JDBC Data Provider
+     *
+     * @param       host        Host that database is located on
+     * @param       port        Port which database is listening on
+     * @param       db          Database name
+     * @param       table       Table name
+     * @param       user        User which has read access to table
+     * @param       pass        Password for user
+     * @return      A MSSQL provider
+     */
+    public static JDBCDataProvider createMssqlProvider(String host, int port, String db, String table, String user, String pass) {
+        initDriver("com.microsoft.jdbc.sqlserver.SQLServerDriver");
+        return new JDBCDataProvider("jdbc:microsoft:sqlserver://" + host + ":" + port + ";databaseName=" + db + ";user=" + user + ";password=" + pass, table);
+    }
 
        
     /**
