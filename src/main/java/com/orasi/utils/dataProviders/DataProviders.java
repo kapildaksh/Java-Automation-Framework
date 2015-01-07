@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.dataProviders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,8 +49,8 @@ public class DataProviders {
     /**
      * Get a SQLite JDBC Data Provider
      * 
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * @version     1/06/2015
+     * @author      Brian Becker
      * @param       filePath    File where database is located
      * @param       table       Table in database
      * @return      A SQLite provider
@@ -68,8 +63,8 @@ public class DataProviders {
     /**
      * Get an Embedded H2 JDBC Data Provider
      * 
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * @version     1/07/2015
+     * @author      Brian Becker
      * @param       filePath    File where database is located
      * @param       table       Table in database
      * @return      A SQLite provider
@@ -82,8 +77,8 @@ public class DataProviders {
     /**
      * Get an Excel JDBC Data Provider
      * 
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * @version     1/06/2015
+     * @author      Brian Becker
      * @param       filePath    File where database is located
      * @param       table       Table in database
      * @return      An Excel provider
@@ -96,8 +91,8 @@ public class DataProviders {
     /**
      * Get a MySQL JDBC Data Provider
      * 
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * @version     1/06/2015
+     * @author      Brian Becker
      * @param       host        Host that database is located on
      * @param       port        Port which database is listening on
      * @param       db          Database name
@@ -114,8 +109,8 @@ public class DataProviders {
     /**
      * Get an Oracle JDBC Data Provider
      * 
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * @version     1/06/2015
+     * @author      Brian Becker
      * @param       host        Host that database is located on
      * @param       port        Port which database is listening on
      * @param       db          Database name
@@ -132,8 +127,8 @@ public class DataProviders {
     /**
      * Get a MSSQL JDBC Data Provider
      *
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * @version     1/06/2015
+     * @author      Brian Becker
      * @param       host        Host that database is located on
      * @param       port        Port which database is listening on
      * @param       db          Database name
@@ -150,8 +145,8 @@ public class DataProviders {
     /**
      * Get a PostgreSQL JDBC Data Provider
      * 
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * @version     1/06/2015
+     * @author      Brian Becker
      * @param       host        Host that database is located on
      * @param       port        Port which database is listening on
      * @param       db          Database name
@@ -168,8 +163,8 @@ public class DataProviders {
     /**
      * Get an IBM DB2 JDBC Data Provider
      * 
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * @version     1/06/2015
+     * @author      Brian Becker
      * @param       host        Host that database is located on
      * @param       port        Port which database is listening on
      * @param       db          Database name
@@ -186,8 +181,8 @@ public class DataProviders {
     /**
      * Get an Remote H2 JDBC Data Provider
      * 
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * @version     1/07/2015
+     * @author      Brian Becker
      * @param       host        Host that database is located on
      * @param       port        Port which database is listening on
      * @param       db          Database name
@@ -204,8 +199,8 @@ public class DataProviders {
     /**
      * Get a factory to create Jackson Json Data Providers.
      * 
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * @version     1/06/2015
+     * @author      Brian Becker
      * @return      Factory which constructs JSON providers.
      */
     public static JacksonDataProviderFactory createJsonFactory() {
@@ -215,8 +210,13 @@ public class DataProviders {
     /**
      * Get a factory to create Jackson XML Data Providers.
      * 
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * NOTE: You need to have the Woodstox StAX Implementation installed
+     * for this provider to function. There is also a limitation against
+     * using arrays with the JsonNode instance type. Mapped classes and
+     * parameter arrays will work properly.
+     * 
+     * @version     1/06/2015
+     * @author      Brian Becker
      * @return      Factory which constructs XML providers.
      */
     public static JacksonDataProviderFactory createXmlFactory() {
@@ -229,8 +229,8 @@ public class DataProviders {
     /**
      * Get a factory to create YAML Data Providers.
      * 
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * @version     1/06/2015
+     * @author      Brian Becker
      * @return      Factory which constructs YAML providers.
      */
     public static JacksonDataProviderFactory createYamlFactory() {
@@ -240,8 +240,8 @@ public class DataProviders {
     /**
      * Get a factory to create Jackson CSV Data Providers.
      * 
-     * @version 1/06/2015
-     * @author  Brian Becker
+     * @version     1/06/2015
+     * @author      Brian Becker
      * @return      Factory which constructs CSV providers
      */
     public static JacksonDataProviderFactory createCsvFactory() {

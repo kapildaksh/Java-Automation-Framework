@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.dataProviders;
 
 import com.orasi.utils.types.IteratorResultSet;
@@ -22,8 +17,8 @@ import org.apache.commons.lang.StringEscapeUtils;
  * and a table name. It can be used with any database that is supported by
  * the Java JDBC API.
  * 
- * @version 01/06/2015
- * @author  Brian Becker
+ * @version     01/06/2015
+ * @author      Brian Becker
  */
 public class JDBCDataProvider implements DataProvider {
     private final String dataSourceUrl;
@@ -33,10 +28,10 @@ public class JDBCDataProvider implements DataProvider {
      * Create a new JDBC Data Provider, with a data source URL, a table,
      * and a username and password to authenticate with.
      * 
-     * @version 01/06/2015
-     * @author  Brian Becker
-     * @param   dataSourceUrl
-     * @param   table
+     * @version     01/06/2015
+     * @author      Brian Becker
+     * @param       dataSourceUrl
+     * @param       table
      */
     public JDBCDataProvider(String dataSourceUrl, String table) {
         this.dataSourceUrl = dataSourceUrl;
@@ -48,10 +43,10 @@ public class JDBCDataProvider implements DataProvider {
      * a result set rather than dumping everything in memory to a list, which
      * would be extremely slow.
      * 
-     * @version	01/02/2015
-     * @author 	Brian Becker
-     * @warning Handles exceptions, returning empty iterators on failure
-     * @return 	Iterator of Object[]
+     * @version     01/02/2015
+     * @author      Brian Becker
+     * @warning     Handles exceptions, returning empty iterators on failure
+     * @return      Iterator of Object[]
      */
     @Override
     public Iterator<Object[]> getData() {

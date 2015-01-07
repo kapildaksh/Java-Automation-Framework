@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.types;
 
 import com.orasi.utils.dataProviders.JDBCDataProvider;
@@ -18,7 +13,8 @@ import java.util.logging.Logger;
  * The ResultSet iterator takes a ResultSet and converts it to an Iterator of
  * Object[].
  * 
- * @author Brian Becker
+ * @version     1/06/2015
+ * @author      Brian Becker
  */
 public class IteratorResultSet implements Iterator {
     private boolean hNext = true;

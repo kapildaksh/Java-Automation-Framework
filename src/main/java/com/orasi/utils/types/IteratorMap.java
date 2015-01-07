@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.types;
 
 import java.util.Iterator;
@@ -11,9 +6,10 @@ import java.util.Iterator;
  * Iterator mapping function for transforming the internal elements
  * of collections.
  * 
- * @author brian.becker
- * @param <S>
- * @param <T>   Output type of mapping function
+ * @version     1/06/2015
+ * @author      Brian Becker
+ * @param       <S>     Input type of mapping function
+ * @param       <T>     Output type of mapping function
  */
 public abstract class IteratorMap <S,T> implements Iterator <T> {
     private final Iterator<S> data;

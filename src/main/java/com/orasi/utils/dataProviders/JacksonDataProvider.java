@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * passed into a test case, you should escape it and use any data provider you
  * like. This is for passing object-like data to test cases.
  * 
- * @version     12/30/2014
+ * @version     1/06/2014
  * @author      Brian Becker
  */
 public class JacksonDataProvider implements DataProvider {
@@ -74,10 +74,10 @@ public class JacksonDataProvider implements DataProvider {
      *      }
      * }
      * 
-     * @version	12/30/2014
-     * @author 	Brian Becker
-     * @warning Handles exceptions, returning empty iterators on failure
-     * @return 	Iterator of Object[]
+     * @version     1/06/2014
+     * @author      Brian Becker
+     * @warning     Handles exceptions, returning empty iterators on failure
+     * @return      Iterator of Object[]
      */
     @Override
     public Iterator<Object[]> getData() {

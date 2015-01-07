@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.dataProviders;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -28,8 +23,8 @@ import java.util.HashMap;
  * To get the benefits of structured data, you simply define a structure in
  * Java which will be automatically filled in.
  * 
- * @version 1/06/2015
- * @author  Brian Becker
+ * @version     1/06/2015
+ * @author      Brian Becker
  */
 public class JacksonDataProviderFactory {
    

@@ -12,8 +12,8 @@ import java.util.Iterator;
  * an Iterator of Object[]. This is the format which TestNG expects its data
  * for test cases.
  * 
- * @version 01/06/2015
- * @author  Brian Becker
+ * @version     01/06/2015
+ * @author      Brian Becker
  */
 public interface DataProvider {
     public Iterator<Object[]> getData();
