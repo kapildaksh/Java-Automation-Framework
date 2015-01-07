@@ -40,14 +40,16 @@ public class DataProviders {
     
     // {0} File
     public static final String SQLITE_URI = "jdbc:sqlite:{0}";
+    public static final String H2_EMBEDDED_URI = "jdbc:h2:file:{0};IFEXISTS=TRUE";
     public static final String EXCEL_URI = "jdbc:xls:file:{0}";
     
     // {0} Host {1} Port {2} Database {3} User {4} Password
     public static final String MYSQL_URI = "jdbc:mysql://{0}:{1}/{2}?user={3}&password={4}";
-    public static final String ORACLE_URI = "jdbc:oracle:thin:{3}/{4}@{0}:{1}:{2}";
+    public static final String ORACLE_THIN_URI = "jdbc:oracle:thin:{3}/{4}@{0}:{1}:{2}";
     public static final String MSSQL_URI = "jdbc:microsoft:sqlserver://{0}:{1};databaseName={2};user={3};password={4}";
     public static final String POSTGRESQL_URI = "jdbc:postgresql://{0}:{1}/{2}?user={3}&password={4}";
     public static final String DB2_URI = "jdbc:db2://{0}:{1}/{2}:user={3};password={4}";
+    public static final String H2_REMOTE_URI = "jdbc:h2:tcp://{0}:{1}/{2};USER={3};PASSWORD={4}";
 
     /**
      * Get a SQLite JDBC Data Provider
@@ -61,6 +63,20 @@ public class DataProviders {
     public static JDBCDataProvider createSqliteProvider(Path filePath, String table) {
         initDriver("org.sqlite.JDBC");
         return new JDBCDataProvider(MessageFormat.format(SQLITE_URI, filePath.toString()), table);
+    }
+    
+    /**
+     * Get an Embedded H2 JDBC Data Provider
+     * 
+     * @version 1/06/2015
+     * @author  Brian Becker
+     * @param       filePath    File where database is located
+     * @param       table       Table in database
+     * @return      A SQLite provider
+     */
+    public static JDBCDataProvider createEmbeddedH2Provider(Path filePath, String table) {
+        initDriver("org.sqlite.JDBC");
+        return new JDBCDataProvider(MessageFormat.format(H2_EMBEDDED_URI, filePath.toString()), table);
     }
     
     /**
@@ -110,7 +126,7 @@ public class DataProviders {
      */
     public static JDBCDataProvider createOracleProvider(String host, int port, String db, String table, String user, String pass) {
         initDriver("oracle.jdbc.OracleDriver");
-        return new JDBCDataProvider(MessageFormat.format(ORACLE_URI, host, port, db, user, pass), table);
+        return new JDBCDataProvider(MessageFormat.format(ORACLE_THIN_URI, host, port, db, user, pass), table);
     }
     
     /**
@@ -166,7 +182,24 @@ public class DataProviders {
         initDriver("COM.ibm.db2.jdbc.app.DB2Driver");
         return new JDBCDataProvider(MessageFormat.format(DB2_URI, host, port, db, user, pass), table);
     }
-
+    
+    /**
+     * Get an Remote H2 JDBC Data Provider
+     * 
+     * @version 1/06/2015
+     * @author  Brian Becker
+     * @param       host        Host that database is located on
+     * @param       port        Port which database is listening on
+     * @param       db          Database name
+     * @param       table       Table name
+     * @param       user        User which has read access to table
+     * @param       pass        Password for user
+     * @return      An IBM DB2 provider
+     */
+    public static JDBCDataProvider createRemoteH2Provider(String host, int port, String db, String table, String user, String pass) {
+        initDriver("org.h2.Driver");
+        return new JDBCDataProvider(MessageFormat.format(H2_REMOTE_URI, host, port, db, user, pass), table);
+    }
        
     /**
      * Get a factory to create Jackson Json Data Providers.
