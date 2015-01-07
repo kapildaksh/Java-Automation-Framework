@@ -49,7 +49,10 @@ public class RestService {
 	 * @return true if the format is accepteable, false otherwise
 	 */
 	private boolean valiateAcceptableFormat(String format) {
-		if (format == "xml" || format == "json")
+		/*if (format == "xml" || format == "json")
+			return true;
+		return false;*/
+		if(format.equalsIgnoreCase("xml") || format.equalsIgnoreCase("json"))
 			return true;
 		return false;
 	}
@@ -100,7 +103,8 @@ public class RestService {
 	 * @throws JSONException 
 	 */
 	public String sendGetRequest(String url, String responseFormat) throws JSONException{
-
+		System.out.println("REST endpoint: " + url);
+		
 		StringBuilder rawResponse = new StringBuilder();
 
 		//Replace any white space in the URL with '%20'
@@ -125,9 +129,9 @@ public class RestService {
 			throw new RuntimeException(ioe.getMessage());
 		}
 		
-		if(responseFormat.equalsIgnoreCase("xml")){
-			//xmlResponseDocument = StringToDocumentToString.convertStringToDocument(rawResponse.toString());
+		if(responseFormat.equalsIgnoreCase("xml")){			
 			setXmlResponseDocument(StringToDocumentToString.convertStringToDocument(rawResponse.toString()));
+			
 			System.out.println();
 			System.out.println();
 			System.out.println("Response");
@@ -138,32 +142,26 @@ public class RestService {
 			System.out.println("Raw Response");
 			System.out.println(rawResponse.toString());
 			
-	        Object [][] json = JSONDataProvider.compileJSON("", rawResponse.toString());
-	        
+			Object [][] json = JSONDataProvider.compileJSON("", rawResponse.toString());
+			JSONObject jsonArray = new JSONObject(rawResponse.toString());
+	        JSONObject jsonObject = new JSONObject(rawResponse.toString());
+			
+			//Uncomment below code to output JSON array values to the console
+/*			System.out.println();
 	        for(int outerArrayCounter = 0; outerArrayCounter < json.length; outerArrayCounter++){
 	        	for(int innerArrayCounter = 0; innerArrayCounter < json[outerArrayCounter].length; innerArrayCounter++){
-	        		System.out.println("jsonArrayObject["+String.valueOf(outerArrayCounter)+"]["+String.valueOf(innerArrayCounter)+"] = "+json[outerArrayCounter][innerArrayCounter]);
+	        		System.out.println("jsonArray["+String.valueOf(outerArrayCounter)+"]["+String.valueOf(innerArrayCounter)+"] = "+json[outerArrayCounter][innerArrayCounter]);
 	        	}
 	        }
+	        System.out.println();*/
+
+	        //Uncomment below code to output JSON object values to the console
 	        
-	        System.out.println();
+/*	        System.out.println();
+	        System.out.println("jsonObject length:" + String.valueOf(jsonObject.length()));
+	        System.out.println("jsonObject names:" + jsonObject.names());
+	        System.out.println();*/
 	        
-	        JSONArray jsonarray = new JSONArray(json[1][0].toString());
-	        for(int outerLoopCounter = 0; outerLoopCounter < jsonarray.getJSONObject(0).names().length(); outerLoopCounter++){
-	        	System.out.println("jsonArrayObjectName["+String.valueOf(outerLoopCounter)+"] = "+jsonarray.getJSONObject(0).names().get(outerLoopCounter));
-	        }
-	        System.out.println("Number of names: "+String.valueOf(jsonarray.getJSONObject(0).names().length()));
-	        setJsonResponseStringArray(json);
-	        setJsonResponseArray(jsonarray);
-	        
-	        JSONObject jo = new JSONObject(rawResponse.toString());
-	        
-	        System.out.println();
-	        System.out.println(jo.length());
-	        System.out.println(jo.names());
-	        System.out.println();
-	     
-	        //getJsonResponse();
 		}
 		
 		return rawResponse.toString();
@@ -358,10 +356,12 @@ public class RestService {
 	    Object result = expr.evaluate(this.xmlResponseDocument, XPathConstants.NODESET);
 	    NodeList nodes = (NodeList) result;
 	    
-	    for(int nodesList = 0; nodesList < nodes.item(0).getChildNodes().getLength(); nodesList++){
+	    //Uncomment below code to output child node values to the console
+/*	    System.out.println();
+ 		for(int nodesList = 0; nodesList < nodes.item(0).getChildNodes().getLength(); nodesList++){
 	    	System.out.println(nodes.item(0).getChildNodes().item(nodesList).getNodeName());
-	    }
+	    }*/
 	    
-	    return nodes.item(0).getChildNodes().getLength();
+	    return (int)nodes.item(0).getChildNodes().getLength()/2;
 	}
 }
