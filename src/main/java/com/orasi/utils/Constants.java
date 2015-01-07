@@ -1,6 +1,8 @@
 package com.orasi.utils;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
 
 
@@ -20,6 +22,8 @@ public class Constants {
     
     /** Location of data provider files in the project  */
     final static public String BLUESOURCE_DATAPROVIDER_PATH = "/bluesource/dataProviders/";
+    
+    final static public String SANDBOX_PATH = "/sandbox/";
     
     /** Location of drivers in project */
     final static public String DRIVERS_PATH_LOCAL = "/drivers/";

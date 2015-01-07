@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
 public class TestCSVDataProvider {
     
     public Path getFilePath(String name) throws Throwable {
-        return Paths.get(getClass().getResource(Constants.BLUESOURCE_DATAPROVIDER_PATH).toURI()).resolve(name);
+        return Paths.get(getClass().getResource(Constants.SANDBOX_PATH).toURI()).resolve(name);
     }
 
     @DataProvider(name = "dataActuallyValidCSV")
