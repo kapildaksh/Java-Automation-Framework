@@ -34,17 +34,17 @@ public class DataProviders {
     }
     
     // {0} File
-    public static final String SQLITE_URI = "jdbc:sqlite:{0}";
-    public static final String H2_EMBEDDED_URI = "jdbc:h2:file:{0};IFEXISTS=TRUE";
-    public static final String EXCEL_URI = "jdbc:xls:file:{0}";
+    private static final String SQLITE_URI = "jdbc:sqlite:{0}";
+    private static final String H2_EMBEDDED_URI = "jdbc:h2:file:{0};IFEXISTS=TRUE";
+    private static final String EXCEL_URI = "jdbc:xls:file:{0}";
     
     // {0} Host {1} Port {2} Database {3} User {4} Password
-    public static final String MYSQL_URI = "jdbc:mysql://{0}:{1}/{2}?user={3}&password={4}";
-    public static final String ORACLE_THIN_URI = "jdbc:oracle:thin:{3}/{4}@{0}:{1}:{2}";
-    public static final String MSSQL_URI = "jdbc:microsoft:sqlserver://{0}:{1};databaseName={2};user={3};password={4}";
-    public static final String POSTGRESQL_URI = "jdbc:postgresql://{0}:{1}/{2}?user={3}&password={4}";
-    public static final String DB2_URI = "jdbc:db2://{0}:{1}/{2}:user={3};password={4}";
-    public static final String H2_REMOTE_URI = "jdbc:h2:tcp://{0}:{1}/{2};USER={3};PASSWORD={4}";
+    private static final String MYSQL_URI = "jdbc:mysql://{0}:{1}/{2}?user={3}&password={4}";
+    private static final String ORACLE_THIN_URI = "jdbc:oracle:thin:{3}/{4}@{0}:{1}:{2}";
+    private static final String MSSQL_URI = "jdbc:microsoft:sqlserver://{0}:{1};databaseName={2};user={3};password={4}";
+    private static final String POSTGRESQL_URI = "jdbc:postgresql://{0}:{1}/{2}?user={3}&password={4}";
+    private static final String DB2_URI = "jdbc:db2://{0}:{1}/{2}:user={3};password={4}";
+    private static final String H2_REMOTE_URI = "jdbc:h2:tcp://{0}:{1}/{2};USER={3};PASSWORD={4}";
 
     /**
      * Get a SQLite JDBC Data Provider
