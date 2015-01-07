@@ -60,7 +60,7 @@ public class DataProviders {
      * @param       table       Table in database
      * @return      A SQLite provider
      */
-    public static JDBCDataProvider createSqliteProvider(Path filePath, String table) {
+    public static DataProvider createSqliteProvider(Path filePath, String table) {
         initDriver("org.sqlite.JDBC");
         return new JDBCDataProvider(MessageFormat.format(SQLITE_URI, filePath.toString()), table);
     }
@@ -74,7 +74,7 @@ public class DataProviders {
      * @param       table       Table in database
      * @return      A SQLite provider
      */
-    public static JDBCDataProvider createEmbeddedH2Provider(Path filePath, String table) {
+    public static DataProvider createEmbeddedH2Provider(Path filePath, String table) {
         initDriver("org.sqlite.JDBC");
         return new JDBCDataProvider(MessageFormat.format(H2_EMBEDDED_URI, filePath.toString()), table);
     }
@@ -88,7 +88,7 @@ public class DataProviders {
      * @param       table       Table in database
      * @return      An Excel provider
      */
-    public static JDBCDataProvider createExcelProvider(Path filePath, String table) {
+    public static DataProvider createExcelProvider(Path filePath, String table) {
         initDriver("com.googlecode.sqlsheet.Driver");
         return new JDBCDataProvider(MessageFormat.format(EXCEL_URI, filePath.toString()), table);
     }
@@ -106,7 +106,7 @@ public class DataProviders {
      * @param       pass        Password for user
      * @return      A MySQL provider
      */
-    public static JDBCDataProvider createMysqlProvider(String host, int port, String db, String table, String user, String pass) {
+    public static DataProvider createMysqlProvider(String host, int port, String db, String table, String user, String pass) {
         initDriver("com.mysql.jdbc.Driver");
         return new JDBCDataProvider(MessageFormat.format(MYSQL_URI, host, port, db, user, pass), table);
     }
@@ -124,7 +124,7 @@ public class DataProviders {
      * @param       pass        Password for user
      * @return      An Oracle provider
      */
-    public static JDBCDataProvider createOracleProvider(String host, int port, String db, String table, String user, String pass) {
+    public static DataProvider createOracleProvider(String host, int port, String db, String table, String user, String pass) {
         initDriver("oracle.jdbc.OracleDriver");
         return new JDBCDataProvider(MessageFormat.format(ORACLE_THIN_URI, host, port, db, user, pass), table);
     }
@@ -142,7 +142,7 @@ public class DataProviders {
      * @param       pass        Password for user
      * @return      A MSSQL provider
      */
-    public static JDBCDataProvider createMssqlProvider(String host, int port, String db, String table, String user, String pass) {
+    public static DataProvider createMssqlProvider(String host, int port, String db, String table, String user, String pass) {
         initDriver("com.microsoft.jdbc.sqlserver.SQLServerDriver");
         return new JDBCDataProvider(MessageFormat.format(MSSQL_URI, host, port, db, user, pass), table);
     }
@@ -160,7 +160,7 @@ public class DataProviders {
      * @param       pass        Password for user
      * @return      A PostgreSQL provider
      */
-    public static JDBCDataProvider createPostgresqlProvider(String host, int port, String db, String table, String user, String pass) {
+    public static DataProvider createPostgresqlProvider(String host, int port, String db, String table, String user, String pass) {
         initDriver("org.postgresql.Driver");
         return new JDBCDataProvider(MessageFormat.format(POSTGRESQL_URI, host, port, db, user, pass), table);
     }
@@ -178,7 +178,7 @@ public class DataProviders {
      * @param       pass        Password for user
      * @return      An IBM DB2 provider
      */
-    public static JDBCDataProvider createDB2Provider(String host, int port, String db, String table, String user, String pass) {
+    public static DataProvider createDB2Provider(String host, int port, String db, String table, String user, String pass) {
         initDriver("COM.ibm.db2.jdbc.app.DB2Driver");
         return new JDBCDataProvider(MessageFormat.format(DB2_URI, host, port, db, user, pass), table);
     }
@@ -196,7 +196,7 @@ public class DataProviders {
      * @param       pass        Password for user
      * @return      An IBM DB2 provider
      */
-    public static JDBCDataProvider createRemoteH2Provider(String host, int port, String db, String table, String user, String pass) {
+    public static DataProvider createRemoteH2Provider(String host, int port, String db, String table, String user, String pass) {
         initDriver("org.h2.Driver");
         return new JDBCDataProvider(MessageFormat.format(H2_REMOTE_URI, host, port, db, user, pass), table);
     }

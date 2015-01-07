@@ -59,7 +59,7 @@ public class JacksonDataProviderFactory {
      * @return
      * @throws  Exception 
      */
-    public JacksonDataProvider createArrayParams(Path filePath) throws Exception {
+    public DataProvider createArrayParams(Path filePath) throws Exception {
         return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructCollectionType(ArrayList.class, Object[].class), false);
     }
 
@@ -74,7 +74,7 @@ public class JacksonDataProviderFactory {
      * @return
      * @throws  Exception 
      */
-    public JacksonDataProvider createArrayNode(Path filePath) throws Exception {
+    public DataProvider createArrayNode(Path filePath) throws Exception {
         return createArrayStructured(filePath, JsonNode.class);
     }
 
@@ -93,7 +93,7 @@ public class JacksonDataProviderFactory {
      * @return
      * @throws  Exception 
      */
-    public JacksonDataProvider createArrayStructured(Path filePath, Class structure) throws Exception {
+    public DataProvider createArrayStructured(Path filePath, Class structure) throws Exception {
         map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructCollectionType(ArrayList.class, structure), true);
     }
@@ -109,7 +109,7 @@ public class JacksonDataProviderFactory {
      * @return
      * @throws  Exception 
      */
-    public JacksonDataProvider createHashParams(Path filePath) throws Exception {
+    public DataProvider createHashParams(Path filePath) throws Exception {
         return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructMapType(HashMap.class, String.class, Object[].class), false);
     }
 
@@ -124,7 +124,7 @@ public class JacksonDataProviderFactory {
      * @return
      * @throws  Exception 
      */
-    public JacksonDataProvider createHashNode(Path filePath) throws Exception {
+    public DataProvider createHashNode(Path filePath) throws Exception {
         return createHashStructured(filePath, JsonNode.class);
     }
 
@@ -143,7 +143,7 @@ public class JacksonDataProviderFactory {
      * @return
      * @throws  Exception 
      */
-    public JacksonDataProvider createHashStructured(Path filePath, Class structure) throws Exception {
+    public DataProvider createHashStructured(Path filePath, Class structure) throws Exception {
         this.map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return new JacksonDataProvider(filePath, this.map, this.map.getTypeFactory().constructMapType(HashMap.class, String.class, structure), true);        
     }
