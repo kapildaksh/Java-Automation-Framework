@@ -54,6 +54,8 @@ public class DistanceMatrix {
 						String mode, String language, String apiKey,
 						String validateOriginAddress, String validateDestinationAddress,
 						String format) throws XPathExpressionException, JSONException {
+		String[] originAddress = validateOriginAddress.split(";");
+		String[] destinationAddress = validateDestinationAddress.split(";");
 		rest = new RestService();
 		rest.setDefaultResponseFormat(format);
 		rest.sendGetRequest(
@@ -67,11 +69,16 @@ public class DistanceMatrix {
 			System.out.println("Number of nodes for xpath["+xpath+"]: " +String.valueOf(numberOfNodes));
 			System.out.println("Number of childs nodes fro xpath ["+xpath+"]: "+String.valueOf(numberOfChildNodes));
 			
-			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/origin_address[1]"), "Vancouver, BC, Canada");
-			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/destination_address[2]"), "Victoria, BC, Canada");
+			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/origin_address[1]"), originAddress[0]);
+			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/destination_address[1]"), destinationAddress[0]);
+			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/origin_address[2]"), originAddress[1]);
+			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/destination_address[2]"), destinationAddress[1]);
 			
 		}else{
-			//TODO: Needs JSON validations here
-		}
+/*			Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses"), originAddress[0]);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses"), destinationAddress[0]);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses"), originAddress[1]);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses"), destinationAddress[1]);
+		*/}
 	}
 }
