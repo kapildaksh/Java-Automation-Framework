@@ -42,7 +42,7 @@ import java.util.Iterator;
 public class Jess {
 	
 	@Test
-	public void mainTest() throws ClientProtocolException, IOException{
+	public void gitHubUserTest() throws ClientProtocolException, IOException{
 	
 		//instantiate the base rest service class
 		RestService_V2 restService = new RestService_V2();
@@ -54,7 +54,8 @@ public class Jess {
 		Assert.assertEquals(restService.getResponseFormat(), "json");
 		//take the json response string and transform to java object
 		User user = restService.mapJSONToObject(User.class);
-		System.out.println(user.getLogin());
+		
+		//outputting the 
 		
 	    //User user = mapper.readValue(jsonFromResponse, User.class);
 		   
