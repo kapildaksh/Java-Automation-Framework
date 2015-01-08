@@ -23,36 +23,37 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import com.orasi.utils.dataProviders.JSONDataProvider;
 import com.orasi.utils.documentConverter.StringToDocumentToString;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONWriter;
+import org.testng.Assert;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+
+
+
 
 import com.orasi.utils.XMLTools;
 
 public class RestService {
 	private String defaultResponseFormat = "json";
 	private static Document xmlResponseDocument = null;
-	private static Object[][] jsonResponseString = null;
-	private static JSONArray jsonResponse = null;
+	private static String jsonResponseString = null;
+	private static JSONObject jsonResponseObject = null;
 
 	/**
-	 * @summary This is used to determine is the user-defined format is one that is acceptable for use with REST services
+	 * @summary This is used to determine is the user-defined format is one that
+	 *          is acceptable for use with REST services
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
-	 * @param format - string; used to determine the format of the response
+	 * @param format
+	 *            - string; used to determine the format of the response
 	 * @return true if the format is accepteable, false otherwise
 	 */
 	private boolean valiateAcceptableFormat(String format) {
-		/*if (format == "xml" || format == "json")
-			return true;
-		return false;*/
-		if(format.equalsIgnoreCase("xml") || format.equalsIgnoreCase("json"))
+		if (format.equalsIgnoreCase("xml") || format.equalsIgnoreCase("json"))
 			return true;
 		return false;
 	}
@@ -61,16 +62,18 @@ public class RestService {
 	 * @summary This is used to set the format
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
-	 * @param format - string; used to determine the format of the response
+	 * @param format
+	 *            - string; used to determine the format of the response
 	 */
 	public void setDefaultResponseFormat(String format) {
 		if (valiateAcceptableFormat(format)) {
 			this.defaultResponseFormat = format.toLowerCase();
 		} else {
-			throw new RuntimeException("Invalid response format entered. Acceptable formats are 'json' or 'xml'");
+			throw new RuntimeException(
+					"Invalid response format entered. Acceptable formats are 'json' or 'xml'");
 		}
 	}
-	
+
 	/**
 	 * @summary This is used to retrieve the current default response format
 	 * @author Justin Phlegar
@@ -85,39 +88,44 @@ public class RestService {
 	 * @summary This is used to invoke the REST "Get" request
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
-	 * @param url - endpoint for the REST service
+	 * @param url
+	 *            - endpoint for the REST service
 	 * @return Returns the response to the "Get" request as a string
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
 	public String sendGetRequest(String url) throws IOException, JSONException {
 		return sendGetRequest(url, getDefaultResponseFormat());
 	}
 
 	/**
-	 * @summary This is used to invoke the REST "Get" request and generate a string version of the response
-	 * 				If the default format is XML, an XML document is generated for later use
+	 * @summary This is used to invoke the REST "Get" request and generate a
+	 *          string version of the response If the default format is XML, an
+	 *          XML document is generated for later use
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
-	 * @param url - endpoint for the REST service
+	 * @param url
+	 *            - endpoint for the REST service
 	 * @return Returns the response to the "Get" request as a string
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
-	public String sendGetRequest(String url, String responseFormat) throws JSONException{
+	public String sendGetRequest(String url, String responseFormat)
+			throws JSONException {
 		System.out.println("REST endpoint: " + url);
-		
+
 		StringBuilder rawResponse = new StringBuilder();
 
-		//Replace any white space in the URL with '%20'
+		// Replace any white space in the URL with '%20'
 		url = url.replaceAll(" ", "%20");
-		
-		//Build the connection string
+
+		// Build the connection string
 		HttpURLConnection conn = httpConnectionBuilder(url, "GET",
 				responseFormat);
 
 		InputStream stream = null;
 		String buffer = "";
 
-		//Invoke the REST service and, given there are no errors, read the response into a string format
+		// Invoke the REST service and, given there are no errors, read the
+		// response into a string format
 		try {
 			stream = conn.getInputStream();
 			BufferedReader bufferReader = new BufferedReader(
@@ -128,42 +136,23 @@ public class RestService {
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe.getMessage());
 		}
-		
-		if(responseFormat.equalsIgnoreCase("xml")){			
-			setXmlResponseDocument(StringToDocumentToString.convertStringToDocument(rawResponse.toString()));
-			
-			System.out.println();
-			System.out.println();
-			System.out.println("Response");
-			System.out.println(getXmlResponse());
-		}else if(responseFormat.equalsIgnoreCase("json")){			
-			System.out.println();
-			System.out.println();
-			System.out.println("Raw Response");
-			System.out.println(rawResponse.toString());
-			
-			Object [][] json = JSONDataProvider.compileJSON("", rawResponse.toString());
-			JSONObject jsonArray = new JSONObject(rawResponse.toString());
-	        JSONObject jsonObject = new JSONObject(rawResponse.toString());
-			
-			//Uncomment below code to output JSON array values to the console
-/*			System.out.println();
-	        for(int outerArrayCounter = 0; outerArrayCounter < json.length; outerArrayCounter++){
-	        	for(int innerArrayCounter = 0; innerArrayCounter < json[outerArrayCounter].length; innerArrayCounter++){
-	        		System.out.println("jsonArray["+String.valueOf(outerArrayCounter)+"]["+String.valueOf(innerArrayCounter)+"] = "+json[outerArrayCounter][innerArrayCounter]);
-	        	}
-	        }
-	        System.out.println();*/
 
-	        //Uncomment below code to output JSON object values to the console
-	        
-/*	        System.out.println();
-	        System.out.println("jsonObject length:" + String.valueOf(jsonObject.length()));
-	        System.out.println("jsonObject names:" + jsonObject.names());
-	        System.out.println();*/
-	        
+		if (responseFormat.equalsIgnoreCase("xml")) {
+			setXmlResponseDocument(StringToDocumentToString
+					.convertStringToDocument(rawResponse.toString()));
+
+			System.out.println();
+			System.out.println("Raw XML Response");
+			System.out.println(getXmlResponse());
+		} else if (responseFormat.equalsIgnoreCase("json")) {
+			System.out.println();
+			System.out.println("Raw JSON Response");
+			System.out.println(rawResponse.toString());
+
+			setJsonResponseObject(new JSONObject(rawResponse.toString()));
+			setJsonResponseString(rawResponse.toString());
 		}
-		
+
 		return rawResponse.toString();
 	}
 
@@ -171,7 +160,8 @@ public class RestService {
 	 * @summary This is used to build the REST URL
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
-	 * @param url - endpoint for the REST service
+	 * @param url
+	 *            - endpoint for the REST service
 	 * @return Returns the url as a URL object
 	 */
 	private URL urlBuilder(String url) {
@@ -181,7 +171,6 @@ public class RestService {
 		try {
 			urlRequest = new URL(url);
 		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		return urlRequest;
@@ -191,9 +180,13 @@ public class RestService {
 	 * @summary This is used to build the HTTP URL connection
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
-	 * @param url - endpoint for the REST service
-	 * @param requestMethod - REST method to be invoked (e.g. "Get", "Put", etc)
-	 * @param responseFormat - response format expected from the REST service (e.g. "xml" or "json")
+	 * @param url
+	 *            - endpoint for the REST service
+	 * @param requestMethod
+	 *            - REST method to be invoked (e.g. "Get", "Put", etc)
+	 * @param responseFormat
+	 *            - response format expected from the REST service (e.g. "xml"
+	 *            or "json")
 	 * @return Returns a HttpURLConnection object
 	 */
 	private HttpURLConnection httpConnectionBuilder(String url,
@@ -204,7 +197,6 @@ public class RestService {
 		try {
 			connection = (HttpURLConnection) urlRequest.openConnection();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		connection.setDoOutput(true);
@@ -216,12 +208,11 @@ public class RestService {
 		try {
 			connection.setRequestMethod(requestMethod.toUpperCase());
 		} catch (ProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return connection;
 	}
-	
+
 	/**
 	 * @summary Set a Response XML Document to be stored in memory to be
 	 *          retrieved and edited easily. Retrieve XML Document using
@@ -237,20 +228,21 @@ public class RestService {
 		xmlResponseDocument = doc;
 		xmlResponseDocument.normalize();
 	}
-	
+
 	/**
 	 * @summary This is used to find the value of an XML node using xpath
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @precondition The Response Document needs to be set by
 	 *               {@link #setXMLResponseDocument(Document)}
-	 * @param xpath - path of the node from which to pull the value
+	 * @param xpath
+	 *            - path of the node from which to pull the value
 	 * @return string representation of the node value
 	 */
-	public String getXmlResponseByXpath(String xpath){
+	public String getXmlResponseByXpath(String xpath) {
 		return XMLTools.getValueByXpath(getXmlResponseDocument(), xpath);
 	}
-	
+
 	/**
 	 * @summary This is used to retrieve the current Response Document as it is
 	 *          in memory
@@ -263,7 +255,7 @@ public class RestService {
 	protected static Document getXmlResponseDocument() {
 		return xmlResponseDocument;
 	}
-	
+
 	/**
 	 * @summary Takes the current Response XML Document stored in memory and
 	 *          return it as a string for simple output
@@ -296,72 +288,116 @@ public class RestService {
 		}
 		return sw.toString();
 	}
-	
+
 	/**
-	 * @summary Returns the number of nodes for a given xpath. Useful for determining if indexing is need to access multiple sibling nodes
+	 * @summary Returns the number of nodes for a given xpath. Useful for
+	 *          determining if indexing is need to access multiple sibling nodes
 	 * @precondition Requires XML Document to be loaded by using
 	 *               {@link #setResponseDocument}
 	 * @author Waightstill W. Avery
 	 * @version Created 01/06/2015
-	 * @param path - string, xpath
+	 * @param path
+	 *            - string, xpath
 	 * @return integer, number of nodes found with the given xpath
 	 */
-	public int getNumberOfNodesByXpath(String path) throws XPathExpressionException{
-	    //creating an XPathFactory:
-	    XPathFactory factory = XPathFactory.newInstance();
-	    //using this factory to create an XPath object: 
-	    XPath xpath = factory.newXPath();
+	@SuppressWarnings("static-access")
+	public int getNumberOfNodesByXpath(String path)
+			throws XPathExpressionException {
+		// creating an XPathFactory:
+		XPathFactory factory = XPathFactory.newInstance();
+		// using this factory to create an XPath object:
+		XPath xpath = factory.newXPath();
 
-	    // XPath Query for showing all nodes value
-	    XPathExpression expr = xpath.compile(path);
-	    Object result = expr.evaluate(this.xmlResponseDocument, XPathConstants.NODESET);
-	    NodeList nodes = (NodeList) result;
-	    
-	    return nodes.getLength();
+		// XPath Query for showing all nodes value
+		XPathExpression expr = xpath.compile(path);
+		Object result = expr.evaluate(this.xmlResponseDocument,
+				XPathConstants.NODESET);
+		NodeList nodes = (NodeList) result;
+
+		return nodes.getLength();
 	}
-	
-	private void setJsonResponseStringArray(Object[][] object){
-		jsonResponseString = object;
+
+	/**
+	 * @summary Returns the number of nodes for a given xpath. Useful for
+	 *          determining if indexing is need to access multiple sibling nodes
+	 * @precondition Requires XML Document to be loaded by using
+	 *               {@link #setResponseDocument}
+	 * @author Waightstill W. Avery
+	 * @version Created 01/06/2015
+	 * @param path
+	 *            - string, xpath
+	 * @return integer, number of nodes found with the given xpath
+	 */
+	@SuppressWarnings("static-access")
+	public int getNumberOfChildNodesByXpath(String path)
+			throws XPathExpressionException {
+		// creating an XPathFactory:
+		XPathFactory factory = XPathFactory.newInstance();
+		// using this factory to create an XPath object:
+		XPath xpath = factory.newXPath();
+
+		// XPath Query for showing all nodes value
+		XPathExpression expr = xpath.compile(path);
+		Object result = expr.evaluate(this.xmlResponseDocument,
+				XPathConstants.NODESET);
+		NodeList nodes = (NodeList) result;
+
+		// Uncomment below code to output child node values to the console
+		/*
+		 * System.out.println(); for(int nodesList = 0; nodesList <
+		 * nodes.item(0).getChildNodes().getLength(); nodesList++){
+		 * System.out.println
+		 * (nodes.item(0).getChildNodes().item(nodesList).getNodeName()); }
+		 */
+
+		return (int) nodes.item(0).getChildNodes().getLength() / 2;
 	}
-	
-	public Object[][] getJsonResponseStringArray(){
+
+	public String getJsonResponseValueByKeyString(String keyString) throws JSONException {
+		String[] jsonObjects = keyString.split(";");
+		JSONObject jo = new JSONObject(getJsonResponseString());
+		JSONArray ja = new JSONArray();
+		String value = "";
+		String path = "";
+		
+		for(String keyCounter: jsonObjects){
+			String[] keyParts = keyCounter.split(",");
+			switch (keyParts[1].toLowerCase()) {
+			case "object":case "jsonobject":
+				Assert.assertEquals(keyParts.length, 2, "Two parts are needed for a JSONObject to be retrieved: [keyName,object]");
+				jo = jo.getJSONObject(keyParts[0]);
+				break;
+			case "array":case "jsonarray":
+				Assert.assertEquals(keyParts.length, 3, "Three parts are needed for a JSONObject to be retrieved: [keyName,object,arrayIndex]");
+				ja = jo.getJSONArray(keyParts[0]);
+				jo = (JSONObject) ja.getJSONObject(Integer.parseInt(keyParts[2]));
+				break;
+			case "string":
+				value = jo.get(keyParts[0]).toString();
+				break;
+			default:
+				break;
+			}
+			path += keyParts[0] + ";";
+		}
+		//Uncomment below code to output the json 'path' and value to the console
+		//System.out.println("Value for the path ["+path +"] = "+ value);
+		return value;
+	}
+
+	private void setJsonResponseString(String response) {
+		jsonResponseString = response;
+	}
+
+	public String getJsonResponseString() {
 		return jsonResponseString;
 	}
 	
-	private void setJsonResponseArray(JSONArray jsonArray){
-		jsonResponse = jsonArray;
+	private void setJsonResponseObject(JSONObject response) {
+		jsonResponseObject = response;
 	}
-	
-	public JSONArray setJsonResponseArray(){
-		return jsonResponse;
-	}
-	
-	/**
-	 * @summary Returns the number of nodes for a given xpath. Useful for determining if indexing is need to access multiple sibling nodes
-	 * @precondition Requires XML Document to be loaded by using
-	 *               {@link #setResponseDocument}
-	 * @author Waightstill W. Avery
-	 * @version Created 01/06/2015
-	 * @param path - string, xpath
-	 * @return integer, number of nodes found with the given xpath
-	 */
-	public int getNumberOfChildNodesByXpath(String path) throws XPathExpressionException{
-	    //creating an XPathFactory:
-	    XPathFactory factory = XPathFactory.newInstance();
-	    //using this factory to create an XPath object: 
-	    XPath xpath = factory.newXPath();
 
-	    // XPath Query for showing all nodes value
-	    XPathExpression expr = xpath.compile(path);
-	    Object result = expr.evaluate(this.xmlResponseDocument, XPathConstants.NODESET);
-	    NodeList nodes = (NodeList) result;
-	    
-	    //Uncomment below code to output child node values to the console
-/*	    System.out.println();
- 		for(int nodesList = 0; nodesList < nodes.item(0).getChildNodes().getLength(); nodesList++){
-	    	System.out.println(nodes.item(0).getChildNodes().item(nodesList).getNodeName());
-	    }*/
-	    
-	    return (int)nodes.item(0).getChildNodes().getLength()/2;
+	public JSONObject getJsonResponseObject() {
+		return jsonResponseObject;
 	}
 }

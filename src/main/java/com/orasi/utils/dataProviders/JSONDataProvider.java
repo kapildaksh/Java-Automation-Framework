@@ -4,8 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.orasi.utils.database.Recordset;
-
 public class JSONDataProvider {
     public static Object[][] compileJSON(String header, String text){
 		

@@ -10,6 +10,10 @@
 			<id>eviware</id>
 			<url>http://www.eviware.com/repository/maven2/</url>
 		</repository>
+		<repository>
+			<id>maven</id>
+			<url>http://repo.maven.apache.org/maven2/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -106,9 +110,34 @@
 			<version>0.9.8</version>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-lgpl</artifactId>
-			<version>1.9.13</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-yaml</artifactId>
+			<version>2.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-csv</artifactId>
+			<version>2.4.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -188,38 +217,23 @@
 			<version>1.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.4.4</version>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>woodstox-core-asl</artifactId>
+			<version>4.1.4</version>
 		</dependency>
-                <dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.4.4</version>
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.8.7</version>
 		</dependency>
-                <dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<version>2.4.4</version>
-		</dependency>
-                <dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-xml</artifactId>
-			<version>2.4.4</version>
-		</dependency>
-                <dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-yaml</artifactId>
-			<version>2.4.4</version>
-		</dependency>
-                <dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-csv</artifactId>
-			<version>2.4.4</version>
+		<dependency>
+			<groupId>com.google.code.sqlsheet</groupId>
+			<artifactId>sqlsheet</artifactId>
+			<version>6.5</version>
 		</dependency>
 	</dependencies>
 	<properties>
-		<testNGSourceDirectory>src/test/resources/bluesource/testngXMLs</testNGSourceDirectory>
+		<testNGSourceDirectory>src/test/resources/sandbox</testNGSourceDirectory>
 	</properties>
 	<build>
 		<pluginManagement>
@@ -249,7 +263,7 @@
 
 						<!-- parameterized testNG suite via maven <suiteXmlFiles> -->
 						<suiteXmlFiles>
-							<suiteXmlFile>${testNGSourceDirectory}/TestAddNewTitle.xml</suiteXmlFile>
+							<suiteXmlFile>${testNGSourceDirectory}/TestDataSources.xml</suiteXmlFile>
 						</suiteXmlFiles>
 						<!-- <suiteXmlFiles> <suiteXmlFile>${testNGSourceDirectory}/suite_housekeeping.xml</suiteXmlFile> 
 							</suiteXmlFiles> -->

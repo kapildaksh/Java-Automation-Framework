@@ -74,9 +74,16 @@ public class Geocode {
 			validateAddressValue(postalCodeTarget, postalCode, numberOfNodes);
 			validateAddressValue(cityTarget, city, numberOfNodes);
 		}else{
-			//TODO: Needs JSON validations here
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("results,array,0;address_components,array,0;long_name,string"), streetNumber);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("results,array,0;address_components,array,1;long_name,string"), streetname);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("results,array,0;address_components,array,2;long_name,string"), city);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("results,array,0;address_components,array,7;long_name,string"), postalCode);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("results,array,0;formatted_address,string"), "7025 Albert Pick Road, Greensboro, NC 27409, USA");
+			
+			rest.getJsonResponseValueByKeyString("results,array,0;geometry,object;location,object;lat,string");
+			rest.getJsonResponseValueByKeyString("results,array,0;geometry,object;location,object;lng,string");
 		}
-	}
+}
 
 	private void validateAddressValue(String tagetValue, String value,
 			int maxIndex) throws XPathExpressionException {
