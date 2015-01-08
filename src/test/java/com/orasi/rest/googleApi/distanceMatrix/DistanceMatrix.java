@@ -45,8 +45,8 @@ public class DistanceMatrix {
      * @throws JSONException 
      * @Summary: Invokes the Google "Geocode" API REST service and validates the XML response
      * @Precondition:NA
-     * @Author: Jessica Marshall
-     * @Version: 10/6/2014
+     * @Author: Waightstill W avery
+     * @Version: 01/05/2015
      * @Return: N/A
      */
 	@Test(dataProvider = "dataScenario", groups = { "rest" })
@@ -73,12 +73,16 @@ public class DistanceMatrix {
 			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/destination_address[1]"), destinationAddress[0]);
 			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/origin_address[2]"), originAddress[1]);
 			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/destination_address[2]"), destinationAddress[1]);
-			
 		}else{
-/*			Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses"), originAddress[0]);
-			Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses"), destinationAddress[0]);
-			Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses"), originAddress[1]);
-			Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses"), destinationAddress[1]);
-		*/}
+			/*Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses,array,0"), originAddress[0]);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses, array,0"), destinationAddress[0]);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses, array,1"), originAddress[1]);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses, array,1"), destinationAddress[1]);
+			*/
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses,0"), originAddress[0]);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses,0"), destinationAddress[0]);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses,1"), originAddress[1]);
+			Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses,1"), destinationAddress[1]);
+		}
 	}
 }

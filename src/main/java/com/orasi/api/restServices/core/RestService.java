@@ -35,6 +35,7 @@ import org.w3c.dom.NodeList;
 
 
 
+
 import com.orasi.utils.XMLTools;
 
 public class RestService {
@@ -234,7 +235,7 @@ public class RestService {
 	 * @author Justin Phlegar
 	 * @version Created: 08/28/2014
 	 * @precondition The Response Document needs to be set by
-	 *               {@link #setXMLResponseDocument(Document)}
+	 *               {@link #setXmlResponseDocument(Document)}
 	 * @param xpath
 	 *            - path of the node from which to pull the value
 	 * @return string representation of the node value
@@ -260,7 +261,7 @@ public class RestService {
 	 * @summary Takes the current Response XML Document stored in memory and
 	 *          return it as a string for simple output
 	 * @precondition Requires XML Document to be loaded by using
-	 *               {@link #setResponseDocument}
+	 *               {@link #setXmlResponseDocument}
 	 * @author Justin Phlegar
 	 * @version Created 08/28/2014
 	 * @return Will return the current Response XML as a string
@@ -293,7 +294,7 @@ public class RestService {
 	 * @summary Returns the number of nodes for a given xpath. Useful for
 	 *          determining if indexing is need to access multiple sibling nodes
 	 * @precondition Requires XML Document to be loaded by using
-	 *               {@link #setResponseDocument}
+	 *               {@link #setXmlResponseDocument}
 	 * @author Waightstill W. Avery
 	 * @version Created 01/06/2015
 	 * @param path
@@ -321,7 +322,7 @@ public class RestService {
 	 * @summary Returns the number of nodes for a given xpath. Useful for
 	 *          determining if indexing is need to access multiple sibling nodes
 	 * @precondition Requires XML Document to be loaded by using
-	 *               {@link #setResponseDocument}
+	 *               {@link #setXmlResponseDocument}
 	 * @author Waightstill W. Avery
 	 * @version Created 01/06/2015
 	 * @param path
@@ -353,32 +354,68 @@ public class RestService {
 		return (int) nodes.item(0).getChildNodes().getLength() / 2;
 	}
 
+	/**
+	 * @summary Returns the value from a name:value pair using a string of 
+	 * 			keys to generate a path through the JSON response object
+	 * @precondition Requires JSON Object to be loaded by using
+	 *               {@link #setJsonResponseObject}
+	 * @author Waightstill W. Avery
+	 * @version Created 01/08/2015
+	 * @param keyString - string, semicolon-delimited string containing a sequence 
+	 * 			of key names with which to parse the JSON response for a particular 
+	 * 			name:value pair. Sequences include:
+	 * 			1) JSONOBject -> "<<keyName>>;"
+	 * 			2) JSONArray  -> "<<keyName>>,<<arrayIndex>>;"
+	 * 			3) String     -> "<<keyName>>,String;"
+	 * @return String, value of the defined key name
+	 */
 	public String getJsonResponseValueByKeyString(String keyString) throws JSONException {
+		//Create an array of keys
 		String[] jsonObjects = keyString.split(";");
+		//Grab a local copy of the JSON response object
 		JSONObject jo = new JSONObject(getJsonResponseString());
 		JSONArray ja = new JSONArray();
 		String value = "";
 		String path = "";
 		
+		//Iterate through each key in the keyString
 		for(String keyCounter: jsonObjects){
+			//Create an array of parts for each key
 			String[] keyParts = keyCounter.split(",");
-			switch (keyParts[1].toLowerCase()) {
-			case "object":case "jsonobject":
-				Assert.assertEquals(keyParts.length, 2, "Two parts are needed for a JSONObject to be retrieved: [keyName,object]");
-				jo = jo.getJSONObject(keyParts[0]);
+			switch (keyParts.length) {
+			//Treat it as a JSONObject
+			case 1:
+				//One part is needed to establish a JSONObject, that being the key name
+				//Create the JSONObject
+				jo = jo.getJSONObject(keyParts[0].trim());
 				break;
-			case "array":case "jsonarray":
-				Assert.assertEquals(keyParts.length, 3, "Three parts are needed for a JSONObject to be retrieved: [keyName,object,arrayIndex]");
-				ja = jo.getJSONArray(keyParts[0]);
-				jo = (JSONObject) ja.getJSONObject(Integer.parseInt(keyParts[2]));
-				break;
-			case "string":
-				value = jo.get(keyParts[0]).toString();
+			//Treat it as a JSONArray
+			case 2:
+				/*The special case of the return value being located is handled here and 
+				  is triggered by the second key part being "string"*/
+				if(keyParts[1].trim().equalsIgnoreCase("string")){
+					value = jo.get(keyParts[0].trim()).toString();
+				}else{
+					/*Two parts are needed to establish a JSONArray. In addition to the JSON 
+					element type, an array index is required. It is the presence of this 
+					second part that will signify that an array is anticipated*/
+					//Create the JSONArray
+					ja = jo.getJSONArray(keyParts[0].trim());
+					//Using the array index, determine if a JSONObject can be created or if a String is located, indicating the return value should have been located
+					if(ja.optJSONObject(Integer.parseInt(keyParts[1].trim())) != null){
+						jo = (JSONObject) ja.getJSONObject(Integer.parseInt(keyParts[1].trim()));
+					}else if(ja.optString(Integer.parseInt(keyParts[1].trim())) != null){
+						value = ja.getString(Integer.parseInt(keyParts[1].trim()));
+					}
+				}
 				break;
 			default:
-				break;
+				throw new RuntimeException("A key part should have zero parts for a String [\";\"], one part for a JSONObject [\"keyName;\"] or 2 parts "
+						+ "for a JSONArray [\"keyName, arrayindex;\"]. The entry with keyName ["+keyParts[0]+"] contained ["+String.valueOf(keyParts.length)+"] "
+								+ "parts ["+keyCounter+"].");
 			}
-			path += keyParts[0] + ";";
+			//Compile the JSON key name path that is used to locate the value; used for console output and debugging below
+			path += keyParts[0].trim() + ";";
 		}
 		//Uncomment below code to output the json 'path' and value to the console
 		//System.out.println("Value for the path ["+path +"] = "+ value);
