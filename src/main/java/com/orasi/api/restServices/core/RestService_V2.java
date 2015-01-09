@@ -11,8 +11,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -66,6 +68,14 @@ public class RestService_V2 {
 		ObjectMapper mapper = new ObjectMapper().
 				      configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		return mapper.readValue(responseAsString, clazz);
+		
+	}
+	
+	public JsonNode mapJSONToTree() throws IOException {
+		ObjectMapper mapper = new ObjectMapper().
+			      configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		return mapper.readTree(responseAsString);
 	}
 	
 }

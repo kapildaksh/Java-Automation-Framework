@@ -1,10 +1,10 @@
 package com.orasi.api.restServices.services.gitHub;
 //organization_repositories_url: "https://api.github.com/orgs/{org}/repos{?type,page,per_page,sort}",
-public class OrganizationRepositories {
+public class OrganizationRepos {
 	private String name;
 	private String id;
 	
-	public OrganizationRepositories() {
+	public OrganizationRepos() {
 		super();
 	}
 	
