@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="GeoIpService" parallel="none">
-  <test name="GeoIpService">
-    <classes>
-      <class name="com.orasi.soap.webServiceX.GeoIpService"/>
-    </classes>
-  </test> <!-- GeoIpService -->
-</suite> <!-- GeoIpService -->

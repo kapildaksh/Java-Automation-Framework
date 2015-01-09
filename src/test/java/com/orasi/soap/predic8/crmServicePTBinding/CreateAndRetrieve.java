@@ -1,13 +1,14 @@
-package com.orasi.sandbox;
+package com.orasi.soap.predic8.crmServicePTBinding;
 
 import javax.xml.bind.ValidationException;
 import javax.xml.xpath.XPathExpressionException;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
 import com.orasi.api.SoapExamples.predict8.CRMServicePTBinding.operations.*;
 
-
-public class WaitsSandbox {
+public class CreateAndRetrieve {
 	String personId;
 	String personFirstName;
 	String personLastName;
@@ -95,4 +96,5 @@ public class WaitsSandbox {
 		Assert.assertEquals(localGet.getResponseAddressCountry(), addressCountry, "The response address street ["+localGet.getResponseAddressCountry()+"] was not that which was expected ["+addressCountry+"].");
 		Assert.assertEquals(localGet.getResponseAddressCompanyName(), addressCompanyName, "The response address street ["+localGet.getResponseAddressCompanyName()+"] was not that which was expected ["+addressCompanyName+"].");
 	}
+
 }

@@ -1,15 +1,12 @@
-package com.orasi.soap.predic8.generate;
+package com.orasi.soap.predic8.idServiceBinding;
 
 import java.util.Random;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
 import com.orasi.api.SoapExamples.predict8.IDServiceBinding.operations.Generate;
 
-
-
-public class GenerateTest {	
+public class GenerateTest {
 	@Test()
 	public void main() {
 		Generate gen = new Generate("stage", "Main");

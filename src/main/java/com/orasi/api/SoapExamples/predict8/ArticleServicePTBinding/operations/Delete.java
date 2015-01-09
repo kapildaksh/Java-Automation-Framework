@@ -8,11 +8,14 @@ public class Delete extends ArticleServicePTBinding{
 		super(environment);
 		
 		//Generate a request from a project xml file
-		setRequestDocument(XMLTools.loadXML(buildRequestFromWSDL("getAll")));
+		setRequestDocument(XMLTools.loadXML(buildRequestFromWSDL("delete")));
 		System.out.println(getRequest());
 				
 		removeComments() ;
 		removeWhiteSpace();
 	}
 
+	public void setRequestId(String value){
+		setRequestNodeValueByXPath("/Envelope/Body/delete/id", value);
+	}
 }
