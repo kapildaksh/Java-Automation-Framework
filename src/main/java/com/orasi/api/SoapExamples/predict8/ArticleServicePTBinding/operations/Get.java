@@ -14,5 +14,28 @@ public class Get extends ArticleServicePTBinding{
 		removeComments() ;
 		removeWhiteSpace();
 	}
+	
+	public void setRequestId(String value){
+		setRequestNodeValueByXPath("/Envelope/Body/get/id", value);
+	}
 
+	public String getResponseName(){
+		return getResponseNodeValueByXPath("/Envelope/Body/getResponse/article/name");
+	}
+
+	public String getResponseDescription(){
+		return getResponseNodeValueByXPath("/Envelope/Body/getResponse/article/description");
+	}
+
+	public String getResponsePriceAmount(){
+		return getResponseNodeValueByXPath("/Envelope/Body/getResponse/article/price/amount");
+	}
+
+	public String getResponsePriceCurrency(){
+		return getResponseNodeValueByXPath("/Envelope/Body/getResponse/article/price/currency");
+	}
+
+	public String getResponseId(){
+		return getResponseNodeValueByXPath("/Envelope/Body/getResponse/article/id");
+	}
 }

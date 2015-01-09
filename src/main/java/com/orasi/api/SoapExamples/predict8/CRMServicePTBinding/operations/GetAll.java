@@ -1,4 +1,4 @@
-package com.orasi.api.SoapExamples.predict8.ArticleServicePTBinding.operations;
+package com.orasi.api.SoapExamples.predict8.CRMServicePTBinding.operations;
 
 import javax.xml.bind.ValidationException;
 import javax.xml.xpath.XPath;
@@ -11,11 +11,11 @@ import org.testng.Assert;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.jayway.restassured.path.xml.element.NodeChildren;
-import com.orasi.api.SoapExamples.predict8.ArticleServicePTBinding.ArticleServicePTBinding;
+import com.orasi.api.SoapExamples.predict8.CRMServicePTBinding.CRMServicePTBinding;
+import com.orasi.utils.Constants;
 import com.orasi.utils.XMLTools;
 
-public class GetAll extends ArticleServicePTBinding{
+public class GetAll extends CRMServicePTBinding{
 	public GetAll(String environment, String scenario) {
 		super(environment);
 		
@@ -27,7 +27,7 @@ public class GetAll extends ArticleServicePTBinding{
 		removeWhiteSpace();
 	}
 	
-	public void verifyPresenceOfArticle(String[] attributes, String path, boolean isExpected)
+	public void verifyPresenceOfCustomer(String[] attributes, String path, boolean isExpected)
 			throws XPathExpressionException, ValidationException {
 		boolean articleFound = false;
 		String nodeText;
@@ -45,7 +45,7 @@ public class GetAll extends ArticleServicePTBinding{
 		for(int nodeCounter = 0; nodeCounter < nodes.getLength(); nodeCounter++){
 			Node node = nodes.item(nodeCounter);
 			nodeText = node.getTextContent();
-			if(nodeText.contains(attributes[4])){
+			if(nodeText.contains(attributes[attributes.length-1])){
 				articleFound = true;
 				for(int attributeCounter = 0; attributeCounter < attributes.length; attributeCounter++){
 					if(!nodeText.contains(attributes[attributeCounter])){
