@@ -265,8 +265,6 @@
 						<suiteXmlFiles>
 							<suiteXmlFile>${testNGSourceDirectory}/TestDataSources.xml</suiteXmlFile>
 						</suiteXmlFiles>
-						<!-- <suiteXmlFiles> <suiteXmlFile>${testNGSourceDirectory}/suite_housekeeping.xml</suiteXmlFile> 
-							</suiteXmlFiles> -->
 					</configuration>
 				</plugin>
 				<plugin>

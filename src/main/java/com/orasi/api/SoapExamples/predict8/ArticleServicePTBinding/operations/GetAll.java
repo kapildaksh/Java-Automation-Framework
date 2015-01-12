@@ -11,7 +11,6 @@ import org.testng.Assert;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.jayway.restassured.path.xml.element.NodeChildren;
 import com.orasi.api.SoapExamples.predict8.ArticleServicePTBinding.ArticleServicePTBinding;
 import com.orasi.utils.XMLTools;
 
