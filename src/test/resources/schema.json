@@ -1,0 +1,12 @@
+{
+    "$schema": "file:///C:/Users/brian.becker/Git/java-rest-schema/target/test-classes/schema.json",
+    "type": "object",
+    "properties": {
+        "/": { "$ref": "file:///C:/Users/brian.becker/Git/java-rest-schema/target/test-classes/entry-schema.json" }
+    },
+    "patternProperties": {
+        "^(/[^/]+)+$": { "$ref": "file:///C:/Users/brian.becker/Git/java-rest-schema/target/test-classes/entry-schema.json" }
+    },
+    "additionalProperties": false,
+    "required": [ "/" ]
+}
