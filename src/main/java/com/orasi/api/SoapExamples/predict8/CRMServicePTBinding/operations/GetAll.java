@@ -11,9 +11,8 @@ import org.testng.Assert;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.orasi.api.SoapExamples.predict8.CRMServicePTBinding.CRMServicePTBinding;
-import com.orasi.utils.Constants;
 import com.orasi.utils.XMLTools;
+import com.orasi.api.SoapExamples.predict8.CRMServicePTBinding.CRMServicePTBinding;
 
 public class GetAll extends CRMServicePTBinding{
 	public GetAll(String environment, String scenario) {
