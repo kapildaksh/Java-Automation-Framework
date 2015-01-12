@@ -4,18 +4,21 @@ package com.orasi.api.restServices.core;
  * Just playing around with some different ways of using rest services with Jackson 
  */
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpPatch;
+import org.apache.http.client.methods.HttpOptions;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -38,7 +41,7 @@ public class RestService_V2 {
 	
 	int statusCode = 0;
 	String responseFormat;
-	String responseAsString;
+	String responseAsString = null;
 	
 	private ObjectMapper mapper = new ObjectMapper().
 		      configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -50,10 +53,11 @@ public class RestService_V2 {
 	
 	/**
 	 * Sends a GET request
-	 * @param URL 
-	 * @return
-	 * @throws ClientProtocolException
-	 * @throws IOException
+	 * 
+	 * @param 	URL for the service you are testing
+	 * @return 	response in string format
+	 * @throws 	ClientProtocolException
+	 * @throws 	IOException
 	 */
 	public String sendGetRequest(String URL) throws ClientProtocolException, IOException{
 		HttpUriRequest request = new HttpGet(URL);
@@ -69,12 +73,13 @@ public class RestService_V2 {
 	}
 	
 	/**
-	 * Sends a post request
-	 * @param URL
-	 * @param params
-	 * @return
-	 * @throws ClientProtocolException
-	 * @throws IOException
+	 * Sends a post (update) request, pass in the parameters for the json arguments to update
+	 * 
+	 * @param 	URL		for the service
+	 * @param 	params	arguments to update
+	 * @return 	response in string format
+	 * @throws 	ClientProtocolException
+	 * @throws 	IOException
 	 */
 	public String sendPostRequest(String URL, List<NameValuePair> params) throws ClientProtocolException, IOException{
 		
@@ -89,9 +94,21 @@ public class RestService_V2 {
 		responseAsString = EntityUtils.toString(httpResponse.getEntity());
 		System.out.println("String response: " + responseAsString);
 		
+		
+		
 		return responseAsString;
 	}
-
+	
+	
+	/**
+	 * Sends a put (create) request, pass in the parameters for the json arguments to create
+	 * 
+	 * @param 	URL		for the service
+	 * @param 	params	arguments to update
+	 * @return 	response in string format
+	 * @throws 	ClientProtocolException
+	 * @throws 	IOException
+	 */
 	public String sendPutRequest(String URL, List<NameValuePair> params) throws ClientProtocolException, IOException{
 		HttpClient httpclient = HttpClients.createDefault();
 		HttpPut putRequest = new HttpPut(URL);
@@ -107,9 +124,91 @@ public class RestService_V2 {
 		return responseAsString;
 	}
 	
+	/**
+	 * Sends a patch (update) request, pass in the parameters for the json arguments to update
+	 * 
+	 * @param 	URL		for the service
+	 * @param 	params	arguments to update
+	 * @return 	response in string format
+	 * @throws 	ClientProtocolException
+	 * @throws 	IOException
+	 */
+	public String sendPatchRequest(String URL, List<NameValuePair> params) throws ClientProtocolException, IOException{
+		HttpClient httpclient = HttpClients.createDefault();
+		HttpPatch patchRequest = new HttpPatch(URL);
+		patchRequest.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+		
+		HttpResponse httpResponse = httpclient.execute(patchRequest);
+		setStatusCode(httpResponse);		
+		setResponseFormat(httpResponse);
+		
+		responseAsString = EntityUtils.toString(httpResponse.getEntity());
+		System.out.println("String response: " + responseAsString);
+		
+		return responseAsString;
+	}
+	
+	/**
+	 * Sends a delete request.  Depends on the service if a response is returned.
+	 * If no response is returned, will return null	 * 
+	 * 
+	 * @param 	URL		for the service
+	 * @return 	response in string format or null
+	 * @throws 	ClientProtocolException
+	 * @throws 	IOException
+	 */
+	public String sendDeleteRequest(String URL) throws ClientProtocolException, IOException{
+
+		HttpUriRequest deleteRequest = new HttpDelete(URL);
+		HttpResponse httpResponse = HttpClientBuilder.create().build().execute( deleteRequest );
+
+		setStatusCode(httpResponse);		
+		setResponseFormat(httpResponse);
+		
+		if (httpResponse.getEntity()!=null){
+			responseAsString = EntityUtils.toString(httpResponse.getEntity());
+			System.out.println("String response: " + responseAsString);
+		}		
+		
+		return responseAsString;
+	}
+	
+	/**
+	 * Sends an options request.  Options should give what the acceptable methods are for
+	 * the service (GET, HEAD, PUT, POST, etc).  There should be some sort of an ALLOW 
+	 * header that will give you the allowed methods.  May or may not be a body to the response, 
+	 * depending on the service.  
+	 * 
+	 * This method will return all the headers and the test should parse through and find the header 
+	 * it needs, that will give the allowed methods, as the naming convention will be different for each service.  
+	 * 
+	 * @param 	URL		for the service
+	 * @return 	returns an array of headers
+	 * @throws 	ClientProtocolException
+	 * @throws 	IOException
+	 */
+	public Header[] sendOptionsRequest(String URL ) throws ClientProtocolException, IOException{
+		HttpClient httpclient = HttpClients.createDefault();
+		HttpOptions httpOptions=new HttpOptions(URL);
+		
+		HttpResponse httpResponse=httpclient.execute(httpOptions);
+		System.out.println("Response Headers: ");
+		Header[] headers = httpResponse.getAllHeaders();
+		for (Header header: headers ){	
+			System.out.println(header.getName() + " : " + header.getValue());
+		}
+		
+		setStatusCode(httpResponse);		
+		setResponseFormat(httpResponse);
+		
+		return headers;
+		
+
+	}
 	
 	private void setStatusCode(HttpResponse httpResponse){
 		statusCode = httpResponse.getStatusLine().getStatusCode();
+		System.out.println("Status Line: " + httpResponse.getStatusLine());
 		System.out.println("Status code: " + statusCode);
 	}
 
