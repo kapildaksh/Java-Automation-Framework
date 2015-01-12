@@ -41,7 +41,9 @@ package com.github.arven.text;
 import java.io.InvalidObjectException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.reflect.Constructor;
 import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
 import java.text.CharacterIterator;
 import java.text.ChoiceFormat;
 import java.text.DateFormat;
@@ -66,36 +68,36 @@ import java.util.Map.Entry;
 
 
 /**
- * <code>MessageFormat</code> provides a means to produce concatenated
+ * <code>MapMessageFormat</code> provides a means to produce concatenated
  * messages in a language-neutral way. Use this to construct messages
  * displayed for end users.
  *
  * <p>
- * <code>MessageFormat</code> takes a set of objects, formats them, then
+ * <code>MapMessageFormat</code> takes a set of objects, formats them, then
  * inserts the formatted strings into the pattern at the appropriate places.
  *
  * <p>
  * <strong>Note:</strong>
- * <code>MessageFormat</code> differs from the other <code>Format</code>
- * classes in that you create a <code>MessageFormat</code> object with one
+ * <code>MapMessageFormat</code> differs from the other <code>Format</code>
+ * classes in that you create a <code>MapMessageFormat</code> object with one
  * of its constructors (not with a <code>getInstance</code> style factory
- * method). The factory methods aren't necessary because <code>MessageFormat</code>
+ * method). The factory methods aren't necessary because <code>MapMessageFormat</code>
  * itself doesn't implement locale specific behavior. Any locale specific
  * behavior is defined by the pattern that you provide as well as the
  * subformats used for inserted arguments.
  *
  * <h4><a name="patterns">Patterns and Their Interpretation</a></h4>
  *
- * <code>MessageFormat</code> uses patterns of the following form:
+ * <code>MapMessageFormat</code> uses patterns of the following form:
  * <blockquote><pre>
  * <i>MessageFormatPattern:</i>
  *         <i>String</i>
  *         <i>MessageFormatPattern</i> <i>FormatElement</i> <i>String</i>
  *
  * <i>FormatElement:</i>
- *         { <i>ArgumentIndex</i> }
- *         { <i>ArgumentIndex</i> , <i>FormatType</i> }
- *         { <i>ArgumentIndex</i> , <i>FormatType</i> , <i>FormatStyle</i> }
+ *         { <i>ArgumentName</i> }
+ *         { <i>ArgumentName</i> , <i>FormatType</i> }
+ *         { <i>ArgumentName</i> , <i>FormatType</i> , <i>FormatStyle</i> }
  *
  * <i>FormatType: one of </i>
  *         number date time choice
@@ -613,8 +615,8 @@ public class MapMessageFormat extends Format {
      * @exception NullPointerException if <code>newFormats</code> is null
      * @since 1.4
      */
-    public void setFormatsByArgumentName(Map<String, Format> newFormats) {
-        for(Entry<String, Format> e : newFormats.entrySet()) {
+    public void setFormatsByArgumentName(Map<Object, Format> newFormats) {
+        for(Entry<Object, Format> e : newFormats.entrySet()) {
             setFormatByArgumentName(e.getKey(), e.getValue());
         }
     }
@@ -667,7 +669,7 @@ public class MapMessageFormat extends Format {
      * @param newFormat the new format to use
      * @since 1.4
      */
-    public void setFormatByArgumentName(String argumentIndex, Format newFormat) {
+    public void setFormatByArgumentName(Object argumentIndex, Format newFormat) {
         for (int j = 0; j <= maxOffset; j++) {
             if (argumentNames[j].equals(argumentIndex)) {
                 formats[j] = newFormat;
@@ -716,8 +718,8 @@ public class MapMessageFormat extends Format {
      * @return the formats used for the arguments within the pattern
      * @since 1.4
      */
-    public Map<String,Format> getFormatsByArgumentName() {
-        Map<String,Format> resultArray = new HashMap<String,Format>();
+    public Map<Object,Format> getFormatsByArgumentName() {
+        Map<Object,Format> resultArray = new HashMap<Object,Format>();
         for (int i = 0; i <= maxOffset; i++) {
             resultArray.put(argumentNames[i], formats[i]);
         }
@@ -1230,7 +1232,7 @@ public class MapMessageFormat extends Format {
     private StringBuffer subformat(Map arguments, StringBuffer result,
                                    FieldPosition fp, List characterIterators) {
         // note: this implementation assumes a fast substring & index.
-        // if this is not true, would be better to append chars one by one.
+        // if this is not true, would be better to append chars one by one.       
         int lastOffset = 0;
         int last = result.length();
         for (int i = 0; i <= maxOffset; ++i) {
@@ -1519,9 +1521,15 @@ public class MapMessageFormat extends Format {
      */
     AttributedCharacterIterator createAttributedCharacterIterator(
                        AttributedCharacterIterator[] iterators) {
-        //AttributedString as = new AttributedString(iterators);
-        AttributedString as = new AttributedString(iterators);
-        return as.getIterator();
+        try {
+            Constructor<AttributedString> cas = AttributedString.class.getConstructor(AttributedCharacterIterator[].class);
+            cas.setAccessible(true);
+            AttributedString as = cas.newInstance((Object[])iterators);
+            return as.getIterator();
+        } catch (Exception ex) {
+            ex.printStackTrace(System.err);
+            return new AttributedString("").getIterator();
+        }
     }
     
     /**

@@ -6,9 +6,6 @@
 package com.github.arven.sandbox;
 
 import com.github.arven.text.MapMessageFormat;
-import java.text.MessageFormat;
-import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +15,7 @@ import java.util.Map;
  */
 public class Sandbox {
     public static void main(String[] args) throws Exception {
-        System.out.println("Testing");
+        /*System.out.println("Testing");
         System.out.println(MessageFormat.format("I''m a {0} and I''m {1}, the answer is {2,number,integer}.", "MessageFormat", "Integer Keyed", 42));
         //System.out.println(MapMessageFormat.format("I''m a {0} and I''m {1}.", "String", "Defined"));
         Map map = new HashMap();
@@ -33,6 +30,27 @@ public class Sandbox {
         System.out.println(parsed);
         
         System.out.println(Arrays.asList(fmt.getFormatsByArgumentName()));
+        */
+        Map names = new HashMap();
+        names.put("arv", "( Brian Becker )");
+        names.put("trf", "( T. R. Fields )");
+        names.put("prs", "P. R. Skylar");
+        names.put("xyz", "Xyzzy");
+        names.put("0", 500);
+        MapMessageFormat tf = new MapMessageFormat("This is a test, arv. Now we will use real variables. {arv}zx, {trf}st, ys{prs}li: all{xyz} {0}");
+        String formatted = tf.format(names);
+        System.out.println(formatted);
+        Map parsed = (Map) tf.parseObject(formatted);
+        System.out.println(parsed);
+        //String formatted = tf.format(names);
+        //System.out.println(formatted);
+        //Object o = tf.parseObject(formatted);
+        //System.out.println(o.toString());
+        
+        //Map m = new HashMap();
+        //m.put("arv", "-- Brian Becker");
+        //System.out.println(tf.format(new HashMap()));
+        
         //fmt.parse
     }
 }

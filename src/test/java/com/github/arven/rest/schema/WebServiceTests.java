@@ -7,8 +7,8 @@ package com.github.arven.rest.schema;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+import com.github.arven.text.MapMessageFormat;
 import com.github.fge.jsonschema.cfg.ValidationConfiguration;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.library.DraftV4Library;
@@ -22,6 +22,9 @@ import com.github.fge.msgsimple.load.MessageBundles;
 import com.github.fge.msgsimple.source.MapMessageSource;
 import com.github.fge.msgsimple.source.MessageSource;
 import java.net.URL;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Map;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -173,11 +176,31 @@ public class WebServiceTests extends RestDebuggerTest {
         Assert.assertEquals(node.at("/~1var/options/0").asText(), "nosuid");
         Assert.assertEquals(node.at(JSONP.slash("/var storage label")).asText(), "8f3ba6f4-5c70-46ec-83af-0d5434953e5f");
     }
+    
+    @Test
+    public void regularMessageFormat() throws Exception {
+        JsonNode node = mapper.readTree(new URL("file:///C:/Users/brian.becker/Git/java-rest-schema/target/test-classes/errorpage.json"));
+        String error = node.get("error").asText();
+        MessageFormat format = new MessageFormat("{0} {1}: The server was unable to find the {3} that was requested from Article {2}");
+        Object[] parsed = format.parse(error);
+        println(Arrays.asList(parsed));
+        Assert.assertEquals(parsed[0], "404");
+        Assert.assertEquals(parsed[1], "Not Found");
+        Assert.assertEquals(parsed[2], "123");
+        Assert.assertEquals(parsed[3], "Comment resource");
+    }
 
-    //@Test
-    //public void fails() throws Exception {
-        // JsonSchema entry = JsonSchemaFactory.byDefault().getJsonSchema(WebServiceTests.class.getResource("entry-schema.json").toString());
-    //}
+    @Test
+    public void mapMessageFormat() throws Exception {
+        JsonNode node = mapper.readTree(new URL("file:///C:/Users/brian.becker/Git/java-rest-schema/target/test-classes/errorpage.json"));
+        String error = node.get("error").asText();
+        MapMessageFormat format = new MapMessageFormat("{errorCode} {errorName}: The server was unable to find the {extraType} that was requested from Article {articleNo}");
+        Map map = format.parse(error);
+        Assert.assertEquals(map.get("errorCode"), "404");
+        Assert.assertEquals(map.get("errorName"), "Not Found");
+        Assert.assertEquals(map.get("articleNo"), "123");
+        Assert.assertEquals(map.get("extraType"), "Comment resource");
+    }
     
     //@Test
     //public void fails2() throws Exception {
