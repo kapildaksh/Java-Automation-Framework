@@ -1519,6 +1519,7 @@ public class MapMessageFormat extends Format {
      * @return AttributedCharacterIterator wrapping passed in
      *         AttributedCharacterIterators
      */
+    @SuppressWarnings("UseSpecificCatch")
     AttributedCharacterIterator createAttributedCharacterIterator(
                        AttributedCharacterIterator[] iterators) {
         try {

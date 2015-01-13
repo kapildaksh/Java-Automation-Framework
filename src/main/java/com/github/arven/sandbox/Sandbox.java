@@ -6,6 +6,7 @@
 package com.github.arven.sandbox;
 
 import com.github.arven.text.MapMessageFormat;
+import com.github.arven.text.TemplateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ public class Sandbox {
         System.out.println(Arrays.asList(fmt.getFormatsByArgumentName()));
         */
         Map names = new HashMap();
+        names.put("tst", "VxTesting 192");
         names.put("arv", "( Brian Becker )");
         names.put("trf", "( T. R. Fields )");
         names.put("prs", "P. R. Skylar");
@@ -42,6 +44,12 @@ public class Sandbox {
         System.out.println(formatted);
         Map parsed = (Map) tf.parseObject(formatted);
         System.out.println(parsed);
+        
+        TemplateFormat template = new TemplateFormat("${tst}This is a test, $${arv}. Now we will use real variables. ${arv,numeric}zx, ${trf}st, ys${prs}li: all${xyz} ${0}");
+        String f2 = template.format(names);
+        System.out.println(f2);
+        Map p2 = (Map) template.parseObject(f2);
+        System.out.println(p2);
         //String formatted = tf.format(names);
         //System.out.println(formatted);
         //Object o = tf.parseObject(formatted);
