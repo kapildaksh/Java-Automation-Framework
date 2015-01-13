@@ -47,17 +47,28 @@ public class AccountServiceTests {
         server.enqueue(new MockResponse().setHeader("Content-Type", JSON).setBody(map.writeValueAsString(
                 new BasicMessage(200, RequestType.CREATE, "Created user successfully")
         )));
+        server.enqueue(new MockResponse().setHeader("Content-Type", JSON).setBody(map.writeValueAsString(
+                new BasicMessage(200, RequestType.READ, "Read user data successfully")
+        )));
         server.play();
         URL url = server.getUrl("/users/trfields");
         
         RequestBody body = RequestBody.create(JSON, "{ }");
-        Request request = new Request.Builder().url(url).put(body).build();
-        Response response = client.newCall(request).execute();
-        System.out.println(response.body().string());
+        Request request1 = new Request.Builder().url(url).put(body).build();
+        Response response1 = client.newCall(request1).execute();
+        System.out.println(response1.body().string());
         
-        RecordedRequest request1 = server.takeRequest();
-        Assert.assertEquals(request1.getPath(), "/users/trfields");
-        Assert.assertEquals(request1.getMethod(), "PUT");
+        Request request2 = new Request.Builder().url(url).get().build();
+        Response response2 = client.newCall(request2).execute();
+        System.out.println(response2.body().string());        
+        
+        RecordedRequest recorded1 = server.takeRequest();
+        Assert.assertEquals(recorded1.getPath(), "/users/trfields");
+        Assert.assertEquals(recorded1.getMethod(), "PUT");
+        
+        RecordedRequest recorded2 = server.takeRequest();
+        Assert.assertEquals(recorded2.getPath(), "/users/trfields");
+        Assert.assertEquals(recorded2.getMethod(), "GET");
         server.shutdown();
     }
     
@@ -67,16 +78,32 @@ public class AccountServiceTests {
         server.enqueue(new MockResponse().setHeader("Content-Type", JSON).setBody(map.writeValueAsString(
                 new BasicMessage(200, RequestType.DELETE, "Deleted user successfully")
         )));
+        server.enqueue(new MockResponse().setHeader("Content-Type", JSON).setBody(map.writeValueAsString(
+                new BasicMessage(404, RequestType.READ, "User not found")
+        )).setStatus("HTTP/1.1 404 Resource not found"));
+        
         server.play();
         URL url = server.getUrl("/users/trfields");
         
-        Request request = new Request.Builder().url(url).delete().build();
-        Response response = client.newCall(request).execute();
-        System.out.println(response.body().string());
+        Request request1 = new Request.Builder().url(url).delete().build();
+        Response response1 = client.newCall(request1).execute();
         
-        RecordedRequest request1 = server.takeRequest();
-        Assert.assertEquals(request1.getPath(), "/users/trfields");
-        Assert.assertEquals(request1.getMethod(), "DELETE");
+        Request request2 = new Request.Builder().url(url).get().build();
+        Response response2 = client.newCall(request2).execute();
+        BasicMessage body = map.readValue(response2.body().string(), BasicMessage.class);
+        Assert.assertEquals(response2.code(), 404);
+        Assert.assertEquals(body.getErrorCode(), 404);
+        Assert.assertEquals(body.getSuccessful(), false);
+        Assert.assertEquals(body.getMessage(), "User not found");
+        Assert.assertEquals(body.getType(), RequestType.READ);
+        
+        RecordedRequest recorded1 = server.takeRequest();
+        Assert.assertEquals(recorded1.getPath(), "/users/trfields");
+        Assert.assertEquals(recorded1.getMethod(), "DELETE");
+        
+        RecordedRequest recorded2 = server.takeRequest();
+        Assert.assertEquals(recorded2.getPath(), "/users/trfields");
+        Assert.assertEquals(recorded2.getMethod(), "GET");
         server.shutdown();
     }
     

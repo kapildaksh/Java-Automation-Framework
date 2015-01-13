@@ -5,26 +5,37 @@
  */
 package com.github.arven.rest.api;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
- * This message represents some basic CRUD operation has completed;
+ * This message represents some basic CRUD operation has completed, or
+ * possibly failed.
  * 
  * @author Brian Becker
  */
+@JsonAutoDetect(fieldVisibility=JsonAutoDetect.Visibility.ANY)
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class BasicMessage {
     public static enum RequestType { CREATE, READ, UPDATE, DELETE, PROCESS };
 
-    private final int code;
-    public int getErrorCode() { return code; }
+    private int errorCode;
+    public int getErrorCode() { return errorCode; }
     
-    private final RequestType type;
+    private RequestType type;
     public RequestType getType() { return type; }
     
-    private final String message;
+    private String message;
     public String getMessage() { return message; }
     
-    public BasicMessage(int code, RequestType type, String message) {
+    public boolean getSuccessful() { return this.errorCode == 200; }
+    
+    public BasicMessage() { }
+    
+    public BasicMessage(int errorCode, RequestType type, String message) {
         this.type = type;
-        this.code = code;
+        this.errorCode = errorCode;
         this.message = message;
     }
 }
