@@ -96,7 +96,7 @@ public class AccountServiceTests {
         BasicMessage body = map.readValue(response2.body().string(), BasicMessage.class);
         Assert.assertEquals(response2.code(), 404);
         Assert.assertEquals(body.getErrorCode(), 404);
-        Assert.assertEquals(body.getSuccessful(), false);
+        Assert.assertFalse(body.getSuccessful());
         Assert.assertEquals(body.getMessage(), "User not found");
         Assert.assertEquals(body.getType(), RequestType.READ);
         
@@ -127,19 +127,22 @@ public class AccountServiceTests {
         PatchBuilder patch = new PatchBuilder();
         patch.test("/username", "trfields");
         patch.replace("/nickname", "Tom");
-        System.out.println(patch.toString());
         RequestBody patchBody = RequestBody.create(JSON_PATCH, patch.toString());
         Request request1 = new Request.Builder().url(url).patch(patchBody).build();
         Response response1 = client.newCall(request1).execute();
+        BasicMessage body1 = map.readValue(response1.body().string(), BasicMessage.class);
         
-        System.out.println(response1.body().string());
+        Assert.assertEquals(body1.getErrorCode(), 200);
+        Assert.assertEquals(body1.getMessage(), "Modified user data successfully");
+        Assert.assertEquals(body1.getType(), RequestType.UPDATE);
+        Assert.assertTrue(body1.getSuccessful());
         
         Request request2 = new Request.Builder().url(url).get().build();
         Response response2 = client.newCall(request2).execute();
-        AccountInformationMessage body = map.readValue(response2.body().string(), AccountInformationMessage.class);
+        AccountInformationMessage body2 = map.readValue(response2.body().string(), AccountInformationMessage.class);
         
-        Assert.assertEquals(body.nickname, "Tom");
-        Assert.assertEquals(body.username, "trfields");
+        Assert.assertEquals(body2.nickname, "Tom");
+        Assert.assertEquals(body2.username, "trfields");
         
         RecordedRequest recorded1 = server.takeRequest();
         Assert.assertEquals(recorded1.getPath(), "/users/trfields");
