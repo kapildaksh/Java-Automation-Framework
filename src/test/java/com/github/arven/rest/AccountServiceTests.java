@@ -8,7 +8,9 @@ package com.github.arven.rest;
 import com.github.arven.rest.api.BasicMessage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.arven.rest.api.AccountInformationMessage;
 import com.github.arven.rest.api.BasicMessage.RequestType;
+import com.github.arven.rest.util.PatchBuilder;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -17,10 +19,8 @@ import com.squareup.okhttp.Response;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
-import java.io.IOException;
 import java.net.URL;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 /**
@@ -31,6 +31,9 @@ public class AccountServiceTests {
     
     public static final MediaType JSON
       = MediaType.parse("application/json; charset=utf-8");
+    
+    public static final MediaType JSON_PATCH
+            = MediaType.parse("application/json-patch+json; charset=utf-8");
     
     private MockWebServer server;
     private final OkHttpClient client;
@@ -100,6 +103,47 @@ public class AccountServiceTests {
         RecordedRequest recorded1 = server.takeRequest();
         Assert.assertEquals(recorded1.getPath(), "/users/trfields");
         Assert.assertEquals(recorded1.getMethod(), "DELETE");
+        
+        RecordedRequest recorded2 = server.takeRequest();
+        Assert.assertEquals(recorded2.getPath(), "/users/trfields");
+        Assert.assertEquals(recorded2.getMethod(), "GET");
+        server.shutdown();
+    }
+    
+    @Test
+    public void updateAccount() throws Exception {
+        server = new MockWebServer();
+        server.enqueue(new MockResponse().setHeader("Content-Type", JSON).setBody(map.writeValueAsString(
+                new BasicMessage(200, RequestType.UPDATE, "Modified user data successfully")
+        )));
+        server.enqueue(new MockResponse().setHeader("Content-Type", JSON).setBody(map.writeValueAsString(
+                new AccountInformationMessage(
+                        new BasicMessage(200, RequestType.READ, "Read user data successfully"),
+                        "trfields",
+                        "Tom"))));        
+        server.play();
+        URL url = server.getUrl("/users/trfields");
+        
+        PatchBuilder patch = new PatchBuilder();
+        patch.test("/username", "trfields");
+        patch.replace("/nickname", "Tom");
+        System.out.println(patch.toString());
+        RequestBody patchBody = RequestBody.create(JSON_PATCH, patch.toString());
+        Request request1 = new Request.Builder().url(url).patch(patchBody).build();
+        Response response1 = client.newCall(request1).execute();
+        
+        System.out.println(response1.body().string());
+        
+        Request request2 = new Request.Builder().url(url).get().build();
+        Response response2 = client.newCall(request2).execute();
+        AccountInformationMessage body = map.readValue(response2.body().string(), AccountInformationMessage.class);
+        
+        Assert.assertEquals(body.nickname, "Tom");
+        Assert.assertEquals(body.username, "trfields");
+        
+        RecordedRequest recorded1 = server.takeRequest();
+        Assert.assertEquals(recorded1.getPath(), "/users/trfields");
+        Assert.assertEquals(recorded1.getMethod(), "PATCH");
         
         RecordedRequest recorded2 = server.takeRequest();
         Assert.assertEquals(recorded2.getPath(), "/users/trfields");

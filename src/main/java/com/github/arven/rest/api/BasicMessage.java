@@ -5,9 +5,7 @@
  */
 package com.github.arven.rest.api;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * This message represents some basic CRUD operation has completed, or
@@ -15,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 
  * @author Brian Becker
  */
-@JsonAutoDetect(fieldVisibility=JsonAutoDetect.Visibility.ANY)
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class BasicMessage {
     public static enum RequestType { CREATE, READ, UPDATE, DELETE, PROCESS };
