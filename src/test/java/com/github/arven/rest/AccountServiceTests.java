@@ -10,7 +10,7 @@ import com.github.arven.rest.api.BasicMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.arven.rest.api.AccountInformationMessage;
 import com.github.arven.rest.api.BasicMessage.RequestType;
-import com.github.arven.rest.util.PatchBuilder;
+import com.github.arven.rest.util.Patch;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -124,7 +124,7 @@ public class AccountServiceTests {
         server.play();
         URL url = server.getUrl("/users/trfields");
         
-        PatchBuilder patch = new PatchBuilder();
+        Patch.Builder patch = new Patch.Builder();
         patch.test("/username", "trfields");
         patch.replace("/nickname", "Tom");
         RequestBody patchBody = RequestBody.create(JSON_PATCH, patch.toString());
