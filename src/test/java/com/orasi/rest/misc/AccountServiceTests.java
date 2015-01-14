@@ -109,11 +109,21 @@ public class AccountServiceTests {
     public void updateAccount() throws Exception {
         server = new MockWebServer();
         server.enqueue(new MockResponse().setHeader("Content-Type", JSON).setBody(map.writeValueAsString(
+                new AccountInformation("trfields", "T. R. Fields")
+        )));        
+        server.enqueue(new MockResponse().setHeader("Content-Type", JSON).setBody(map.writeValueAsString(
                 new ServiceResponse(ServiceResponse.Type.SUCCESS, 200)
         )));
         server.enqueue(new MockResponse().setHeader("Content-Type", JSON).setBody(map.writeValueAsString(new AccountInformation("trfields", "Tom"))));        
         server.play();
         URL url = server.getUrl("/users/trfields");
+        
+        Request request0 = new Request.Builder().url(url).get().build();
+        Response response0 = client.newCall(request0).execute();
+        AccountInformation body0 = map.readValue(response0.body().string(), AccountInformation.class);
+        
+        Assert.assertEquals(body0.nickname, "T. R. Fields");
+        Assert.assertEquals(body0.username, "trfields");
         
         Patch.Builder patch = new Patch.Builder();
         patch.test("/username", "trfields");
@@ -133,13 +143,22 @@ public class AccountServiceTests {
         Assert.assertEquals(body2.nickname, "Tom");
         Assert.assertEquals(body2.username, "trfields");
         
+        JsonNode first = map.valueToTree(body0);
+        JsonNode last = map.valueToTree(body2);
+        new Patch.Builder().replace("/nickname", "Tom").build().apply(first);
+        Assert.assertEquals(first.toString(), last.toString());
+        
         RecordedRequest recorded1 = server.takeRequest();
         Assert.assertEquals(recorded1.getPath(), "/users/trfields");
-        Assert.assertEquals(recorded1.getMethod(), "PATCH");
+        Assert.assertEquals(recorded1.getMethod(), "GET");
         
         RecordedRequest recorded2 = server.takeRequest();
         Assert.assertEquals(recorded2.getPath(), "/users/trfields");
-        Assert.assertEquals(recorded2.getMethod(), "GET");
+        Assert.assertEquals(recorded2.getMethod(), "PATCH");
+        
+        RecordedRequest recorded3 = server.takeRequest();
+        Assert.assertEquals(recorded3.getPath(), "/users/trfields");
+        Assert.assertEquals(recorded3.getMethod(), "GET");
         server.shutdown();
     }
     
