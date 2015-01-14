@@ -6,8 +6,7 @@
 	<parameter name="operatingSystem" value="" />
 	<test name="DistanceMatrix">
 		<classes>
-			<class name="com.orasi.rest.googleApi.distanceMatrix.DistanceMatrix_XML" />
-			<!-- <class name="com.orasi.rest.googleApi.distanceMatrix.DistanceMatrix_JSON" /> -->
+			<class name="com.orasi.rest.googleApi.distanceMatrix.DistanceMatrix" />
 		</classes>
 	</test> <!-- DistanceMatrix -->
 </suite> <!-- DistanceMatrix -->
