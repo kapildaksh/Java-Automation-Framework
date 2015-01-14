@@ -28,11 +28,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
-
-
-
 public class WebDriverSetup {
-
 
 	public WebDriver driver;
 	private String testEnvironment = "";
@@ -46,12 +42,10 @@ public class WebDriverSetup {
 	private URL seleniumHubURL = null;
 		
 	public WebDriverSetup(){}
-	
 
 	public WebDriverSetup(	String application, String browserUnderTest, 
 							String browserVersion, String operatingSystem,
 							String runLocation, String environment){
-
 		
 		this.testApplication = application;
 		this.browser = browserUnderTest;
@@ -59,12 +53,9 @@ public class WebDriverSetup {
 		this.operatingSystem = operatingSystem;
 		this.location = runLocation;
 		this.testEnvironment = environment;
-		
-
 	}
 	
 	//Getters & Setters
-	
 	public void setTestEnvironment(String environment){
 		testEnvironment = environment;
 	}
@@ -73,7 +64,6 @@ public class WebDriverSetup {
 		return testEnvironment;
 	}
 
-	
 	public  void setTestApplication(String application){
 		testApplication= application;
 	}
@@ -188,7 +178,13 @@ public class WebDriverSetup {
 
 		//If the location is local, grab the drivers for each browser type from within the project
 		if (location.equalsIgnoreCase("local")){
-			
+			if(this.operatingSystem.equalsIgnoreCase("windows")){
+				
+			}else if(this.operatingSystem.equalsIgnoreCase("mac")){
+				
+			}else if(this.operatingSystem.equalsIgnoreCase("linux")){
+				
+			}
 			DesiredCapabilities caps = null;
 			File file = null;
 			if (browser.equalsIgnoreCase("Firefox")){
