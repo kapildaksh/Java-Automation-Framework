@@ -16,11 +16,11 @@ import org.testng.annotations.Test;
  *
  * @author brian.becker
  */
-public class RestUtilsTests {
+public class PatchUtilityTest {
     
     private final ObjectMapper map;
     
-    public RestUtilsTests() {
+    public PatchUtilityTest() {
         this.map = new ObjectMapper();
     }
     
