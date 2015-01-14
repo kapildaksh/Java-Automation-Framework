@@ -9,16 +9,13 @@ package com.github.arven.rest.api;
  *
  * @author brian.becker
  */
-public class AccountInformationMessage {
-    public BasicMessage status;
-    
+public class AccountInformation {   
     public String username;
     public String nickname;
     
-    public AccountInformationMessage() { }
+    public AccountInformation() { }
     
-    public AccountInformationMessage(BasicMessage status, String username, String nickname) {
-        this.status = status;
+    public AccountInformation(String username, String nickname) {
         this.username = username;
         this.nickname = nickname;
     }

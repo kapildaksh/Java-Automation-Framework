@@ -7,9 +7,7 @@ package com.github.arven.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.arven.rest.api.AccountInformationMessage;
-import com.github.arven.rest.api.BasicMessage;
-import com.github.arven.rest.api.BasicMessage.RequestType;
+import com.github.arven.rest.api.AccountInformation;
 import com.github.arven.rest.util.Patch;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -33,9 +31,7 @@ public class RestUtilsTests {
         JsonNode n = map.readTree(patch.toString());
         Assert.assertEquals(n.size(), 1);
         
-        AccountInformationMessage m = new AccountInformationMessage(
-                new BasicMessage(200, RequestType.READ, "Read user successfully"),
-                "trfields", "T. R. Fields");
+        AccountInformation m = new AccountInformation("trfields", "T. R. Fields");
         
         JsonNode toPatch = map.valueToTree(m);
         Assert.assertNotNull(patch.apply(toPatch));
@@ -46,9 +42,7 @@ public class RestUtilsTests {
         Patch patch = new Patch.Builder().replace("/username", "trfields2").build();
         System.out.println(patch.toString());
         
-        AccountInformationMessage m = new AccountInformationMessage(
-                new BasicMessage(200, RequestType.READ, "Read user successfully"),
-                "trfields", "T. R. Fields");
+        AccountInformation m = new AccountInformation("trfields", "T. R. Fields");
         
         JsonNode toPatch = map.valueToTree(m);
         Assert.assertNotNull(patch.apply(toPatch));
@@ -60,9 +54,7 @@ public class RestUtilsTests {
         Patch patch = new Patch.Builder().remove("/username").build();
         System.out.println(patch.toString());
         
-        AccountInformationMessage m = new AccountInformationMessage(
-                new BasicMessage(200, RequestType.READ, "Read user successfully"),
-                "trfields", "T. R. Fields");
+        AccountInformation m = new AccountInformation("trfields", "T. R. Fields");
         
         JsonNode toPatch = map.valueToTree(m);
         Assert.assertNotNull(patch.apply(toPatch));
@@ -74,9 +66,7 @@ public class RestUtilsTests {
         Patch patch = new Patch.Builder().add("/username2", "testing").build();
         System.out.println(patch.toString());
         
-        AccountInformationMessage m = new AccountInformationMessage(
-                new BasicMessage(200, RequestType.READ, "Read user successfully"),
-                "trfields", "T. R. Fields");
+        AccountInformation m = new AccountInformation("trfields", "T. R. Fields");
         
         JsonNode toPatch = map.valueToTree(m);
         Assert.assertNotNull(patch.apply(toPatch));
@@ -88,9 +78,7 @@ public class RestUtilsTests {
         Patch patch = new Patch.Builder().move("/username", "/username2").build();
         System.out.println(patch.toString());
         
-        AccountInformationMessage m = new AccountInformationMessage(
-                new BasicMessage(200, RequestType.READ, "Read user successfully"),
-                "trfields", "T. R. Fields");
+        AccountInformation m = new AccountInformation("trfields", "T. R. Fields");
         
         JsonNode toPatch = map.valueToTree(m);
         Assert.assertNotNull(patch.apply(toPatch));
@@ -103,9 +91,7 @@ public class RestUtilsTests {
         Patch patch = new Patch.Builder().copy("/username", "/username2").build();
         System.out.println(patch.toString());
         
-        AccountInformationMessage m = new AccountInformationMessage(
-                new BasicMessage(200, RequestType.READ, "Read user successfully"),
-                "trfields", "T. R. Fields");
+        AccountInformation m = new AccountInformation("trfields", "T. R. Fields");
         
         JsonNode toPatch = map.valueToTree(m);
         Assert.assertNotNull(patch.apply(toPatch));
