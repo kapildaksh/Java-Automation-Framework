@@ -5,9 +5,12 @@
  */
 package com.github.arven.rest.util;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,6 +21,7 @@ import java.util.List;
  */
 public class Patch {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     public static enum Op {        
         TEST, REMOVE, ADD, REPLACE, MOVE, COPY;
         
@@ -38,6 +42,26 @@ public class Patch {
         public PatchEntry(Op op, String from, String path, Object value) {
             this.op = op; this.path = path; this.value = value; this.from = from;
         }
+        
+        public boolean apply(JsonNode node) {
+            switch(op) {
+                case TEST:
+                    if(!node.at(path).equals(value))
+                        return false;
+                    break;
+                case REMOVE:
+                    break;
+                case ADD:
+                    break;
+                case REPLACE:
+                    break;
+                case MOVE:
+                    break;
+                case COPY:
+                    break;
+            }
+            return true;
+        }
     }
     
     /**
@@ -48,28 +72,34 @@ public class Patch {
     public static class Builder {
         private final List<PatchEntry> entries = new LinkedList<PatchEntry>();
         
-        public void test(String path, Object value) {
+        public Builder test(String path, Object value) {
             this.entries.add(new PatchEntry(Op.TEST, null, path, value));
+            return this;
         }
 
-        public void add(String path, Object value) {
+        public Builder add(String path, Object value) {
             this.entries.add(new PatchEntry(Op.ADD, null, path, value));
+            return this;
         }
 
-        public void replace(String path, Object value) {
+        public Builder replace(String path, Object value) {
             this.entries.add(new PatchEntry(Op.REPLACE, null, path, value));
+            return this;
         }
         
-        public void move(String from, String path) {
+        public Builder move(String from, String path) {
             this.entries.add(new PatchEntry(Op.MOVE, from, path, null));
+            return this;
         }
         
-        public void copy(String from, String path) {
+        public Builder copy(String from, String path) {
             this.entries.add(new PatchEntry(Op.COPY, from, path, null));
+            return this;
         }
 
-        public void remove(String path) {
+        public Builder remove(String path) {
             this.entries.add(new PatchEntry(Op.REMOVE, null, path, null));
+            return this;
         }
 
         public Patch build() {
@@ -83,6 +113,13 @@ public class Patch {
     public Patch(List<PatchEntry> entries) {
         this.entries = entries;
         this.map = new ObjectMapper();
+        this.map.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
+    }
+    
+    public void apply(JsonNode node) {
+        for(PatchEntry pe : entries) {
+            pe.apply(node);
+        }
     }
     
     @Override

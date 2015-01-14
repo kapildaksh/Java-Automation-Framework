@@ -7,6 +7,9 @@ package com.github.arven.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.arven.rest.api.AccountInformationMessage;
+import com.github.arven.rest.api.BasicMessage;
+import com.github.arven.rest.api.BasicMessage.RequestType;
 import com.github.arven.rest.util.Patch;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -25,11 +28,14 @@ public class RestUtilsTests {
     
     @Test
     public void buildPatchTest() throws Exception {
-        Patch.Builder patch = new Patch.Builder();
-        patch.test("/username", "trfields");
-        System.out.println(patch.build().toString());
-        JsonNode n = map.readTree(patch.build().toString());
+        Patch patch = new Patch.Builder().test("/username", "trfields").build();
+        System.out.println(patch.toString());
+        JsonNode n = map.readTree(patch.toString());
         Assert.assertEquals(n.size(), 1);
+        
+        AccountInformationMessage m = new AccountInformationMessage(
+                new BasicMessage(200, RequestType.READ, "Read user successfully"),
+                "trfields", "T. R. Fields");
     }
     
 }
