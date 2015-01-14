@@ -1,18 +1,11 @@
-
 package com.orasi.utils;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
-//import org.codehaus.jackson.JsonGenerator.Feature;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -21,18 +14,8 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
-
-
-
 
 public class WebDriverSetup {
-
 
 	public WebDriver driver;
 	private String testEnvironment = "";
@@ -46,12 +29,10 @@ public class WebDriverSetup {
 	private URL seleniumHubURL = null;
 		
 	public WebDriverSetup(){}
-	
 
 	public WebDriverSetup(	String application, String browserUnderTest, 
 							String browserVersion, String operatingSystem,
 							String runLocation, String environment){
-
 		
 		this.testApplication = application;
 		this.browser = browserUnderTest;
@@ -59,12 +40,9 @@ public class WebDriverSetup {
 		this.operatingSystem = operatingSystem;
 		this.location = runLocation;
 		this.testEnvironment = environment;
-		
-
 	}
 	
 	//Getters & Setters
-	
 	public void setTestEnvironment(String environment){
 		testEnvironment = environment;
 	}
@@ -73,7 +51,6 @@ public class WebDriverSetup {
 		return testEnvironment;
 	}
 
-	
 	public  void setTestApplication(String application){
 		testApplication= application;
 	}
@@ -188,7 +165,13 @@ public class WebDriverSetup {
 
 		//If the location is local, grab the drivers for each browser type from within the project
 		if (location.equalsIgnoreCase("local")){
-			
+			if(this.operatingSystem.equalsIgnoreCase("windows")){
+				
+			}else if(this.operatingSystem.equalsIgnoreCase("mac")){
+				
+			}else if(this.operatingSystem.equalsIgnoreCase("linux")){
+				
+			}
 			DesiredCapabilities caps = null;
 			File file = null;
 			if (browser.equalsIgnoreCase("Firefox")){
@@ -272,7 +255,4 @@ public class WebDriverSetup {
 		setDriverWindow(driver.getWindowHandle());
 
 	}
-
-
-
 }
