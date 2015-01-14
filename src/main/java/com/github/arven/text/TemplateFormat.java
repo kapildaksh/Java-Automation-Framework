@@ -19,7 +19,6 @@ public class TemplateFormat extends Format {
     private final List<TemplateElement> elements;
     private static final String fieldLeft = "${";
     private static final String fieldRight = "}";
-    private static final String fieldFormat = ",";
     private static final char fieldEscape = '$';
     private final Pattern regexPattern;
         
@@ -83,12 +82,12 @@ public class TemplateFormat extends Format {
 
     @Override
     public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-        Map map = (Map) obj;
+        Map m = (Map)obj;
         for(TemplateElement e : this.elements) {
-            if(e.variable && map.containsKey(e.text)) {
-                toAppendTo.append(map.get(e.text));
+            if(e.variable && m.containsKey(e.text)) {
+                toAppendTo.append(m.get(e.text));
             } else if(e.variable) {
-                toAppendTo.append(fieldLeft).append(e.text).append(fieldRight);
+                toAppendTo.append(fieldLeft.concat(e.text).concat(fieldRight));
             } else {
                 toAppendTo.append(e.text);
             }
