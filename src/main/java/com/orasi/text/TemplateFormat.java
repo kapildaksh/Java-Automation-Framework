@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.text;
 
 import java.text.FieldPosition;
@@ -14,6 +10,17 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The TemplateFormat class formats and parses strings with variables in them.
+ * The search strings are in typical ${variable} notation used by quite a
+ * few template engines. This is not a full template engine, just a variable
+ * expression replacement format.
+ * 
+ * NOTE: The TemplateFormat processor uses a full regular expression search,
+ * for parsing, so it may become slow.
+ * 
+ * @author Brian Becker
+ */
 public class TemplateFormat extends Format {
 
     private final List<TemplateElement> elements;

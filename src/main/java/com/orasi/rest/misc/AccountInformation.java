@@ -6,8 +6,9 @@
 package com.orasi.rest.misc;
 
 /**
- *
- * @author brian.becker
+ * Account information field for a fictitious web service.
+ * 
+ * @author Brian Becker
  */
 public class AccountInformation {   
     public String username;

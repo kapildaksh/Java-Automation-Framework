@@ -6,8 +6,9 @@
 package com.orasi.rest.misc;
 
 /**
- *
- * @author brian.becker
+ * Service Response message for a fictitious web service.
+ * 
+ * @author Brian Becker
  */
 public class ServiceResponse {
     public int code;
