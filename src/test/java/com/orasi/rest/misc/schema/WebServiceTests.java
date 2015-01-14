@@ -34,6 +34,8 @@ import org.testng.annotations.Test;
  */
 public class WebServiceTests extends RestDebuggerTest {
     
+    public static final String REST_SANDBOX = "/rest/sandbox/";
+    
     public final ObjectMapper mapper;
     
     public WebServiceTests() {
@@ -43,9 +45,9 @@ public class WebServiceTests extends RestDebuggerTest {
     
     @Test
     public void fstabSchema() throws Exception {
-        JsonSchema schema = JsonSchemaFactory.byDefault().getJsonSchema(WebServiceTests.class.getResource("/schema.json").toString());
-        JsonSchema entry = JsonSchemaFactory.byDefault().getJsonSchema(WebServiceTests.class.getResource("/entry-schema.json").toString());
-        JsonNode node = mapper.readTree(WebServiceTests.class.getResource("/fstab.json"));
+        JsonSchema schema = JsonSchemaFactory.byDefault().getJsonSchema(WebServiceTests.class.getResource(REST_SANDBOX + "schema.json").toString());
+        JsonSchema entry = JsonSchemaFactory.byDefault().getJsonSchema(WebServiceTests.class.getResource(REST_SANDBOX + "entry-schema.json").toString());
+        JsonNode node = mapper.readTree(WebServiceTests.class.getResource(REST_SANDBOX + "fstab.json"));
         ProcessingReport report = schema.validate(node);
         println("Schema Valid? " + yesno(report.isSuccess()));
         Assert.assertTrue(report.isSuccess());
@@ -67,9 +69,9 @@ public class WebServiceTests extends RestDebuggerTest {
         final JsonSchemaFactory factory = JsonSchemaFactory.newBuilder()
             .setValidationConfiguration(cfg).freeze();
         
-        JsonSchema schema = factory.getJsonSchema(WebServiceTests.class.getResource("/schema.json").toString());
-        JsonSchema entry = factory.getJsonSchema(WebServiceTests.class.getResource("/entry-schema.json").toString());
-        JsonNode node = mapper.readTree(WebServiceTests.class.getResource("/fstab.json"));
+        JsonSchema schema = factory.getJsonSchema(WebServiceTests.class.getResource(REST_SANDBOX + "schema.json").toString());
+        JsonSchema entry = factory.getJsonSchema(WebServiceTests.class.getResource(REST_SANDBOX + "entry-schema.json").toString());
+        JsonNode node = mapper.readTree(WebServiceTests.class.getResource(REST_SANDBOX + "fstab.json"));
         ProcessingReport report = schema.validate(node);
        
         println("Schema Valid? " + yesno(report.isSuccess()));
@@ -92,9 +94,9 @@ public class WebServiceTests extends RestDebuggerTest {
         final JsonSchemaFactory factory = JsonSchemaFactory.newBuilder()
             .setValidationConfiguration(cfg).freeze();
         
-        JsonSchema schema = factory.getJsonSchema(WebServiceTests.class.getResource("/schema.json").toString());
-        JsonSchema entry = factory.getJsonSchema(WebServiceTests.class.getResource("/entry-schema.json").toString());
-        JsonNode node = mapper.readTree(WebServiceTests.class.getResource("/fstab.json"));
+        JsonSchema schema = factory.getJsonSchema(WebServiceTests.class.getResource(REST_SANDBOX + "schema.json").toString());
+        JsonSchema entry = factory.getJsonSchema(WebServiceTests.class.getResource(REST_SANDBOX + "entry-schema.json").toString());
+        JsonNode node = mapper.readTree(WebServiceTests.class.getResource(REST_SANDBOX + "fstab.json"));
         ProcessingReport report = schema.validate(node);
        
         println("Schema Valid? " + yesno(report.isSuccess()));
@@ -121,9 +123,9 @@ public class WebServiceTests extends RestDebuggerTest {
         final JsonSchemaFactory factory = JsonSchemaFactory.newBuilder()
             .setValidationConfiguration(cfg).freeze();
         
-        JsonSchema schema = factory.getJsonSchema(WebServiceTests.class.getResource("/schema.json").toString());
-        JsonSchema entry = factory.getJsonSchema(WebServiceTests.class.getResource("/entry-schema.json").toString());
-        JsonNode node = mapper.readTree(WebServiceTests.class.getResource("/fstab.json"));
+        JsonSchema schema = factory.getJsonSchema(WebServiceTests.class.getResource(REST_SANDBOX + "schema.json").toString());
+        JsonSchema entry = factory.getJsonSchema(WebServiceTests.class.getResource(REST_SANDBOX + "entry-schema.json").toString());
+        JsonNode node = mapper.readTree(WebServiceTests.class.getResource(REST_SANDBOX + "fstab.json"));
         ProcessingReport report = schema.validate(node);
        
         println("Schema Valid? " + yesno(report.isSuccess()));
@@ -150,9 +152,9 @@ public class WebServiceTests extends RestDebuggerTest {
         final JsonSchemaFactory factory = JsonSchemaFactory.newBuilder()
             .setValidationConfiguration(cfg).freeze();
         
-        JsonSchema schema = factory.getJsonSchema(WebServiceTests.class.getResource("/schema.json").toString());
-        JsonSchema entry = factory.getJsonSchema(WebServiceTests.class.getResource("/entry-schema.json").toString());
-        JsonNode node = mapper.readTree(WebServiceTests.class.getResource("/fstab.json"));
+        JsonSchema schema = factory.getJsonSchema(WebServiceTests.class.getResource(REST_SANDBOX + "schema.json").toString());
+        JsonSchema entry = factory.getJsonSchema(WebServiceTests.class.getResource(REST_SANDBOX + "entry-schema.json").toString());
+        JsonNode node = mapper.readTree(WebServiceTests.class.getResource(REST_SANDBOX + "fstab.json"));
         ProcessingReport report = schema.validate(node);
        
         println("Schema Valid? " + yesno(report.isSuccess()));
