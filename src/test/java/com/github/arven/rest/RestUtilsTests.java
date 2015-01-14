@@ -36,6 +36,81 @@ public class RestUtilsTests {
         AccountInformationMessage m = new AccountInformationMessage(
                 new BasicMessage(200, RequestType.READ, "Read user successfully"),
                 "trfields", "T. R. Fields");
+        
+        JsonNode toPatch = map.valueToTree(m);
+        Assert.assertNotNull(patch.apply(toPatch));
+    }
+    
+    @Test
+    public void buildPatchReplace() throws Exception {
+        Patch patch = new Patch.Builder().replace("/username", "trfields2").build();
+        System.out.println(patch.toString());
+        
+        AccountInformationMessage m = new AccountInformationMessage(
+                new BasicMessage(200, RequestType.READ, "Read user successfully"),
+                "trfields", "T. R. Fields");
+        
+        JsonNode toPatch = map.valueToTree(m);
+        Assert.assertNotNull(patch.apply(toPatch));
+        Assert.assertEquals(toPatch.at("/username").asText(), "trfields2");
+    }
+    
+    @Test
+    public void buildPatchRemove() throws Exception {
+        Patch patch = new Patch.Builder().remove("/username").build();
+        System.out.println(patch.toString());
+        
+        AccountInformationMessage m = new AccountInformationMessage(
+                new BasicMessage(200, RequestType.READ, "Read user successfully"),
+                "trfields", "T. R. Fields");
+        
+        JsonNode toPatch = map.valueToTree(m);
+        Assert.assertNotNull(patch.apply(toPatch));
+        Assert.assertTrue(toPatch.at("/username").isMissingNode());
+    }
+    
+    @Test
+    public void buildPatchAdd() throws Exception {
+        Patch patch = new Patch.Builder().add("/username2", "testing").build();
+        System.out.println(patch.toString());
+        
+        AccountInformationMessage m = new AccountInformationMessage(
+                new BasicMessage(200, RequestType.READ, "Read user successfully"),
+                "trfields", "T. R. Fields");
+        
+        JsonNode toPatch = map.valueToTree(m);
+        Assert.assertNotNull(patch.apply(toPatch));
+        Assert.assertEquals(toPatch.at("/username2").asText(), "testing");
+    }
+    
+    @Test
+    public void buildPatchMove() throws Exception {
+        Patch patch = new Patch.Builder().move("/username", "/username2").build();
+        System.out.println(patch.toString());
+        
+        AccountInformationMessage m = new AccountInformationMessage(
+                new BasicMessage(200, RequestType.READ, "Read user successfully"),
+                "trfields", "T. R. Fields");
+        
+        JsonNode toPatch = map.valueToTree(m);
+        Assert.assertNotNull(patch.apply(toPatch));
+        Assert.assertEquals(toPatch.at("/username2").asText(), "trfields");
+        Assert.assertTrue(toPatch.at("/username").isMissingNode());
+    }
+    
+    @Test
+    public void buildPatchCopy() throws Exception {
+        Patch patch = new Patch.Builder().copy("/username", "/username2").build();
+        System.out.println(patch.toString());
+        
+        AccountInformationMessage m = new AccountInformationMessage(
+                new BasicMessage(200, RequestType.READ, "Read user successfully"),
+                "trfields", "T. R. Fields");
+        
+        JsonNode toPatch = map.valueToTree(m);
+        Assert.assertNotNull(patch.apply(toPatch));
+        Assert.assertEquals(toPatch.at("/username2").asText(), "trfields");
+        Assert.assertEquals(toPatch.at("/username2").asText(), "trfields");
     }
     
 }

@@ -7,12 +7,18 @@ package com.github.arven.rest.util;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonPointer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ValueNode;
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * HTTP Patch Request (JSON-PATCH format)
@@ -37,30 +43,80 @@ public class Patch {
         public final String from;
         public final String path;
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        public final Object value;
+        public final JsonNode value;
         
         public PatchEntry(Op op, String from, String path, Object value) {
-            this.op = op; this.path = path; this.value = value; this.from = from;
+            if(!(value instanceof JsonNode)) {
+                ObjectMapper map = new ObjectMapper();
+                this.value = map.valueToTree(value);
+            } else {
+                this.value = (JsonNode) value;
+            }
+            
+            this.op = op; this.path = path; this.from = from;
         }
         
-        public boolean apply(JsonNode node) {
+        public void remove(JsonNode node, String element) {
+            if(node instanceof ObjectNode) {
+                ((ObjectNode)node).remove(element);
+            } else if(node instanceof ArrayNode) {
+                ((ArrayNode)node).remove(Integer.valueOf(element));
+            }
+        }
+        
+        public void replace(JsonNode node, String element, JsonNode value) {
+            if(node instanceof ObjectNode) {
+                ((ObjectNode)node).set(element, value);
+            } else if(node instanceof ArrayNode) {
+                ((ArrayNode)node).set(Integer.valueOf(element), value);
+            }
+        }
+        
+        public void add(JsonNode node, String element, JsonNode value) {
+            if(node instanceof ObjectNode) {
+                ((ObjectNode)node).set(element, value);
+            } else if(node instanceof ArrayNode) {
+                ((ArrayNode)node).insert(Integer.valueOf(element), value);
+            }
+        }
+        
+        public JsonNode apply(JsonNode node) {
+            String newpath = path.substring(0, path.lastIndexOf("/"));
+            String element = path.substring(path.lastIndexOf("/"));
+            String from_newpath = "";
+            String from_element = "";
+            
+            if(from != null) {
+                from_newpath = from.substring(0, from.lastIndexOf("/"));
+                from_element = from.substring(from.lastIndexOf("/"));
+            }
+            
+            JsonNode newnode = node.at(newpath);
+            JsonNode newfrom = node.at(from_newpath);
+            
             switch(op) {
                 case TEST:
-                    if(!node.at(path).equals(value))
-                        return false;
+                    if(!newnode.at(element).equals(value))
+                        return null;
                     break;
                 case REMOVE:
+                    remove(newnode, element.substring(1));
                     break;
                 case ADD:
+                    add(newnode, element.substring(1), value);
                     break;
                 case REPLACE:
+                    replace(newnode, element.substring(1), value);
                     break;
                 case MOVE:
+                    add(newnode, element.substring(1), newfrom.at(from_element));
+                    remove(newfrom, from_element.substring(1));
                     break;
                 case COPY:
+                    add(newnode, element.substring(1), newfrom.at(from_element));
                     break;
             }
-            return true;
+            return node;
         }
     }
     
@@ -116,10 +172,12 @@ public class Patch {
         this.map.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
     }
     
-    public void apply(JsonNode node) {
+    public JsonNode apply(JsonNode node) {
         for(PatchEntry pe : entries) {
-            pe.apply(node);
+            if(pe.apply(node) == null)
+                return null;
         }
+        return node;
     }
     
     @Override
