@@ -1,0 +1,5 @@
+{
+    "status": "failed",
+    "code": 404,
+    "error": "404 Not Found: The server was unable to find the Comment resource that was requested from Article 123"
+}

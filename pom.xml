@@ -17,7 +17,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.github.arven.rest.testing.RestServer</mainClass>
+                            <mainClass>com.github.arven.rest.schema.RestServer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -80,7 +80,16 @@
             <groupId>com.squareup.okhttp</groupId>
             <artifactId>mockwebserver</artifactId>
             <version>2.2.0</version>
-            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>bsh</groupId>
+            <artifactId>bsh</artifactId>
+            <version>2.0b4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fge</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>2.2.6</version>
         </dependency>
     </dependencies>
     <reporting>
