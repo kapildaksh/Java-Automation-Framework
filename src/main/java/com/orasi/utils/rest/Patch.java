@@ -8,13 +8,19 @@ package com.orasi.utils.rest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * HTTP Patch Request (JSON-PATCH format)
@@ -168,12 +174,34 @@ public class Patch {
         this.map.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
     }
     
+    public static Patch fromJson(String json) {
+        ObjectMapper m = new ObjectMapper();
+        m.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
+        try {
+            return new Patch((List<PatchEntry>)m.readValue(json, new TypeReference<List<PatchEntry>>() { }));
+        } catch (IOException ex) {
+            Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new Patch(Collections.EMPTY_LIST);
+    }
+    
     public JsonNode apply(JsonNode node) {
         for(PatchEntry pe : entries) {
             if(pe.apply(node) == null)
                 return null;
         }
         return node;
+    }
+    
+    public <T> T apply(T o, Class c) {
+        try {
+            JsonNode n = this.map.valueToTree(o);
+            this.apply(n);
+            return (T) map.treeToValue(n, c);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return o;
     }
     
     @Override
