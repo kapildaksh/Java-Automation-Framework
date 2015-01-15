@@ -49,7 +49,8 @@ public class Sandbox {
         System.out.println(Arrays.asList(fmt.getFormatsByArgumentName()));
         */
        
-        Map names = new HashMap();
+        
+        /*Map names = new HashMap();
         names.put("tst", "VxTesting 192");
         names.put("arv", "( Brian Becker )");
         names.put("trf", "( T. R. Fields )");
@@ -62,11 +63,11 @@ public class Sandbox {
         Map parsed = (Map) tf.parseObject(formatted);
         System.out.println(parsed);
         
-        /* TemplateFormat template = new TemplateFormat("${tst}This is a test, $${arv}. Now we will use real variables. ${arv}zx, ${trf}st, ys${prs}li: all${xyz} ${0}");
+        TemplateFormat template = new TemplateFormat("${tst}This is a test, $${arv}. Now we will use real variables. ${arv}zx, ${trf}st, ys${prs}li: all${xyz} ${0}");
         String f2 = template.format(names);
         System.out.println(f2);
         Map p2 = (Map) template.parseObject(f2);
-        System.out.println(p2); */
+        System.out.println(p2);*/
         
         TemplateFormat templateObj = new TemplateFormat("${tst}This is a test, $${arv}. Now we will use real variables. ${arv}zx, ${trf}st, ys${prs}li: all${xyz} ${0} ${p:xyzf}");
         ObjectMap m = new ObjectMap(new Names());
@@ -76,7 +77,6 @@ public class Sandbox {
         v.putAllExists((Map) templateObj.parseObject(f3));
         System.out.println(v);
         System.out.println(m);
-        
         //String formatted = tf.format(names);
         //System.out.println(formatted);
         //Object o = tf.parseObject(formatted);
