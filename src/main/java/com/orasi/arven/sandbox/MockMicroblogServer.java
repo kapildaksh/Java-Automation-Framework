@@ -1,7 +1,7 @@
 package com.orasi.arven.sandbox;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.orasi.utils.rest.Json;
 import com.orasi.utils.rest.Patch;
 import static sparkfive.Spark.*;
 
@@ -20,6 +20,7 @@ public class MockMicroblogServer {
     private static ObjectMapper map = new ObjectMapper();
     
     public static void main( final String[] args ) throws Exception {
+        
         post("/users", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
@@ -28,18 +29,18 @@ public class MockMicroblogServer {
                 return u.username;
             }
         });
-        
+                
         get("/users/:name", new Route() {
             @Override
-            public Object handle(Request req, Response res) {
-                return users.get(req.params("name"));
+            public Object handle(Request req, Response res) throws Exception {
+                return map.writeValueAsString(users.get(req.params(":name")));
             }
         });
         
         patch("/users/:name", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
-                User nu = Patch.fromJson(req.body()).apply(users.remove(req.params("name")), User.class);
+                User nu = Json.patch(req.body(), users.remove(req.params(":name")), User.class);
                 users.put(nu.username, nu);
                 return nu.username;
             }
@@ -48,7 +49,7 @@ public class MockMicroblogServer {
         delete("/users/:name", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
-                return users.remove(req.params("name"));
+                return users.remove(req.params(":name"));
             }
         });        
     }
