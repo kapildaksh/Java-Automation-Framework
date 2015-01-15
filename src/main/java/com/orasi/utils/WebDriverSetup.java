@@ -165,44 +165,72 @@ public class WebDriverSetup {
 
 		//If the location is local, grab the drivers for each browser type from within the project
 		if (location.equalsIgnoreCase("local")){
-			if(this.operatingSystem.equalsIgnoreCase("windows")){
-				
-			}else if(this.operatingSystem.equalsIgnoreCase("mac")){
-				
-			}else if(this.operatingSystem.equalsIgnoreCase("linux")){
-				
-			}
 			DesiredCapabilities caps = null;
 			File file = null;
-			if (browser.equalsIgnoreCase("Firefox")){
-		    	driver = new FirefoxDriver();	    	
-		    }
-			//Internet explorer
-		    else if(browser.equalsIgnoreCase("IE")){
-		    	caps = DesiredCapabilities.internetExplorer();
-		    	caps.setCapability("ignoreZoomSetting", true);
-		    	caps.setCapability("enablePersistentHover", false);
-		    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "IEDriverServer.exe").getPath());
-				System.setProperty("webdriver.ie.driver", file.getAbsolutePath());
-				driver = new InternetExplorerDriver(caps);
-		    }
-			//Chrome
-		    else if(browser.equalsIgnoreCase("Chrome")){
-		    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "ChromeDriver.exe").getPath());
-				System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
-				driver = new ChromeDriver();		    	
-		    }
-			//Headless - HTML unit driver
-		    else if(browser.equalsIgnoreCase("html")){	    	
-				driver = new HtmlUnitDriver(true);		    	
-		    }
-			//Safari
-		    else if(browser.equalsIgnoreCase("safari")){
-		    	driver = new SafariDriver();
-		    }
-		    else {
-		    	throw new RuntimeException("Parameter not set for browser type");
-		    }
+			switch (this.operatingSystem.toLowerCase().trim().replace(" ", "")) {
+			case "windows":case "":
+				if (browser.equalsIgnoreCase("Firefox")){
+			    	driver = new FirefoxDriver();	    	
+			    }
+				//Internet explorer
+			    else if(browser.equalsIgnoreCase("IE")){
+			    	caps = DesiredCapabilities.internetExplorer();
+			    	caps.setCapability("ignoreZoomSetting", true);
+			    	caps.setCapability("enablePersistentHover", false);
+			    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "IEDriverServer.exe").getPath());
+					System.setProperty("webdriver.ie.driver", file.getAbsolutePath());
+					driver = new InternetExplorerDriver(caps);
+			    }
+				//Chrome
+			    else if(browser.equalsIgnoreCase("Chrome")){
+			    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "ChromeDriver.exe").getPath());
+					System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
+					driver = new ChromeDriver();		    	
+			    }
+				//Headless - HTML unit driver
+			    else if(browser.equalsIgnoreCase("html")){	    	
+					driver = new HtmlUnitDriver(true);		    	
+			    }
+				//Safari
+			    else if(browser.equalsIgnoreCase("safari")){
+			    	driver = new SafariDriver();
+			    }
+			    else {
+			    	throw new RuntimeException("Parameter not set for browser type");
+			    }
+				break;
+			case "mac":case "macos":
+				if (browser.equalsIgnoreCase("Firefox")){
+			    	driver = new FirefoxDriver();	    	
+			    }
+				//Internet explorer
+			    else if(browser.equalsIgnoreCase("IE")){
+			    	throw new RuntimeException("Currently there is no support of IE for Mac OS.");
+			    }
+				//Chrome
+			    else if(browser.equalsIgnoreCase("Chrome")){
+			    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "chromedriver").getPath());
+					System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
+					driver = new ChromeDriver();		    	
+			    }
+				//Headless - HTML unit driver
+			    else if(browser.equalsIgnoreCase("html")){	    	
+					driver = new HtmlUnitDriver(true);		    	
+			    }
+				//Safari
+			    else if(browser.equalsIgnoreCase("safari")){
+			    	driver = new SafariDriver();
+			    }
+			    else {
+			    	throw new RuntimeException("Parameter not set for browser type");
+			    }
+				break;
+			case "linux":case "linuxos":
+				
+				break;
+			default:
+				break;
+			}			
 		
 		//Code for running on the selenium grid
 		}else if(location.equalsIgnoreCase("remote")){
