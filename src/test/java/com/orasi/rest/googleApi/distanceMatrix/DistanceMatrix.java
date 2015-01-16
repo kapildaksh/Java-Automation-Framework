@@ -53,36 +53,33 @@ public class DistanceMatrix {
 	public void main(String testScenario, String origins, String destinations,
 						String mode, String language, String apiKey,
 						String validateOriginAddress, String validateDestinationAddress,
-						String format) throws XPathExpressionException, JSONException {
-		String[] originAddress = validateOriginAddress.split(";");
-		String[] destinationAddress = validateDestinationAddress.split(";");
-		rest = new RestService();
-		rest.setDefaultResponseFormat(format);
-		rest.sendGetRequest(
-				"https://maps.googleapis.com/maps/api/distancematrix/"+rest.getDefaultResponseFormat()+"?origins="+origins+"&destinations="+destinations+"&mode="+mode+"&language="+language+"&key="+apiKey,
-				rest.getDefaultResponseFormat());
+						String format, String os) throws XPathExpressionException, JSONException {
+		if(os.toLowerCase().equalsIgnoreCase(operatingSystem)){
+			String[] originAddress = validateOriginAddress.split(";");
+			String[] destinationAddress = validateDestinationAddress.split(";");
+			rest = new RestService();
+			rest.setDefaultResponseFormat(format);
+			rest.sendGetRequest(
+					"https://maps.googleapis.com/maps/api/distancematrix/"+rest.getDefaultResponseFormat()+"?origins="+origins+"&destinations="+destinations+"&mode="+mode+"&language="+language+"&key="+apiKey,
+					rest.getDefaultResponseFormat());
 
-		if(rest.getDefaultResponseFormat().equalsIgnoreCase("xml")){
-			String xpath = "/DistanceMatrixResponse";
-			int numberOfNodes = rest.getNumberOfNodesByXpath(xpath);
-			int numberOfChildNodes = rest.getNumberOfChildNodesByXpath(xpath);
-			System.out.println("Number of nodes for xpath["+xpath+"]: " +String.valueOf(numberOfNodes));
-			System.out.println("Number of childs nodes fro xpath ["+xpath+"]: "+String.valueOf(numberOfChildNodes));
-			
-			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/origin_address[1]"), originAddress[0]);
-			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/destination_address[1]"), destinationAddress[0]);
-			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/origin_address[2]"), originAddress[1]);
-			Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/destination_address[2]"), destinationAddress[1]);
-		}else{
-			/*Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses,array,0"), originAddress[0]);
-			Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses, array,0"), destinationAddress[0]);
-			Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses, array,1"), originAddress[1]);
-			Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses, array,1"), destinationAddress[1]);
-			*/
-			Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses,0"), originAddress[0]);
-			Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses,0"), destinationAddress[0]);
-			Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses,1"), originAddress[1]);
-			Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses,1"), destinationAddress[1]);
+			if(rest.getDefaultResponseFormat().equalsIgnoreCase("xml")){
+				String xpath = "/DistanceMatrixResponse";
+				int numberOfNodes = rest.getNumberOfNodesByXpath(xpath);
+				int numberOfChildNodes = rest.getNumberOfChildNodesByXpath(xpath);
+				System.out.println("Number of nodes for xpath["+xpath+"]: " +String.valueOf(numberOfNodes));
+				System.out.println("Number of childs nodes fro xpath ["+xpath+"]: "+String.valueOf(numberOfChildNodes));
+				
+				Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/origin_address[1]"), originAddress[0]);
+				Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/destination_address[1]"), destinationAddress[0]);
+				Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/origin_address[2]"), originAddress[1]);
+				Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/destination_address[2]"), destinationAddress[1]);
+			}else{
+				Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses,0"), originAddress[0]);
+				Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses,0"), destinationAddress[0]);
+				Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses,1"), originAddress[1]);
+				Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses,1"), destinationAddress[1]);
+			}
 		}
 	}
 }
