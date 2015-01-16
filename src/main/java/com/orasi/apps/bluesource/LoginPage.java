@@ -9,7 +9,6 @@ import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Constants;
-import com.orasi.utils.WebDriverSetup;
 
 public class LoginPage {
 	private WebDriver driver;
@@ -27,24 +26,22 @@ public class LoginPage {
 	// *********************
 	// ** Build page area **
 	// *********************
-	public LoginPage(WebDriver driver){
+	public LoginPage(WebDriver driver) {
 		this.driver = driver;
 		ElementFactory.initElements(driver, this);
 	}
-	public boolean pageLoaded(){
-		return new PageLoaded().isElementLoaded(this.getClass(), driver, btnLogin); 
-		//return new PageLoaded().isDomComplete(driver);  
+
+	public boolean pageLoaded() {
+		return new PageLoaded().isElementLoaded(this.getClass(), driver, btnLogin);
 	}
-	
+
 	public LoginPage initialize() {
-		return ElementFactory.initElements(driver,
-				this.getClass());       
-	 }
+		return ElementFactory.initElements(driver, this.getClass());
+	}
 
 	// *****************************************
 	// ***Page Interactions ***
 	// *****************************************
-
 	
 	public void login(String role) {
 		final String username;
@@ -57,7 +54,11 @@ public class LoginPage {
 		 
 		driver.switchTo().defaultContent();
 		
-		txtUsername.set(username);
+		if(System.getProperty("operatingSystem").equalsIgnoreCase("mac")){
+			txtUsername.set(username);	
+		}else{
+			txtUsername.safeSet(username);
+		}
 		//txtPassword.safeSet(password);
 		txtPassword.setSecure(password);
 		btnLogin.click();

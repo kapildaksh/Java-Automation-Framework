@@ -81,11 +81,11 @@ public class TestAddNewTitle {
 			String newTitle) {
 		String testName = new Object() {
 		}.getClass().getEnclosingMethod().getName();
-		TestReporter.setPrintToConsole(true);
+		//Uncomment the following line to have TestReporter outputs output to the console
+		//TestReporter.setPrintToConsole(true);
 		WebDriverSetup setup = new WebDriverSetup(application,
 				browserUnderTest, browserVersion, operatingSystem, runLocation,
 				environment);
-		setup.setDefaultTestTimeout(50);
 		WebDriver driver = setup.initialize();
 		
 		System.out.println(testName);

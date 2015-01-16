@@ -35,13 +35,13 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      */
     @Override
     public void clear() {
-	try{	    	
-	    getWrappedElement().clear();
-	    TestReporter.interfaceLog(" Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
-	}catch(RuntimeException rte){
-	    TestReporter.interfaceLog("Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo()  + " </b>]", true);
-	    throw rte;
-	}
+		try {
+			getWrappedElement().clear();
+			TestReporter.interfaceLog(" Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]");
+		} catch (RuntimeException rte) {
+			TestReporter.interfaceLog("Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]", true);
+			throw rte;
+		}
     }
 
     /**
@@ -52,18 +52,18 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      */
     @Override
     public void set(String text) {
-        if (!text.isEmpty()){   
-            try{        	
-        	getWrappedElement().clear();
-        	getWrappedElement().sendKeys(text);
-        	TestReporter.log(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
-            }catch(RuntimeException rte){
-                TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
-                throw rte;
-            }
-	}else{
-	    TestReporter.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
-        }
+		if (!text.isEmpty()) {
+			try {
+				getWrappedElement().clear();
+				getWrappedElement().sendKeys(text);
+				TestReporter.log(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+			} catch (RuntimeException rte) {
+				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
+				throw rte;
+			}
+		} else {
+			TestReporter.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+		}
     }
     
     /**

@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -42,7 +43,10 @@ public class WebDriverSetup {
 		this.operatingSystem = operatingSystem;
 		setOperatingSystem(operatingSystem);
 		this.location = runLocation;
+		setRunLocation(runLocation);
 		this.testEnvironment = environment;
+		
+		verifyExpectedAndActualOS();
 	}
 	
 	//Getters & Setters
@@ -54,12 +58,12 @@ public class WebDriverSetup {
 		return testEnvironment;
 	}
 
-	public  void setTestApplication(String application){
-		testApplication= application;
+	public static void setTestApplication(String application){
+		System.setProperty("testApplication",application);
 	}
 
-	public String getTestApplication(){
-		return testApplication;
+	public static String getTestApplication(){
+		return System.getProperty("testApplication");
 	}
 
 	public void setDriverWindow(String window){
@@ -114,6 +118,14 @@ public class WebDriverSetup {
 		return driver;
 	}
 	
+	public static String getRunLocation() {
+		return System.getProperty("runLocation");
+	}
+
+	public static void setRunLocation(String location) {
+		System.setProperty("runLocation", location);
+	}
+	
 	/**
 	 * Initializes the webdriver, sets up the run location, driver type,
 	 * launches the application.
@@ -141,7 +153,6 @@ public class WebDriverSetup {
 	 */
 	public void launchApplication(){
 		driver.get(appURLRepository.getString(testApplication.toUpperCase() + "_" + testEnvironment.toUpperCase()));
-		
 	}
 	
 	/**
@@ -153,7 +164,6 @@ public class WebDriverSetup {
 	 * @return 	Nothing 
 	 */
 	public void driverSetup(){
-
 		//Set the URL for selenium grid
 		try {
 			seleniumHubURL = new URL(Constants.SELENIUM_HUB_URL);
@@ -164,16 +174,16 @@ public class WebDriverSetup {
 		driver = null;
 
 		//If the location is local, grab the drivers for each browser type from within the project
-		if (location.equalsIgnoreCase("local")){
+		if (getRunLocation().equalsIgnoreCase("local")){
 			DesiredCapabilities caps = null;
 			File file = null;
-			switch (this.operatingSystem.toLowerCase().trim().replace(" ", "")) {
+			switch (getOperatingSystem().toLowerCase().trim().replace(" ", "")) {
 			case "windows":case "":
-				if (browser.equalsIgnoreCase("Firefox")){
+				if (getBrowserUnderTest().equalsIgnoreCase("Firefox") || getBrowserUnderTest().equalsIgnoreCase("FF")){
 			    	driver = new FirefoxDriver();	    	
 			    }
 				//Internet explorer
-			    else if(browser.equalsIgnoreCase("IE")){
+			    else if(getBrowserUnderTest().equalsIgnoreCase("IE") || getBrowserUnderTest().replace(" ", "").equalsIgnoreCase("internetexplorer")){
 			    	caps = DesiredCapabilities.internetExplorer();
 			    	caps.setCapability("ignoreZoomSetting", true);
 			    	caps.setCapability("enablePersistentHover", false);
@@ -182,17 +192,17 @@ public class WebDriverSetup {
 					driver = new InternetExplorerDriver(caps);
 			    }
 				//Chrome
-			    else if(browser.equalsIgnoreCase("Chrome")){
+			    else if(getBrowserUnderTest().equalsIgnoreCase("Chrome")){
 			    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "ChromeDriver.exe").getPath());
 					System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 					driver = new ChromeDriver();		    	
 			    }
 				//Headless - HTML unit driver
-			    else if(browser.equalsIgnoreCase("html")){	    	
+			    else if(getBrowserUnderTest().equalsIgnoreCase("html")){	    	
 					driver = new HtmlUnitDriver(true);		    	
 			    }
 				//Safari
-			    else if(browser.equalsIgnoreCase("safari")){
+			    else if(getBrowserUnderTest().equalsIgnoreCase("safari")){
 			    	driver = new SafariDriver();
 			    }
 			    else {
@@ -200,25 +210,25 @@ public class WebDriverSetup {
 			    }
 				break;
 			case "mac":case "macos":
-				if (browser.equalsIgnoreCase("Firefox")){
+				if (getBrowserUnderTest().equalsIgnoreCase("Firefox") || getBrowserUnderTest().equalsIgnoreCase("FF")){
 			    	driver = new FirefoxDriver();	    	
 			    }
 				//Internet explorer
-			    else if(browser.equalsIgnoreCase("IE")){
-			    	throw new RuntimeException("Currently there is no support of IE for Mac OS.");
+			    else if(getBrowserUnderTest().equalsIgnoreCase("IE") || getBrowserUnderTest().replace(" ", "").equalsIgnoreCase("internetexplorer")){
+			    	throw new RuntimeException("Currently there is no support for IE with Mac OS.");
 			    }
 				//Chrome
-			    else if(browser.equalsIgnoreCase("Chrome")){
+			    else if(getBrowserUnderTest().equalsIgnoreCase("Chrome")){
 			    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "chromedriver").getPath());
 					System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 					driver = new ChromeDriver();		    	
 			    }
 				//Headless - HTML unit driver
-			    else if(browser.equalsIgnoreCase("html")){	    	
+			    else if(getBrowserUnderTest().equalsIgnoreCase("html")){	    	
 					driver = new HtmlUnitDriver(true);		    	
 			    }
 				//Safari
-			    else if(browser.equalsIgnoreCase("safari")){
+			    else if(getBrowserUnderTest().equalsIgnoreCase("safari")){
 			    	driver = new SafariDriver();
 			    }
 			    else {
@@ -233,44 +243,40 @@ public class WebDriverSetup {
 			}			
 		
 		//Code for running on the selenium grid
-		}else if(location.equalsIgnoreCase("remote")){
+		}else if(getRunLocation().equalsIgnoreCase("remote")){
 			
 			DesiredCapabilities caps = null;
 			
 			//firefox
-			if (browser.equalsIgnoreCase("Firefox")){
+			if (getBrowserUnderTest().equalsIgnoreCase("Firefox")){
 				caps = DesiredCapabilities.firefox();
-				caps.setVersion(browserVersion);
-				    	
+				caps.setVersion(browserVersion);    	
 		    }
 			//internet explorer
-		    else if(browser.equalsIgnoreCase("IE")){
+		    else if(getBrowserUnderTest().equalsIgnoreCase("IE")){
 		    	caps = DesiredCapabilities.internetExplorer();
 		    	caps.setCapability("ignoreZoomSetting", true);
 		    	caps.setVersion(browserVersion);
-		    	
 		    }
 			//chrome
-		    else if(browser.equalsIgnoreCase("Chrome")){
+		    else if(getBrowserUnderTest().equalsIgnoreCase("Chrome")){
 		    	caps = DesiredCapabilities.chrome();
-		    	caps.setVersion(browserVersion);
-		    	   		    	
+		    	caps.setVersion(browserVersion);  		    	
 		    }
 			//headless - HTML unit driver
-		    else if(browser.equalsIgnoreCase("html")){	
-		    	caps = DesiredCapabilities.htmlUnitWithJs();
-		    			    	
+		    else if(getBrowserUnderTest().equalsIgnoreCase("html")){	
+		    	caps = DesiredCapabilities.htmlUnitWithJs();		    	
 		    }
 			//safari
-		    else if(browser.equals("safari")){
+		    else if(getBrowserUnderTest().equals("safari")){
 		    	caps = DesiredCapabilities.safari();
 		    }
 		    else {
 		    	throw new RuntimeException("Parameter not set for browser type");
 		    }
 			
-			caps.setPlatform(org.openqa.selenium.Platform.valueOf(operatingSystem));
-	    	driver = new RemoteWebDriver(seleniumHubURL, caps);	
+			caps.setPlatform(org.openqa.selenium.Platform.valueOf(getOperatingSystem()));
+	    	driver = new RemoteWebDriver(seleniumHubURL, caps);
 	    	
 		}else{
 			throw new RuntimeException("Parameter for run [Location] was not set to 'Local' or 'Remote'");
@@ -281,6 +287,33 @@ public class WebDriverSetup {
 		//driver.manage().deleteAllCookies();
 		driver.manage().window().maximize();
 		setDriverWindow(driver.getWindowHandle());
-
+	}
+	
+	/**
+	 * Verifies that the OS passed by the TestNG XML is the same as the actual OS 
+	 * @version	01/16/2015
+	 * @author 	Waightstill W Avery
+	 */
+	private void verifyExpectedAndActualOS(){
+		//Verify that the current OS is actually that which was indicated as expected by the TestNG XML
+		String platform = Platform.getCurrent().toString().toLowerCase();
+		switch (operatingSystem) {
+		case "mac": case "linux": case "unix": case "android":
+			TestReporter.assertTrue(platform.equalsIgnoreCase(operatingSystem), "The System OS ["+platform+"] did not match that which was passed in the TestNG XML ["+operatingSystem+"].");
+			break;
+		case "windows":
+			String[] knownPlatformValues = {"windows", "xp", "vista", "win8", "win8_1"};
+			Boolean osFound = false;
+			for(int winCount = 0; winCount < knownPlatformValues.length; winCount++){
+				osFound = platform.equalsIgnoreCase(knownPlatformValues[winCount]);
+				if(osFound){
+					break;
+				}
+			}
+			TestReporter.assertTrue(osFound, "The System OS ["+platform+"] did not match that which was passed in the TestNG XML ["+operatingSystem+"].");
+			break;
+		default:
+			throw new RuntimeException("The System OS ["+platform+"] did not match that which was passed in the TestNG XML ["+operatingSystem+"].");
+		}
 	}
 }
