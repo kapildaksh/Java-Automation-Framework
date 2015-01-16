@@ -32,8 +32,7 @@ public class DistanceMatrix {
 
 	@BeforeTest(groups = { "rest" })
 	@Parameters({ "environment", "runLocation", "operatingSystem" })
-	public void setup(String runLocation, String operatingSystem,
-			String environment) {
+	public void setup(String environment, String runLocation, String operatingSystem) {
 		this.application = "GoogleAPI";
 		this.runLocation = runLocation;
 		this.operatingSystem = operatingSystem;

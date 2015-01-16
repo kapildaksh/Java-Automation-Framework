@@ -54,7 +54,7 @@ public class LoginPage {
 		 
 		driver.switchTo().defaultContent();
 		
-		if(System.getProperty("operatingSystem").equalsIgnoreCase("mac")){
+		if(System.getProperty("browser").equalsIgnoreCase("safari")){
 			txtUsername.set(username);	
 		}else{
 			txtUsername.safeSet(username);
