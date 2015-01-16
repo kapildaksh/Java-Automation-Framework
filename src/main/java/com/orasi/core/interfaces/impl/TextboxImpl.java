@@ -103,7 +103,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     public void safeSet(String text) {
         if (!text.isEmpty()){
             try{
-        	getWrappedElement().click();        	
+        	getWrappedElement().click();     	
         	getWrappedElement().sendKeys(Keys.CONTROL + "a");
         	getWrappedElement().sendKeys(text);
         	getWrappedElement().sendKeys(Keys.TAB);

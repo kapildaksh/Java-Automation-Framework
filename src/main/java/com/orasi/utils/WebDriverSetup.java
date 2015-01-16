@@ -36,8 +36,11 @@ public class WebDriverSetup {
 		
 		this.testApplication = application;
 		this.browser = browserUnderTest;
+		setBrowserUnderTest(browserUnderTest);
 		this.browserVersion = browserVersion;
+		setBrowserVersion(browserVersion);
 		this.operatingSystem = operatingSystem;
+		setOperatingSystem(operatingSystem);
 		this.location = runLocation;
 		this.testEnvironment = environment;
 	}
@@ -67,30 +70,28 @@ public class WebDriverSetup {
 		return driverWindow;
 	}
 
-	public String getOperatingSystem() {
-		return operatingSystem;
+	public static String getOperatingSystem() {
+		return System.getProperty("operatingSystem");
 	}
 
-
-	public void setOperatingSystem(String operatingSystem) {
-		this.operatingSystem = operatingSystem;
+	public static void setOperatingSystem(String operatingSystem) {
+		System.setProperty("operatingSystem", operatingSystem);
 	}
 
-	public void setBrowserUnderTest(String browser) {
-		this.browser = browser;
-	}
-	
-	public String getBrowserUnderTest(){
-		return browser;
+	public static void setBrowserUnderTest(String browser) {
+		System.setProperty("browser", browser);
 	}
 	
-	public String getBrowserVersion() {
-		return browserVersion;
+	public static String getBrowserUnderTest(){
+		return System.getProperty("browser");
+	}
+	
+	public static String getBrowserVersion() {
+		return System.getProperty("browserVersion");
 	}
 
-
-	public void setBrowserVersion(String browserVersion) {
-		this.browserVersion = browserVersion;
+	public static void setBrowserVersion(String browserVersion) {
+		System.setProperty("browserVersion", browserVersion);
 	}
 	
 	public  ResourceBundle getEnvironmentURLRepository(){
@@ -123,7 +124,6 @@ public class WebDriverSetup {
 	 * @return 	the web driver
 	 */
 	public WebDriver initialize(){
-		
 		driverSetup();
 		launchApplication();
 		return this.driver;

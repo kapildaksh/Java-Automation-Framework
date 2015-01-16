@@ -9,6 +9,7 @@ import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Constants;
+import com.orasi.utils.WebDriverSetup;
 
 public class LoginPage {
 	private WebDriver driver;
@@ -30,7 +31,6 @@ public class LoginPage {
 		this.driver = driver;
 		ElementFactory.initElements(driver, this);
 	}
-	
 	public boolean pageLoaded(){
 		return new PageLoaded().isElementLoaded(this.getClass(), driver, btnLogin); 
 		//return new PageLoaded().isDomComplete(driver);  
@@ -47,21 +47,17 @@ public class LoginPage {
 
 	
 	public void login(String role) {
-	
-		
-		
 		final String username;
 		final String password;
 		final ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
-
+		
 		username = userCredentialRepo.getString("BLUESOURCE_" + role.toUpperCase());
 		//password = userCredentialRepo.getString("BLUESOURCE_PASSWORD");
 		password = userCredentialRepo.getString("BLUESOURCE_ENCODED_PASSWORD");
-		
 		 
 		driver.switchTo().defaultContent();
 		
-		txtUsername.safeSet(username);
+		txtUsername.set(username);
 		//txtPassword.safeSet(password);
 		txtPassword.setSecure(password);
 		btnLogin.click();

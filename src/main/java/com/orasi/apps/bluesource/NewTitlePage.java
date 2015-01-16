@@ -46,7 +46,7 @@ public class NewTitlePage {
 	
 	//method to create a new title
 	public void createNewTitle(String newTitle){
-		txtTitle.safeSet(newTitle);
+		txtTitle.set(newTitle);
 		btnCreateTitle.click();
 	}
 

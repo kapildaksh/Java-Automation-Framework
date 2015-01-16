@@ -54,7 +54,6 @@ public class TestAddNewTitle {
 		this.browserVersion = browserVersion;
 		this.operatingSystem = operatingSystem;
 		this.environment = environment;
-
 	}
 
 	@AfterMethod(groups = { "regression" })
@@ -66,12 +65,12 @@ public class TestAddNewTitle {
 		if (test.getStatus() == ITestResult.FAILURE) {
 			new Screenshot().takeScreenShot(test, driver);
 		}
-		//driver.quit();
+		driver.quit();
 	}
 
 	/**
 	 * @throws Exception
-	 * @Summary: Adds a housekeeper to the schedule
+	 * @Summary: Adds and deletes a title to the Orasi Blue Source website
 	 * @Precondition:NA
 	 * @Author: Jessica Marshall
 	 * @Version: 10/6/2014
@@ -86,7 +85,9 @@ public class TestAddNewTitle {
 		WebDriverSetup setup = new WebDriverSetup(application,
 				browserUnderTest, browserVersion, operatingSystem, runLocation,
 				environment);
+		setup.setDefaultTestTimeout(50);
 		WebDriver driver = setup.initialize();
+		
 		System.out.println(testName);
 		drivers.put(testName, driver);
 
