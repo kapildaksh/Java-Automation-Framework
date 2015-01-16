@@ -3,7 +3,7 @@
 <suite name="DistanceMatrix" parallel="instances" thread-count="5">
 	<parameter name="environment" value="staging" />
 	<parameter name="runLocation" value="local" />
-	<parameter name="operatingSystem" value="" />
+	<parameter name="operatingSystem" value="windows" />
 	<test name="DistanceMatrix">
 		<classes>
 			<class name="com.orasi.rest.googleApi.distanceMatrix.DistanceMatrix" />

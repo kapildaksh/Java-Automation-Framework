@@ -32,8 +32,7 @@ public class DistanceMatrix {
 
 	@BeforeTest(groups = { "rest" })
 	@Parameters({ "environment", "runLocation", "operatingSystem" })
-	public void setup(String runLocation, String operatingSystem,
-			String environment) {
+	public void setup(String environment, String runLocation, String operatingSystem) {
 		this.application = "GoogleAPI";
 		this.runLocation = runLocation;
 		this.operatingSystem = operatingSystem;
@@ -62,7 +61,6 @@ public class DistanceMatrix {
 			rest.sendGetRequest(
 					"https://maps.googleapis.com/maps/api/distancematrix/"+rest.getDefaultResponseFormat()+"?origins="+origins+"&destinations="+destinations+"&mode="+mode+"&language="+language+"&key="+apiKey,
 					rest.getDefaultResponseFormat());
-
 			if(rest.getDefaultResponseFormat().equalsIgnoreCase("xml")){
 				String xpath = "/DistanceMatrixResponse";
 				int numberOfNodes = rest.getNumberOfNodesByXpath(xpath);
