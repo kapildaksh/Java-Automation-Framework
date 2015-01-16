@@ -185,16 +185,28 @@ public class Patch {
         return node;
     }
     
-    public <T> T apply(T o, Class c) {
+    public <T> T apply(T o) {
         try {
             JsonNode n = this.map.valueToTree(o);
             this.apply(n);
-            return (T) map.treeToValue(n, c);
+            return (T) map.treeToValue(n, o.getClass());
         } catch (JsonProcessingException ex) {
             Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
         }
         return o;
     }
+    
+    public static <T> T patch(String json, Object o) {
+        ObjectMapper m = new ObjectMapper();
+        m.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
+        try {
+            Patch p = new Patch((List<Patch.PatchEntry>)m.readValue(json, new TypeReference<List<Patch.PatchEntry>>() { }));
+            return (T) p.apply(o);
+        } catch (IOException ex) {
+            Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return (T) o;
+    }    
     
     @Override
     public String toString() {
