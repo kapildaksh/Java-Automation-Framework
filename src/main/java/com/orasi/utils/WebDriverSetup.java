@@ -219,8 +219,10 @@ public class WebDriverSetup {
 			    }
 				//Chrome
 			    else if(getBrowserUnderTest().equalsIgnoreCase("Chrome")){
-			    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "chromedriver").getPath());
-					System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
+//			    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "chromedriver").getPath());
+			    	file = new File(this.getClass().getResource("/Users/waightstillavery/" + "chromedriver").getPath());
+			    	//     /Applications/Google Chrome.app/Contents/MacOS
+			    	System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 					driver = new ChromeDriver();		    	
 			    }
 				//Headless - HTML unit driver
