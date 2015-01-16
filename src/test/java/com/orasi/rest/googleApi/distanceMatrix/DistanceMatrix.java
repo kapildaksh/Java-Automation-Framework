@@ -54,7 +54,7 @@ public class DistanceMatrix {
 						String mode, String language, String apiKey,
 						String validateOriginAddress, String validateDestinationAddress,
 						String format, String os) throws XPathExpressionException, JSONException {
-		if(operatingSystem.toLowerCase().equalsIgnoreCase(os)){
+		if(os.toLowerCase().equalsIgnoreCase(operatingSystem)){
 			String[] originAddress = validateOriginAddress.split(";");
 			String[] destinationAddress = validateDestinationAddress.split(";");
 			rest = new RestService();
@@ -79,7 +79,7 @@ public class DistanceMatrix {
 				Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses,0"), destinationAddress[0]);
 				Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses,1"), originAddress[1]);
 				Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses,1"), destinationAddress[1]);
-			}	
+			}
 		}
 	}
 }
