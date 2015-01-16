@@ -61,6 +61,7 @@ public class DistanceMatrix {
 			rest.sendGetRequest(
 					"https://maps.googleapis.com/maps/api/distancematrix/"+rest.getDefaultResponseFormat()+"?origins="+origins+"&destinations="+destinations+"&mode="+mode+"&language="+language+"&key="+apiKey,
 					rest.getDefaultResponseFormat());
+
 			if(rest.getDefaultResponseFormat().equalsIgnoreCase("xml")){
 				String xpath = "/DistanceMatrixResponse";
 				int numberOfNodes = rest.getNumberOfNodesByXpath(xpath);
