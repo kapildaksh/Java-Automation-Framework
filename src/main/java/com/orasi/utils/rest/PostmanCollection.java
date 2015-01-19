@@ -84,13 +84,13 @@ public class PostmanCollection {
                     rawModeData });
         }
                
-        public Response send() throws IOException {
+        public Response send(String... contents) throws IOException {
             OkHttpClient client = new OkHttpClient();
             
             Headers.Builder hdrs = new Headers.Builder();
             for(String hdr : headers.split(Pattern.quote("\n"))) {
-                String[] h = hdr.split(Pattern.quote(":"), 2);
-                hdrs = hdrs.add(h[0], h[1]);
+                //String[] h = hdr.split(Pattern.quote(":"), 2);
+                //hdrs = hdrs.add(h[0], h[1]);
             }
             
             RequestBody body = null;
@@ -104,7 +104,7 @@ public class PostmanCollection {
                     text.append("&");
                     parts++;
                 }
-                text.deleteCharAt(text.length());
+                text.deleteCharAt(text.length() - 1);
                 if(method.equals(GET)) {
                     if(url.endsWith("?")) {
                         url = url + "&" + text.toString();
@@ -123,12 +123,23 @@ public class PostmanCollection {
                 body = mb.build();
             } else if (rawModeData != null) {
                 body = RequestBody.create(null, rawModeData);
+            } else if (dataMode.equals("binary") && contents.length == 1 && contents[0] != null) {
+                body = RequestBody.create(null, contents[0]);
             }
-                                    
-            Request request = new Request.Builder()
-                    .url(url)
-                    .headers(hdrs.build())
-                    .method(method.toString(), body).build();
+
+            Request request;
+            
+            if(method.equals(GET)) {
+                request = new Request.Builder()
+                        .url(url)
+                        .headers(hdrs.build())
+                        .get().build();
+            } else {
+                request = new Request.Builder()
+                        .url(url)
+                        .headers(hdrs.build())
+                        .method(method.toString(), body).build();
+            }
             
             Response response = client.newCall(request).execute();
             

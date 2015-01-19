@@ -1,0 +1,168 @@
+{
+	"id": "73b12b1f-1001-6367-3f7d-d5145a472150",
+	"name": "PostmanTests",
+	"description": "",
+	"order": [
+		"50a152bf-69da-a8ac-baaf-745622a37533",
+		"419ef0b0-14fb-d337-4eb0-db9455048fbd",
+		"e3177bd1-2082-81c8-add8-eb072f1fb547",
+		"6bb522f5-4fdd-977c-e040-e27c73821168",
+		"ef9809f9-1927-5b8f-6132-cb79c2f2346d"
+	],
+	"folders": [],
+	"timestamp": 1421699829464,
+	"synced": false,
+	"remoteLink": "",
+	"requests": [
+		{
+			"id": "419ef0b0-14fb-d337-4eb0-db9455048fbd",
+			"headers": "",
+			"url": "http://localhost:8045/more/testing",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [
+				{
+					"key": "q",
+					"value": "v1",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "v",
+					"value": "v2",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "a",
+					"value": "v3",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "Test Form Encoding",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1421701169484,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"synced": false
+		},
+		{
+			"id": "50a152bf-69da-a8ac-baaf-745622a37533",
+			"headers": "",
+			"url": "http://localhost:8045/more/testing?q=v1&v=v2&a=v3",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"data": [
+				{
+					"key": "var1",
+					"value": "A",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "Test Parameters",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1421700626027,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"synced": false
+		},
+		{
+			"id": "6bb522f5-4fdd-977c-e040-e27c73821168",
+			"headers": "",
+			"url": "http://localhost:8045/more/testing",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Test Raw Data",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1421701476488,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"synced": false,
+			"rawModeData": "This is only a raw document, no formatting or special data type."
+		},
+		{
+			"id": "e3177bd1-2082-81c8-add8-eb072f1fb547",
+			"headers": "",
+			"url": "http://localhost:8045/more/testing",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [
+				{
+					"key": "q",
+					"value": "v1",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "v",
+					"value": "v2",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "a",
+					"value": "v3",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "Test Url Encoding",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1421701248741,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"synced": false
+		},
+		{
+			"id": "ef9809f9-1927-5b8f-6132-cb79c2f2346d",
+			"headers": "",
+			"url": "http://localhost:8045/more/testing",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"dataMode": "binary",
+			"name": "Test Binary Data",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1421701779296,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"synced": false
+		}
+	]
+}

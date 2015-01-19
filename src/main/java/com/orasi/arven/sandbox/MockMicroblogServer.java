@@ -96,9 +96,8 @@ public class MockMicroblogServer implements Runnable {
         srv.stop();
     }
     
-    public void run() {
-        SparkInstance srv = new SparkInstance();
-        
+    @Override
+    public void run() {       
         srv.get("/tags", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
