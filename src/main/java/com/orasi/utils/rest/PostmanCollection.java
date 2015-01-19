@@ -6,14 +6,17 @@
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import static com.orasi.utils.rest.PostmanCollection.RequestType.GET;
+import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Headers;
+import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -34,6 +37,13 @@ public class PostmanCollection {
         GET, POST, PUT, PATCH, DELETE, COPY, HEAD, OPTIONS,
         LINK, UNLINK, PURGE, LOCK, UNLOCK, PROPFIND
     }
+    
+    public static class PostmanRequestData {
+        public String key;
+        public String value;
+        public String type;
+        public boolean enabled;
+    }
         
     public static class PostmanRequest {        
         public static final MessageFormat fmt = new MessageFormat(
@@ -50,7 +60,7 @@ public class PostmanCollection {
         public Map pathVariables;
         public String preRequestScript;
         public RequestType method;
-        public List<String> data;
+        public List<PostmanRequestData> data;
         public String dataMode;
         public String name;
         public String description;
@@ -73,27 +83,52 @@ public class PostmanCollection {
                     currentHelper, helperAttributes, collectionId, synced, 
                     rawModeData });
         }
-        
+               
         public Response send() throws IOException {
+            OkHttpClient client = new OkHttpClient();
+            
             Headers.Builder hdrs = new Headers.Builder();
             for(String hdr : headers.split(Pattern.quote("\n"))) {
                 String[] h = hdr.split(Pattern.quote(":"), 2);
                 hdrs = hdrs.add(h[0], h[1]);
             }
             
-            RequestBody body;
-            if(rawModeData == null) {
-                body = null;
-            } else {
+            RequestBody body = null;
+            StringBuilder text = new StringBuilder("");
+            int parts = 0;
+            if(data != null && dataMode.equals("urlencoded") && data.size() > 0) {
+                for(PostmanRequestData dt : data) {
+                    text.append(URLEncoder.encode(dt.key, "UTF-8"));
+                    text.append("=");
+                    text.append(URLEncoder.encode(dt.value, "UTF-8"));
+                    text.append("&");
+                    parts++;
+                }
+                text.deleteCharAt(text.length());
+                if(method.equals(GET)) {
+                    if(url.endsWith("?")) {
+                        url = url + "&" + text.toString();
+                    } else {
+                        url = url + "?" + text.toString();
+                    }
+                } else {
+                    body = RequestBody.create(null, text.toString());
+                }
+            } else if (data != null && dataMode.equals("params") && data.size() > 0) {
+                MultipartBuilder mb = new MultipartBuilder();
+                mb.type(MultipartBuilder.FORM);
+                for(PostmanRequestData dt : data) {
+                    mb.addFormDataPart(dt.key, dt.value);
+                }
+                body = mb.build();
+            } else if (rawModeData != null) {
                 body = RequestBody.create(null, rawModeData);
             }
-            
+                                    
             Request request = new Request.Builder()
                     .url(url)
                     .headers(hdrs.build())
                     .method(method.toString(), body).build();
-            
-            OkHttpClient client = new OkHttpClient();
             
             Response response = client.newCall(request).execute();
             
