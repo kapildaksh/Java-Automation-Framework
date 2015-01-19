@@ -30,7 +30,7 @@ import sparkfive.ResponseTransformer;
 import sparkfive.Route;
 import sparkfive.SparkInstance;
 
-public class MockMicroblogServer {
+public class MockMicroblogServer implements Runnable {
 
     public static interface ModelMutator {
         public Object model();
@@ -86,7 +86,17 @@ public class MockMicroblogServer {
     
     private static final ObjectMapper map = new ObjectMapper();
     
-    public static void main( final String[] args ) throws Exception {
+    private final SparkInstance srv;
+    
+    public MockMicroblogServer() {
+        this.srv = new SparkInstance();
+    }
+    
+    public void stop() {
+        srv.stop();
+    }
+    
+    public void run() {
         SparkInstance srv = new SparkInstance();
         
         srv.get("/tags", new Route() {
