@@ -1,31 +1,34 @@
 package com.orasi.arven.sandbox;
 
-import static sparkfive.Spark.*;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
 import com.google.common.collect.Lists;
+
 import com.orasi.arven.sandbox.Message.Type;
 import com.orasi.utils.rest.Patch;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.commons.lang3.tuple.Pair;
-import sparkfive.ExceptionHandler;
 
+import sparkfive.ExceptionHandler;
 import sparkfive.Request;
 import sparkfive.Response;
 import sparkfive.ResponseTransformer;
 import sparkfive.Route;
+import sparkfive.SparkInstance;
 
 public class MockMicroblogServer {
 
@@ -83,8 +86,10 @@ public class MockMicroblogServer {
     
     private static final ObjectMapper map = new ObjectMapper();
     
-    public static void main( final String[] args ) throws Exception {           
-        get("/tags", new Route() {
+    public static void main( final String[] args ) throws Exception {
+        SparkInstance srv = new SparkInstance();
+        
+        srv.get("/tags", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
@@ -99,7 +104,7 @@ public class MockMicroblogServer {
             }                        
         }, new JsonTransformer());
         
-        get("/tags/:tag", new Route() {
+        srv.get("/tags/:tag", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
@@ -112,7 +117,7 @@ public class MockMicroblogServer {
             }            
         }, new JsonTransformer());
         
-        post("/users", new Route() {
+        srv.post("/users", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
@@ -122,7 +127,7 @@ public class MockMicroblogServer {
             }
         }, new JsonTransformer());
                 
-        get("/users/:name", new Route() {
+        srv.get("/users/:name", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
@@ -130,7 +135,7 @@ public class MockMicroblogServer {
             }
         }, new JsonTransformer());
         
-        patch("/users/:name", new Route() {
+        srv.patch("/users/:name", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");                
@@ -140,7 +145,7 @@ public class MockMicroblogServer {
             }
         }, new JsonTransformer());
         
-        delete("/users/:name", new Route() {
+        srv.delete("/users/:name", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
@@ -148,7 +153,7 @@ public class MockMicroblogServer {
             }
         }, new JsonTransformer());
         
-        put("/users/:name/friends/:friend", new Route() {
+        srv.put("/users/:name/friends/:friend", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
@@ -167,7 +172,7 @@ public class MockMicroblogServer {
             }
         }, new JsonTransformer());
         
-        delete("/users/:name/friends/:friend", new Route() {
+        srv.delete("/users/:name/friends/:friend", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
@@ -185,7 +190,7 @@ public class MockMicroblogServer {
             }
         }, new JsonTransformer());        
         
-        post("/users/:name/posts", new Route() {
+        srv.post("/users/:name/posts", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
@@ -209,7 +214,7 @@ public class MockMicroblogServer {
             }
         }, new JsonTransformer());
         
-        get("/users/:name/posts", new Route() {
+        srv.get("/users/:name/posts", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
@@ -225,7 +230,7 @@ public class MockMicroblogServer {
             }
         }, new JsonTransformer());
         
-        get("/users/:name/posts/:number", new Route() {
+        srv.get("/users/:name/posts/:number", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
@@ -242,7 +247,7 @@ public class MockMicroblogServer {
             }
         }, new JsonTransformer());
 
-        exception(NumberFormatException.class, new ExceptionHandler() {
+        srv.exception(NumberFormatException.class, new ExceptionHandler() {
             @Override
             public void handle(Exception exception, Request request, Response response) {
                 response.status(500);
@@ -251,7 +256,7 @@ public class MockMicroblogServer {
             }
         });        
         
-        exception(Exception.class, new ExceptionHandler() {
+        srv.exception(Exception.class, new ExceptionHandler() {
             @Override
             public void handle(Exception exception, Request request, Response response) {
                 response.status(500);
