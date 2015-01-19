@@ -222,7 +222,12 @@ public class WebDriverSetup {
 			    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "chromedriver").getPath());
 			    	//     /Applications/Google Chrome.app/Contents/MacOS
 			    	System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
-					driver = new ChromeDriver();		    	
+					try{
+						driver = new ChromeDriver();		    	
+					}catch(IllegalStateException ise){
+						ise.printStackTrace();
+						throw new IllegalStateException("This has been seen to occur when the chromedriver file does not have executable permissions. In a terminal, navigate to the directory to which Maven pulls the drivers at runtime (e.g \"/target/classes/drivers/\") and execute the following command: chmod +rx chromedriver");
+					}
 			    }
 				//Headless - HTML unit driver
 			    else if(getBrowserUnderTest().equalsIgnoreCase("html")){	    	
