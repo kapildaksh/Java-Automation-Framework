@@ -178,7 +178,7 @@ public class WebDriverSetup {
 			DesiredCapabilities caps = null;
 			File file = null;
 			switch (getOperatingSystem().toLowerCase().trim().replace(" ", "")) {
-			case "windows":case "":
+			case "windows": case "": case "vista":
 				if (getBrowserUnderTest().equalsIgnoreCase("Firefox") || getBrowserUnderTest().equalsIgnoreCase("FF")){
 			    	driver = new FirefoxDriver();	    	
 			    }
@@ -299,10 +299,15 @@ public class WebDriverSetup {
 		//Verify that the current OS is actually that which was indicated as expected by the TestNG XML
 		String platform = Platform.getCurrent().toString().toLowerCase();
 		switch (operatingSystem) {
+		/*
+		 * Mac OS, Linux, Unix and Android are OS enumerations that have only one value. 
+		 * Windows is treated as the default case, but a validation is made that the 
+		 * current Windows OS is one that can be handled by the framework.
+		 */
 		case "mac": case "linux": case "unix": case "android":
-			TestReporter.assertTrue(platform.equalsIgnoreCase(operatingSystem), "The System OS ["+platform+"] did not match that which was passed in the TestNG XML ["+operatingSystem+"].");
-			break;
-		case "windows":
+			TestReporter.assertTrue(platform.trim().replace(" ", "").equalsIgnoreCase(operatingSystem.toString().toLowerCase().trim().replace(" ", "")), "The System OS ["+platform.trim().replace(" ", "")+"] did not match that which was passed in the TestNG XML ["+operatingSystem.toString().toLowerCase().trim().replace(" ", "")+"].");
+			break;			
+		default:
 			String[] knownPlatformValues = {"windows", "xp", "vista", "win8", "win8_1"};
 			Boolean osFound = false;
 			for(int winCount = 0; winCount < knownPlatformValues.length; winCount++){
@@ -313,8 +318,6 @@ public class WebDriverSetup {
 			}
 			TestReporter.assertTrue(osFound, "The System OS ["+platform+"] did not match that which was passed in the TestNG XML ["+operatingSystem+"].");
 			break;
-		default:
-			throw new RuntimeException("The System OS ["+platform+"] did not match that which was passed in the TestNG XML ["+operatingSystem+"].");
 		}
 	}
 }

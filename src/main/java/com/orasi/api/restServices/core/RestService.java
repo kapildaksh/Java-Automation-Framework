@@ -1,14 +1,19 @@
 package com.orasi.api.restServices.core;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -31,10 +36,6 @@ import org.json.JSONObject;
 import org.testng.Assert;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-
-
-
-
 
 import com.orasi.utils.XMLTools;
 
@@ -93,8 +94,9 @@ public class RestService {
 	 *            - endpoint for the REST service
 	 * @return Returns the response to the "Get" request as a string
 	 * @throws JSONException
+	 * @throws TransformerException 
 	 */
-	public String sendGetRequest(String url) throws IOException, JSONException {
+	public String sendGetRequest(String url) throws IOException, JSONException, TransformerException {
 		return sendGetRequest(url, getDefaultResponseFormat());
 	}
 
@@ -108,9 +110,11 @@ public class RestService {
 	 *            - endpoint for the REST service
 	 * @return Returns the response to the "Get" request as a string
 	 * @throws JSONException
+	 * @throws UnsupportedEncodingException 
+	 * @throws TransformerException 
 	 */
 	public String sendGetRequest(String url, String responseFormat)
-			throws JSONException {
+			throws JSONException, UnsupportedEncodingException, TransformerException {
 		System.out.println("REST endpoint: " + url);
 
 		StringBuilder rawResponse = new StringBuilder();
@@ -120,8 +124,7 @@ public class RestService {
 
 		// Build the connection string
 		HttpURLConnection conn = httpConnectionBuilder(url, "GET",
-				responseFormat);
-		
+				responseFormat);	
 		
 		InputStream stream = null;
 		String buffer = "";
@@ -137,8 +140,8 @@ public class RestService {
 			}
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe.getMessage());
-		}
-
+		}		
+		
 		if (responseFormat.equalsIgnoreCase("xml")) {
 			setXmlResponseDocument(StringToDocumentToString
 					.convertStringToDocument(rawResponse.toString()));
@@ -146,6 +149,7 @@ public class RestService {
 			System.out.println();
 			System.out.println("Raw XML Response");
 			System.out.println(getXmlResponse());
+			
 		} else if (responseFormat.equalsIgnoreCase("json")) {
 			System.out.println();
 			System.out.println("Raw JSON Response");
@@ -227,8 +231,8 @@ public class RestService {
 	 *            Document: XML file of the Response to be stored in memory
 	 */
 	protected void setXmlResponseDocument(Document doc) {
-		xmlResponseDocument = doc;
-		xmlResponseDocument.normalize();
+		this.xmlResponseDocument = doc;
+		this.xmlResponseDocument.normalize();
 	}
 
 	/**
@@ -254,7 +258,7 @@ public class RestService {
 	 * @version Created: 08/28/2014
 	 * @return Returns the stored Response XML as a Document object
 	 */
-	protected static Document getXmlResponseDocument() {
+	protected Document getXmlResponseDocument() {
 		return xmlResponseDocument;
 	}
 

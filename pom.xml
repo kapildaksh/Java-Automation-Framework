@@ -233,7 +233,8 @@
 		</dependency>
 	</dependencies>
 	<properties>
-		<testNGSourceDirectory>src/test/resources/sandbox</testNGSourceDirectory>
+		<!-- <testNGSourceDirectory>src/test/resources/sandbox</testNGSourceDirectory> -->
+		<testNGSourceDirectory>src/test/resources/sandbox/mavenBuild</testNGSourceDirectory>
 	</properties>
 	<build>
 		<pluginManagement>
