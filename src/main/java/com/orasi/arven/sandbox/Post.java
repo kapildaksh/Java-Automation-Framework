@@ -5,7 +5,11 @@
  */
 package com.orasi.arven.sandbox;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -15,4 +19,15 @@ public class Post {
     public Integer id;
     public Date created;
     public String text;
+       
+    public List<String> getTags() throws Exception {
+        List<String> tags = new ArrayList<String>();
+        String[] temp = StringUtils.substringsBetween(text.replaceAll("[" + Pattern.quote("!\"$%&'()*+,-./:;<=>?@[\\]^_`{|}~") + "]", " ").concat(" "), "#", " ");
+        if (temp != null) {
+            for(String tag : temp) {
+                tags.add(StringUtils.lowerCase(tag));
+            }
+        }
+        return tags;
+    }
 }

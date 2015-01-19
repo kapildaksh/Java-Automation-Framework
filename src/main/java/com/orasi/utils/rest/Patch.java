@@ -85,7 +85,7 @@ public class Patch {
             }
         }
         
-        public JsonNode apply(JsonNode node) {
+        public JsonNode apply(JsonNode node) throws Exception {
             String newpath = path.substring(0, path.lastIndexOf("/"));
             String element = path.substring(path.lastIndexOf("/"));
             String from_newpath = "";
@@ -179,8 +179,12 @@ public class Patch {
     
     public JsonNode apply(JsonNode node) {
         for(PatchEntry pe : entries) {
-            if(pe.apply(node) == null)
-                return null;
+            try {
+                if(pe.apply(node) == null)
+                    return null;
+            } catch (Exception ex) {
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return node;
     }

@@ -1,8 +1,11 @@
 package com.orasi.arven.sandbox;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import static sparkfive.Spark.*;
+
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.Lists;
 import com.orasi.arven.sandbox.Message.Type;
 import com.orasi.utils.rest.Patch;
 import java.io.PrintWriter;
@@ -10,10 +13,13 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import static sparkfive.Spark.*;
 
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import org.apache.commons.collections.MultiMap;
+import org.apache.commons.collections.map.MultiValueMap;
+import org.apache.commons.lang3.tuple.Pair;
 import sparkfive.ExceptionHandler;
 
 import sparkfive.Request;
@@ -23,31 +29,88 @@ import sparkfive.Route;
 
 public class MockMicroblogServer {
 
+    public static interface ModelMutator {
+        public Object model();
+    }
+    
+    public static class ArrayOffset implements ModelMutator {
+        private final String offS;
+        private final int size;
+        private final List objects;
+        
+        public ArrayOffset(String offS, int size, List objects) {
+            this.offS = offS;
+            this.size = size;
+            this.objects = objects;
+        }
+        
+        @Override
+        public Object model() {
+            int offset = 0;
+            if(offS != null) {
+                offset = Integer.valueOf(offS);
+            }
+            int end = objects.size() < (offset + 20) ? objects.size() : offset + 20;
+            return offset <= end ? objects.subList(offset, end) : Collections.EMPTY_LIST;
+        }
+    }
+    
     public static class JsonTransformer implements ResponseTransformer {
 
         private final ObjectMapper om = new ObjectMapper();
 
         public JsonTransformer() {
+            om.setSerializationInclusion(Include.NON_EMPTY);
             om.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         }
         
         @Override
         public String render(Object model) throws Exception {
-            try {
-                if(model != null) {
-                    return om.writeValueAsString(model);
-                }
-            } catch(Exception e) {}
+            if(model instanceof ModelMutator) {
+                model = ((ModelMutator)model).model();
+            }
+            
+            if(model != null) {
+                return om.writeValueAsString(model);
+            }
             return om.writeValueAsString(new Message(Type.ERROR, "Resource not found."));
         }
 
     }
     
-    private static final Map<String, User> users = new HashMap<String, User>();
+    private static final Map<String, User> users = MapFactory.getUsers();
+    private static final MultiMap tagdir = new MultiValueMap();
     
     private static final ObjectMapper map = new ObjectMapper();
     
-    public static void main( final String[] args ) throws Exception {
+    public static void main( final String[] args ) throws Exception {           
+        get("/tags", new Route() {
+            @Override
+            public Object handle(Request req, Response res) throws Exception {
+                res.type("application/json; charset=UTF-8");
+                List<Pair<Integer, String>> map = new ArrayList<Pair<Integer, String>>();
+
+                for(Object s : tagdir.keySet()) {
+                    List<String> vals = (List<String>) tagdir.get(s);
+                    map.add(Pair.of(vals.size(), (String) s));
+                }
+                
+                return map;
+            }                        
+        }, new JsonTransformer());
+        
+        get("/tags/:tag", new Route() {
+            @Override
+            public Object handle(Request req, Response res) throws Exception {
+                res.type("application/json; charset=UTF-8");
+                if(tagdir.containsKey(req.params(":tag"))) {
+                    ArrayList c = (ArrayList) tagdir.get(req.params(":tag"));
+                    return new ArrayOffset(req.queryParams("offset"), 20, Lists.reverse(c));
+                } else {
+                    return Collections.EMPTY_LIST;
+                }
+            }            
+        }, new JsonTransformer());
         
         post("/users", new Route() {
             @Override
@@ -85,6 +148,43 @@ public class MockMicroblogServer {
             }
         }, new JsonTransformer());
         
+        put("/users/:name/friends/:friend", new Route() {
+            @Override
+            public Object handle(Request req, Response res) throws Exception {
+                res.type("application/json; charset=UTF-8");
+                boolean mutual = false;
+                String fn = req.params(":friend");
+                String mn = req.params(":name");
+                if(users.containsKey(mn) && users.containsKey(fn)) {
+                    User u = users.get(mn);
+                    User u2 = users.get(fn);
+                    if(u.friends == null)
+                        u.friends = new HashSet();
+                    u.friends.add(u2);
+                    return new Message(Type.INFORMATIONAL, "Added friend to set.");
+                }
+                return new Message(Type.ERROR, "Could not find user or friend.");
+            }
+        }, new JsonTransformer());
+        
+        delete("/users/:name/friends/:friend", new Route() {
+            @Override
+            public Object handle(Request req, Response res) throws Exception {
+                res.type("application/json; charset=UTF-8");
+                String fn = req.params(":friend");
+                String mn = req.params(":name");
+                if(users.containsKey(mn) && users.containsKey(fn)) {
+                    User u = users.get(mn);
+                    User u2 = users.get(fn);
+                    if(u.friends.contains(u2)) {
+                        u.friends.remove(u2);
+                        return new Message(Type.INFORMATIONAL, "Friend removed.");
+                    }
+                }
+                return new Message(Type.ERROR, "Could not find user or friend.");
+            }
+        }, new JsonTransformer());        
+        
         post("/users/:name/posts", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
@@ -92,11 +192,16 @@ public class MockMicroblogServer {
                 Post p = map.readValue(req.body(), Post.class);
                 p.created = new Date();
                 if(users.containsKey(req.params(":name"))) {
-                    if(users.get(req.params(":name")).posts == null) {
-                        users.get(req.params(":name")).posts = new ArrayList<Post>();
+                    User u = users.get(req.params(":name"));
+                    if(u.posts == null) {
+                        u.posts = new ArrayList<Post>();
                     }
-                    p.id = users.get(req.params(":name")).posts.size();
-                    users.get(req.params(":name")).posts.add(p);
+                    p.id = u.posts.size();
+                    u.posts.add(p);
+                    for(String tag : p.getTags()) {
+                        tagdir.put(tag, p);
+                    }
+                    
                     return new Message(Type.INFORMATIONAL, "Message posted.");
                 }
                 res.status(500);
@@ -113,12 +218,7 @@ public class MockMicroblogServer {
                     if(u.posts == null) {
                         u.posts = new ArrayList<Post>();
                     }
-                    int offset = 0;
-                    if(req.queryParams("offset") != null) {
-                        offset = Integer.valueOf(req.queryParams("offset"));
-                    }
-                    int end = u.posts.size() < (offset + 20) ? u.posts.size() : offset + 20;
-                    return offset <= end ? u.posts.subList(offset, end) : Collections.EMPTY_LIST;
+                    return new ArrayOffset(req.queryParams("offset"), 20, Lists.reverse(u.posts));
                 }
                 res.status(404);
                 return new Message(Type.ERROR, "Could not find user.");
@@ -141,14 +241,15 @@ public class MockMicroblogServer {
                 return new Message(Type.ERROR, "Could not find user.");
             }
         }, new JsonTransformer());
-        
-        delete("/users/:name/posts/:number", new Route() {
+
+        exception(NumberFormatException.class, new ExceptionHandler() {
             @Override
-            public Object handle(Request req, Response res) throws Exception {
-                res.type("application/json; charset=UTF-8");
-                return users.remove(req.params(":name")) == null ? new Message(Type.ERROR, "Could not find user.") : new Message(Type.INFORMATIONAL, "User removed.");
+            public void handle(Exception exception, Request request, Response response) {
+                response.status(500);
+                response.type("text/plain; charset=UTF-8");
+                response.body("The value you entered is not a valid number.");
             }
-        }, new JsonTransformer());
+        });        
         
         exception(Exception.class, new ExceptionHandler() {
             @Override
