@@ -15,6 +15,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpPatch;
@@ -51,6 +52,26 @@ public class RestService_V2 {
 		
 	}
 	
+	public Header[] sendHeadRequest(String URL) throws ClientProtocolException, IOException{
+		
+		HttpClient httpclient = HttpClients.createDefault();
+		HttpHead httpHead=new HttpHead(URL);
+		
+		HttpResponse httpResponse=httpclient.execute(httpHead);
+		
+		System.out.println("Response Headers: ");
+		Header[] headers = httpResponse.getAllHeaders();
+		for (Header header: headers ){	
+			System.out.println(header.getName() + " : " + header.getValue());
+		}
+		System.out.println("");
+		
+		setStatusCode(httpResponse);		
+		setResponseFormat(httpResponse);
+		
+		return headers;
+	}
+	
 	/**
 	 * Sends a GET request
 	 * 
@@ -62,6 +83,14 @@ public class RestService_V2 {
 	public String sendGetRequest(String URL) throws ClientProtocolException, IOException{
 		HttpUriRequest request = new HttpGet(URL);
 		HttpResponse httpResponse = HttpClientBuilder.create().build().execute( request );
+		
+		Header[] headers = httpResponse.getAllHeaders();
+		
+		System.out.println("Response Headers: ");
+		for (Header header: headers ){	
+			System.out.println(header.getName() + " : " + header.getValue());
+		}
+		System.out.println("");
 		
 		setStatusCode(httpResponse);		
 		setResponseFormat(httpResponse);
@@ -197,6 +226,7 @@ public class RestService_V2 {
 		for (Header header: headers ){	
 			System.out.println(header.getName() + " : " + header.getValue());
 		}
+		System.out.println("");
 		
 		setStatusCode(httpResponse);		
 		setResponseFormat(httpResponse);

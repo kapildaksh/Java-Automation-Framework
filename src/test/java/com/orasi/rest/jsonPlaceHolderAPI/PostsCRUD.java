@@ -1,4 +1,4 @@
-package com.orasi.rest.jsonPlaceHolder;
+package com.orasi.rest.jsonPlaceHolderAPI;
 
 import java.io.IOException;
 import java.net.URI;
@@ -178,6 +178,25 @@ public class PostsCRUD {
 				System.out.println("Allowed rest methods for this service: " + allowedMethods);
 			}
 		}
+		
+		
+	}
+	
+	
+	//@Test
+	public void testHEAD() throws ClientProtocolException, IOException{
+		
+		String URL = "http://jsonplaceholder.typicode.com/posts/1";
+		RestService_V2 restService = new RestService_V2();
+				
+		Header[] headers = restService.sendHeadRequest(URL);
+		
+		//verify request comes back as 204
+		Assert.assertEquals(restService.getStatusCode(), HttpStatus.SC_OK);
+		//verify format response is text/plain
+		Assert.assertEquals(restService.getResponseFormat(), "text/plain");
+		
+
 		
 		
 	}
