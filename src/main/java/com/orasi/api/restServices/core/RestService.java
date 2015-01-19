@@ -121,7 +121,8 @@ public class RestService {
 		// Build the connection string
 		HttpURLConnection conn = httpConnectionBuilder(url, "GET",
 				responseFormat);
-
+		
+		
 		InputStream stream = null;
 		String buffer = "";
 
