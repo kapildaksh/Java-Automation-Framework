@@ -1,5 +1,6 @@
 package com.orasi.bluesource;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,6 +70,8 @@ public class TestAddNewTitle {
 	}
 
 	/**
+	 * @throws IOException 
+	 * @throws InterruptedException 
 	 * @throws Exception
 	 * @Summary: Adds and deletes a title to the Orasi Blue Source website
 	 * @Precondition:NA
@@ -78,7 +81,7 @@ public class TestAddNewTitle {
 	 */
 	@Test(dataProvider = "dataScenario", groups = { "regression" })
 	public void testCreateNewTitle(String testScenario, String role,
-			String newTitle) {
+			String newTitle) throws InterruptedException, IOException {
 		String testName = new Object() {
 		}.getClass().getEnclosingMethod().getName();
 		//Uncomment the following line to have TestReporter outputs output to the console

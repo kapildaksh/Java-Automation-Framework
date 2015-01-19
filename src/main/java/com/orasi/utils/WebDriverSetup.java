@@ -1,6 +1,7 @@
 package com.orasi.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -134,8 +135,10 @@ public class WebDriverSetup {
 	 * @version	12/16/2014
 	 * @author 	Jessica Marshall
 	 * @return 	the web driver
+	 * @throws IOException 
+	 * @throws InterruptedException 
 	 */
-	public WebDriver initialize(){
+	public WebDriver initialize() throws InterruptedException, IOException{
 		driverSetup();
 		launchApplication();
 		return this.driver;
@@ -162,8 +165,10 @@ public class WebDriverSetup {
 	 * @version	12/16/2014
 	 * @author 	Justin Phlegar
 	 * @return 	Nothing 
+	 * @throws IOException 
+	 * @throws InterruptedException 
 	 */
-	public void driverSetup(){
+	public void driverSetup() throws InterruptedException, IOException{
 		//Set the URL for selenium grid
 		try {
 			seleniumHubURL = new URL(Constants.SELENIUM_HUB_URL);
@@ -223,10 +228,17 @@ public class WebDriverSetup {
 			    	//     /Applications/Google Chrome.app/Contents/MacOS
 			    	System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 					try{
+						//Ensure the permission on the driver include executable permissions
+						String bashCommand = "/bin/bash -c \"chmod +rx " + file.getAbsolutePath() + "\"";
+						Runtime.getRuntime().exec(bashCommand).waitFor();
 						driver = new ChromeDriver();		    	
 					}catch(IllegalStateException ise){
 						ise.printStackTrace();
 						throw new IllegalStateException("This has been seen to occur when the chromedriver file does not have executable permissions. In a terminal, navigate to the directory to which Maven pulls the drivers at runtime (e.g \"/target/classes/drivers/\") and execute the following command: chmod +rx chromedriver");
+					}catch(IOException ioe){
+						ioe.printStackTrace();
+					}catch(InterruptedException ie){
+						ie.printStackTrace();
 					}
 			    }
 				//Headless - HTML unit driver
