@@ -24,8 +24,18 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- *
- * @author brian.becker
+ * Test the Postman RestCollection class, which takes an input description
+ * file and allows calling any of the individual web services conveniently
+ * by the name you assigned to them in Postman. Here we ensure the various
+ * different types of output are functioning properly.
+ * 
+ * NOTE: REST is typically considered to include JSON and XML web services.
+ * You will find multipart form encoding, url encoding, and a variety of
+ * file upload options in Postman. While not typically considered within
+ * the scope of REST, this is a generic HTTP client and providing all of the
+ * methods will allow mostly-REST services to be tested fully.
+ * 
+ * @author Brian Becker
  */
 public class PostmanTest {
     public static final String REST_SANDBOX = "/rest/sandbox/";

@@ -30,7 +30,7 @@ import sparkfive.ResponseTransformer;
 import sparkfive.Route;
 import sparkfive.SparkInstance;
 
-public class MockMicroblogServer implements Runnable {
+public class MockMicroblogServer {
 
     public static interface ModelMutator {
         public Object model();
@@ -96,8 +96,7 @@ public class MockMicroblogServer implements Runnable {
         srv.stop();
     }
     
-    @Override
-    public void run() {       
+    public void start() {       
         srv.get("/tags", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {

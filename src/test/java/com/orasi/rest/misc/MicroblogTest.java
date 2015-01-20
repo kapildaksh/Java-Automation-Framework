@@ -18,7 +18,11 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
- *
+ * The MicroBlog example server is a simple Jetty service which is started up
+ * by this test. It is a volatile test double which is used to simulate some
+ * web service like Twitter. It does not hold any state, but various actions
+ * are performed on the in-memory data with a "clean slate" on every startup.
+ * 
  * @author Brian Becker
  */
 public class MicroblogTest {
@@ -34,8 +38,7 @@ public class MicroblogTest {
         map = new ObjectMapper();
         collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
         server = new MockMicroblogServer();
-        Thread t = new Thread(server);
-        t.start();
+        server.start();
     }
     
     @AfterClass
