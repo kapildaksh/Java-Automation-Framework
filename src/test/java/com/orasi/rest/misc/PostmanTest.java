@@ -17,9 +17,11 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import junit.framework.Assert;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.unbescape.uri.UriEscape;
 
 /**
  *
@@ -27,76 +29,75 @@ import org.unbescape.uri.UriEscape;
  */
 public class PostmanTest {
     public static final String REST_SANDBOX = "/rest/sandbox/";
+    public static final int TESTING_PORT = 8045;
     
     public ObjectMapper map;
     public RestCollection collection;
-    //public Map env;   
+    
+    public MockWebServer mws;
     
     @BeforeClass
     public void setUp() throws Exception {
         map = new ObjectMapper();
         collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "PostmanTests.json.postman_collection"));
-        //env = new HashMap();
-        
+    }
+    
+    @BeforeMethod
+    public void initTest() throws Exception {
+        mws = new MockWebServer();
+    }
+    
+    @AfterMethod
+    public void cleanUpTest(ITestResult ires) throws Exception {
+        mws.shutdown();
     }
     
     @Test
     public void testParameters() throws Exception {
         // GET /more/testing?q=v1&v=v2&a=v3 HTTP/1.1
-        MockWebServer mws = new MockWebServer();
         mws.enqueue(new MockResponse());       
-        mws.play(8045);
+        mws.play(TESTING_PORT);
         
         collection.byName("Test Parameters").send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3 HTTP/1.1", rr.getRequestLine());
-        
-        mws.shutdown();
-    }
+}
     
     @Test
     public void testParametersVariables() throws Exception {
         // GET /more/testing?q=v1&v=v2&a=v3 HTTP/1.1
-        MockWebServer mws = new MockWebServer();
         mws.enqueue(new MockResponse());       
-        mws.play(8045);
+        mws.play(TESTING_PORT);
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
         collection.byName("Test Variables").withEnv(env).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3&x=file:///var/variable HTTP/1.1", rr.getRequestLine());
-        
-        mws.shutdown();
     }    
     
     @Test
     public void testUrlEncoding() throws Exception {
         // q=v1&v=v2&a=v3
-        MockWebServer mws = new MockWebServer();
         mws.enqueue(new MockResponse());       
-        mws.play(8045);
+        mws.play(TESTING_PORT);
         
         collection.byName("Test Url Encoding").send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("q=v1&v=v2&a=v3", rr.getUtf8Body());
-        
-        mws.shutdown();
     }
     
     @Test
     public void testUrlEncodingVariables() throws Exception {
         // q=v1&v=v2&a=v3
-        MockWebServer mws = new MockWebServer();
         mws.enqueue(new MockResponse());       
-        mws.play(8045);
+        mws.play(TESTING_PORT);
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
         collection.byName("Test Url Encoding Variables").withEnv(env).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("q=v1&v=v2&a=v3&x=" + URLEncoder.encode("file:///var/variable", "UTF-8"), rr.getUtf8Body());
-        mws.shutdown();
     }    
     
     @Test
@@ -114,9 +115,8 @@ public class PostmanTest {
 
         // v3
         // ------WebKitFormBoundaryeMvs55AiRqYQEjHV--
-        MockWebServer mws = new MockWebServer();
         mws.enqueue(new MockResponse());       
-        mws.play(8045);
+        mws.play(TESTING_PORT);
         
         collection.byName("Test Form Encoding").send();
 
@@ -125,15 +125,12 @@ public class PostmanTest {
         Assert.assertTrue(rr.getUtf8Body().contains("v1"));
         Assert.assertTrue(rr.getUtf8Body().contains("v2"));
         Assert.assertTrue(rr.getUtf8Body().contains("v3"));
-        
-        mws.shutdown();        
     }
     
     @Test
     public void testMultipartFormVariables() throws Exception {
-        MockWebServer mws = new MockWebServer();
         mws.enqueue(new MockResponse());       
-        mws.play(8045);
+        mws.play(TESTING_PORT);
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
@@ -144,40 +141,32 @@ public class PostmanTest {
         Assert.assertTrue(rr.getUtf8Body().contains("v1"));
         Assert.assertTrue(rr.getUtf8Body().contains("v2"));
         Assert.assertTrue(rr.getUtf8Body().contains("v3"));
-        Assert.assertTrue(rr.getUtf8Body().contains("file:///var/variable"));
-        
-        mws.shutdown();        
+        Assert.assertTrue(rr.getUtf8Body().contains("file:///var/variable"));   
     }
     
     
     @Test
     public void testRaw() throws Exception {
         // This is only a raw document, no formatting or special data type.
-        MockWebServer mws = new MockWebServer();
         mws.enqueue(new MockResponse());       
-        mws.play(8045);
+        mws.play(TESTING_PORT);
         
         collection.byName("Test Raw Data").send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("This is only a raw document, no formatting or special data type.", rr.getUtf8Body());
-        
-        mws.shutdown();        
     }
     
     @Test
     public void testRawVariables() throws Exception {
         // This is only a raw document, no formatting or special data type.
-        MockWebServer mws = new MockWebServer();
         mws.enqueue(new MockResponse());       
-        mws.play(8045);
+        mws.play(TESTING_PORT);
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
         collection.byName("Test Raw Variables").withEnv(env).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("This is only a raw document, no formatting or special data type. It does, however, support file:///var/variable", rr.getUtf8Body());
-        
-        mws.shutdown();        
     }    
     
     @Test
@@ -194,16 +183,12 @@ public class PostmanTest {
         //      "additionalProperties": false,
         //      "required": [ "/" ]
         // }
-        
-        MockWebServer mws = new MockWebServer();
         mws.enqueue(new MockResponse());       
-        mws.play(8045);
+        mws.play(TESTING_PORT);
         
         collection.byName("Test Binary Data").send(new String(Files.readAllBytes(Paths.get(getClass().getResource(REST_SANDBOX).toURI()).resolve("schema.json"))));
         RecordedRequest rr = mws.takeRequest();
         Assert.assertTrue(rr.getUtf8Body().contains("patternProperties"));
-        
-        mws.shutdown();
     }
     
 }

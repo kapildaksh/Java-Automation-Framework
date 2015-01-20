@@ -5,6 +5,7 @@
  */
 package com.orasi.utils.types;
 
+import com.google.common.base.Function;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,30 +16,35 @@ import java.util.Set;
  *
  * @author brian.becker
  * @param <K>
- * @param <V>
  */
 public class DefaultingMap<K, V> implements Map<K, V> {
 
     public final Map orig;
     public final Map fallback;
     
-    public DefaultingMap(Map<K, V> orig, Map<K, V> fallback) {
+    public final Function<K, V> keyDefaults;
+    
+    public DefaultingMap(Map<K, V> orig, Map<K, V> fallback, Function<K, V> keyDefaults) {
         this.orig = orig != null ? orig : new HashMap();
         this.fallback = fallback != null ? orig : new HashMap();
+        this.keyDefaults = keyDefaults;
     }
     
     @Override
     public int size() {
+        if(keyDefaults != null) return Integer.MAX_VALUE;
         return this.keySet().size();
     }
 
     @Override
     public boolean isEmpty() {
+        if(keyDefaults != null) return false;
         return this.orig.isEmpty() && this.fallback.isEmpty();
     }
 
     @Override
     public boolean containsKey(Object key) {
+        if(keyDefaults != null) return true;
         return this.orig.containsKey(key) || this.fallback.containsKey(key);
     }
 
@@ -51,9 +57,12 @@ public class DefaultingMap<K, V> implements Map<K, V> {
     public V get(Object key) {
         if(this.orig.containsKey(key)) {
             return (V) this.orig.get(key);
-        } else {
+        } else if(this.fallback.containsKey(key)) {
             return (V) this.fallback.get(key);
+        } else if(keyDefaults != null) {
+            return (V) keyDefaults.apply((K) key);
         }
+        return null;        
     }
 
     @Override
@@ -97,7 +106,7 @@ public class DefaultingMap<K, V> implements Map<K, V> {
         Set v = new HashSet();
         v.addAll(this.orig.entrySet());
         v.addAll(this.fallback.entrySet());
-        return v;     
+        return v;
     }
     
 }

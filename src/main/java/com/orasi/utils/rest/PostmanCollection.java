@@ -7,6 +7,7 @@ package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Function;
 import com.orasi.utils.types.DefaultingMap;
 import com.orasi.utils.types.Reference;
 import com.squareup.okhttp.OkHttpClient;
@@ -97,7 +98,13 @@ public class PostmanCollection implements RestCollection {
                 case "raw": format = RequestFormat.RAW; break;
             }
             
-            Map variables = new DefaultingMap(requestVariables, requestDefaultVariables.get());
+            Map variables = new DefaultingMap(requestVariables, requestDefaultVariables.get(), new Function<String, String>() {
+                @Override
+                public String apply(String f) {
+                    return "{{" + f + "}}";
+                }
+            });
+            
             url = RestRequestHelpers.variables(url, variables);
             rawModeData = RestRequestHelpers.variables(rawModeData, variables);
             
@@ -129,12 +136,12 @@ public class PostmanCollection implements RestCollection {
     private final Map<String, RestRequest> names;
     private final Reference<Map> defaultVariables;
     
-    public PostmanCollection(byte[] data, Map<String, String> variables) throws IOException {
+    public PostmanCollection(byte[] data) throws IOException {
         ObjectMapper map = new ObjectMapper();
         object = map.readValue(data, PostmanCollectionData.class);
         ids = new HashMap<String, RestRequest>();
         names = new HashMap<String, RestRequest>();
-        defaultVariables = new Reference<Map>(variables);
+        defaultVariables = new Reference<Map>(new HashMap());
         for(PostmanRequest req : object.requests) {
             req.requestDefaultVariables = defaultVariables;
             ids.put(req.id, req);
@@ -149,7 +156,7 @@ public class PostmanCollection implements RestCollection {
     }
     
     public static RestCollection file(URL collection) throws Exception {
-        return new PostmanCollection(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), null);
+        return new PostmanCollection(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray());
     }
         
 }
