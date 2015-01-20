@@ -1,6 +1,7 @@
 package com.orasi.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -134,8 +135,10 @@ public class WebDriverSetup {
 	 * @version	12/16/2014
 	 * @author 	Jessica Marshall
 	 * @return 	the web driver
+	 * @throws IOException 
+	 * @throws InterruptedException 
 	 */
-	public WebDriver initialize(){
+	public WebDriver initialize() throws InterruptedException, IOException{
 		driverSetup();
 		launchApplication();
 		return this.driver;
@@ -162,8 +165,10 @@ public class WebDriverSetup {
 	 * @version	12/16/2014
 	 * @author 	Justin Phlegar
 	 * @return 	Nothing 
+	 * @throws IOException 
+	 * @throws InterruptedException 
 	 */
-	public void driverSetup(){
+	public void driverSetup() throws InterruptedException, IOException{
 		//Set the URL for selenium grid
 		try {
 			seleniumHubURL = new URL(Constants.SELENIUM_HUB_URL);
@@ -178,7 +183,7 @@ public class WebDriverSetup {
 			DesiredCapabilities caps = null;
 			File file = null;
 			switch (getOperatingSystem().toLowerCase().trim().replace(" ", "")) {
-			case "windows":case "":
+			case "windows": case "": case "vista":
 				if (getBrowserUnderTest().equalsIgnoreCase("Firefox") || getBrowserUnderTest().equalsIgnoreCase("FF")){
 			    	driver = new FirefoxDriver();	    	
 			    }
@@ -220,8 +225,24 @@ public class WebDriverSetup {
 				//Chrome
 			    else if(getBrowserUnderTest().equalsIgnoreCase("Chrome")){
 			    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "chromedriver").getPath());
-					System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
-					driver = new ChromeDriver();		    	
+			    	//     /Applications/Google Chrome.app/Contents/MacOS
+			    	System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
+					try{
+						//Ensure the permission on the driver include executable permissions
+						Process proc = Runtime.getRuntime().exec(new String[]{"/bin/bash","-c","chmod 777 " + file.getAbsolutePath()});
+						proc.waitFor();
+						System.out.println(proc.exitValue());
+						
+						
+						driver = new ChromeDriver();
+					}catch(IllegalStateException ise){
+						ise.printStackTrace();
+						throw new IllegalStateException("This has been seen to occur when the chromedriver file does not have executable permissions. In a terminal, navigate to the directory to which Maven pulls the drivers at runtime (e.g \"/target/classes/drivers/\") and execute the following command: chmod +rx chromedriver");
+					}catch(IOException ioe){
+						ioe.printStackTrace();
+					}//catch(InterruptedException ie){
+						//ie.printStackTrace();
+					//}
 			    }
 				//Headless - HTML unit driver
 			    else if(getBrowserUnderTest().equalsIgnoreCase("html")){	    	
@@ -298,10 +319,15 @@ public class WebDriverSetup {
 		//Verify that the current OS is actually that which was indicated as expected by the TestNG XML
 		String platform = Platform.getCurrent().toString().toLowerCase();
 		switch (operatingSystem) {
+		/*
+		 * Mac OS, Linux, Unix and Android are OS enumerations that have only one value. 
+		 * Windows is treated as the default case, but a validation is made that the 
+		 * current Windows OS is one that can be handled by the framework.
+		 */
 		case "mac": case "linux": case "unix": case "android":
-			TestReporter.assertTrue(platform.equalsIgnoreCase(operatingSystem), "The System OS ["+platform+"] did not match that which was passed in the TestNG XML ["+operatingSystem+"].");
-			break;
-		case "windows":
+			TestReporter.assertTrue(platform.trim().replace(" ", "").equalsIgnoreCase(operatingSystem.toString().toLowerCase().trim().replace(" ", "")), "The System OS ["+platform.trim().replace(" ", "")+"] did not match that which was passed in the TestNG XML ["+operatingSystem.toString().toLowerCase().trim().replace(" ", "")+"].");
+			break;			
+		default:
 			String[] knownPlatformValues = {"windows", "xp", "vista", "win8", "win8_1"};
 			Boolean osFound = false;
 			for(int winCount = 0; winCount < knownPlatformValues.length; winCount++){
@@ -312,8 +338,6 @@ public class WebDriverSetup {
 			}
 			TestReporter.assertTrue(osFound, "The System OS ["+platform+"] did not match that which was passed in the TestNG XML ["+operatingSystem+"].");
 			break;
-		default:
-			throw new RuntimeException("The System OS ["+platform+"] did not match that which was passed in the TestNG XML ["+operatingSystem+"].");
 		}
 	}
 }

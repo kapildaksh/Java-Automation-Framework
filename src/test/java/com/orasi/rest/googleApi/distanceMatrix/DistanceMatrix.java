@@ -1,5 +1,8 @@
 package com.orasi.rest.googleApi.distanceMatrix;
 
+import java.io.UnsupportedEncodingException;
+
+import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.json.JSONException;
@@ -42,6 +45,8 @@ public class DistanceMatrix {
     /**
      * @throws XPathExpressionException
      * @throws JSONException 
+     * @throws UnsupportedEncodingException 
+     * @throws TransformerException 
      * @Summary: Invokes the Google "Geocode" API REST service and validates the XML response
      * @Precondition:NA
      * @Author: Waightstill W avery
@@ -52,8 +57,8 @@ public class DistanceMatrix {
 	public void main(String testScenario, String origins, String destinations,
 						String mode, String language, String apiKey,
 						String validateOriginAddress, String validateDestinationAddress,
-						String format, String os) throws XPathExpressionException, JSONException {
-		if(os.toLowerCase().equalsIgnoreCase(operatingSystem)){
+						String format) throws XPathExpressionException, JSONException, UnsupportedEncodingException, TransformerException {
+//		if(os.toLowerCase().equalsIgnoreCase(operatingSystem)){
 			String[] originAddress = validateOriginAddress.split(";");
 			String[] destinationAddress = validateDestinationAddress.split(";");
 			rest = new RestService();
@@ -67,7 +72,7 @@ public class DistanceMatrix {
 				int numberOfNodes = rest.getNumberOfNodesByXpath(xpath);
 				int numberOfChildNodes = rest.getNumberOfChildNodesByXpath(xpath);
 				System.out.println("Number of nodes for xpath["+xpath+"]: " +String.valueOf(numberOfNodes));
-				System.out.println("Number of childs nodes fro xpath ["+xpath+"]: "+String.valueOf(numberOfChildNodes));
+				System.out.println("Number of childs nodes for xpath ["+xpath+"]: "+String.valueOf(numberOfChildNodes));
 				
 				Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/origin_address[1]"), originAddress[0]);
 				Assert.assertEquals(rest.getXmlResponseByXpath("/DistanceMatrixResponse/destination_address[1]"), destinationAddress[0]);
@@ -79,6 +84,6 @@ public class DistanceMatrix {
 				Assert.assertEquals(rest.getJsonResponseValueByKeyString("origin_addresses,1"), originAddress[1]);
 				Assert.assertEquals(rest.getJsonResponseValueByKeyString("destination_addresses,1"), destinationAddress[1]);
 			}
-		}
+//		}
 	}
 }
