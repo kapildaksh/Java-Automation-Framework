@@ -229,17 +229,20 @@ public class WebDriverSetup {
 			    	System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 					try{
 						//Ensure the permission on the driver include executable permissions
-						String bashCommand = "/bin/bash -c \"chmod +rx " + file.getAbsolutePath() + "\"";
-						Runtime.getRuntime().exec(bashCommand).waitFor();
-						driver = new ChromeDriver();		    	
+						Process proc = Runtime.getRuntime().exec(new String[]{"/bin/bash","-c","chmod 777 " + file.getAbsolutePath()});
+						proc.waitFor();
+						System.out.println(proc.exitValue());
+						
+						
+						driver = new ChromeDriver();
 					}catch(IllegalStateException ise){
 						ise.printStackTrace();
 						throw new IllegalStateException("This has been seen to occur when the chromedriver file does not have executable permissions. In a terminal, navigate to the directory to which Maven pulls the drivers at runtime (e.g \"/target/classes/drivers/\") and execute the following command: chmod +rx chromedriver");
 					}catch(IOException ioe){
 						ioe.printStackTrace();
-					}catch(InterruptedException ie){
-						ie.printStackTrace();
-					}
+					}//catch(InterruptedException ie){
+						//ie.printStackTrace();
+					//}
 			    }
 				//Headless - HTML unit driver
 			    else if(getBrowserUnderTest().equalsIgnoreCase("html")){	    	
