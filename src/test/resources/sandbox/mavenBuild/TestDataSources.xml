@@ -5,7 +5,7 @@
 	<parameter name="environment" value="staging" />
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
-	<parameter name="operatingSystem" value="mac" />
+	<parameter name="operatingSystem" value="vista" />
 	<test name="Test">
 		<classes>
 			<!-- REST tests -->
