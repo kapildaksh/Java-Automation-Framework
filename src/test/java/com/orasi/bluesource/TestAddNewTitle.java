@@ -80,9 +80,12 @@ public class TestAddNewTitle {
     @Test(dataProvider = "dataScenario", groups = { "regression" })
     public void testCreateNewTitle(String testScenario, String role,
 	    String newTitle) {
+	
 	String testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
+	
 	TestReporter.setPrintToConsole(true);
+	
 	WebDriverSetup setup = new WebDriverSetup(application,
 		browserUnderTest, browserVersion, operatingSystem, runLocation,
 		environment);
