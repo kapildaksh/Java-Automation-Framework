@@ -22,7 +22,7 @@ import org.testng.annotations.Test;
 
 /**
  *
- * @author brian.becker
+ * @author Brian Becker
  */
 public class MicroblogTest {
     

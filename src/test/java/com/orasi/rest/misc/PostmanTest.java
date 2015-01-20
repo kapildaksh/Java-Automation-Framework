@@ -22,20 +22,20 @@ import org.testng.annotations.Test;
  *
  * @author brian.becker
  */
-public class PostmanTests {
+public class PostmanTest {
     public static final String REST_SANDBOX = "/rest/sandbox/";
     
     public ObjectMapper map;
     public PostmanCollection collection;
        
     @BeforeClass
-    public synchronized void setUp() throws IOException, URISyntaxException {
+    public void setUp() throws IOException, URISyntaxException {
         map = new ObjectMapper();
         collection = PostmanCollection.fromPath(Paths.get(getClass().getResource(REST_SANDBOX).toURI()).resolve("PostmanTests.json.postman_collection"));
     }
     
     @Test
-    public synchronized void testParameters() throws Exception {
+    public void testParameters() throws Exception {
         // GET /more/testing?q=v1&v=v2&a=v3 HTTP/1.1
         MockWebServer mws = new MockWebServer();
         mws.enqueue(new MockResponse());       
@@ -49,7 +49,7 @@ public class PostmanTests {
     }
     
     @Test
-    public synchronized void testUrlEncoding() throws Exception {
+    public void testUrlEncoding() throws Exception {
         // q=v1&v=v2&a=v3
         MockWebServer mws = new MockWebServer();
         mws.enqueue(new MockResponse());       
@@ -63,7 +63,7 @@ public class PostmanTests {
     }
     
     @Test
-    public synchronized void testMultipartForm() throws Exception {
+    public void testMultipartForm() throws Exception {
         // ------WebKitFormBoundaryeMvs55AiRqYQEjHV
         // Content-Disposition: form-data; name="q"
 
@@ -93,7 +93,7 @@ public class PostmanTests {
     }
     
     @Test
-    public synchronized void testRaw() throws Exception {
+    public void testRaw() throws Exception {
         // This is only a raw document, no formatting or special data type.
         MockWebServer mws = new MockWebServer();
         mws.enqueue(new MockResponse());       
@@ -101,13 +101,13 @@ public class PostmanTests {
         
         collection.getRequestByName("Test Raw Data").send();
         RecordedRequest rr = mws.takeRequest();
-        //Assert.assertEquals("This is only a raw document, no formatting or special data type.", rr.getUtf8Body());
+        Assert.assertEquals("This is only a raw document, no formatting or special data type.", rr.getUtf8Body());
         
         mws.shutdown();        
     }
     
     @Test
-    public synchronized void testBinary() throws Exception {
+    public void testBinary() throws Exception {
         // {
         //      "$schema": "file:///C:/Users/brian.becker/Git/java-rest-schema/target/test-classes/schema.json",
         //      "type": "object",

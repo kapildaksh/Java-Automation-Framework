@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
  *
  * @author brian.becker
  */
-public class AccountServiceTests {
+public class AccountServiceTest {
     
     public static final MediaType JSON
       = MediaType.parse("application/json; charset=utf-8");
@@ -37,7 +37,7 @@ public class AccountServiceTests {
     private final OkHttpClient client;
     private final ObjectMapper map;
    
-    public AccountServiceTests() {
+    public AccountServiceTest() {
         client = new OkHttpClient();
         map = new ObjectMapper(); 
     }
