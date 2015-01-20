@@ -558,6 +558,95 @@ public abstract class SoapService{
 		System.out.println("Response");
 		System.out.println(getResponse());
 		return response;
+	}	
+	
+	/**
+	 * @summary Takes the pre-built Request XML in memory and sends to the
+	 *          service
+	 * @author Justin Phlegar
+	 * @version Created: 08/28/2014
+	 * @throws UnsupportedOperationException
+	 *             Operation given did not match any of the existing operations
+	 * @throws SOAPException
+	 * @throws IOException
+	 *             Failed to read the Request properly
+	 */
+	public SOAPMessage sendRequest(String[] headerName, String[] headerValue) {
+		SOAPMessage request = null;
+		SOAPMessage response = null;
+		SOAPConnectionFactory connectionFactory = null;
+		SOAPConnection connection = null;
+		SOAPBody responseBody = null;
+		MessageFactory messageFactory = null;
+
+		// Get the service endpoint from previously stored URL
+		String url = getServiceURL();
+
+		try {
+			messageFactory = MessageFactory
+					.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
+
+			// Convert XML Request to SoapMessage
+			
+			MimeHeaders headers = new MimeHeaders();
+			headers.setHeader(headerName[0], headerValue[0]);
+			if(headerName.length > 1){
+				for(int headerCounter = 0; headerCounter < headerName.length; headerCounter++){
+					headers.addHeader(headerName[headerCounter], headerValue[headerCounter]);
+				}
+			}
+			request = messageFactory.createMessage(headers,
+					new StringBufferInputStream(getRequest()));
+			request.writeTo(System.out);
+			System.out.println();
+
+			// Send out Soap Request to the endopoint
+			connectionFactory = SOAPConnectionFactory.newInstance();
+
+			connection = connectionFactory.createConnection();
+			response = connection.call(request, url);
+
+			// Normalize Response and get the soap body
+			response.getSOAPBody().normalize();
+			responseBody = response.getSOAPBody();
+		} catch (UnsupportedOperationException uoe) {
+			throw new RuntimeException(
+					"Operation given did not match any operations in the service"
+							+ uoe.getCause());
+		} catch (SOAPException soape) {
+			throw new RuntimeException(soape.getCause());
+		} catch (IOException ioe) {
+			throw new RuntimeException("Failed to read the request properly"
+					+ ioe.getCause());
+		}
+
+		// Check for faults and report
+		if (responseBody.hasFault()) {
+			SOAPFault newFault = responseBody.getFault();
+			setRepsonseStatusCode(newFault.getFaultCode());
+			System.out
+					.println("sendSoapReq FAULT:  " + newFault.getFaultCode());
+		} else {
+			setRepsonseStatusCode("200");
+		}
+
+		try {
+			connection.close();
+
+		} catch (SOAPException soape) {
+			throw new RuntimeException(soape.getCause());
+		}
+
+		// Covert Soap Response to XML and set it as Response in memory
+		Document doc = XMLTools.makeXMLDocument(response);
+		doc.normalize();
+		setResponseDocument(doc);
+		setResponseBaseURI(responseBody.getNamespaceURI());
+		System.out.println();
+		System.out.println();
+		System.out.println("Response");
+		System.out.println(getResponse());
+		return response;
 	}
 
 	/**
@@ -679,10 +768,8 @@ public abstract class SoapService{
 		setEnvironment(environment);
 
 		// include the %20 as whitespace for URL format
-		if (environment.toLowerCase().contentEquals("snow white")) {
-			environment = "Snow%20White";
-		} else if (environment.toLowerCase().contentEquals("evil queen")) {
-			environment = "Evil%20Queen";
+		if (environment.toLowerCase().contains(" ")){
+			environment.replaceAll(" ", "%20");
 		}
 
 		String url = "http://dmweb.wdw-ilab.wdw.disney.com:8081/EnvSrvcEndPntRepository/rest/retrieveServiceEndpoint/{environment}/{service}";
@@ -709,8 +796,6 @@ public abstract class SoapService{
 		}else{
 			setServiceURL(endpoint + ".wsdl");
 		}
-
-
 	}
 
 	protected String buildRequestFromWSDL(String service) {

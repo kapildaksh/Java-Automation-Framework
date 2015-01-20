@@ -29,115 +29,116 @@ import com.orasi.apps.bluesource.TopNavigationBar;
 
 public class TestAddNewTitle {
 
-    private String application = "";
-    private String browserUnderTest = "";
-    private String browserVersion = "";
-    private String operatingSystem = "";
-    private String runLocation = "";
-    private String environment = "";
-    private Map<String, WebDriver> drivers = new HashMap<String, WebDriver>();
+	private String application = "";
+	private String browserUnderTest = "";
+	private String browserVersion = "";
+	private String operatingSystem = "";
+	private String runLocation = "";
+	private String environment = "";
+	private Map<String, WebDriver> drivers = new HashMap<String, WebDriver>();
 
-    @DataProvider(name = "dataScenario")
-    public Object[][] scenarios() {
-	return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
-		+ "TestAddNewTitle.xlsx", "TestAddNewTitle").getTestData();
-    }
-
-    @BeforeTest(groups = { "regression" })
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
-	    "operatingSystem", "environment" })
-    public void setup(@Optional String runLocation, String browserUnderTest,
-	    String browserVersion, String operatingSystem, String environment) {
-	this.application = "Bluesource";
-	this.runLocation = runLocation;
-	this.browserUnderTest = browserUnderTest;
-	this.browserVersion = browserVersion;
-	this.operatingSystem = operatingSystem;
-	this.environment = environment;
-
-    }
-    
-    @AfterMethod(groups = { "regression" })
-    public synchronized void closeSession(ITestResult test){
-	System.out.println(test.getMethod().getMethodName());
-	WebDriver driver = drivers.get(test.getMethod().getMethodName());   
-	
-	//if is a failure, then take a screenshot
-	if (test.getStatus() == ITestResult.FAILURE){
-		new Screenshot().takeScreenShot(test, driver);
+	@DataProvider(name = "dataScenario")
+	public Object[][] scenarios() {
+		return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
+				+ "TestAddNewTitle.xlsx", "TestAddNewTitle").getTestData();
 	}
-	driver.quit();
-    }
 
-    /**
-     * @throws Exception
-     * @Summary: Adds a housekeeper to the schedule
-     * @Precondition:NA
-     * @Author: Jessica Marshall
-     * @Version: 10/6/2014
-     * @Return: N/A
-     */
-    @Test(dataProvider = "dataScenario", groups = { "regression" })
-    public void testCreateNewTitle(String testScenario, String role,
-	    String newTitle) {
-	
-	String testName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	
-	TestReporter.setPrintToConsole(true);
-	
-	WebDriverSetup setup = new WebDriverSetup(application,
-		browserUnderTest, browserVersion, operatingSystem, runLocation,
-		environment);
-	WebDriver driver = setup.initialize();
-	System.out.println(testName);
-	drivers.put(testName, driver);
+	@BeforeTest(groups = { "regression" })
+	@Parameters({ "runLocation", "browserUnderTest", "browserVersion",
+			"operatingSystem", "environment" })
+	public void setup(@Optional String runLocation, String browserUnderTest,
+			String browserVersion, String operatingSystem, String environment) {
+		this.application = "Bluesource";
+		this.runLocation = runLocation;
+		this.browserUnderTest = browserUnderTest;
+		this.browserVersion = browserVersion;
+		this.operatingSystem = operatingSystem;
+		this.environment = environment;
+	}
 
-	// Login
-	LoginPage loginPage = new LoginPage(driver);
-	TestReporter.assertTrue(loginPage.pageLoaded(),
-		"Verify login page is displayed");
-	loginPage.login(role);
+	@AfterMethod(groups = { "regression" })
+	public synchronized void closeSession(ITestResult test) {
+		System.out.println(test.getMethod().getMethodName());
+		WebDriver driver = drivers.get(test.getMethod().getMethodName());
 
-	// Verify user is logged in
-	TopNavigationBar topNavigationBar = new TopNavigationBar(driver);
-	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
+		// if is a failure, then take a screenshot
+		if (test.getStatus() == ITestResult.FAILURE) {
+			new Screenshot().takeScreenShot(test, driver);
+		}
+		driver.quit();
+	}
 
-	// Navigate to the title page
-	topNavigationBar.clickAdminLink();
-	topNavigationBar.clickTitlesLink();
+	/**
+	 * @throws Exception
+	 * @Summary: Adds and deletes a title to the Orasi Blue Source website
+	 * @Precondition:NA
+	 * @Author: Jessica Marshall
+	 * @Version: 10/6/2014
+	 * @Return: N/A
+	 */
+	@Test(dataProvider = "dataScenario", groups = { "regression" })
+	public void testCreateNewTitle(String testScenario, String role,
+			String newTitle) {
+		String testName = new Object() {
+		}.getClass().getEnclosingMethod().getName();
+		//Uncomment the following line to have TestReporter outputs output to the console
+		//TestReporter.setPrintToConsole(true);
+		WebDriverSetup setup = new WebDriverSetup(application,
+				browserUnderTest, browserVersion, operatingSystem, runLocation,
+				environment);
+		WebDriver driver = setup.initialize();
+		
+		System.out.println(testName);
+		drivers.put(testName, driver);
 
-	// Verify navigated to the title page
-	ListingTitlesPage listingTitlesPage = new ListingTitlesPage(driver);
-	TestReporter.assertTrue(listingTitlesPage.pageLoaded(),
-		"Verify listing titles page is displayed");
+		// Login
+		LoginPage loginPage = new LoginPage(driver);
+		TestReporter.assertTrue(loginPage.pageLoaded(),
+				"Verify login page is displayed");
+		loginPage.login(role);
 
-	// Click new title
-	listingTitlesPage.clickNewTitle();
+		// Verify user is logged in
+		TopNavigationBar topNavigationBar = new TopNavigationBar(driver);
+		TestReporter.assertTrue(topNavigationBar.isLoggedIn(),
+				"Validate the user logged in successfully");
 
-	// Instantiate the New titles page and create a new title
-	NewTitlePage newTitlePage = new NewTitlePage(driver);
-	TestReporter.assertTrue(newTitlePage.pageLoaded(),
-		"Verify create new title page is displayed");
-	newTitlePage.createNewTitle(newTitle);
+		// Navigate to the title page
+		topNavigationBar.clickAdminLink();
+		topNavigationBar.clickTitlesLink();
 
-	// Verify the title was created
-	TestReporter.assertTrue(listingTitlesPage.isSuccessMsgDisplayed(), "Validate success message appears");
-	TestReporter.log("New Title was created: " + newTitle);
+		// Verify navigated to the title page
+		ListingTitlesPage listingTitlesPage = new ListingTitlesPage(driver);
+		TestReporter.assertTrue(listingTitlesPage.pageLoaded(),
+				"Verify listing titles page is displayed");
 
-	// Verify the title is displayed on the title results table
-	TestReporter.assertTrue(listingTitlesPage.searchTableByTitle(newTitle), "Validate new title appears in table");
+		// Click new title
+		listingTitlesPage.clickNewTitle();
 
-	// Delete the new title
-	listingTitlesPage.deleteTitle(newTitle);
+		// Instantiate the New titles page and create a new title
+		NewTitlePage newTitlePage = new NewTitlePage(driver);
+		TestReporter.assertTrue(newTitlePage.pageLoaded(),
+				"Verify create new title page is displayed");
+		newTitlePage.createNewTitle(newTitle);
 
-	// Verify the title is deleted
-	ListingTitlesPage refreshedPage = new ListingTitlesPage(driver);
-	TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(), "Validate success message appears");
+		// Verify the title was created
+		TestReporter.assertTrue(listingTitlesPage.isSuccessMsgDisplayed(),
+				"Validate success message appears");
+		TestReporter.log("New Title was created: " + newTitle);
 
-	// logout
-	topNavigationBar.logout();
+		// Verify the title is displayed on the title results table
+		TestReporter.assertTrue(listingTitlesPage.searchTableByTitle(newTitle),
+				"Validate new title appears in table");
 
-    }
+		// Delete the new title
+		listingTitlesPage.deleteTitle(newTitle);
 
+		// Verify the title is deleted
+		ListingTitlesPage refreshedPage = new ListingTitlesPage(driver);
+		TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(),
+				"Validate success message appears");
+
+		// logout
+		topNavigationBar.logout();
+
+	}
 }
