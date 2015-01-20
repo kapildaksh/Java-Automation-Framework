@@ -7,7 +7,6 @@ package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static com.orasi.utils.rest.PostmanCollection.RequestType.GET;
-import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -34,7 +33,12 @@ import okio.Okio;
  * 
  * @author Brian Becker
  */
-public class PostmanCollection {
+public class PostmanCollection implements RestRequestCollection {
+
+    @Override
+    public RestRequest byName(String name) {
+        return this.getRequestByName(name);
+    }
     
     public static enum RequestType {
         GET, POST, PUT, PATCH, DELETE, COPY, HEAD, OPTIONS,
