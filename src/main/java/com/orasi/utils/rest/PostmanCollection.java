@@ -28,8 +28,11 @@ import java.util.regex.Pattern;
 import okio.Okio;
 
 /**
- *
- * @author brian.becker
+ * The PostmanCollection allows one to load a Postman Collection file, which
+ * is just a specially formatted JSON file. It describes a user-selected group
+ * of queries which have been saved in Postman.
+ * 
+ * @author Brian Becker
  */
 public class PostmanCollection {
     
@@ -45,7 +48,7 @@ public class PostmanCollection {
         public boolean enabled;
     }
         
-    public static class PostmanRequest {        
+    public static class PostmanRequest implements RestRequest {        
         public static final MessageFormat fmt = new MessageFormat(
                 "ID: {0}\nHeaders: {1}\nURL: {2}\nVars: {3}\n" +
                 "Script: {4}\nMethod: {5}\nData: {6}\nData Mode {7}\n" +
@@ -83,14 +86,17 @@ public class PostmanCollection {
                     currentHelper, helperAttributes, collectionId, synced, 
                     rawModeData });
         }
-               
-        public Response send(String... contents) throws IOException {
+        
+        @Override
+        public Response send(String... contents) throws Exception {
             OkHttpClient client = new OkHttpClient();
             
             Headers.Builder hdrs = new Headers.Builder();
             for(String hdr : headers.split(Pattern.quote("\n"))) {
-                //String[] h = hdr.split(Pattern.quote(":"), 2);
-                //hdrs = hdrs.add(h[0], h[1]);
+                String[] h = hdr.split(Pattern.quote(":"), 2);
+                if(h.length == 2) {
+                    hdrs = hdrs.add(h[0], h[1]);
+                }
             }
             
             RequestBody body = null;
