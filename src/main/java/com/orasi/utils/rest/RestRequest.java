@@ -6,6 +6,7 @@
 package com.orasi.utils.rest;
 
 import com.squareup.okhttp.Response;
+import java.util.Map;
 
 /**
  *
@@ -30,5 +31,7 @@ public interface RestRequest {
     }    
     
     public abstract Response send(String... parameters) throws Exception;
+    
+    public abstract RestRequest withEnv(Map variables);
     
 }

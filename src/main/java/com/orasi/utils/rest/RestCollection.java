@@ -5,6 +5,8 @@
  */
 package com.orasi.utils.rest;
 
+import java.util.Map;
+
 /**
  *
  * @author brian.becker
@@ -12,4 +14,5 @@ package com.orasi.utils.rest;
 public interface RestCollection {
     public abstract RestRequest byId(String id);
     public abstract RestRequest byName(String name);
+    public abstract RestCollection withEnv(Map variables);
 }

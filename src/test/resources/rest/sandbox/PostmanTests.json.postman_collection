@@ -7,7 +7,11 @@
 		"419ef0b0-14fb-d337-4eb0-db9455048fbd",
 		"e3177bd1-2082-81c8-add8-eb072f1fb547",
 		"6bb522f5-4fdd-977c-e040-e27c73821168",
-		"ef9809f9-1927-5b8f-6132-cb79c2f2346d"
+		"ef9809f9-1927-5b8f-6132-cb79c2f2346d",
+		"9065d039-dcdb-a609-a5fd-3e28d3703ec4",
+		"7fa254d0-f666-be4b-2c1e-3e6dee9a2fc1",
+		"4b74e13c-10c5-3c72-89df-2759be2abee2",
+		"a9c78868-b6be-1606-353a-471e53354de9"
 	],
 	"folders": [],
 	"timestamp": 1421699829464,
@@ -53,6 +57,28 @@
 			"helperAttributes": {},
 			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
 			"synced": false
+		},
+		{
+			"id": "4b74e13c-10c5-3c72-89df-2759be2abee2",
+			"headers": "",
+			"url": "http://localhost:8045/more/testing",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Test Raw Variables",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1421781065618,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"synced": false,
+			"rawModeData": "This is only a raw document, no formatting or special data type. It does, however, support {{var}}"
 		},
 		{
 			"id": "50a152bf-69da-a8ac-baaf-745622a37533",
@@ -103,6 +129,138 @@
 			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
 			"synced": false,
 			"rawModeData": "This is only a raw document, no formatting or special data type."
+		},
+		{
+			"id": "7fa254d0-f666-be4b-2c1e-3e6dee9a2fc1",
+			"headers": "",
+			"url": "http://localhost:8045/more/testing",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [
+				{
+					"key": "q",
+					"value": "v1",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "v",
+					"value": "v2",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "a",
+					"value": "v3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "x",
+					"value": "{{var}}",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "Test Form Variables",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1421780805463,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"synced": false
+		},
+		{
+			"id": "9065d039-dcdb-a609-a5fd-3e28d3703ec4",
+			"headers": "",
+			"url": "http://localhost:8045/more/testing?q=v1&v=v2&a=v3&x={{var}}",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"data": [
+				{
+					"key": "q",
+					"value": "v1",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "v",
+					"value": "v2",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "a",
+					"value": "{{var}}",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "Test Variables",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1421774557051,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"synced": false
+		},
+		{
+			"id": "a9c78868-b6be-1606-353a-471e53354de9",
+			"headers": "",
+			"url": "http://localhost:8045/more/testing",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [
+				{
+					"key": "q",
+					"value": "v1",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "v",
+					"value": "v2",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "a",
+					"value": "v3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "x",
+					"value": "{{var}}",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "Test Url Encoding Variables",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1421781433814,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"synced": false
 		},
 		{
 			"id": "e3177bd1-2082-81c8-add8-eb072f1fb547",

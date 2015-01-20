@@ -24,9 +24,9 @@ import java.util.regex.Pattern;
 public class TemplateFormat extends Format {
 
     private final List<TemplateElement> elements;
-    private static final String fieldLeft = "${";
-    private static final String fieldRight = "}";
-    private static final char fieldEscape = '$';
+    private final String fieldLeft;
+    private final String fieldRight;
+    private final char fieldEscape;
     private final Pattern regexPattern;
         
     public static class TemplateElement {
@@ -50,8 +50,15 @@ public class TemplateFormat extends Format {
             return te;
         }
     }
-
+    
     public TemplateFormat(String pattern) throws Exception {
+        this(pattern, "${", "}", '$');
+    }
+
+    public TemplateFormat(String pattern, String left, String right, char escape) throws Exception {
+        this.fieldLeft = left;
+        this.fieldRight = right;
+        this.fieldEscape = escape;
         this.elements = new LinkedList<TemplateElement>();
         StringBuilder temp = new StringBuilder();
         int idx = -1, lidx = 0, vidx, cidx;
@@ -83,7 +90,8 @@ public class TemplateFormat extends Format {
         for (TemplateElement te : this.elements) {
             regex.append(te.pattern);
         }
-        System.out.println(regex.toString());
+        //System.out.println(regex.toString());
+        //System.out.println(fieldLeft);
         regexPattern = Pattern.compile(regex.toString());
     }
 
@@ -100,6 +108,14 @@ public class TemplateFormat extends Format {
             }
         }
         return toAppendTo;
+    }
+    
+    public static String format(String str, Map format) {
+        try {
+            return new TemplateFormat(str).format(format);
+        } catch (Exception e) {
+            return str;
+        }
     }
 
     @Override

@@ -5,7 +5,10 @@
  */
 package com.orasi.utils.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.orasi.utils.types.DefaultingMap;
+import com.orasi.utils.types.Reference;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -63,6 +66,17 @@ public class PostmanCollection implements RestCollection {
         public Boolean synced;
         public String rawModeData;
         
+        @JsonIgnore
+        public Map requestVariables;
+        @JsonIgnore
+        public Reference<Map> requestDefaultVariables;
+        
+        @Override
+        public RestRequest withEnv(Map vars) {
+            this.requestVariables = vars;
+            return this;
+        }
+        
         @Override
         public String toString() {
             return fmt.format(new Object[] { id, headers, url, pathVariables, 
@@ -82,7 +96,15 @@ public class PostmanCollection implements RestCollection {
                 case "binary": format = RequestFormat.RAW; break;
                 case "raw": format = RequestFormat.RAW; break;
             }
-                    
+            
+            Map variables = new DefaultingMap(requestVariables, requestDefaultVariables.get());
+            url = RestRequestHelpers.variables(url, variables);
+            rawModeData = RestRequestHelpers.variables(rawModeData, variables);
+            
+            if(data != null) {
+                RestRequestHelpers.variables(data, variables);
+            }
+            
             Request request = RestRequestHelpers.request(method, headers, url, format, data, rawModeData, parameters);
             Response response = client.newCall(request).execute();
             
@@ -105,20 +127,29 @@ public class PostmanCollection implements RestCollection {
     private final PostmanCollectionData object;
     private final Map<String, RestRequest> ids;
     private final Map<String, RestRequest> names;
+    private final Reference<Map> defaultVariables;
     
-    public PostmanCollection(byte[] data) throws IOException {
+    public PostmanCollection(byte[] data, Map<String, String> variables) throws IOException {
         ObjectMapper map = new ObjectMapper();
         object = map.readValue(data, PostmanCollectionData.class);
         ids = new HashMap<String, RestRequest>();
         names = new HashMap<String, RestRequest>();
+        defaultVariables = new Reference<Map>(variables);
         for(PostmanRequest req : object.requests) {
+            req.requestDefaultVariables = defaultVariables;
             ids.put(req.id, req);
             names.put(req.name, req);
         }
     }
     
-    public static RestCollection file(URL collection) throws Exception {
-        return new PostmanCollection(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray());
+    @Override
+    public RestCollection withEnv(Map variables) {
+        defaultVariables.set(variables);
+        return this;
     }
     
+    public static RestCollection file(URL collection) throws Exception {
+        return new PostmanCollection(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), null);
+    }
+        
 }

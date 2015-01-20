@@ -5,6 +5,8 @@
  */
 package com.orasi.utils.rest;
 
+import com.orasi.text.MapMessageFormat;
+import com.orasi.text.TemplateFormat;
 import com.orasi.utils.rest.RestRequest.RequestData;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MultipartBuilder;
@@ -12,6 +14,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -22,6 +25,34 @@ import org.apache.commons.lang3.tuple.Pair;
  * @author Brian Becker
  */
 public class RestRequestHelpers {
+    
+    /**
+     * Generate the key and value strings for the request data by processing
+     * them through the variable formatter.
+     * 
+     * @param data
+     * @param variables
+     * @return 
+     */
+    public static List<RequestData> variables(List<RequestData> data, Map variables) {
+        for(RequestData dt : data) {
+            dt.key = format(dt.key, variables); //.format(dt.key, variables);
+            dt.value = format(dt.value, variables);
+        }
+        return data;
+    }
+    
+    public static String variables(String url, Map variables) {
+        return format(url, variables);
+    }
+    
+    public static String format(String key, Map variables) {
+        try {
+            return (new TemplateFormat(key, "{{", "}}", '$')).format(variables);
+        } catch (Exception e) {
+            return key;
+        }
+    }
     
     /**
      * Generate a set of headers from a simple string split by newlines.
