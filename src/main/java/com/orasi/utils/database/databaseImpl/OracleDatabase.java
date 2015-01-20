@@ -6,9 +6,9 @@ public class OracleDatabase extends Database {
 	private String dbGeneralUsername = "";
 	private String dbGeneralPassword = "";
 	
-	public OracleDatabase(String environment, String tnsName){
+	public OracleDatabase(String tnsName){
 		setDbDriver("oracle.jdbc.driver.OracleDriver");
-		setDbConnectionString("jdbc:oracle:thin:@" + environment.toUpperCase() + "_" + tnsName.toUpperCase());
+		setDbConnectionString("jdbc:oracle:thin:@" + tnsName.toUpperCase());
 		
 		switch(tnsName.toLowerCase()){
 		case "dreams":

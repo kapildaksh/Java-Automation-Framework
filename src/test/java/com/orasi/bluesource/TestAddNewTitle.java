@@ -144,5 +144,4 @@ public class TestAddNewTitle {
 		topNavigationBar.logout();
 
 	}
-
 }
