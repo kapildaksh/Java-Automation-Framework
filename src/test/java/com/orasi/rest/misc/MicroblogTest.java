@@ -12,7 +12,7 @@ import com.orasi.utils.rest.RestAssert;
 import com.orasi.utils.rest.PostmanCollection;
 import com.orasi.utils.rest.RestCollection;
 import com.squareup.okhttp.Response;
-import org.junit.Assert;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
