@@ -12,5 +12,23 @@ import com.squareup.okhttp.Response;
  * @author Brian Becker
  */
 public interface RestRequest {
-    public abstract Response send(String... contents) throws Exception;
+    
+    public static enum RequestType {
+        GET, POST, PUT, PATCH, DELETE, COPY, HEAD, OPTIONS,
+        LINK, UNLINK, PURGE, LOCK, UNLOCK, PROPFIND
+    }
+    
+    public static enum RequestFormat {
+        URLENCODE, MULTIPART_FORM, RAW
+    }
+    
+    public static class RequestData {
+        public String key;
+        public String value;
+        public String type;
+        public boolean enabled;
+    }    
+    
+    public abstract Response send(String... parameters) throws Exception;
+    
 }

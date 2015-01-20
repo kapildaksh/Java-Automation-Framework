@@ -8,13 +8,10 @@ package com.orasi.rest.misc;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.arven.sandbox.MockMicroblogServer;
-import com.orasi.utils.rest.PostmanCollection;
-import com.orasi.utils.rest.PostmanCollection.PostmanRequest;
 import com.orasi.utils.rest.RestAssert;
+import com.orasi.utils.rest.PostmanCollection;
+import com.orasi.utils.rest.RestCollection;
 import com.squareup.okhttp.Response;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import org.junit.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -29,13 +26,13 @@ public class MicroblogTest {
     public static final String REST_SANDBOX = "/rest/sandbox/";
     
     public ObjectMapper map;
-    public PostmanCollection collection;
+    public RestCollection collection;
     public MockMicroblogServer server;
     
     @BeforeClass
-    public void setUp() throws IOException, URISyntaxException {
+    public void setUp() throws Exception {
         map = new ObjectMapper();
-        collection = PostmanCollection.fromPath(Paths.get(getClass().getResource(REST_SANDBOX).toURI()).resolve("MicroBlog.json.postman_collection"));
+        collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
         server = new MockMicroblogServer();
         Thread t = new Thread(server);
         t.start();
@@ -48,8 +45,7 @@ public class MicroblogTest {
         
     @Test(groups = "users")
     public void createUserTom() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Create User Tom");
-        Response res = req.send();
+        Response res = collection.byName("Create User Tom").send();
         Assert.assertTrue(res.isSuccessful());        
         JsonNode n = map.readTree(res.body().string());
         Assert.assertEquals("User added.", n.path("message").asText());
@@ -57,8 +53,7 @@ public class MicroblogTest {
     
     @Test(groups = "users")
     public void createUserLarry() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Create User Larry");
-        Response res = req.send();
+        Response res = collection.byName("Create User Larry").send();
         Assert.assertTrue(res.isSuccessful());        
         JsonNode n = map.readTree(res.body().string());
         Assert.assertEquals("User added.", n.path("message").asText());        
@@ -66,8 +61,7 @@ public class MicroblogTest {
 
     @Test(groups = "usersVerify", dependsOnGroups = "users")
     public void verifyUserTom() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Check User Tom");
-        Response res = req.send();
+        Response res = collection.byName("Check User Tom").send();
         Assert.assertTrue(res.isSuccessful());        
         JsonNode n = map.readTree(res.body().string());
         Assert.assertEquals("tom", n.path("username").asText());
@@ -77,8 +71,7 @@ public class MicroblogTest {
     
     @Test(groups = "usersVerify", dependsOnGroups = "users")
     public void verifyUserLarry() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Check User Larry");
-        Response res = req.send();
+        Response res = collection.byName("Check User Larry").send();
         Assert.assertTrue(res.isSuccessful());        
         JsonNode n = map.readTree(res.body().string());
         Assert.assertEquals("larry", n.path("username").asText());        
@@ -88,114 +81,101 @@ public class MicroblogTest {
     
     @Test(groups = "posts", dependsOnGroups = "users")
     public void createPostTom() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Tom Posts Message");
-        Response res = req.send();
+        Response res = collection.byName("Tom Posts Message").send();
         Assert.assertTrue(res.isSuccessful());
     }
     
     @Test(groups = "posts", dependsOnGroups = "users")
     public void createPostLarry() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Lots of Hash Tags");
-        Response res = req.send();        
+        Response res = collection.byName("Lots of Hash Tags").send();
         Assert.assertTrue(res.isSuccessful());
     }
     
     @Test(groups = "postsVerify", dependsOnGroups = "posts")
     public void verifyPostTom() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Check Tom's Posts");
-        Response res = req.send();        
+        Response res = collection.byName("Check Tom's Posts").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
-        Assert.assertTrue(n.path(0).path("tags").isArray());
+        RestAssert.assertIsArray(n.path(0).path("tags"));
         Assert.assertEquals("This is an #example of a post which has a lot of those pointless #pound signs.", n.path(0).path("text").asText());
-        RestAssert.assertArrayContainsValue(n.path(0).path("tags"), "example");
-        RestAssert.assertArrayContainsValue(n.path(0).path("tags"), "pound");
+        RestAssert.assertInArray(n.path(0).path("tags"), "example");
+        RestAssert.assertInArray(n.path(0).path("tags"), "pound");
     }
     
     @Test(groups = "postsVerify", dependsOnGroups = "posts")
     public void verifyPostLarry() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Read Larry's Posts");
-        Response res = req.send();        
+        Response res = collection.byName("Read Larry's Posts").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
-        Assert.assertTrue(n.path(0).path("tags").isArray());
+        RestAssert.assertIsArray(n.path(0).path("tags"));
         Assert.assertEquals("I don't get those #tags anyway. Why #are #they #practically #before #every #word.", n.path(0).path("text").asText());
-        RestAssert.assertArrayContainsValues(n.path(0).path("tags"), "tags", "are", "they", "practically", "before", "every", "word");
+        RestAssert.assertInArray(n.path(0).path("tags"), "tags", "are", "they", "practically", "before", "every", "word");
     }
     
     @Test(groups = "postsVerify", dependsOnGroups = "posts")
     public void verifyPostLarrySingle() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Another Way to Read a Post");
-        Response res = req.send();        
+        Response res = collection.byName("Another Way to Read a Post").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
-        Assert.assertTrue(n.path("tags").isArray());
+        RestAssert.assertIsArray(n.path("tags"));
         Assert.assertEquals("I don't get those #tags anyway. Why #are #they #practically #before #every #word.", n.path("text").asText());
-        RestAssert.assertArrayContainsValues(n.path("tags"), "tags", "are", "they", "practically", "before", "every", "word");   
+        RestAssert.assertInArray(n.path("tags"), "tags", "are", "they", "practically", "before", "every", "word");   
     }
     
     @Test(groups = "friends", dependsOnGroups = "users")
     public void addFriendTomLarry() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Tom Adds Larry");
-        Response res = req.send();        
+        Response res = collection.byName("Tom Adds Larry").send();
         Assert.assertTrue(res.isSuccessful());
     }
     
     @Test(groups = "friends", dependsOnGroups = "users")
     public void addFriendLarryTom() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Larry Adds Tom Back");
-        Response res = req.send();        
+        Response res = collection.byName("Larry Adds Tom Back").send();
         Assert.assertTrue(res.isSuccessful());        
     }
     
     @Test(groups = "friendsVerify", dependsOnGroups = "friends")
     public void verifyFriendTomLarry() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Check User Tom");
-        Response res = req.send();        
+        Response res = collection.byName("Check User Tom").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
-        Assert.assertTrue(n.path("friends").isArray());
-        RestAssert.assertArrayContainsValue(n.path("friends"), "larry");
+        RestAssert.assertIsArray(n.path("friends"));
+        RestAssert.assertInArray(n.path("friends"), "larry");
     }
     
     @Test(groups = "friendsVerify", dependsOnGroups = "friends")
     public void verifyFriendLarryTom() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Check User Larry");
-        Response res = req.send();        
+        Response res = collection.byName("Check User Larry").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
-        Assert.assertTrue(n.path("friends").isArray());
-        RestAssert.assertArrayContainsValue(n.path("friends"), "tom");
+        RestAssert.assertIsArray(n.path("friends"));
+        RestAssert.assertInArray(n.path("friends"), "tom");
     }
     
     @Test(groups = "friendsRemove", dependsOnGroups = "friendsVerify")
     public void removeFriendLarryTom() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Larry Removes Tom");
-        Response res = req.send();        
+        Response res = collection.byName("Larry Removes Tom").send();
         Assert.assertTrue(res.isSuccessful());        
     }
     
     @Test(groups = "friendsRemoveVerify", dependsOnGroups = "friendsRemove")
     public void verifyRemoveFriendLarryTom() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Check User Larry");
-        Response res = req.send();        
+        Response res = collection.byName("Check User Larry").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
-        Assert.assertTrue(n.path("friends").isArray());
-        RestAssert.assertArrayNotContainsValue(n.path("friends"), "tom");        
+        RestAssert.assertIsArray(n.path("friends"));
+        RestAssert.assertNotInArray(n.path("friends"), "tom");        
     }
     
     @Test(groups = "patchEmail", dependsOnGroups = "usersVerify")
     public void patchLarryEmail() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Larry Adds Email Address");
-        Response res = req.send();        
+        Response res = collection.byName("Larry Adds Email Address").send();
         Assert.assertTrue(res.isSuccessful());
     }
     
     @Test(groups = "patchEmailVerify", dependsOnGroups = "patchEmail")
     public void verifyPatchEmail() throws Exception {
-        PostmanRequest req = collection.getRequestByName("Check User Larry");
-        Response res = req.send();        
+        Response res = collection.byName("Check User Larry").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
         Assert.assertEquals("larry@wall.org", n.path("email").asText());        

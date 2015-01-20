@@ -7,11 +7,10 @@ package com.orasi.rest.misc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.utils.rest.PostmanCollection;
+import com.orasi.utils.rest.RestCollection;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import junit.framework.Assert;
@@ -26,12 +25,12 @@ public class PostmanTest {
     public static final String REST_SANDBOX = "/rest/sandbox/";
     
     public ObjectMapper map;
-    public PostmanCollection collection;
+    public RestCollection collection;
        
     @BeforeClass
-    public void setUp() throws IOException, URISyntaxException {
+    public void setUp() throws Exception {
         map = new ObjectMapper();
-        collection = PostmanCollection.fromPath(Paths.get(getClass().getResource(REST_SANDBOX).toURI()).resolve("PostmanTests.json.postman_collection"));
+        collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "PostmanTests.json.postman_collection"));
     }
     
     @Test
@@ -41,7 +40,7 @@ public class PostmanTest {
         mws.enqueue(new MockResponse());       
         mws.play(8045);
         
-        collection.getRequestByName("Test Parameters").send();
+        collection.byName("Test Parameters").send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3 HTTP/1.1", rr.getRequestLine());
         
@@ -55,7 +54,7 @@ public class PostmanTest {
         mws.enqueue(new MockResponse());       
         mws.play(8045);
         
-        collection.getRequestByName("Test Url Encoding").send();
+        collection.byName("Test Url Encoding").send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("q=v1&v=v2&a=v3", rr.getUtf8Body());
         
@@ -81,7 +80,7 @@ public class PostmanTest {
         mws.enqueue(new MockResponse());       
         mws.play(8045);
         
-        collection.getRequestByName("Test Form Encoding").send();
+        collection.byName("Test Form Encoding").send();
 
         RecordedRequest rr = mws.takeRequest();
 
@@ -99,7 +98,7 @@ public class PostmanTest {
         mws.enqueue(new MockResponse());       
         mws.play(8045);
         
-        collection.getRequestByName("Test Raw Data").send();
+        collection.byName("Test Raw Data").send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("This is only a raw document, no formatting or special data type.", rr.getUtf8Body());
         
@@ -125,7 +124,7 @@ public class PostmanTest {
         mws.enqueue(new MockResponse());       
         mws.play(8045);
         
-        collection.getRequestByName("Test Binary Data").send(new String(Files.readAllBytes(Paths.get(getClass().getResource(REST_SANDBOX).toURI()).resolve("schema.json"))));
+        collection.byName("Test Binary Data").send(new String(Files.readAllBytes(Paths.get(getClass().getResource(REST_SANDBOX).toURI()).resolve("schema.json"))));
         RecordedRequest rr = mws.takeRequest();
         Assert.assertTrue(rr.getUtf8Body().contains("patternProperties"));
         

@@ -9,6 +9,7 @@ package com.orasi.utils.rest;
  *
  * @author brian.becker
  */
-public interface RestRequestCollection {
+public interface RestCollection {
+    public abstract RestRequest byId(String id);
     public abstract RestRequest byName(String name);
 }

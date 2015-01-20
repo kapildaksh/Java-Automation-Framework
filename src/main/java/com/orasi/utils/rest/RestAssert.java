@@ -15,50 +15,47 @@ import org.junit.Assert;
  * @author brian.becker
  */
 public class RestAssert {
-    public static void assertArrayContainsValue(JsonNode container, Object contained) throws Exception {
+    
+    public static void assertInArray(JsonNode container, Object... contained) throws Exception {
         ObjectMapper map = new ObjectMapper();
-        
-        boolean found = false;
-        if(container instanceof ArrayNode) {
+        RestAssert.assertIsArray(container);
+        for (Object c : contained) {
+            boolean found = false;
             ArrayNode an = (ArrayNode) container;
             for(int i = 0; i < an.size(); i++) {
-                found = found ? true : map.writeValueAsString(an.get(i)).equals(map.writeValueAsString(contained));
+                found = found ? true : map.writeValueAsString(an.get(i)).equals(map.writeValueAsString(c));
             }
             if(!found) {
-                Assert.fail("Item not found in array node.");
+                Assert.fail("Item [" + c.toString() + "] not found in array node, should be in array.");
             }
-        } else {
-            Assert.fail("Array node expected.");
         }
     }
     
-    public static void assertArrayNotContainsValue(JsonNode container, Object contained) throws Exception {
+    public static void assertNotInArray(JsonNode container, Object... contained) throws Exception {
         ObjectMapper map = new ObjectMapper();
-        
-        boolean found = false;
-        if(container instanceof ArrayNode) {
+        RestAssert.assertIsArray(container);
+        for (Object c : contained) {
+            boolean found = false;
             ArrayNode an = (ArrayNode) container;
             for(int i = 0; i < an.size(); i++) {
-                found = found ? true : map.writeValueAsString(an.get(i)).equals(map.writeValueAsString(contained));
+                found = found ? true : map.writeValueAsString(an.get(i)).equals(map.writeValueAsString(c));
             }
             if(found) {
-                Assert.fail("Item not found in array node.");
-            }
-        } else {
-            Assert.fail("Array node expected.");
-        }
-    }    
-    
-    public static void assertArrayContainsValues(JsonNode container, Object... contained) throws Exception {
-        for (Object c : contained) {
-            RestAssert.assertArrayContainsValue(container, c);
+                Assert.fail("Item [" + c.toString() + "] found in array node, should not be in array.");
+            }          
         }
     }
     
-    public static void assertArrayNotContainsValues(JsonNode container, Object... contained) throws Exception {
-        for (Object c : contained) {
-            RestAssert.assertArrayNotContainsValue(container, c);
+    public static void assertIsArray(JsonNode container) {
+        if(!(container instanceof ArrayNode)) {
+            Assert.fail("Array node expected, got " + container.getNodeType().name() + ".");
         }
+    }
+    
+    public static void assertNotArray(JsonNode container) {
+        if(container instanceof ArrayNode) {
+            Assert.fail("Non-array node expected, got array node.");
+        }        
     }
     
 }
