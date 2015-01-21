@@ -13,6 +13,7 @@ import com.orasi.utils.types.Reference;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import edu.emory.mathcs.backport.java.util.Arrays;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -21,7 +22,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import okio.Okio;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * The PostmanCollection allows one to load a Postman Collection file, which
@@ -71,9 +74,11 @@ public class PostmanCollection implements RestCollection {
         public Map requestVariables;
         @JsonIgnore
         public Reference<Map> requestDefaultVariables;
+        @JsonIgnore
+        public String[] files;
         
         @Override
-        public RestRequest withEnv(Map vars) {
+        public RestRequest env(Map vars) {
             this.requestVariables = vars;
             return this;
         }
@@ -88,7 +93,27 @@ public class PostmanCollection implements RestCollection {
         }
         
         @Override
-        public Response send(String... parameters) throws Exception {
+        public RestRequest params(String... parts) {
+            String[] temp = StringUtils.substringsBetween(url, "/:", "/");
+            int i = 0;
+            if(temp != null && temp.length > 0) {
+                for(String t : temp) {
+                     System.out.println(t);
+                     url = url.replace("/:" + t + "/", "/" + parts[i++] + "/");
+                }
+            }
+            System.out.println(url);
+            return this;
+        }
+        
+        @Override
+        public RestRequest files(String... files) {
+            this.files = files;
+            return this;
+        }
+        
+        @Override
+        public Response send() throws Exception {
             OkHttpClient client = new OkHttpClient();
             RequestFormat format = null;
             switch(dataMode) {
@@ -112,7 +137,7 @@ public class PostmanCollection implements RestCollection {
                 RestRequestHelpers.variables(data, variables);
             }
             
-            Request request = RestRequestHelpers.request(method, headers, url, format, data, rawModeData, parameters);
+            Request request = RestRequestHelpers.request(method, headers, url, format, data, rawModeData, files);
             Response response = client.newCall(request).execute();
             
             return response;
@@ -150,7 +175,7 @@ public class PostmanCollection implements RestCollection {
     }
     
     @Override
-    public RestCollection withEnv(Map variables) {
+    public RestCollection env(Map variables) {
         defaultVariables.set(variables);
         return this;
     }

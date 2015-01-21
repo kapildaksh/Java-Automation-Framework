@@ -18,6 +18,10 @@
                         <id>orasi-maven</id>
                         <url>ftp://gsod-taba/maven2/</url>
                 </repository>
+                <repository>
+                        <id>snowcrash-java-binding</id>
+                        <url>https://bitbucket.org/outofcoffee/snowcrash-java-binding/raw/HEAD/repo/</url>
+                </repository>
 	</repositories>
 	<dependencies>
                 <dependency>

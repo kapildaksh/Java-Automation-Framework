@@ -11,7 +11,8 @@
 		"9065d039-dcdb-a609-a5fd-3e28d3703ec4",
 		"7fa254d0-f666-be4b-2c1e-3e6dee9a2fc1",
 		"4b74e13c-10c5-3c72-89df-2759be2abee2",
-		"a9c78868-b6be-1606-353a-471e53354de9"
+		"a9c78868-b6be-1606-353a-471e53354de9",
+		"68eab554-1e14-2423-6ea6-00f98c334498"
 	],
 	"folders": [],
 	"timestamp": 1421699829464,
@@ -100,6 +101,54 @@
 			"description": "",
 			"descriptionFormat": "html",
 			"time": 1421700626027,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"synced": false
+		},
+		{
+			"id": "68eab554-1e14-2423-6ea6-00f98c334498",
+			"headers": "",
+			"url": "http://localhost:8045/:which/testing?q=v1&v=v2&a=v3&x={{var}}",
+			"pathVariables": {
+				"which": ""
+			},
+			"preRequestScript": "",
+			"method": "GET",
+			"data": [
+				{
+					"key": "q",
+					"value": "v1",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "v",
+					"value": "v2",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "a",
+					"value": "v3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "x",
+					"value": "{{var}}",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "Url Parameters",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1421791452113,
 			"version": 2,
 			"responses": [],
 			"tests": "",
