@@ -268,7 +268,7 @@
 
 						<!-- parameterized testNG suite via maven <suiteXmlFiles> -->
 						<suiteXmlFiles>
-							<suiteXmlFile>${testNGSourceDirectory}/TestAddNewTitle.xml</suiteXmlFile>
+							<suiteXmlFile>${testNGSourceDirectory}/TestDataSources.xml</suiteXmlFile>
 						</suiteXmlFiles>
 					</configuration>
 				</plugin>

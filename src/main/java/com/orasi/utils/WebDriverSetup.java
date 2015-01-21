@@ -11,6 +11,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.NotConnectedException;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -168,7 +169,7 @@ public class WebDriverSetup {
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	public void driverSetup() throws InterruptedException, IOException{
+	public void driverSetup() throws InterruptedException, IOException, NotConnectedException{
 		//Set the URL for selenium grid
 		try {
 			seleniumHubURL = new URL(Constants.SELENIUM_HUB_URL);
@@ -224,25 +225,21 @@ public class WebDriverSetup {
 			    }
 				//Chrome
 			    else if(getBrowserUnderTest().equalsIgnoreCase("Chrome")){
-			    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "chromedriver").getPath());
-			    	//     /Applications/Google Chrome.app/Contents/MacOS
+			    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "mac/chromedriver").getPath());
 			    	System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 					try{
 						//Ensure the permission on the driver include executable permissions
 						Process proc = Runtime.getRuntime().exec(new String[]{"/bin/bash","-c","chmod 777 " + file.getAbsolutePath()});
-						proc.waitFor();
-						System.out.println(proc.exitValue());
-						
-						
+						proc.waitFor();									
 						driver = new ChromeDriver();
 					}catch(IllegalStateException ise){
 						ise.printStackTrace();
 						throw new IllegalStateException("This has been seen to occur when the chromedriver file does not have executable permissions. In a terminal, navigate to the directory to which Maven pulls the drivers at runtime (e.g \"/target/classes/drivers/\") and execute the following command: chmod +rx chromedriver");
 					}catch(IOException ioe){
 						ioe.printStackTrace();
-					}//catch(InterruptedException ie){
-						//ie.printStackTrace();
-					//}
+					}catch(InterruptedException ie){
+						ie.printStackTrace();
+					}
 			    }
 				//Headless - HTML unit driver
 			    else if(getBrowserUnderTest().equalsIgnoreCase("html")){	    	
@@ -257,7 +254,25 @@ public class WebDriverSetup {
 			    }
 				break;
 			case "linux":case "linuxos":
-				
+				if (getBrowserUnderTest().equalsIgnoreCase("Firefox") || getBrowserUnderTest().equalsIgnoreCase("FF")){
+					driver = new FirefoxDriver();
+			    }else if(getBrowserUnderTest().equalsIgnoreCase("Chrome")){
+			    	file = new File(this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "/linux/chromedriver").getPath());
+			    	System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
+					try{
+						//Ensure the permission on the driver include executable permissions
+						Process proc = Runtime.getRuntime().exec(new String[]{"/bin/bash","-c","chmod 777 " + file.getAbsolutePath()});
+						proc.waitFor();									
+						driver = new ChromeDriver();
+					}catch(IllegalStateException ise){
+						ise.printStackTrace();
+						throw new IllegalStateException("This has been seen to occur when the chromedriver file does not have executable permissions. In a terminal, navigate to the directory to which Maven pulls the drivers at runtime (e.g \"/target/classes/drivers/\") and execute the following command: chmod +rx chromedriver");
+					}catch(IOException ioe){
+						ioe.printStackTrace();
+					}catch(InterruptedException ie){
+						ie.printStackTrace();
+					}
+			    }
 				break;
 			default:
 				break;
