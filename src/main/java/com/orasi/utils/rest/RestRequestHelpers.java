@@ -5,7 +5,6 @@
  */
 package com.orasi.utils.rest;
 
-import com.orasi.text.MapMessageFormat;
 import com.orasi.text.TemplateFormat;
 import com.orasi.utils.rest.RestRequest.RequestData;
 import com.squareup.okhttp.Headers;

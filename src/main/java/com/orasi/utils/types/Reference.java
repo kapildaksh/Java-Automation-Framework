@@ -5,6 +5,10 @@
  */
 package com.orasi.utils.types;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * This is a reference type which is like a non-synchronous version of the
  * AtomicReference.
@@ -14,6 +18,7 @@ package com.orasi.utils.types;
  */
 public class Reference<T> {
     
+    @JsonIgnore
     public T value;
     
     public void set(T value) {
@@ -26,6 +31,17 @@ public class Reference<T> {
     
     public Reference(T value) {
         this.value = value;
+    }
+    
+    @JsonIgnore
+    public boolean isNull() {
+        return value == null;
+    }
+    
+    @JsonValue
+    @Override
+    public String toString() {
+        return this.value.toString();
     }
     
 }

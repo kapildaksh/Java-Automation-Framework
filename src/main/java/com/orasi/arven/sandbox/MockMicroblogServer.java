@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 
 import com.orasi.arven.sandbox.Message.Type;
 import com.orasi.utils.rest.Patch;
+import com.orasi.utils.types.Reference;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -15,6 +16,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,11 @@ import sparkfive.Route;
 import sparkfive.SparkInstance;
 
 public class MockMicroblogServer {
+    
+    public static void main(String[] args) {
+        MockMicroblogServer svr = new MockMicroblogServer();
+        svr.start();
+    }
 
     public static interface ModelMutator {
         public Object model();
@@ -81,7 +88,7 @@ public class MockMicroblogServer {
 
     }
     
-    private static final Map<String, User> users = MapFactory.getUsers();
+    private static final Map<String, Reference<User>> users = new HashMap<String, Reference<User>>();
     private static final MultiMap tagdir = new MultiValueMap();
     
     private static final ObjectMapper map = new ObjectMapper();
@@ -130,7 +137,7 @@ public class MockMicroblogServer {
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
                 User u = map.readValue(req.body(), User.class);
-                users.put(u.username, u);
+                users.put(u.username, new Reference<User>(u));
                 return new Message(Type.INFORMATIONAL, "User added.");
             }
         }, new JsonTransformer());
@@ -139,7 +146,7 @@ public class MockMicroblogServer {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
-                return users.get(req.params(":name"));
+                return users.get(req.params(":name")).get();
             }
         }, new JsonTransformer());
         
@@ -148,7 +155,7 @@ public class MockMicroblogServer {
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");                
                 User nu = Patch.patch(req.body(), users.remove(req.params(":name")));
-                users.put(nu.username, nu);
+                users.put(nu.username, new Reference<User>(nu));
                 return new Message(Type.INFORMATIONAL, "New Username: ".concat(nu.username));                    
             }
         }, new JsonTransformer());
@@ -169,11 +176,11 @@ public class MockMicroblogServer {
                 String fn = req.params(":friend");
                 String mn = req.params(":name");
                 if(users.containsKey(mn) && users.containsKey(fn)) {
-                    User u = users.get(mn);
-                    User u2 = users.get(fn);
-                    if(u.friends == null)
-                        u.friends = new HashSet();
-                    u.friends.add(u2);
+                    Reference<User> u = users.get(mn);
+                    Reference<User> u2 = users.get(fn);
+                    if(u.get().friends == null)
+                        u.get().friends = new HashSet();
+                    u.get().friends.add(u2);
                     return new Message(Type.INFORMATIONAL, "Added friend to set.");
                 }
                 return new Message(Type.ERROR, "Could not find user or friend.");
@@ -187,10 +194,10 @@ public class MockMicroblogServer {
                 String fn = req.params(":friend");
                 String mn = req.params(":name");
                 if(users.containsKey(mn) && users.containsKey(fn)) {
-                    User u = users.get(mn);
-                    User u2 = users.get(fn);
-                    if(u.friends.contains(u2)) {
-                        u.friends.remove(u2);
+                    Reference<User> u = users.get(mn);
+                    Reference<User> u2 = users.get(fn);
+                    if(u.get().friends.contains(u2)) {
+                        u.get().friends.remove(u2);
                         return new Message(Type.INFORMATIONAL, "Friend removed.");
                     }
                 }
@@ -205,12 +212,12 @@ public class MockMicroblogServer {
                 Post p = map.readValue(req.body(), Post.class);
                 p.created = new Date();
                 if(users.containsKey(req.params(":name"))) {
-                    User u = users.get(req.params(":name"));
-                    if(u.posts == null) {
-                        u.posts = new ArrayList<Post>();
+                    Reference<User> u = users.get(req.params(":name"));
+                    if(u.get().posts == null) {
+                        u.get().posts = new ArrayList<Post>();
                     }
-                    p.id = u.posts.size();
-                    u.posts.add(p);
+                    p.id = u.get().posts.size();
+                    u.get().posts.add(p);
                     for(String tag : p.getTags()) {
                         tagdir.put(tag, p);
                     }
@@ -227,11 +234,11 @@ public class MockMicroblogServer {
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
                 if(users.containsKey(req.params(":name"))) {
-                    User u = users.get(req.params(":name"));
-                    if(u.posts == null) {
-                        u.posts = new ArrayList<Post>();
+                    Reference<User> u = users.get(req.params(":name"));
+                    if(u.get().posts == null) {
+                        u.get().posts = new ArrayList<Post>();
                     }
-                    return new ArrayOffset(req.queryParams("offset"), 20, Lists.reverse(u.posts));
+                    return new ArrayOffset(req.queryParams("offset"), 20, Lists.reverse(u.get().posts));
                 }
                 res.status(404);
                 return new Message(Type.ERROR, "Could not find user.");
@@ -243,10 +250,10 @@ public class MockMicroblogServer {
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
                 if(users.containsKey(req.params(":name"))) {
-                    User u = users.get(req.params(":name"));
+                    Reference<User> u = users.get(req.params(":name"));
                     int number = Integer.valueOf(req.params(":number"));
-                    if(number < u.posts.size()) {
-                        return u.posts.get(number);
+                    if(number < u.get().posts.size()) {
+                        return u.get().posts.get(number);
                     } else {
                         return new Message(Type.ERROR, "Could not find post.");
                     }

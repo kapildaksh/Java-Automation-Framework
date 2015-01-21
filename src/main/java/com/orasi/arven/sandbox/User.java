@@ -7,8 +7,8 @@ package com.orasi.arven.sandbox;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.orasi.utils.types.Reference;
 import java.util.List;
 import java.util.Set;
 
@@ -24,8 +24,7 @@ class User {
     public String email;
     public List<Post> posts;
     
-    @JsonSerialize(using = SerializeToString.class)
-    public Set<User> friends;
+    public Set<Reference<User>> friends;
         
     @Override
     public String toString() { return this.username; }
