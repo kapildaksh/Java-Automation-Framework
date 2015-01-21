@@ -39,8 +39,7 @@ public class Reference<T> {
     }
     
     @JsonValue
-    @Override
-    public String toString() {
+    public String name () {
         return this.value.toString();
     }
     
