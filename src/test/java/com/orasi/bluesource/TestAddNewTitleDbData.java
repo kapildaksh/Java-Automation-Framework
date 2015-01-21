@@ -1,5 +1,6 @@
 package com.orasi.bluesource;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,6 +71,8 @@ public class TestAddNewTitleDbData {
     }
 
     /**
+     * @throws IOException 
+     * @throws InterruptedException 
      * @throws Exception
      * @Summary: Adds a housekeeper to the schedule
      * @Precondition:NA
@@ -79,7 +82,7 @@ public class TestAddNewTitleDbData {
      */
     @Test(dataProvider = "dataScenario", groups = { "regression" })
     public void testCreateNewTitle(String testScenario, String role,
-	    String newTitle) {
+	    String newTitle) throws InterruptedException, IOException {
 	
 	String testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();

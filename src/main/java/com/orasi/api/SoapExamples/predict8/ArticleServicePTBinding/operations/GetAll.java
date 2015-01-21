@@ -38,7 +38,7 @@ public class GetAll extends ArticleServicePTBinding{
 
 		// XPath Query for showing all nodes value
 		XPathExpression expr = xpath.compile(path);
-		Object result = expr.evaluate(XMLTools.makeXMLDocument(getResponse()),	XPathConstants.NODESET);
+		Object result = expr.evaluate(getResponseDocument(),	XPathConstants.NODESET);
 		NodeList nodes = (NodeList) result;
 		
 		for(int nodeCounter = 0; nodeCounter < nodes.getLength(); nodeCounter++){
