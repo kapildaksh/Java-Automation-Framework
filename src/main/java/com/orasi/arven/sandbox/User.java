@@ -23,4 +23,9 @@ public class User {
     public List<Post> posts;
     
     public Set<Reference<User>> friends;
+    
+    @Override
+    public String toString() {
+        return this.username;
+    }
 }

@@ -125,13 +125,13 @@ public class MicroblogTest {
         RestAssert.assertInArray(n.path("tags"), "tags", "are", "they", "practically", "before", "every", "word");   
     }
     
-    @Test(groups = "friends", dependsOnGroups = "users")
+    @Test(groups = "friends", dependsOnGroups = "usersVerify")
     public void addFriendTomLarry() throws Exception {
         Response res = collection.byName("Tom Adds Larry").send();
         Assert.assertTrue(res.isSuccessful());
     }
     
-    @Test(groups = "friends", dependsOnGroups = "users")
+    @Test(groups = "friends", dependsOnGroups = "usersVerify")
     public void addFriendLarryTom() throws Exception {
         Response res = collection.byName("Larry Adds Tom Back").send();
         Assert.assertTrue(res.isSuccessful());        
@@ -175,12 +175,12 @@ public class MicroblogTest {
         Assert.assertTrue(res.isSuccessful());
     }
     
-    @Test(groups = "patchEmailVerify", dependsOnGroups = "patchEmail")
+    @Test(groups = {"patchEmailVerify", "one"}, dependsOnGroups = "patchEmail")
     public void verifyPatchEmail() throws Exception {
         Response res = collection.byName("Check User Larry").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
         Assert.assertEquals("larry@wall.org", n.path("email").asText());        
-    }    
-    
+    }
+
 }

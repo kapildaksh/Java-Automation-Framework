@@ -30,6 +30,7 @@ public interface RestRequest {
         public boolean enabled;
     }    
     
+    public abstract ExpectedResponse response(String name);
     public abstract Response send() throws Exception;
     
     public abstract RestRequest env(Map variables);

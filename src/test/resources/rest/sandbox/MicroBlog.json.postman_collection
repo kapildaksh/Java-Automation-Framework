@@ -37,7 +37,60 @@
 			"descriptionFormat": "html",
 			"time": 1421441010103,
 			"version": 2,
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 14,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "48",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"type\":\"INFORMATIONAL\",\"message\":\"User added.\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "d68bda82-1513-7e20-b000-d32ad9fcb75c",
+					"name": "createUserLarryExample",
+					"request": {
+						"url": "http://localhost:4567/users",
+						"pathVariables": {},
+						"data": "{\n\"username\": \"larry\",\n\"nickname\": \"Larry Wall\"\n}",
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "raw",
+						"method": "POST",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
@@ -59,7 +112,60 @@
 			"descriptionFormat": "html",
 			"time": 1421441331103,
 			"version": 2,
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 61,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "52",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"type\":\"INFORMATIONAL\",\"message\":\"Message posted.\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "eebf9635-dfa6-f1c7-0bc2-85ec35b3232a",
+					"name": "createPostTomExample",
+					"request": {
+						"url": "http://localhost:4567/users/tom/posts",
+						"pathVariables": {},
+						"data": "{\n  \"text\": \"This is an #example of a post which has a lot of those pointless #pound signs.\"\n}",
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "raw",
+						"method": "POST",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
@@ -81,7 +187,60 @@
 			"descriptionFormat": "html",
 			"time": 1421441583004,
 			"version": 2,
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 20,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "57",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"type\":\"INFORMATIONAL\",\"message\":\"Added friend to set.\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "6eb27ad8-92b5-ebd5-979c-f7dd600233de",
+					"name": "addFriendLarryTomExample",
+					"request": {
+						"url": "http://localhost:4567/users/larry/friends/tom",
+						"pathVariables": {},
+						"data": "",
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "raw",
+						"method": "PUT",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
@@ -103,7 +262,60 @@
 			"descriptionFormat": "html",
 			"time": 1421441562706,
 			"version": 2,
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 17,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "57",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"type\":\"INFORMATIONAL\",\"message\":\"Added friend to set.\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "fb54c138-044b-a34b-ad9d-81042eec5f65",
+					"name": "addFriendTomLarryExample",
+					"request": {
+						"url": "http://localhost:4567/users/tom/friends/larry",
+						"pathVariables": {},
+						"data": "",
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "raw",
+						"method": "PUT",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
@@ -128,7 +340,60 @@
 			"name": "Larry Removes Tom",
 			"description": "",
 			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 16,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "52",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"type\":\"INFORMATIONAL\",\"message\":\"Friend removed.\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "1effb371-5d75-0e5d-564c-cacdcabc2dc7",
+					"name": "removeFriendLarryTomExample",
+					"request": {
+						"url": "http://localhost:4567/users/larry/friends/tom",
+						"pathVariables": {},
+						"data": [],
+						"headers": "",
+						"dataMode": "params",
+						"method": "DELETE",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"synced": false
 		},
 		{
@@ -145,7 +410,60 @@
 			"descriptionFormat": "html",
 			"time": 1421441455412,
 			"version": 2,
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 12,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "52",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"type\":\"INFORMATIONAL\",\"message\":\"Message posted.\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "ea1dde8c-6852-831f-64d5-6c44fde1b770",
+					"name": "createPostLarryExample",
+					"request": {
+						"url": "http://localhost:4567/users/larry/posts",
+						"pathVariables": {},
+						"data": "{\n  \"text\": \"I don't get those #tags anyway. Why #are #they #practically #before #every #word.\"\n}",
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "raw",
+						"method": "POST",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
@@ -167,7 +485,60 @@
 			"descriptionFormat": "html",
 			"time": 1421441343910,
 			"version": 2,
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 54,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "166",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "[{\"id\":0,\"created\":\"2015-01-21T17:11:32.862+0000\",\"text\":\"This is an #example of a post which has a lot of those pointless #pound signs.\",\"tags\":[\"example\",\"pound\"]}]",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "6c2f45c8-06f2-d327-d4b6-4dd5cc047f37",
+					"name": "verifyPostTomExample",
+					"request": {
+						"url": "http://localhost:4567/users/tom/posts",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
@@ -188,7 +559,60 @@
 			"descriptionFormat": "html",
 			"time": 1421440911709,
 			"version": 2,
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 230,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "48",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"type\":\"INFORMATIONAL\",\"message\":\"User added.\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "269c22d8-269c-eed3-0db6-ee8d823f1562",
+					"name": "createUserTomExample",
+					"request": {
+						"url": "http://localhost:4567/users",
+						"pathVariables": {},
+						"data": "{\n\"username\": \"tom\",\n\"nickname\": \"Tom R. Fields\",\n\"email\": \"tom@muckdragon.info\"\n}",
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "raw",
+						"method": "POST",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
@@ -213,7 +637,112 @@
 			"name": "Check User Tom",
 			"description": "",
 			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 21,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "75",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"username\":\"tom\",\"nickname\":\"Tom R. Fields\",\"email\":\"tom@muckdragon.info\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "93c20cf1-e784-589f-edcc-c701f0aeab6a",
+					"name": "verifyUserTomExample",
+					"request": {
+						"url": "http://localhost:4567/users/tom",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
+				},
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 23,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "95",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"username\":\"tom\",\"nickname\":\"Tom R. Fields\",\"email\":\"tom@muckdragon.info\",\"friends\":[\"larry\"]}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "131c05dc-41b0-b552-8462-89b02099ef5d",
+					"name": "verifyFriendTomLarryExample",
+					"request": {
+						"url": "http://localhost:4567/users/tom",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"synced": false
 		},
 		{
@@ -230,7 +759,60 @@
 			"descriptionFormat": "html",
 			"time": 1421441515341,
 			"version": 2,
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 26,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "207",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"id\":0,\"created\":\"2015-01-21T17:11:42.421+0000\",\"text\":\"I don't get those #tags anyway. Why #are #they #practically #before #every #word.\",\"tags\":[\"tags\",\"are\",\"they\",\"practically\",\"before\",\"every\",\"word\"]}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "cb40ee21-9a2c-e111-296d-2c0e9edbfa43",
+					"name": "verifyPostLarrySingleExample",
+					"request": {
+						"url": "http://localhost:4567/users/larry/posts/0",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
@@ -251,7 +833,60 @@
 			"descriptionFormat": "html",
 			"time": 1421442017130,
 			"version": 2,
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 73,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "56",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"type\":\"INFORMATIONAL\",\"message\":\"New Username: larry\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "db6c1c46-5db4-7516-9176-f85b800947a8",
+					"name": "patchLarryEmailExample",
+					"request": {
+						"url": "http://localhost:4567/users/larry",
+						"pathVariables": {},
+						"data": "[\n  { \"op\": \"add\", \"path\": \"/email\", \"value\": \"larry@wall.org\" }\n]",
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "raw",
+						"method": "PATCH",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
@@ -297,7 +932,216 @@
 			"name": "Check User Larry",
 			"description": "",
 			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 15,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "44",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"username\":\"larry\",\"nickname\":\"Larry Wall\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "6328b3c1-bec6-6524-83d5-22e8b6aa6625",
+					"name": "verifyUserLarryExample",
+					"request": {
+						"url": "http://localhost:4567/users/larry",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
+				},
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 23,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "62",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"username\":\"larry\",\"nickname\":\"Larry Wall\",\"friends\":[\"tom\"]}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "1ce3ed91-42fe-167b-b449-94ed5b1161f7",
+					"name": "verifyFriendLarryTomExample",
+					"request": {
+						"url": "http://localhost:4567/users/larry",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
+				},
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 14,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "44",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"username\":\"larry\",\"nickname\":\"Larry Wall\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "e052bf70-d7fb-a87b-2fd3-d2edb422e9b1",
+					"name": "verifyRemoveFriendLarryTomExample",
+					"request": {
+						"url": "http://localhost:4567/users/larry",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
+				},
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 22,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "69",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"username\":\"larry\",\"nickname\":\"Larry Wall\",\"email\":\"larry@wall.org\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "082f5be8-2d30-88d0-9369-1fee4448e02f",
+					"name": "verifyPatchEmailExample",
+					"request": {
+						"url": "http://localhost:4567/users/larry",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"synced": false
 		},
 		{
@@ -314,7 +1158,60 @@
 			"descriptionFormat": "html",
 			"time": 1421441468404,
 			"version": 2,
-			"responses": [],
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 14,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "209",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "[{\"id\":0,\"created\":\"2015-01-21T17:11:42.421+0000\",\"text\":\"I don't get those #tags anyway. Why #are #they #practically #before #every #word.\",\"tags\":[\"tags\",\"are\",\"they\",\"practically\",\"before\",\"every\",\"word\"]}]",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "8361be4d-9ace-ff1d-e026-bf8741a61f4d",
+					"name": "verifyPostLarryExample",
+					"request": {
+						"url": "http://localhost:4567/users/larry/posts",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},

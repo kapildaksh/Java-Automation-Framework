@@ -6,6 +6,8 @@
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import com.orasi.utils.types.DefaultingMap;
@@ -19,10 +21,12 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import okio.Okio;
 import org.apache.commons.lang3.StringUtils;
+import org.testng.Assert;
 
 /**
  * The PostmanCollection allows one to load a Postman Collection file, which
@@ -42,7 +46,70 @@ public class PostmanCollection implements RestCollection {
     public RestRequest byName(String name) {
         return names.get(name);
     }
+    
+    public static class ResponseCode {
+        public Number code;
+        public String name;
+        public String detail;
+    }
+    
+    public static class Header {
+        public String name;
+        public String key;
+        public String value;
+        public String description;
+    }
+    
+    public static class State {
+        public String size;
+    }
+    
+    public static class PostmanResponseRequest {
+        public String url;
+        public Map pathVariables;
+        public JsonNode data;
+        public String headers;
+        public String dataMode;
+        public String method;
+        public String tests;
+        public Number version;
+    }
+    
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class SampleResponse extends ExpectedResponse {
+
+        @Override
+        public String expected() {
+            return this.text;
+        }
         
+        public String returned() {
+            return this.realResponseText;
+        }
+                        
+        public String status;
+        public ResponseCode responseCode;
+        public Number time;
+        public List<Header> headers;
+        public List<String> cookies;
+        public String mime;
+        public String text;
+        public String language;
+        public String rawDataType;
+        public State state;
+        public String previewType;
+        public Number searchResultScrolledTo;
+        public Boolean forceRaw;
+        public String id;
+        public String name;
+        public PostmanResponseRequest request;
+        
+        @JsonIgnore
+        public Response realResponse;
+        @JsonIgnore
+        public String realResponseText;
+    }
+
     public static class PostmanRequest implements RestRequest {        
         public static final MessageFormat fmt = new MessageFormat(
                 "-- ID: {0} URL: {2} Method: {5} Name: {8} --");
@@ -60,7 +127,7 @@ public class PostmanCollection implements RestCollection {
         public String descriptionFormat;
         public Date time;
         public Number version;
-        public List<String> responses;
+        public List<SampleResponse> responses;
         public String tests;
         public String currentHelper;
         public Map helperAttributes;
@@ -140,8 +207,22 @@ public class PostmanCollection implements RestCollection {
             
             return response;
         }
+        
+        @Override
+        public ExpectedResponse response(String name) {
+            try {
+                for(SampleResponse r : this.responses) {
+                    if(r.name.equals(name)) {
+                        r.realResponse = this.send();
+                        r.realResponseText = r.realResponse.body().string();
+                        return r;
+                    }
+                }
+            } catch (Exception e) {}
+            return new SampleResponse();
+        }
     }
-    
+        
     public static class PostmanCollectionData {        
         public String id;
         public String name;

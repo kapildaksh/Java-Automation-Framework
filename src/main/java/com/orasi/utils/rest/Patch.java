@@ -176,6 +176,14 @@ public class Patch {
         this.map.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
     }
     
+    public String apply(String json) {
+        try {
+            ObjectMapper map = new ObjectMapper();
+            return map.writeValueAsString(apply(map.readTree(json)));
+        } catch (Exception e) {}
+        return json;
+    }
+    
     public JsonNode apply(JsonNode node) {
         for(PatchEntry pe : entries) {
             try {
