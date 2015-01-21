@@ -13,7 +13,6 @@ import com.orasi.utils.types.Reference;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import edu.emory.mathcs.backport.java.util.Arrays;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -22,7 +21,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 import okio.Okio;
 import org.apache.commons.lang3.StringUtils;
 

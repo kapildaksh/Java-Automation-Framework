@@ -146,17 +146,18 @@ public class MockMicroblogServer {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
-                return users.get(req.params(":name")).get();
+                Reference<User> user = users.get(req.params(":name"));
+                return user.isNull() ? null : user.get();
             }
         }, new JsonTransformer());
         
         srv.patch("/users/:name", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
-                res.type("application/json; charset=UTF-8");                
-                User nu = Patch.patch(req.body(), users.remove(req.params(":name")));
-                users.put(nu.username, new Reference<User>(nu));
-                return new Message(Type.INFORMATIONAL, "New Username: ".concat(nu.username));                    
+                res.type("application/json; charset=UTF-8");
+                Reference<User> u = users.get(req.params(":name"));
+                u.set((User) Patch.patch(req.body(), u.get()));
+                return new Message(Type.INFORMATIONAL, "New Username: ".concat(u.get().username));                    
             }
         }, new JsonTransformer());
         
@@ -164,7 +165,7 @@ public class MockMicroblogServer {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
-                return users.remove(req.params(":name")) == null ? new Message(Type.ERROR, "Could not find user.") : new Message(Type.INFORMATIONAL, "User removed.");
+                return users.remove(req.params(":name")).isNull() ? new Message(Type.ERROR, "Could not find user.") : new Message(Type.INFORMATIONAL, "User removed.");
             }
         }, new JsonTransformer());
         

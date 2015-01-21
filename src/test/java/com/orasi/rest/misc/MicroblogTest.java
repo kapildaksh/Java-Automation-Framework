@@ -166,8 +166,7 @@ public class MicroblogTest {
         Response res = collection.byName("Check User Larry").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
-        RestAssert.assertIsArray(n.path("friends"));
-        RestAssert.assertNotInArray(n.path("friends"), "tom");        
+        RestAssert.assertNotArray(n.path("friends"));
     }
     
     @Test(groups = "patchEmail", dependsOnGroups = "usersVerify")

@@ -5,9 +5,10 @@
  */
 package com.orasi.utils.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Objects;
 
 /**
  * This is a reference type which is like a non-synchronous version of the
@@ -38,9 +39,28 @@ public class Reference<T> {
         return value == null;
     }
     
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Reference) {
+            return this.name().equals(((Reference)o).name());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.name());
+    }
+    
     @JsonValue
     public String name () {
         return this.value.toString();
+    }
+    
+    @JsonCreator
+    public static Reference<Object> name (String ref) {
+        return new Reference<Object>(ref);
     }
     
 }
