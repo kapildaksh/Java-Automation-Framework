@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +12,8 @@ import okio.Okio;
 /**
  * This file reads the Postman Environment files which can be saved during
  * manual testing of a REST service. They contain the replacements for
- * variables held in the {{ and }} tags.
+ * variables held in the {{ and }} tags. This is a generic map type and can
+ * be used with any methods available for a standard map.
  * 
  * @author Brian Becker
  */
@@ -59,7 +55,7 @@ public class PostmanEnvironment extends AbstractMap {
         public String syncedFilename;
     }
     
-    public PostmanEnvironmentData object;
+    private final PostmanEnvironmentData object;
     
     public PostmanEnvironment(byte[] data) throws IOException {
         ObjectMapper map = new ObjectMapper();

@@ -30,6 +30,11 @@ public class ExpectedPath {
         this.patches = patches;
     }
     
+    private void test() {
+        if(this.newPatchPath == null)
+            throw new IllegalArgumentException("Operation not supported on root node.");
+    }
+    
     /**
      * Travel to the given path, from this node. Uses the Jackson-style path
      * selection, strings (for object) and integers (for arrays).
@@ -38,7 +43,7 @@ public class ExpectedPath {
      * @return 
      */
     public ExpectedPath path(Object... path) {
-        return new ExpectedPath(newPatchPath + JsonPointer.fromPath(path), ignores, patches);
+        return new ExpectedPath((newPatchPath != null ? newPatchPath : "") + JsonPointer.fromPath(path), ignores, patches);
     }
     
     /**
@@ -49,7 +54,7 @@ public class ExpectedPath {
      * @return 
      */
     public ExpectedPath at(String path) {
-        return new ExpectedPath(newPatchPath + path, ignores, patches);
+        return new ExpectedPath((newPatchPath != null ? newPatchPath : "") + path, ignores, patches);
     }        
     
     /**
@@ -59,6 +64,7 @@ public class ExpectedPath {
      * @return this
      */
     public ExpectedPath ignore() {
+        test();
         Patch p = new Patch.Builder().remove(newPatchPath).build();
         this.ignores.add(p);
         return this;
@@ -74,6 +80,7 @@ public class ExpectedPath {
      * @return this
      */
     public ExpectedPath replace(Object value) {
+        test();
         Patch p = new Patch.Builder().replace(newPatchPath, value).build();
         this.patches.add(p);
         return this;
@@ -87,6 +94,7 @@ public class ExpectedPath {
      * @return 
      */
     public ExpectedPath add(Object value) {
+        test();
         Patch p = new Patch.Builder().add(newPatchPath, value).build();
         this.patches.add(p);
         return this;
@@ -98,6 +106,7 @@ public class ExpectedPath {
      * @return 
      */
     public ExpectedPath remove() {
+        test();
         Patch p = new Patch.Builder().remove(newPatchPath).build();
         this.patches.add(p);
         return this;

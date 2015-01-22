@@ -1,18 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.rest;
 
 import java.util.Map;
 
 /**
- *
- * @author brian.becker
+ * The RestCollection is a warehouse of REST service calls. You should be able
+ * to look up calls by ID or by name, the meaning of such which is defined by
+ * the collection implementation itself. You may set a collection-wide
+ * environment, which is usable for value substitution.
+ * 
+ * @author Brian Becker
  */
 public interface RestCollection {
     public abstract RestRequest byId(String id);
     public abstract RestRequest byName(String name);
-    public abstract RestCollection env(Map variables);
+    public abstract RestCollection withEnv(Map variables);
 }

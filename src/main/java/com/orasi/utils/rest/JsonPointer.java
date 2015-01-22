@@ -1,22 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.rest;
 
 /**
- *
- * @author brian.becker
+ * This is an opaque container for holding a JSON pointer. It also has a few
+ * helper methods for converting other notations into JSON pointer.
+ * 
+ * @author Brian Becker
  */
 public class JsonPointer {
     
     private final String pointer;
     
+    /**
+     * Create a JSON pointer from a JSON pointer string.
+     * 
+     * @param pointer 
+     */
     public JsonPointer(String pointer) {
         this.pointer = pointer;
     }
-           
+    
+    /**
+     * Convert a list of path steps like Jackson uses into a JSON Pointer
+     * string.
+     * 
+     * @param objs  A path. Example: fromPath(0, 1, "Testing")
+     * @return JSON pointer string
+     */
     public static String fromPath(Object... objs) {
         StringBuilder pointer = new StringBuilder("");
         for(Object o : objs) {

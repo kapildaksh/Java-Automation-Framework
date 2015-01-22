@@ -81,7 +81,7 @@ public class PostmanTest {
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
-        collection.byName("Test Variables").env(env).send();
+        collection.byName("Test Variables").withEnv(env).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3&x=file:///var/variable HTTP/1.1", rr.getRequestLine());
     }    
@@ -94,7 +94,7 @@ public class PostmanTest {
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
-        collection.byName("Url Parameters").env(env).params("more").send();
+        collection.byName("Url Parameters").withEnv(env).withParams("more").send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3&x=file:///var/variable HTTP/1.1", rr.getRequestLine());
     }        
@@ -118,7 +118,7 @@ public class PostmanTest {
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
-        collection.byName("Test Url Encoding Variables").env(env).send();
+        collection.byName("Test Url Encoding Variables").withEnv(env).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("q=v1&v=v2&a=v3&x=" + URLEncoder.encode("file:///var/variable", "UTF-8"), rr.getUtf8Body());
     }    
@@ -157,7 +157,7 @@ public class PostmanTest {
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
-        collection.byName("Test Form Variables").env(env).send();
+        collection.byName("Test Form Variables").withEnv(env).send();
 
         RecordedRequest rr = mws.takeRequest();
 
@@ -187,7 +187,7 @@ public class PostmanTest {
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
-        collection.byName("Test Raw Variables").env(env).send();
+        collection.byName("Test Raw Variables").withEnv(env).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("This is only a raw document, no formatting or special data type. It does, however, support file:///var/variable", rr.getUtf8Body());
     }    
@@ -209,7 +209,7 @@ public class PostmanTest {
         mws.enqueue(new MockResponse());       
         mws.play(TESTING_PORT);
         
-        collection.byName("Test Binary Data").files(new String(Files.readAllBytes(Paths.get(getClass().getResource(REST_SANDBOX).toURI()).resolve("schema.json")))).send();
+        collection.byName("Test Binary Data").withFiles(new String(Files.readAllBytes(Paths.get(getClass().getResource(REST_SANDBOX).toURI()).resolve("schema.json")))).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertTrue(rr.getUtf8Body().contains("patternProperties"));
     }

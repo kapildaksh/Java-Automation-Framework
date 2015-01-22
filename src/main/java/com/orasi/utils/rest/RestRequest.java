@@ -9,7 +9,11 @@ import com.squareup.okhttp.Response;
 import java.util.Map;
 
 /**
- *
+ * A RestRequest is intended to send the request to the server, with any
+ * given variables, parameters, or files. It also contains a list of
+ * responses, which may have been generated during manual testing or by
+ * a schema writer.
+ * 
  * @author Brian Becker
  */
 public interface RestRequest {
@@ -33,8 +37,8 @@ public interface RestRequest {
     public abstract ExpectedResponse response(String name);
     public abstract Response send() throws Exception;
     
-    public abstract RestRequest env(Map variables);
-    public abstract RestRequest params(String... args);
-    public abstract RestRequest files(String... files);
+    public abstract RestRequest withEnv(Map variables);
+    public abstract RestRequest withParams(String... args);
+    public abstract RestRequest withFiles(String... files);
     
 }
