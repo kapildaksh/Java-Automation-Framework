@@ -1,7 +1,6 @@
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.testng.Assert;
 
@@ -22,13 +21,12 @@ public class RestAssert {
      * @throws Exception 
      */
     public static void assertInArray(JsonNode container, Object... contained) throws Exception {
-        ObjectMapper map = new ObjectMapper();
         RestAssert.assertIsArray(container);
         for (Object c : contained) {
             boolean found = false;
             ArrayNode an = (ArrayNode) container;
             for(int i = 0; i < an.size(); i++) {
-                found = found ? true : map.writeValueAsString(an.get(i)).equals(map.writeValueAsString(c));
+                found = found ? true : Json.map.writeValueAsString(an.get(i)).equals(Json.map.writeValueAsString(c));
             }
             if(!found) {
                 Assert.fail("Item [" + c.toString() + "] not found in array node, should be in array.");
@@ -44,13 +42,12 @@ public class RestAssert {
      * @throws Exception 
      */
     public static void assertNotInArray(JsonNode container, Object... contained) throws Exception {
-        ObjectMapper map = new ObjectMapper();
         RestAssert.assertIsArray(container);
         for (Object c : contained) {
             boolean found = false;
             ArrayNode an = (ArrayNode) container;
             for(int i = 0; i < an.size(); i++) {
-                found = found ? true : map.writeValueAsString(an.get(i)).equals(map.writeValueAsString(c));
+                found = found ? true : Json.map.writeValueAsString(an.get(i)).equals(Json.map.writeValueAsString(c));
             }
             if(found) {
                 Assert.fail("Item [" + c.toString() + "] found in array node, should not be in array.");

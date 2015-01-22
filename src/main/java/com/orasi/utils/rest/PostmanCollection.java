@@ -5,12 +5,10 @@
  */
 package com.orasi.utils.rest;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.orasi.utils.types.DefaultingMap;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -244,10 +242,8 @@ public class PostmanCollection implements RestCollection {
         return this;
     }
     
-    public static RestCollection file(URL collection) throws Exception {
-        ObjectMapper map = new ObjectMapper();
-        map.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));        
-        return new PostmanCollection(map.readValue(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), PostmanCollectionData.class));
+    public static RestCollection file(URL collection) throws Exception {   
+        return new PostmanCollection(Json.map.readValue(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), PostmanCollectionData.class));
     }
         
 }

@@ -11,10 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
@@ -56,8 +53,7 @@ public class Patch {
         @JsonCreator
         public PatchEntry(@JsonProperty("op") Op op, @JsonProperty("from") String from, @JsonProperty("path") String path, @JsonProperty("value") Object value) {
             if(!(value instanceof JsonNode)) {
-                ObjectMapper map = new ObjectMapper();
-                this.value = map.valueToTree(value);
+                this.value = Json.map.valueToTree(value);
             } else {
                 this.value = (JsonNode) value;
             }
@@ -227,12 +223,9 @@ public class Patch {
     }
     
     private final List<PatchEntry> entries;
-    private final ObjectMapper map;
     
     public Patch(List<PatchEntry> entries) {
         this.entries = entries;
-        this.map = new ObjectMapper();
-        this.map.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
     }
     
     /**
@@ -245,7 +238,7 @@ public class Patch {
      */
     public String apply(String json) {
         try {
-            return map.writeValueAsString(apply(map.readTree(json)));
+            return Json.map.writeValueAsString(apply(Json.map.readTree(json)));
         } catch (Exception e) {}
         return json;
     }
@@ -281,9 +274,9 @@ public class Patch {
      */
     public <T> T apply(T o) {
         try {
-            JsonNode n = this.map.valueToTree(o);
+            JsonNode n = Json.map.valueToTree(o);
             this.apply(n);
-            return (T) map.treeToValue(n, o.getClass());
+            return (T) Json.map.treeToValue(n, o.getClass());
         } catch (JsonProcessingException ex) {
             Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -301,10 +294,8 @@ public class Patch {
      * @return the modified object
      */
     public static <T> T patch(String json, Object o) {
-        ObjectMapper m = new ObjectMapper();
-        m.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
         try {
-            Patch p = new Patch((List<Patch.PatchEntry>)m.readValue(json, new TypeReference<List<Patch.PatchEntry>>() { }));
+            Patch p = new Patch((List<Patch.PatchEntry>)Json.map.readValue(json, new TypeReference<List<Patch.PatchEntry>>() { }));
             return (T) p.apply(o);
         } catch (IOException ex) {
             Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
@@ -315,7 +306,7 @@ public class Patch {
     @Override
     public String toString() {
         try {
-            return this.map.writeValueAsString(this.entries);
+            return Json.map.writeValueAsString(this.entries);
         } catch (JsonProcessingException ex) {
             ex.printStackTrace(System.out);
             return "[]";

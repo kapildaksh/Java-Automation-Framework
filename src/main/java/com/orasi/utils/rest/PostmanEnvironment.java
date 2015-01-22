@@ -1,8 +1,5 @@
 package com.orasi.utils.rest;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.AbstractMap;
@@ -63,9 +60,7 @@ public class PostmanEnvironment extends AbstractMap {
     }
         
     public static Map file(URL environment) throws Exception {
-        ObjectMapper map = new ObjectMapper();
-        map.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
-        return new PostmanEnvironment(map.readValue(Okio.buffer(Okio.source((InputStream)environment.getContent())).readByteArray(), PostmanEnvironmentData.class));
+        return new PostmanEnvironment(Json.map.readValue(Okio.buffer(Okio.source((InputStream)environment.getContent())).readByteArray(), PostmanEnvironmentData.class));
     }    
     
     @Override
