@@ -94,7 +94,7 @@ public class RestRequestHelpers {
         url = RestRequestHelpers.variables(url, variables);
         rawModeData = RestRequestHelpers.variables(rawModeData, variables);
         if(data != null) {
-            RestRequestHelpers.variables(data, variables);
+            data = RestRequestHelpers.variables(data, variables);
         }
         
         RequestBody body = null;
