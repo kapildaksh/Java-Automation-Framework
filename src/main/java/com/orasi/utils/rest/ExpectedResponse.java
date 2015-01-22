@@ -17,48 +17,19 @@ import org.testng.Assert;
 public abstract class ExpectedResponse {
     
     @JsonIgnore
-    public List<Patch> ignores = new LinkedList<Patch>();   
+    public List<Patch> ignores = new LinkedList<Patch>();
     @JsonIgnore
-    public List<Patch> patches = new LinkedList<Patch>();   
-    
-    @JsonIgnore
-    public String newPatchPath;
+    public List<Patch> patches = new LinkedList<Patch>();
     
     public abstract String expected();
     public abstract String returned();
-    
-    public ExpectedResponse ignore() {
-        Patch p = new Patch.Builder().remove(newPatchPath).build();
-        this.ignores.add(p);
-        return this;
-    }
-
-    public ExpectedResponse replace(Object value) {
-        Patch p = new Patch.Builder().replace(newPatchPath, value).build();
-        this.patches.add(p);
-        return this;
-    }
-
-    public ExpectedResponse add(Object value) {
-        Patch p = new Patch.Builder().add(newPatchPath, value).build();
-        this.patches.add(p);
-        return this;
-    }
-
-    public ExpectedResponse remove() {
-        Patch p = new Patch.Builder().remove(newPatchPath).build();
-        this.patches.add(p);
-        return this;
+        
+    public ExpectedPath path(Object... path) {
+        return new ExpectedPath(JsonPointer.fromPath(path), ignores, patches);
     }
     
-    public ExpectedResponse path(Object... path) {
-        this.newPatchPath = JsonPointer.fromPath(path);
-        return this;
-    }
-    
-    public ExpectedResponse at(String path) {
-        this.newPatchPath = path;
-        return this;
+    public ExpectedPath at(String path) {
+        return new ExpectedPath(path, ignores, patches);
     }    
 
     public ExpectedResponse clear() {

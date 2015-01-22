@@ -7,6 +7,7 @@ package com.orasi.rest.misc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.arven.sandbox.MockMicroblogServer;
+import com.orasi.utils.rest.ExpectedPath;
 import com.orasi.utils.rest.ExpectedResponse;
 import com.orasi.utils.rest.PostmanCollection;
 import com.orasi.utils.rest.PostmanEnvironment;
@@ -133,7 +134,8 @@ public class MicroblogExampleTest {
     @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
     public void verifyPostTomExample2() throws Exception {
         ExpectedResponse res = collection.byName("Check Tom's Posts").response("verifyPostTomExample");
-        res.path(0, "created").ignore();
+        ExpectedPath p = res.path(0);
+        p.path("created").ignore();
         res.verify();
     }
     
