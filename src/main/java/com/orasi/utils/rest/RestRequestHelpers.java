@@ -7,6 +7,7 @@ package com.orasi.utils.rest;
 
 import com.orasi.text.TemplateFormat;
 import com.orasi.utils.rest.RestRequest.RequestData;
+import com.orasi.utils.rest.RestRequest.RequestType;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.Request;
@@ -117,17 +118,10 @@ public class RestRequestHelpers {
                 break;
         }
         
-        if(type.equals(RestRequest.RequestType.GET)) {
-            return new Request.Builder()
-                    .url(url)
-                    .headers(headers(headers))
-                    .get().build();
-        } else {
-            return new Request.Builder()
-                    .url(url)
-                    .headers(headers(headers))
-                    .method(type.toString(), body).build();
-        }
+        return new Request.Builder()
+                .url(url)
+                .headers(headers(headers))
+                .method(type.toString(), type.equals(RequestType.GET) ? null : body).build();
     }
     
     /**
