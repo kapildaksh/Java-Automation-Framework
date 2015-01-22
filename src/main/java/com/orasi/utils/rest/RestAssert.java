@@ -26,7 +26,7 @@ public class RestAssert {
             boolean found = false;
             ArrayNode an = (ArrayNode) container;
             for(int i = 0; i < an.size(); i++) {
-                found = found ? true : Json.map.writeValueAsString(an.get(i)).equals(Json.map.writeValueAsString(c));
+                found = found ? true : Json.MAP.writeValueAsString(an.get(i)).equals(Json.MAP.writeValueAsString(c));
             }
             if(!found) {
                 Assert.fail("Item [" + c.toString() + "] not found in array node, should be in array.");
@@ -47,7 +47,7 @@ public class RestAssert {
             boolean found = false;
             ArrayNode an = (ArrayNode) container;
             for(int i = 0; i < an.size(); i++) {
-                found = found ? true : Json.map.writeValueAsString(an.get(i)).equals(Json.map.writeValueAsString(c));
+                found = found ? true : Json.MAP.writeValueAsString(an.get(i)).equals(Json.MAP.writeValueAsString(c));
             }
             if(found) {
                 Assert.fail("Item [" + c.toString() + "] found in array node, should not be in array.");

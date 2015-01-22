@@ -18,13 +18,13 @@ import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
  */
 public class Json {
     
-    public static ObjectMapper map;
+    public static ObjectMapper MAP;
     
     static {
-        ObjectMapper map = new ObjectMapper();
-        map.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
-        map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        map.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
+        MAP = new ObjectMapper();
+        MAP.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        MAP.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        MAP.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
     }
     
 }

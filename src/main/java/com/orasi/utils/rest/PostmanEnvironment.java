@@ -60,7 +60,7 @@ public class PostmanEnvironment extends AbstractMap {
     }
         
     public static Map file(URL environment) throws Exception {
-        return new PostmanEnvironment(Json.map.readValue(Okio.buffer(Okio.source((InputStream)environment.getContent())).readByteArray(), PostmanEnvironmentData.class));
+        return new PostmanEnvironment(Json.MAP.readValue(Okio.buffer(Okio.source((InputStream)environment.getContent())).readByteArray(), PostmanEnvironmentData.class));
     }    
     
     @Override

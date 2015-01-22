@@ -243,7 +243,7 @@ public class PostmanCollection implements RestCollection {
     }
     
     public static RestCollection file(URL collection) throws Exception {   
-        return new PostmanCollection(Json.map.readValue(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), PostmanCollectionData.class));
+        return new PostmanCollection(Json.MAP.readValue(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), PostmanCollectionData.class));
     }
         
 }

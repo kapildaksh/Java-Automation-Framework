@@ -53,7 +53,7 @@ public class Patch {
         @JsonCreator
         public PatchEntry(@JsonProperty("op") Op op, @JsonProperty("from") String from, @JsonProperty("path") String path, @JsonProperty("value") Object value) {
             if(!(value instanceof JsonNode)) {
-                this.value = Json.map.valueToTree(value);
+                this.value = Json.MAP.valueToTree(value);
             } else {
                 this.value = (JsonNode) value;
             }
@@ -238,7 +238,7 @@ public class Patch {
      */
     public String apply(String json) {
         try {
-            return Json.map.writeValueAsString(apply(Json.map.readTree(json)));
+            return Json.MAP.writeValueAsString(apply(Json.MAP.readTree(json)));
         } catch (Exception e) {}
         return json;
     }
@@ -274,9 +274,9 @@ public class Patch {
      */
     public <T> T apply(T o) {
         try {
-            JsonNode n = Json.map.valueToTree(o);
+            JsonNode n = Json.MAP.valueToTree(o);
             this.apply(n);
-            return (T) Json.map.treeToValue(n, o.getClass());
+            return (T) Json.MAP.treeToValue(n, o.getClass());
         } catch (JsonProcessingException ex) {
             Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -295,7 +295,7 @@ public class Patch {
      */
     public static <T> T patch(String json, Object o) {
         try {
-            Patch p = new Patch((List<Patch.PatchEntry>)Json.map.readValue(json, new TypeReference<List<Patch.PatchEntry>>() { }));
+            Patch p = new Patch((List<Patch.PatchEntry>)Json.MAP.readValue(json, new TypeReference<List<Patch.PatchEntry>>() { }));
             return (T) p.apply(o);
         } catch (IOException ex) {
             Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
@@ -306,7 +306,7 @@ public class Patch {
     @Override
     public String toString() {
         try {
-            return Json.map.writeValueAsString(this.entries);
+            return Json.MAP.writeValueAsString(this.entries);
         } catch (JsonProcessingException ex) {
             ex.printStackTrace(System.out);
             return "[]";
