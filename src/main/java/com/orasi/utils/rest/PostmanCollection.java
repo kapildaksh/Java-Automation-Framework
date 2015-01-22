@@ -6,7 +6,6 @@
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.utils.types.DefaultingMap;
 import com.squareup.okhttp.OkHttpClient;
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import okio.Okio;
 import org.apache.commons.lang3.StringUtils;
+import org.testng.Assert;
 
 /**
  * The PostmanCollection allows one to load a Postman Collection file, which
@@ -90,6 +90,21 @@ public class PostmanCollection implements RestCollection {
         private String id;
         private String name;
         private PostmanResponseRequest request;
+    }
+    
+    private static class SampleResponseValidator implements RestValidator {
+
+        private final SampleResponseData data;
+        
+        public SampleResponseValidator(SampleResponseData data) {
+            this.data = data;
+        }
+        
+        @Override
+        public void validate(Response real) {
+            Assert.assertEquals(data.responseCode.code, real.code());
+        }
+        
     }
 
     private static class PostmanRequestData {
@@ -182,7 +197,7 @@ public class PostmanCollection implements RestCollection {
         public ExpectedResponse response(String name) {
             for(SampleResponseData r : data.responses) {
                 if(r.name.equals(name)) {
-                    return new ExpectedResponse(this, r.text);
+                    return new ExpectedResponse(this, r.text, new SampleResponseValidator(r));
                 }
             }
             return new ExpectedResponse();

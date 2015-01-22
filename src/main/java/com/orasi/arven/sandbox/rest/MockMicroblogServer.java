@@ -1,4 +1,4 @@
-package com.orasi.arven.sandbox;
+package com.orasi.arven.sandbox.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import com.google.common.collect.Lists;
 
-import com.orasi.arven.sandbox.Message.Type;
+import com.orasi.arven.sandbox.rest.Message.Type;
 import com.orasi.utils.rest.Patch;
 import com.orasi.utils.types.Reference;
 

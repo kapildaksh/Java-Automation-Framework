@@ -6,6 +6,7 @@
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.base.Function;
 import com.squareup.okhttp.Response;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,14 +25,16 @@ public class ExpectedResponse {
     private final List<Patch> patches = new LinkedList<Patch>();
     private final RestRequest request;
     private String expected;
+    private RestValidator validate;
     
-    public ExpectedResponse(RestRequest req, String expected) {
+    public ExpectedResponse(RestRequest req, String expected, RestValidator validate) {
         this.request = req;
         this.expected = expected;
+        this.validate = validate;
     }
 
     public ExpectedResponse() {
-        this(null, null);
+        this(null, null, null);
     }
     
     /**
@@ -55,7 +58,7 @@ public class ExpectedResponse {
      * @return A validated JsonNode
      */
     public JsonNode validate() {
-        if(request == null)
+        if(request == null || expected == null || validate == null)
             throw new UnsupportedOperationException("Operation not supported on null ExpectedResponse");
         try {
             Response res = request.send();
@@ -68,6 +71,7 @@ public class ExpectedResponse {
                 expected = p.apply(expected);
             }
             Assert.assertEquals(expected, real);
+            this.validate.validate(res);
             return Json.MAP.readTree(real);
         } catch (Exception e) {
             throw new RuntimeException("Error while sending message during validation. Validation failed.");

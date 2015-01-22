@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.orasi.arven.sandbox;
+package com.orasi.arven.sandbox.rest;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.orasi.utils.types.Reference;
