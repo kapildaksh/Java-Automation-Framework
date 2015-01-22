@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.orasi</groupId>
 	<artifactId>Java-Automation-Framework</artifactId>
-	
-	
 	<version>1.0</version>
-  	<packaging>pom</packaging>
+	
+	
+<!--   	<packaging>pom</packaging>
 	<modules>
 		<module>Linux_Firefox_Binaries</module>
-	</modules>
+	</modules> -->
 	
 	
 	<!-- Usually specified in .m2/settings.xml, we'll have to revisit later -->
