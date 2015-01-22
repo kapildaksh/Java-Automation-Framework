@@ -18,5 +18,5 @@ LINUX OS:
       Location of these files is based on user-preference. By default, Selenium looks for the Firefox 
       executable as /usr/bin/firefox. As a "super user," a soft link can be made to the binaries so that 
       Selenium still uses /usr/bin/firefox, but that command is actually linked to the version of Firefox 
-      the user has chosen. Since the soft link must be made manually, this solution would prover 
+      the user has chosen. Since the soft link must be made manually, this solution would prove 
       problematic when attempting to implement on a multi-node Selenium grid
