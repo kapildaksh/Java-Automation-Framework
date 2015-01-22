@@ -12,6 +12,7 @@ import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import java.net.URLEncoder;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -34,11 +35,16 @@ public class RestRequestHelpers {
      * @return 
      */
     public static List<RequestData> variables(List<RequestData> data, Map variables) {
+        List<RequestData> data2 = new LinkedList<RequestData>();
         for(RequestData dt : data) {
-            dt.key = format(dt.key, variables); //.format(dt.key, variables);
-            dt.value = format(dt.value, variables);
+            RequestData dt2 = new RequestData();
+            dt2.key = format(dt.key, variables);
+            dt2.value = format(dt.value, variables);
+            dt2.enabled = dt.enabled;
+            dt2.type = dt.type;
+            data2.add(dt2);
         }
-        return data;
+        return data2;
     }
     
     public static String variables(String url, Map variables) {
@@ -79,11 +85,18 @@ public class RestRequestHelpers {
      * @param format
      * @param data
      * @param rawModeData
+     * @param variables
      * @param parameters
      * @return 
      * @throws java.lang.Exception 
      */
-    public static Request request(RestRequest.RequestType type, String headers, String url, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, String... parameters) throws Exception {       
+    public static Request request(RestRequest.RequestType type, String headers, String url, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, Map variables, String... parameters) throws Exception {
+        url = RestRequestHelpers.variables(url, variables);
+        rawModeData = RestRequestHelpers.variables(rawModeData, variables);
+        if(data != null) {
+            RestRequestHelpers.variables(data, variables);
+        }
+        
         RequestBody body = null;
         switch(format) {
             case URLENCODE:

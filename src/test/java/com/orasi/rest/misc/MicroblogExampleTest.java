@@ -40,10 +40,6 @@ public class MicroblogExampleTest {
         map = new ObjectMapper();
         collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
         env1 = PostmanEnvironment.file(getClass().getResource(REST_SANDBOX + "Passwords.postman_environment"));
-        //new HashMap();
-        //env1.put("username", "arven");
-        //env1.put("nickname", "A. R. Varian");
-        //env1.put("email", "arvarian@arven.info");
         env2 = new HashMap();
         env2.put("username", "arven2");
         env2.put("nickname", "A. R. Variadic");

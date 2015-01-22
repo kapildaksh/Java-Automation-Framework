@@ -185,21 +185,11 @@ public class PostmanCollection implements RestCollection {
                 case "raw": format = RequestFormat.RAW; break;
             }
             
-            Map variables = new DefaultingMap(requestVariables, requestDefaultVariables);
-            
-            String safeUrl, safeRawModeData;
-            
-            safeUrl = RestRequestHelpers.variables(url, variables);
-            safeRawModeData = RestRequestHelpers.variables(rawModeData, variables);
-            
-            // CRITICAL
-            if(data != null) {
-                RestRequestHelpers.variables(data, variables);
-            }
-            
-            Request request = RestRequestHelpers.request(method, headers, safeUrl, format, data, safeRawModeData, files);
+            Map variables = new DefaultingMap(requestVariables, requestDefaultVariables);            
+            Request request = RestRequestHelpers.request(method, headers, url, format, data, rawModeData, variables, files);
             Response response = client.newCall(request).execute();
             
+            requestVariables = null;            
             return response;
         }
         
@@ -252,6 +242,7 @@ public class PostmanCollection implements RestCollection {
     
     @Override
     public RestCollection env(Map variables) {
+        defaultVariables.clear();
         defaultVariables.putAll(variables);
         return this;
     }
