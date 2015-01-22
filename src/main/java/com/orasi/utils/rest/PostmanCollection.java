@@ -21,12 +21,10 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import okio.Okio;
 import org.apache.commons.lang3.StringUtils;
-import org.testng.Assert;
 
 /**
  * The PostmanCollection allows one to load a Postman Collection file, which
@@ -83,6 +81,7 @@ public class PostmanCollection implements RestCollection {
             return this.text;
         }
         
+        @Override
         public String returned() {
             return this.realResponseText;
         }
@@ -138,7 +137,7 @@ public class PostmanCollection implements RestCollection {
         @JsonIgnore
         public Map requestVariables;
         @JsonIgnore
-        public Reference<Map> requestDefaultVariables;
+        public Map requestDefaultVariables;
         @JsonIgnore
         public String[] files;
         
@@ -188,21 +187,24 @@ public class PostmanCollection implements RestCollection {
                 case "raw": format = RequestFormat.RAW; break;
             }
             
-            Map variables = new DefaultingMap(requestVariables, requestDefaultVariables.get(), new Function<String, String>() {
+            Map variables = new DefaultingMap(requestVariables, requestDefaultVariables, new Function<String, String>() {
                 @Override
                 public String apply(String f) {
                     return "{{" + f + "}}";
                 }
             });
             
-            url = RestRequestHelpers.variables(url, variables);
-            rawModeData = RestRequestHelpers.variables(rawModeData, variables);
+            String safeUrl, safeRawModeData;
             
+            safeUrl = RestRequestHelpers.variables(url, variables);
+            safeRawModeData = RestRequestHelpers.variables(rawModeData, variables);
+            
+            // CRITICAL
             if(data != null) {
                 RestRequestHelpers.variables(data, variables);
             }
             
-            Request request = RestRequestHelpers.request(method, headers, url, format, data, rawModeData, files);
+            Request request = RestRequestHelpers.request(method, headers, safeUrl, format, data, safeRawModeData, files);
             Response response = client.newCall(request).execute();
             
             return response;
@@ -212,13 +214,16 @@ public class PostmanCollection implements RestCollection {
         public ExpectedResponse response(String name) {
             try {
                 for(SampleResponse r : this.responses) {
+                    System.out.println(name);
                     if(r.name.equals(name)) {
                         r.realResponse = this.send();
                         r.realResponseText = r.realResponse.body().string();
                         return r;
                     }
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                System.out.println("Exception: " + e.getMessage());
+            }
             return new SampleResponse();
         }
     }
@@ -238,14 +243,14 @@ public class PostmanCollection implements RestCollection {
     private final PostmanCollectionData object;
     private final Map<String, RestRequest> ids;
     private final Map<String, RestRequest> names;
-    private final Reference<Map> defaultVariables;
+    private final Map defaultVariables;
     
     public PostmanCollection(byte[] data) throws IOException {
         ObjectMapper map = new ObjectMapper();
         object = map.readValue(data, PostmanCollectionData.class);
         ids = new HashMap<String, RestRequest>();
         names = new HashMap<String, RestRequest>();
-        defaultVariables = new Reference<Map>(new HashMap());
+        defaultVariables = new HashMap();
         for(PostmanRequest req : object.requests) {
             req.requestDefaultVariables = defaultVariables;
             ids.put(req.id, req);
@@ -255,7 +260,7 @@ public class PostmanCollection implements RestCollection {
     
     @Override
     public RestCollection env(Map variables) {
-        defaultVariables.set(variables);
+        defaultVariables.putAll(variables);
         return this;
     }
     

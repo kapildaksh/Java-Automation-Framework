@@ -16,7 +16,9 @@
 		"1bb60a50-200a-ecaa-db58-c654aefc68c8",
 		"b75d7e61-fce1-5b7d-9bdf-020134d7a706",
 		"3ecef213-0fb5-6a14-c1f5-8e68037cddb1",
-		"be640cfd-4bf3-2fb2-859f-c78b4dec320f"
+		"be640cfd-4bf3-2fb2-859f-c78b4dec320f",
+		"f82db5b4-0a66-6d50-9e36-0af0e10de3f9",
+		"e6bb5409-96be-e76c-cdf3-ae99d06529f3"
 	],
 	"folders": [],
 	"timestamp": 1421440517292,
@@ -1217,6 +1219,155 @@
 			"helperAttributes": {},
 			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
 			"synced": false
+		},
+		{
+			"id": "e6bb5409-96be-e76c-cdf3-ae99d06529f3",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:4567/users/{{username}}",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"name": "Check User Variable",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1421876101515,
+			"version": 2,
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 19,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "76",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"username\":\"arven\",\"nickname\":\"A. R. Varian\",\"email\":\"arvarian@arven.info\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "6c759e32-ed2f-13ea-b3cc-b9d9cc5a97eb",
+					"name": "verifyUserVariableExample",
+					"request": {
+						"url": "http://localhost:4567/users/{{username}}",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false
+		},
+		{
+			"id": "f82db5b4-0a66-6d50-9e36-0af0e10de3f9",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:4567/users",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Create User Variable",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1421876068621,
+			"version": 2,
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 48,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "48",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"type\":\"INFORMATIONAL\",\"message\":\"User added.\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "11846c5d-df1f-41f5-2f0b-f28f9e4c526d",
+					"name": "createUserVariableExample",
+					"request": {
+						"url": "http://localhost:4567/users",
+						"pathVariables": {},
+						"data": "{\n  \"username\": \"{{username}}\",\n  \"nickname\": \"{{nickname}}\",\n  \"email\": \"{{email}}\"\n}",
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "raw",
+						"method": "POST",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false,
+			"rawModeData": "{\n  \"username\": \"{{username}}\",\n  \"nickname\": \"{{nickname}}\",\n  \"email\": \"{{email}}\"\n}"
 		}
 	]
 }

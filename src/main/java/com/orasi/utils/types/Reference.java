@@ -39,6 +39,10 @@ public class Reference<T> {
         return value == null;
     }
     
+    public static boolean isNull(Reference i) {
+        return i == null || i.isNull();
+    }
+    
     @Override
     public boolean equals(Object o) {
         if(o instanceof Reference) {
@@ -61,6 +65,10 @@ public class Reference<T> {
     @JsonCreator
     public static Reference<Object> name (String ref) {
         return new Reference<Object>(ref);
+    }
+    
+    public static <T> T safeGet(Reference<T> i) {
+        return i == null ? null : (i.value == null) ? null : i.value;
     }
     
 }

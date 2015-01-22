@@ -147,7 +147,7 @@ public class MockMicroblogServer {
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
                 Reference<User> user = users.get(req.params(":name"));
-                return user.isNull() ? null : user.get();
+                return Reference.safeGet(user);
             }
         }, new JsonTransformer());
         
@@ -165,7 +165,7 @@ public class MockMicroblogServer {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
-                return users.remove(req.params(":name")).isNull() ? new Message(Type.ERROR, "Could not find user.") : new Message(Type.INFORMATIONAL, "User removed.");
+                return Reference.isNull(users.remove(req.params(":name"))) ? new Message(Type.ERROR, "Could not find user.") : new Message(Type.INFORMATIONAL, "User removed.");
             }
         }, new JsonTransformer());
         
@@ -173,7 +173,6 @@ public class MockMicroblogServer {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
-                boolean mutual = false;
                 String fn = req.params(":friend");
                 String mn = req.params(":name");
                 if(users.containsKey(mn) && users.containsKey(fn)) {

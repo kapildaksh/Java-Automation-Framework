@@ -19,34 +19,47 @@ public abstract class ExpectedResponse {
     @JsonIgnore
     public List<Patch> ignores = new LinkedList<Patch>();   
     @JsonIgnore
-    public List<Patch> patches = new LinkedList<Patch>();      
+    public List<Patch> patches = new LinkedList<Patch>();   
+    
+    @JsonIgnore
+    public String newPatchPath;
     
     public abstract String expected();
     public abstract String returned();
     
-    public ExpectedResponse ignore(String path) {
-        Patch p = new Patch.Builder().remove(path).build();
+    public ExpectedResponse ignore() {
+        Patch p = new Patch.Builder().remove(newPatchPath).build();
         this.ignores.add(p);
         return this;
     }
 
-    public ExpectedResponse replace(String path, Object value) {
-        Patch p = new Patch.Builder().replace(path, value).build();
+    public ExpectedResponse replace(Object value) {
+        Patch p = new Patch.Builder().replace(newPatchPath, value).build();
         this.patches.add(p);
         return this;
     }
 
-    public ExpectedResponse add(String path, Object value) {
-        Patch p = new Patch.Builder().add(path, value).build();
+    public ExpectedResponse add(Object value) {
+        Patch p = new Patch.Builder().add(newPatchPath, value).build();
         this.patches.add(p);
         return this;
     }
 
-    public ExpectedResponse remove(String path) {
-        Patch p = new Patch.Builder().remove(path).build();
+    public ExpectedResponse remove() {
+        Patch p = new Patch.Builder().remove(newPatchPath).build();
         this.patches.add(p);
         return this;
     }
+    
+    public ExpectedResponse path(Object... path) {
+        this.newPatchPath = JsonPointer.fromPath(path);
+        return this;
+    }
+    
+    public ExpectedResponse at(String path) {
+        this.newPatchPath = path;
+        return this;
+    }    
 
     public ExpectedResponse clear() {
         this.ignores.clear();
@@ -55,6 +68,11 @@ public abstract class ExpectedResponse {
     }
     
     public void verify() {
+        if(expected() == null)
+            Assert.fail("Nothing expected! Failed to load response.");
+        if(returned() == null)
+            Assert.fail("Nothing returned from REST service.");
+        
         try {
             String expect = expected();
             String real = returned();
@@ -68,6 +86,8 @@ public abstract class ExpectedResponse {
             Assert.assertEquals(expect, real);
         } catch (Exception e) {
             Assert.fail("Exception occurred while sending message. (" + e.getMessage() + ")");
+        } finally {
+            this.clear();
         }
     }
     

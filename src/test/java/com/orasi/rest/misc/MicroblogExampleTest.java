@@ -5,19 +5,13 @@
  */
 package com.orasi.rest.misc;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.ValueNode;
-import com.google.common.base.Function;
 import com.orasi.arven.sandbox.MockMicroblogServer;
 import com.orasi.utils.rest.ExpectedResponse;
 import com.orasi.utils.rest.PostmanCollection;
-import com.orasi.utils.rest.PostmanCollection.SampleResponse;
 import com.orasi.utils.rest.RestCollection;
-import com.squareup.okhttp.Response;
-import java.util.Date;
-import org.testng.Assert;
+import java.util.HashMap;
+import java.util.Map;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -36,12 +30,23 @@ public class MicroblogExampleTest {
     
     public ObjectMapper map;
     public RestCollection collection;
+    public Map environment;
+    public Map e2;
     public MockMicroblogServer server;
     
     @BeforeClass
     public void setUp() throws Exception {
         map = new ObjectMapper();
         collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
+        environment = new HashMap();
+        environment.put("username", "arven");
+        environment.put("nickname", "A. R. Varian");
+        environment.put("email", "arvarian@arven.info");
+        e2 = new HashMap();
+        e2.put("username", "arven2");
+        e2.put("nickname", "A. R. Variadic");
+        e2.put("email", "arvariadic@arven.info");        
+        collection.env(environment);
         server = new MockMicroblogServer();
         server.start();
     }
@@ -71,6 +76,31 @@ public class MicroblogExampleTest {
         collection.byName("Check User Larry").response("verifyUserLarryExample").verify();
     }
     
+    @Test(groups = "usersVariableExample")
+    public void createUserVariableExample1() throws Exception {
+        collection.byName("Create User Variable").response("createUserVariableExample").verify();
+    }    
+    
+    @Test(groups = "usersVariableVerifyExample", dependsOnGroups = "usersVariableExample")
+    public void verifyUserVariableExample1() throws Exception {
+        ExpectedResponse res = collection.byName("Check User Variable").response("verifyUserVariableExample");
+        res.verify();
+    }
+    
+    @Test(groups = "usersVariableExample")
+    public void createUserVariableExample2() throws Exception {
+        collection.byName("Create User Variable").env(e2).response("createUserVariableExample").verify();
+    }    
+    
+    @Test(groups = "usersVariableVerifyExample", dependsOnGroups = "usersVariableExample")
+    public void verifyUserVariableExample2() throws Exception {
+        ExpectedResponse res = collection.byName("Check User Variable").env(e2).response("verifyUserVariableExample");
+        res.path("username").replace("arven2");
+        res.path("nickname").replace("A. R. Variadic");
+        res.path("email").replace("arvariadic@arven.info");
+        res.verify();
+    }    
+    
     @Test(groups = "postsExample", dependsOnGroups = "usersExample")
     public void createPostTomExample() throws Exception {
         collection.byName("Tom Posts Message").response("createPostTomExample").verify();
@@ -81,26 +111,47 @@ public class MicroblogExampleTest {
         collection.byName("Lots of Hash Tags").response("createPostLarryExample").verify();
     }
     
-    @Test(groups = "postsVerifyExample", dependsOnGroups = "postsExample")
-    public void verifyPostTomExample() throws Exception {
+    @Test(groups = "postsVerifyExample1", dependsOnGroups = "postsExample")
+    public void verifyPostTomExample1() throws Exception {
         ExpectedResponse res = collection.byName("Check Tom's Posts").response("verifyPostTomExample");
-        res.ignore("/0/created");
+        res.at("/0/created").ignore();
         res.verify();
     }
     
-    @Test(groups = "postsVerifyExample", dependsOnGroups = "postsExample")
-    public void verifyPostLarryExample() throws Exception {
+    @Test(groups = "postsVerifyExample1", dependsOnGroups = "postsExample")
+    public void verifyPostLarryExample1() throws Exception {
         ExpectedResponse res = collection.byName("Read Larry's Posts").response("verifyPostLarryExample");
-        res.ignore("/0/created");
+        res.at("/0/created").ignore();
         res.verify();
     }
     
-    @Test(groups = "postsVerifyExample", dependsOnGroups = "postsExample")
-    public void verifyPostLarrySingleExample() throws Exception {
+    @Test(groups = "postsVerifyExample1", dependsOnGroups = "postsExample")
+    public void verifyPostLarrySingleExample1() throws Exception {
         ExpectedResponse res = collection.byName("Another Way to Read a Post").response("verifyPostLarrySingleExample");
-        res.ignore("/created");
+        res.at("/created").ignore();
         res.verify();
     }
+    
+    @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
+    public void verifyPostTomExample2() throws Exception {
+        ExpectedResponse res = collection.byName("Check Tom's Posts").response("verifyPostTomExample");
+        res.path(0, "created").ignore();
+        res.verify();
+    }
+    
+    @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
+    public void verifyPostLarryExample2() throws Exception {
+        ExpectedResponse res = collection.byName("Read Larry's Posts").response("verifyPostLarryExample");
+        res.path(0, "created").ignore();
+        res.verify();
+    }
+    
+    @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
+    public void verifyPostLarrySingleExample2() throws Exception {
+        ExpectedResponse res = collection.byName("Another Way to Read a Post").response("verifyPostLarrySingleExample");
+        res.path("created").ignore();
+        res.verify();
+    }   
     
     @Test(groups = "friendsExample", dependsOnGroups = "usersVerifyExample")
     public void addFriendTomLarryExample() throws Exception {

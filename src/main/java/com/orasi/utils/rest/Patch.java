@@ -178,7 +178,6 @@ public class Patch {
     
     public String apply(String json) {
         try {
-            ObjectMapper map = new ObjectMapper();
             return map.writeValueAsString(apply(map.readTree(json)));
         } catch (Exception e) {}
         return json;

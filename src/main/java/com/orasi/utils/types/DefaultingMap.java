@@ -26,8 +26,8 @@ public class DefaultingMap<K, V> implements Map<K, V> {
     public final Function<K, V> keyDefaults;
     
     public DefaultingMap(Map<K, V> orig, Map<K, V> fallback, Function<K, V> keyDefaults) {
-        this.orig = orig != null ? orig : new HashMap();
-        this.fallback = fallback != null ? orig : new HashMap();
+        this.orig = orig;
+        this.fallback = fallback;
         this.keyDefaults = keyDefaults;
     }
     
@@ -56,11 +56,13 @@ public class DefaultingMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(Object key) {
-        if(this.orig.containsKey(key)) {
+        System.out.println("Obtaining value...");
+        if(this.orig != null && this.orig.containsKey(key)) {
             return (V) this.orig.get(key);
-        } else if(this.fallback.containsKey(key)) {
+        } else if(this.fallback != null && this.fallback.containsKey(key)) {
+            System.out.println(this.fallback.get(key).toString());
             return (V) this.fallback.get(key);
-        } else if(keyDefaults != null) {
+        } else if(this.keyDefaults != null && keyDefaults != null) {
             return (V) keyDefaults.apply((K) key);
         }
         return null;        
@@ -89,24 +91,30 @@ public class DefaultingMap<K, V> implements Map<K, V> {
     @Override
     public Set<K> keySet() {
         Set v = new HashSet();
-        v.addAll(this.orig.keySet());
-        v.addAll(this.fallback.keySet());
+        if(this.orig != null)
+            v.addAll(this.orig.keySet());
+        if(this.fallback != null)
+            v.addAll(this.fallback.keySet());
         return v;
     }
 
     @Override
     public Collection<V> values() {
         Set v = new HashSet();
-        v.addAll(this.orig.values());
-        v.addAll(this.fallback.values());
+        if(this.orig != null)
+            v.addAll(this.orig.values());
+        if(this.fallback != null)
+            v.addAll(this.fallback.values());
         return v;        
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
         Set v = new HashSet();
-        v.addAll(this.orig.entrySet());
-        v.addAll(this.fallback.entrySet());
+        if(this.orig != null)
+            v.addAll(this.orig.entrySet());
+        if(this.fallback != null)
+            v.addAll(this.fallback.entrySet());
         return v;
     }
     
