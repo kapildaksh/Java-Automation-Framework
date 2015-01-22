@@ -9,12 +9,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.squareup.okhttp.Response;
 import java.util.LinkedList;
 import java.util.List;
+import org.testng.Assert;
 
 /**
  * The ExpectedResponse class is used for validating whether or not REST
  * requests return the proper values. It takes both a REST request as well
- * as a REST validator. It submits the request and then it passes the
- * result to the validator which is then returned from this method.
+ * as an expected string.
  *
  * @author Brian Becker
  */
@@ -23,11 +23,11 @@ public class ExpectedResponse {
     private final List<Patch> ignores = new LinkedList<Patch>();
     private final List<Patch> patches = new LinkedList<Patch>();
     private final RestRequest request;
-    private final RestValidator validator;
+    private String expected;
     
-    public ExpectedResponse(RestRequest req, RestValidator rv) {
+    public ExpectedResponse(RestRequest req, String expected) {
         this.request = req;
-        this.validator = rv;
+        this.expected = expected;
     }
 
     public ExpectedResponse() {
@@ -55,11 +55,20 @@ public class ExpectedResponse {
      * @return A validated JsonNode
      */
     public JsonNode validate() {
-        if(request == null || validator == null)
+        if(request == null)
             throw new UnsupportedOperationException("Operation not supported on null ExpectedResponse");
         try {
             Response res = request.send();
-            return this.validator.validate(ignores, patches, res);
+            String real = res.body().string();
+            for(Patch p : ignores) {
+                expected = p.apply(expected);
+                real = p.apply(real);
+            }
+            for(Patch p : patches) {
+                expected = p.apply(expected);
+            }
+            Assert.assertEquals(expected, real);
+            return Json.MAP.readTree(real);
         } catch (Exception e) {
             throw new RuntimeException("Error while sending message during validation. Validation failed.");
         }

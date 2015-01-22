@@ -5,10 +5,9 @@
  */
 package com.orasi.utils.rest;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.utils.types.DefaultingMap;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import okio.Okio;
 import org.apache.commons.lang3.StringUtils;
-import org.testng.Assert;
 
 /**
  * The PostmanCollection allows one to load a Postman Collection file, which
@@ -75,9 +73,7 @@ public class PostmanCollection implements RestCollection {
         private Number version;
     }
     
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class SampleResponseData implements RestValidator {
-                       
+    public static class SampleResponseData {        
         private String status;
         private ResponseCode responseCode;
         private Number time;
@@ -94,36 +90,16 @@ public class PostmanCollection implements RestCollection {
         private String id;
         private String name;
         private PostmanResponseRequest request;
-
-        @Override
-        public JsonNode validate(List<Patch> ignores, List<Patch> patches, Response res) throws Exception {
-            String expect = text;
-            String real = res.body().string();
-            for(Patch p : ignores) {
-                expect = p.apply(expect);
-                real = p.apply(real);
-            }
-            for(Patch p : patches) {
-                expect = p.apply(expect);
-            }
-            Assert.assertEquals(expect, real);
-            ObjectMapper map = new ObjectMapper();
-            return map.readTree(real);
-        }
-        
     }
 
-    public static class PostmanRequest implements RestRequest {        
-        private static final MessageFormat fmt = new MessageFormat(
-                "-- ID: {0} URL: {2} Method: {5} Name: {8} --");
-        
+    private static class PostmanRequestData {
         private String id;
         private String headers;
         private String url;
         private Map pathVariables;
         private String preRequestScript;
-        private RequestType method;
-        private List<RequestData> data;
+        private RestRequest.RequestType method;
+        private List<RestRequest.RequestData> data;
         private String dataMode;
         private String name;
         private String description;
@@ -137,12 +113,21 @@ public class PostmanCollection implements RestCollection {
         private String collectionId;
         private Boolean synced;
         private String rawModeData;
+    }
+    
+    public static class PostmanRequest implements RestRequest {        
+        private static final MessageFormat fmt = new MessageFormat(
+                "-- ID: {0} URL: {2} Method: {5} Name: {8} --");
         
-        @JsonIgnore
+        private final PostmanRequestData data;
+        
+        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)        
+        private PostmanRequest(PostmanRequestData data) {
+            this.data = data;
+        }
+        
         private Map requestVariables;
-        @JsonIgnore
         private Map requestDefaultVariables;
-        @JsonIgnore
         private String[] files;
         
         @Override
@@ -153,20 +138,16 @@ public class PostmanCollection implements RestCollection {
         
         @Override
         public String toString() {
-            return fmt.format(new Object[] { id, headers, url, pathVariables, 
-                    preRequestScript, method, data, dataMode, name, description,
-                    descriptionFormat, time, version, responses, tests, 
-                    currentHelper, helperAttributes, collectionId, synced, 
-                    rawModeData });
+            return fmt.format(new Object[] { data.id, data.url, data.method, data.name });
         }
         
         @Override
         public RestRequest withParams(String... parts) {
-            String[] temp = StringUtils.substringsBetween(url, "/:", "/");
+            String[] temp = StringUtils.substringsBetween(data.url, "/:", "/");
             int i = 0;
             if(temp != null && temp.length > 0) {
                 for(String t : temp) {
-                     url = url.replace("/:" + t + "/", "/" + parts[i++] + "/");
+                     data.url = data.url.replace("/:" + t + "/", "/" + parts[i++] + "/");
                 }
             }
             return this;
@@ -182,7 +163,7 @@ public class PostmanCollection implements RestCollection {
         public Response send() throws Exception {
             OkHttpClient client = new OkHttpClient();
             RequestFormat format = null;
-            switch(dataMode) {
+            switch(data.dataMode) {
                 case "params": format = RequestFormat.MULTIPART_FORM; break;
                 case "urlencoded": format = RequestFormat.URLENCODE; break;
                 case "binary": format = RequestFormat.RAW; break;
@@ -190,7 +171,7 @@ public class PostmanCollection implements RestCollection {
             }
             
             Map variables = new DefaultingMap(requestVariables, requestDefaultVariables);            
-            Request request = RestRequestHelpers.request(method, headers, url, format, data, rawModeData, variables, files);
+            Request request = RestRequestHelpers.request(data.method, data.headers, data.url, format, data.data, data.rawModeData, variables, files);
             Response response = client.newCall(request).execute();
             
             requestVariables = null;            
@@ -199,9 +180,9 @@ public class PostmanCollection implements RestCollection {
         
         @Override
         public ExpectedResponse response(String name) {
-            for(SampleResponseData r : this.responses) {
+            for(SampleResponseData r : data.responses) {
                 if(r.name.equals(name)) {
-                    return new ExpectedResponse(this, r);
+                    return new ExpectedResponse(this, r.text);
                 }
             }
             return new ExpectedResponse();
@@ -230,8 +211,8 @@ public class PostmanCollection implements RestCollection {
         defaultVariables = new HashMap();
         for(PostmanRequest req : data.requests) {
             req.requestDefaultVariables = defaultVariables;
-            ids.put(req.id, req);
-            names.put(req.name, req);
+            ids.put(req.data.id, req);
+            names.put(req.data.name, req);
         }
     }
     
