@@ -94,9 +94,9 @@ public class MicroblogExampleTest {
     @Test(groups = "usersVariableVerifyExample", dependsOnGroups = "usersVariableExample")
     public void verifyUserVariableExample2() throws Exception {
         ExpectedResponse res = collection.byName("Check User Variable").withEnv(env2).response("verifyUserVariableExample");
-        res.expected().path("username").replace("arven2");
-        res.expected().path("nickname").replace("A. R. Variadic");
-        res.expected().path("email").replace("arvariadic@arven.info");
+        res.edit().path("username").replace("arven2");
+        res.edit().path("nickname").replace("A. R. Variadic");
+        res.edit().path("email").replace("arvariadic@arven.info");
         res.validate();
     }    
     
@@ -113,28 +113,28 @@ public class MicroblogExampleTest {
     @Test(groups = "postsVerifyExample1", dependsOnGroups = "postsExample")
     public void verifyPostTomExample1() throws Exception {
         ExpectedResponse res = collection.byName("Check Tom's Posts").response("verifyPostTomExample");
-        res.expected().at("/0/created").ignore();
+        res.edit().at("/0/created").ignore();
         res.validate();
     }
     
     @Test(groups = "postsVerifyExample1", dependsOnGroups = "postsExample")
     public void verifyPostLarryExample1() throws Exception {
         ExpectedResponse res = collection.byName("Read Larry's Posts").response("verifyPostLarryExample");
-        res.expected().at("/0/created").ignore();
+        res.edit().at("/0/created").ignore();
         res.validate();
     }
     
     @Test(groups = "postsVerifyExample1", dependsOnGroups = "postsExample")
     public void verifyPostLarrySingleExample1() throws Exception {
         ExpectedResponse res = collection.byName("Another Way to Read a Post").response("verifyPostLarrySingleExample");
-        res.expected().at("/created").ignore();
+        res.edit().at("/created").ignore();
         res.validate();
     }
     
     @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
     public void verifyPostTomExample2() throws Exception {
         ExpectedResponse res = collection.byName("Check Tom's Posts").response("verifyPostTomExample");
-        ExpectedPath p = res.expected().path(0);
+        ExpectedPath p = res.edit().path(0);
         p.path("created").ignore();
         res.validate();
     }
@@ -142,14 +142,14 @@ public class MicroblogExampleTest {
     @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
     public void verifyPostLarryExample2() throws Exception {
         ExpectedResponse res = collection.byName("Read Larry's Posts").response("verifyPostLarryExample");
-        res.expected().path(0, "created").ignore();
+        res.edit().path(0, "created").ignore();
         res.validate();
     }
     
     @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
     public void verifyPostLarrySingleExample2() throws Exception {
         ExpectedResponse res = collection.byName("Another Way to Read a Post").response("verifyPostLarrySingleExample");
-        res.expected().path("created").ignore();
+        res.edit().path("created").ignore();
         res.validate();
     }   
     

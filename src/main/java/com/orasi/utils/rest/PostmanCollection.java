@@ -104,7 +104,7 @@ public class PostmanCollection implements RestCollection {
         }
         
         @Override
-        public ExpectedPath expected() {
+        public ExpectedPath edit() {
             return this.path;
         }
         
