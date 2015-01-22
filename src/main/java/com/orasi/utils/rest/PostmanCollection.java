@@ -5,10 +5,12 @@
  */
 package com.orasi.utils.rest;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.orasi.utils.types.DefaultingMap;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -47,53 +49,53 @@ public class PostmanCollection implements RestCollection {
         return names.get(name);
     }
     
-    public static class ResponseCode {
-        public Number code;
-        public String name;
-        public String detail;
+    private static class ResponseCode {
+        private Number code;
+        private String name;
+        private String detail;
     }
     
-    public static class Header {
-        public String name;
-        public String key;
-        public String value;
-        public String description;
+    private static class Header {
+        private String name;
+        private String key;
+        private String value;
+        private String description;
     }
     
-    public static class State {
-        public String size;
+    private static class State {
+        private String size;
     }
     
-    public static class PostmanResponseRequest {
-        public String url;
-        public Map pathVariables;
-        public JsonNode data;
-        public String headers;
-        public String dataMode;
-        public String method;
-        public String tests;
-        public Number version;
+    private static class PostmanResponseRequest {
+        private String url;
+        private Map pathVariables;
+        private JsonNode data;
+        private String headers;
+        private String dataMode;
+        private String method;
+        private String tests;
+        private Number version;
     }
     
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class SampleResponseData implements RestValidator {
                        
-        public String status;
-        public ResponseCode responseCode;
-        public Number time;
-        public List<Header> headers;
-        public List<String> cookies;
-        public String mime;
-        public String text;
-        public String language;
-        public String rawDataType;
-        public State state;
-        public String previewType;
-        public Number searchResultScrolledTo;
-        public Boolean forceRaw;
-        public String id;
-        public String name;
-        public PostmanResponseRequest request;
+        private String status;
+        private ResponseCode responseCode;
+        private Number time;
+        private List<Header> headers;
+        private List<String> cookies;
+        private String mime;
+        private String text;
+        private String language;
+        private String rawDataType;
+        private State state;
+        private String previewType;
+        private Number searchResultScrolledTo;
+        private Boolean forceRaw;
+        private String id;
+        private String name;
+        private PostmanResponseRequest request;
 
         @Override
         public JsonNode validate(List<Patch> ignores, List<Patch> patches, Response res) throws Exception {
@@ -114,36 +116,36 @@ public class PostmanCollection implements RestCollection {
     }
 
     public static class PostmanRequest implements RestRequest {        
-        public static final MessageFormat fmt = new MessageFormat(
+        private static final MessageFormat fmt = new MessageFormat(
                 "-- ID: {0} URL: {2} Method: {5} Name: {8} --");
         
-        public String id;
-        public String headers;
-        public String url;
-        public Map pathVariables;
-        public String preRequestScript;
-        public RequestType method;
-        public List<RequestData> data;
-        public String dataMode;
-        public String name;
-        public String description;
-        public String descriptionFormat;
-        public Date time;
-        public Number version;
-        public List<SampleResponseData> responses;
-        public String tests;
-        public String currentHelper;
-        public Map helperAttributes;
-        public String collectionId;
-        public Boolean synced;
-        public String rawModeData;
+        private String id;
+        private String headers;
+        private String url;
+        private Map pathVariables;
+        private String preRequestScript;
+        private RequestType method;
+        private List<RequestData> data;
+        private String dataMode;
+        private String name;
+        private String description;
+        private String descriptionFormat;
+        private Date time;
+        private Number version;
+        private List<SampleResponseData> responses;
+        private String tests;
+        private String currentHelper;
+        private Map helperAttributes;
+        private String collectionId;
+        private Boolean synced;
+        private String rawModeData;
         
         @JsonIgnore
-        public Map requestVariables;
+        private Map requestVariables;
         @JsonIgnore
-        public Map requestDefaultVariables;
+        private Map requestDefaultVariables;
         @JsonIgnore
-        public String[] files;
+        private String[] files;
         
         @Override
         public RestRequest withEnv(Map vars) {
@@ -208,30 +210,27 @@ public class PostmanCollection implements RestCollection {
         }
     }
         
-    public static class PostmanCollectionData {        
-        public String id;
-        public String name;
-        public String description;
-        public List<String> order;
-        public List<String> folders;
-        public Date timestamp;
-        public Boolean synced;
-        public String remoteLink;
-        public List<PostmanRequest> requests;
+    private static class PostmanCollectionData {        
+        private String id;
+        private String name;
+        private String description;
+        private List<String> order;
+        private List<String> folders;
+        private Date timestamp;
+        private Boolean synced;
+        private String remoteLink;
+        private List<PostmanRequest> requests;
     }
     
-    private final PostmanCollectionData object;
     private final Map<String, RestRequest> ids;
     private final Map<String, RestRequest> names;
     private final Map defaultVariables;
     
-    public PostmanCollection(byte[] data) throws IOException {
-        ObjectMapper map = new ObjectMapper();
-        object = map.readValue(data, PostmanCollectionData.class);
+    private PostmanCollection(PostmanCollectionData data) throws IOException {
         ids = new HashMap<String, RestRequest>();
         names = new HashMap<String, RestRequest>();
         defaultVariables = new HashMap();
-        for(PostmanRequest req : object.requests) {
+        for(PostmanRequest req : data.requests) {
             req.requestDefaultVariables = defaultVariables;
             ids.put(req.id, req);
             names.put(req.name, req);
@@ -246,7 +245,9 @@ public class PostmanCollection implements RestCollection {
     }
     
     public static RestCollection file(URL collection) throws Exception {
-        return new PostmanCollection(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray());
+        ObjectMapper map = new ObjectMapper();
+        map.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));        
+        return new PostmanCollection(map.readValue(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), PostmanCollectionData.class));
     }
         
 }

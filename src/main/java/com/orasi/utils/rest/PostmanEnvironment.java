@@ -1,7 +1,8 @@
 package com.orasi.utils.rest;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.AbstractMap;
@@ -21,11 +22,11 @@ public class PostmanEnvironment extends AbstractMap {
     
     public static class PostmanEnvironmentEntry implements Map.Entry<String, String> {
         
-        public String key;
-        public String value;
-        public String type;
-        public String name;
-        public Boolean enabled;
+        private String key;
+        private String value;
+        private String type;
+        private String name;
+        private Boolean enabled;
 
         @Override
         public String getKey() {
@@ -46,29 +47,30 @@ public class PostmanEnvironment extends AbstractMap {
         
     }
     
-    public static class PostmanEnvironmentData {
-        public String id;
-        public String name;
-        public Set<PostmanEnvironmentEntry> values;        
-        public Number timestamp;
-        public Boolean synced;
-        public String syncedFilename;
+    private static class PostmanEnvironmentData {
+        private String id;
+        private String name;
+        private Set<PostmanEnvironmentEntry> values;        
+        private Number timestamp;
+        private Boolean synced;
+        private String syncedFilename;
     }
     
-    private final PostmanEnvironmentData object;
+    private final PostmanEnvironmentData data;
     
-    public PostmanEnvironment(byte[] data) throws IOException {
-        ObjectMapper map = new ObjectMapper();
-        object = map.readValue(data, PostmanEnvironmentData.class);
-    }    
-    
+    private PostmanEnvironment(PostmanEnvironmentData data) {
+        this.data = data;
+    }
+        
     public static Map file(URL environment) throws Exception {
-        return new PostmanEnvironment(Okio.buffer(Okio.source((InputStream)environment.getContent())).readByteArray());
+        ObjectMapper map = new ObjectMapper();
+        map.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        return new PostmanEnvironment(map.readValue(Okio.buffer(Okio.source((InputStream)environment.getContent())).readByteArray(), PostmanEnvironmentData.class));
     }    
     
     @Override
     public Set entrySet() {
-        return object.values;
+        return this.data.values;
     }
     
 }
