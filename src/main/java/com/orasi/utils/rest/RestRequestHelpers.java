@@ -90,7 +90,7 @@ public class RestRequestHelpers {
      * @return 
      * @throws java.lang.Exception 
      */
-    public static Request request(RestRequest.RequestType type, String headers, String url, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, Map variables, String... parameters) throws Exception {
+    public static Request request(RestRequest.RequestType type, String headers, String url, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, Map variables, String[] parameters) throws Exception {
         url = RestRequestHelpers.variables(url, variables);
         rawModeData = RestRequestHelpers.variables(rawModeData, variables);
         if(data != null) {
