@@ -5,81 +5,84 @@
  */
 package com.orasi.utils.types;
 
-import com.google.common.base.Function;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 /**
- *
- * @author brian.becker
- * @param <K>
- * @param <V>
+ * The Defaulting Map is a way of cascading several maps, and having each
+ * of them be checked for a particular value in a certain order. It is not
+ * a generic class, generally suited to working with strings. If the value
+ * is not found, a string value "{{variablename}}" will be returned rather
+ * than a null pointer. This allows for easy search-and-replace operations
+ * that will fail visibly.
+ * 
+ * @author Brian Becker
  */
-public class DefaultingMap<K, V> implements Map<K, V> {
+public class DefaultingMap implements Map {
 
     public final Map orig;
     public final Map fallback;
     
-    public final Function<K, V> keyDefaults;
+    public final String OPEN;
+    public final String CLOSE;
     
-    public DefaultingMap(Map<K, V> orig, Map<K, V> fallback, Function<K, V> keyDefaults) {
+    public DefaultingMap(Map orig, Map fallback, String open, String close) {
         this.orig = orig;
         this.fallback = fallback;
-        this.keyDefaults = keyDefaults;
+        this.OPEN = open;
+        this.CLOSE = close;
+    }
+    
+    public DefaultingMap(Map orig, Map fallback) {
+        this(orig, fallback, "{{", "}}");
     }
     
     @Override
     public int size() {
-        if(keyDefaults != null) return Integer.MAX_VALUE;
-        return this.keySet().size();
+        return Integer.MAX_VALUE;
     }
 
     @Override
     public boolean isEmpty() {
-        if(keyDefaults != null) return false;
-        return this.orig.isEmpty() && this.fallback.isEmpty();
+        return false;
     }
 
     @Override
     public boolean containsKey(Object key) {
-        if(keyDefaults != null) return true;
-        return this.orig.containsKey(key) || this.fallback.containsKey(key);
+        return true;
     }
 
     @Override
     public boolean containsValue(Object value) {
-        return this.orig.containsValue(value) || this.fallback.containsValue(value);
+        return this.orig.containsValue(value) || this.fallback.containsValue(value) || ( value.toString().startsWith(OPEN) && value.toString().endsWith(CLOSE) );
     }
 
     @Override
-    public V get(Object key) {
-        System.out.println("Obtaining value...");
+    public Object get(Object key) {
         if(this.orig != null && this.orig.containsKey(key)) {
-            return (V) this.orig.get(key);
+            return this.orig.get(key);
         } else if(this.fallback != null && this.fallback.containsKey(key)) {
             System.out.println(this.fallback.get(key).toString());
-            return (V) this.fallback.get(key);
-        } else if(this.keyDefaults != null && keyDefaults != null) {
-            return (V) keyDefaults.apply((K) key);
+            return this.fallback.get(key);
+        } else {
+            return (String) OPEN + key.toString() + CLOSE;
         }
-        return null;        
     }
 
     @Override
-    public V put(K key, V value) {
+    public Object put(Object key, Object value) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public V remove(Object key) {
+    public Object remove(Object key) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void putAll(Map<? extends K, ? extends V> m) {
+    public void putAll(Map m) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -89,7 +92,7 @@ public class DefaultingMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public Set<K> keySet() {
+    public Set keySet() {
         Set v = new HashSet();
         if(this.orig != null)
             v.addAll(this.orig.keySet());
@@ -99,7 +102,7 @@ public class DefaultingMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public Collection<V> values() {
+    public Collection values() {
         Set v = new HashSet();
         if(this.orig != null)
             v.addAll(this.orig.values());
@@ -109,7 +112,7 @@ public class DefaultingMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public Set<Entry> entrySet() {
         Set v = new HashSet();
         if(this.orig != null)
             v.addAll(this.orig.entrySet());

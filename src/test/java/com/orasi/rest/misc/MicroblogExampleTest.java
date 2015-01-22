@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.arven.sandbox.MockMicroblogServer;
 import com.orasi.utils.rest.ExpectedResponse;
 import com.orasi.utils.rest.PostmanCollection;
+import com.orasi.utils.rest.PostmanEnvironment;
 import com.orasi.utils.rest.RestCollection;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,23 +31,24 @@ public class MicroblogExampleTest {
     
     public ObjectMapper map;
     public RestCollection collection;
-    public Map environment;
-    public Map e2;
+    public Map env1;
+    public Map env2;
     public MockMicroblogServer server;
     
     @BeforeClass
     public void setUp() throws Exception {
         map = new ObjectMapper();
         collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
-        environment = new HashMap();
-        environment.put("username", "arven");
-        environment.put("nickname", "A. R. Varian");
-        environment.put("email", "arvarian@arven.info");
-        e2 = new HashMap();
-        e2.put("username", "arven2");
-        e2.put("nickname", "A. R. Variadic");
-        e2.put("email", "arvariadic@arven.info");        
-        collection.env(environment);
+        env1 = PostmanEnvironment.file(getClass().getResource(REST_SANDBOX + "Passwords.postman_environment"));
+        //new HashMap();
+        //env1.put("username", "arven");
+        //env1.put("nickname", "A. R. Varian");
+        //env1.put("email", "arvarian@arven.info");
+        env2 = new HashMap();
+        env2.put("username", "arven2");
+        env2.put("nickname", "A. R. Variadic");
+        env2.put("email", "arvariadic@arven.info");        
+        collection.env(env1);
         server = new MockMicroblogServer();
         server.start();
     }
@@ -89,12 +91,12 @@ public class MicroblogExampleTest {
     
     @Test(groups = "usersVariableExample")
     public void createUserVariableExample2() throws Exception {
-        collection.byName("Create User Variable").env(e2).response("createUserVariableExample").verify();
+        collection.byName("Create User Variable").env(env2).response("createUserVariableExample").verify();
     }    
     
     @Test(groups = "usersVariableVerifyExample", dependsOnGroups = "usersVariableExample")
     public void verifyUserVariableExample2() throws Exception {
-        ExpectedResponse res = collection.byName("Check User Variable").env(e2).response("verifyUserVariableExample");
+        ExpectedResponse res = collection.byName("Check User Variable").env(env2).response("verifyUserVariableExample");
         res.path("username").replace("arven2");
         res.path("nickname").replace("A. R. Variadic");
         res.path("email").replace("arvariadic@arven.info");

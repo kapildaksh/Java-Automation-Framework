@@ -162,11 +162,9 @@ public class PostmanCollection implements RestCollection {
             int i = 0;
             if(temp != null && temp.length > 0) {
                 for(String t : temp) {
-                     System.out.println(t);
                      url = url.replace("/:" + t + "/", "/" + parts[i++] + "/");
                 }
             }
-            System.out.println(url);
             return this;
         }
         
@@ -187,12 +185,7 @@ public class PostmanCollection implements RestCollection {
                 case "raw": format = RequestFormat.RAW; break;
             }
             
-            Map variables = new DefaultingMap(requestVariables, requestDefaultVariables, new Function<String, String>() {
-                @Override
-                public String apply(String f) {
-                    return "{{" + f + "}}";
-                }
-            });
+            Map variables = new DefaultingMap(requestVariables, requestDefaultVariables);
             
             String safeUrl, safeRawModeData;
             
@@ -214,7 +207,6 @@ public class PostmanCollection implements RestCollection {
         public ExpectedResponse response(String name) {
             try {
                 for(SampleResponse r : this.responses) {
-                    System.out.println(name);
                     if(r.name.equals(name)) {
                         r.realResponse = this.send();
                         r.realResponseText = r.realResponse.body().string();
