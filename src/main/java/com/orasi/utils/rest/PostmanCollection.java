@@ -92,17 +92,38 @@ public class PostmanCollection implements RestCollection {
         private PostmanResponseRequest request;
     }
     
-    private static class SampleResponseValidator implements RestValidator {
+    private static class SampleResponseValidator implements ExpectedResponse {
 
+        private final RestRequest request;
         private final SampleResponseData data;
+        private final ExpectedPath path = new ExpectedPath();
         
-        public SampleResponseValidator(SampleResponseData data) {
+        public SampleResponseValidator(RestRequest request, SampleResponseData data) {
+            this.request = request;
             this.data = data;
         }
         
         @Override
-        public void validate(Response real) {
-            Assert.assertEquals(data.responseCode.code, real.code());
+        public ExpectedPath expected() {
+            return this.path;
+        }
+        
+        @Override
+        public JsonNode validate() {
+            if(request == null || data.text == null)
+                throw new UnsupportedOperationException("Operation not supported on null ExpectedResponse");
+            try {
+                Response res = request.send();
+                String real = res.body().string();
+                String expected = data.text;
+                real = path.getIgnores().apply(real);
+                expected = path.getPatches().apply(expected);
+                expected = path.getIgnores().apply(expected);
+                Assert.assertEquals(expected, real);
+                return Json.MAP.readTree(real);
+            } catch (Exception e) {
+                throw new RuntimeException("Error while sending message during validation. Validation failed.");
+            }
         }
         
     }
@@ -197,10 +218,10 @@ public class PostmanCollection implements RestCollection {
         public ExpectedResponse response(String name) {
             for(SampleResponseData r : data.responses) {
                 if(r.name.equals(name)) {
-                    return new ExpectedResponse(this, r.text, new SampleResponseValidator(r));
+                    return new SampleResponseValidator(this, r);
                 }
             }
-            return new ExpectedResponse();
+            throw new RuntimeException("Response named '" + name + "' not found.");
         }
     }
         

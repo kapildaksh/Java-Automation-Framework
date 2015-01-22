@@ -21,13 +21,25 @@ import java.util.List;
 public class ExpectedPath {
     
     private final String newPatchPath;
-    private final List<Patch> ignores;
-    private final List<Patch> patches;
+    private final Patch ignores;
+    private final Patch patches;
 
-    public ExpectedPath(String path, List<Patch> ignores, List<Patch> patches) {
+    public ExpectedPath(String path, Patch ignores, Patch patches) {
         this.newPatchPath = path;
         this.ignores = ignores;
         this.patches = patches;
+    }
+    
+    public ExpectedPath() {
+        this(null, new Patch(), new Patch());
+    }
+    
+    public Patch getIgnores() {
+        return this.ignores;
+    }
+    
+    public Patch getPatches() {
+        return this.patches;
     }
     
     private void test() {

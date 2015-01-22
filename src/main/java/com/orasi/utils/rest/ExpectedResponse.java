@@ -6,11 +6,6 @@
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.base.Function;
-import com.squareup.okhttp.Response;
-import java.util.LinkedList;
-import java.util.List;
-import org.testng.Assert;
 
 /**
  * The ExpectedResponse class is used for validating whether or not REST
@@ -19,33 +14,9 @@ import org.testng.Assert;
  *
  * @author Brian Becker
  */
-public class ExpectedResponse {
+public interface ExpectedResponse {
     
-    private final List<Patch> ignores = new LinkedList<Patch>();
-    private final List<Patch> patches = new LinkedList<Patch>();
-    private final RestRequest request;
-    private String expected;
-    private RestValidator validate;
-    
-    public ExpectedResponse(RestRequest req, String expected, RestValidator validate) {
-        this.request = req;
-        this.expected = expected;
-        this.validate = validate;
-    }
-
-    public ExpectedResponse() {
-        this(null, null, null);
-    }
-    
-    /**
-     * Get the expected path node, which can be used for changing the
-     * expectations which the validator will have.
-     * 
-     * @return Expected Path node
-     */
-    public ExpectedPath expected() {
-        return new ExpectedPath(null, ignores, patches);
-    }
+    public abstract ExpectedPath expected();
     
     /**
      * Verify this Expected Response. Real is returned, additionally, it acts as
@@ -57,25 +28,6 @@ public class ExpectedResponse {
      * 
      * @return A validated JsonNode
      */
-    public JsonNode validate() {
-        if(request == null || expected == null || validate == null)
-            throw new UnsupportedOperationException("Operation not supported on null ExpectedResponse");
-        try {
-            Response res = request.send();
-            String real = res.body().string();
-            for(Patch p : ignores) {
-                expected = p.apply(expected);
-                real = p.apply(real);
-            }
-            for(Patch p : patches) {
-                expected = p.apply(expected);
-            }
-            Assert.assertEquals(expected, real);
-            this.validate.validate(res);
-            return Json.MAP.readTree(real);
-        } catch (Exception e) {
-            throw new RuntimeException("Error while sending message during validation. Validation failed.");
-        }
-    }
+    public abstract JsonNode validate();
     
 }

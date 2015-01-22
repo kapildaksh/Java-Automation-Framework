@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -228,6 +229,10 @@ public class Patch {
         this.entries = entries;
     }
     
+    public Patch() {
+        this.entries = new LinkedList<PatchEntry>();
+    }
+    
     /**
      * Apply this patch to a string, returning another string which is the
      * string with the patch applied. If the patch failed to apply, the
@@ -311,5 +316,18 @@ public class Patch {
             ex.printStackTrace(System.out);
             return "[]";
         }
+    }
+    
+    public static Patch add(Collection<Patch> patches) {
+        List<PatchEntry> entries = new LinkedList<PatchEntry>();
+        for(Patch p : patches) {
+            entries.addAll(p.entries);
+        }        
+        return new Patch(entries);
+    }
+    
+    public Patch add(Patch patch) {
+        this.entries.addAll(patch.entries);
+        return this;
     }
 }
