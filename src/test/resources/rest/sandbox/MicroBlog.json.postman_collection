@@ -184,7 +184,7 @@
 			"method": "PUT",
 			"data": [],
 			"dataMode": "raw",
-			"name": "Larry Adds Tom Back",
+			"name": "Larry Adds Tom",
 			"description": "",
 			"descriptionFormat": "html",
 			"time": 1421441583004,

@@ -161,7 +161,7 @@ public class MicroblogExampleTest {
     
     @Test(groups = "friendsExample", dependsOnGroups = "usersVerifyExample")
     public void addFriendLarryTomExample() throws Exception {
-        collection.byName("Larry Adds Tom Back").response("addFriendLarryTomExample").validate();
+        collection.byName("Larry Adds Tom").response("addFriendLarryTomExample").validate();
     }
     
     @Test(groups = "friendsVerifyExample", dependsOnGroups = "friendsExample")

@@ -133,7 +133,7 @@ public class MicroblogTest {
     
     @Test(groups = "friends", dependsOnGroups = "usersVerify")
     public void addFriendLarryTom() throws Exception {
-        Response res = collection.byName("Larry Adds Tom Back").send();
+        Response res = collection.byName("Larry Adds Tom").send();
         Assert.assertTrue(res.isSuccessful());        
     }
     

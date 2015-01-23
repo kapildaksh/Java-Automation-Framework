@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Lists;
 
 import com.orasi.arven.sandbox.rest.Message.Type;
+import com.orasi.utils.rest.Json;
 import com.orasi.utils.rest.Patch;
 import com.orasi.utils.types.Reference;
 
@@ -33,6 +34,8 @@ import sparkfive.Route;
 import sparkfive.SparkInstance;
 
 public class MockMicroblogServer {
+    
+    private boolean running = false;
     
     public static void main(String[] args) {
         MockMicroblogServer svr = new MockMicroblogServer();
@@ -90,9 +93,7 @@ public class MockMicroblogServer {
     
     private static final Map<String, Reference<User>> users = new HashMap<String, Reference<User>>();
     private static final MultiMap tagdir = new MultiValueMap();
-    
-    private static final ObjectMapper map = new ObjectMapper();
-    
+       
     private final SparkInstance srv;
     
     public MockMicroblogServer() {
@@ -101,9 +102,21 @@ public class MockMicroblogServer {
     
     public void stop() {
         srv.stop();
+        running = false;
     }
     
-    public void start() {       
+    public boolean isRunning() {
+        return running;
+    }
+    
+    public void clear() {
+        tagdir.clear();
+        users.clear();
+    }
+    
+    public void start() {
+        running = true;
+        
         srv.get("/tags", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
@@ -136,7 +149,7 @@ public class MockMicroblogServer {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
-                User u = map.readValue(req.body(), User.class);
+                User u = Json.Map.readValue(req.body(), User.class);
                 users.put(u.username, new Reference<User>(u));
                 return new Message(Type.INFORMATIONAL, "User added.");
             }
@@ -209,7 +222,7 @@ public class MockMicroblogServer {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
-                Post p = map.readValue(req.body(), Post.class);
+                Post p = Json.Map.readValue(req.body(), Post.class);
                 p.created = new Date();
                 if(users.containsKey(req.params(":name"))) {
                     Reference<User> u = users.get(req.params(":name"));
