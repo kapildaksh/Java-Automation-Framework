@@ -1142,6 +1142,58 @@
 						"tests": "",
 						"version": 2
 					}
+				},
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 16,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "48",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"type\":\"ERROR\",\"message\":\"Resource not found.\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "17701164-596d-2226-9355-6fba148e4af5",
+					"name": "verifyUserLarryDeletedExample",
+					"request": {
+						"url": "http://localhost:4567/users/larry",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
 				}
 			],
 			"synced": false

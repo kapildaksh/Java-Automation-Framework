@@ -39,6 +39,7 @@ public class MicroblogExampleTest {
     @BeforeClass
     public void setUp() throws Exception {
         map = new ObjectMapper();
+        System.out.println(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
         collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
         env1 = PostmanEnvironment.file(getClass().getResource(REST_SANDBOX + "Passwords.postman_environment"));
         env2 = new HashMap();
