@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite" parallel="false" thread-count="5">
+	<parameter name="browserUnderTest" value="chrome" />
+	<parameter name="environment" value="staging" />
+	<parameter name="runLocation" value="local" />
+	<parameter name="browserVersion" value="31.0" />
+	<parameter name="operatingSystem" value="linux" />
+	<test name="Test">
+		<classes>
+			<!-- REST tests -->
+			<class name="com.orasi.rest.googleApi.geoCode.Geocode" />
+			<class name="com.orasi.rest.googleApi.distanceMatrix.DistanceMatrix" />
+			<!-- SOAP tests -->
+			<class name="com.orasi.soap.predic8.articleServicePTBinding.CRUD" />
+			<class name="com.orasi.soap.predic8.crmServicePTBinding.CreateAndRetrieve" />
+			<class name="com.orasi.soap.predic8.idServiceBinding.GenerateTest" />
+			<!-- GUI tests -->
+			<class name="com.orasi.bluesource.TestAddNewTitle" />
+		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->

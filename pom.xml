@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.orasi</groupId>
 	<artifactId>Java-Automation-Framework</artifactId>
-	<version>1.0</version>
+	<version>1.0</version>	
 	<!-- Usually specified in .m2/settings.xml, we'll have to revisit later -->
 	<repositories>
 		<repository>
@@ -301,7 +301,7 @@
 	<properties>
 		<!-- <testNGSourceDirectory>src/test/resources/sandbox</testNGSourceDirectory> -->
 		<!-- <testNGSourceDirectory>src/test/resources/bluesource/testngXMLs</testNGSourceDirectory> -->
-		<testNGSourceDirectory>src/test/resources/sandbox/mavenBuild</testNGSourceDirectory>
+		<testNGSourceDirectory>src/test/resources</testNGSourceDirectory>
 	</properties>
 	<build>
 		<pluginManagement>
