@@ -34,7 +34,7 @@ import java.util.Map.Entry;
 public class MicroblogCucumberStepdefs {
     
     public static final String REST_SANDBOX = "/rest/sandbox/";
-    public static MockMicroblogServer server = new MockMicroblogServer();
+    public static final MockMicroblogServer server = new MockMicroblogServer();
     
     public ObjectMapper map;
     public RestCollection collection;
@@ -133,25 +133,6 @@ public class MicroblogCucumberStepdefs {
         }
         expected.validate();
     }    
-    
-    @But("^not considering (.*)")
-    public void not_considering(String label) throws Throwable {
-        expected.at(label).ignore();
-    }
-    
-    @But("^with the following replaced from (.*):$")
-    public void with_the_following_replaced(String path, Map<String,String> changes) throws Throwable {
-        for(Entry e : changes.entrySet()) {
-            expected.at(path + e.getKey().toString()).replace(e.getValue());
-        }
-    }
-    
-    @But("^with the following ignored from (.*):$")
-    public void with_the_following_ignored(String path, List<String> changes) throws Throwable {
-        for(String e : changes) {
-            expected.at(path + e).ignore();
-        }
-    }
     
     @Then("^I expect the response to be valid$")
     public void I_expect_the_response_to_be_valid() throws Throwable {
