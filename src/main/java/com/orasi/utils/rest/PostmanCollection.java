@@ -92,20 +92,14 @@ public class PostmanCollection implements RestCollection {
         private PostmanResponseRequest request;
     }
     
-    private static class SampleResponseValidator implements ExpectedResponse {
+    private static class SampleResponseValidator extends BaseExpectedNode implements ExpectedResponse {
 
         private final RestRequest request;
         private final SampleResponseData data;
-        private final ExpectedPath path = new ExpectedPath();
         
         public SampleResponseValidator(RestRequest request, SampleResponseData data) {
             this.request = request;
             this.data = data;
-        }
-        
-        @Override
-        public ExpectedPath edit() {
-            return this.path;
         }
         
         @Override
@@ -116,11 +110,11 @@ public class PostmanCollection implements RestCollection {
                 Response res = request.send();
                 String real = res.body().string();
                 String expected = data.text;
-                real = path.getIgnores().apply(real);
-                expected = path.getPatches().apply(expected);
-                expected = path.getIgnores().apply(expected);
+                real = ignores.apply(real);
+                expected = patches.apply(expected);
+                expected = ignores.apply(expected);
                 Assert.assertEquals(expected, real);
-                return Json.MAP.readTree(real);
+                return Json.Map.readTree(real);
             } catch (Exception e) {
                 throw new RuntimeException("Error while sending message during validation. Validation failed.");
             }
@@ -260,7 +254,7 @@ public class PostmanCollection implements RestCollection {
     }
     
     public static RestCollection file(URL collection) throws Exception {   
-        return new PostmanCollection(Json.MAP.readValue(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), PostmanCollectionData.class));
+        return new PostmanCollection(Json.Map.readValue(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), PostmanCollectionData.class));
     }
         
 }

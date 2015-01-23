@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -54,7 +49,7 @@ public class Patch {
         @JsonCreator
         public PatchEntry(@JsonProperty("op") Op op, @JsonProperty("from") String from, @JsonProperty("path") String path, @JsonProperty("value") Object value) {
             if(!(value instanceof JsonNode)) {
-                this.value = Json.MAP.valueToTree(value);
+                this.value = Json.Map.valueToTree(value);
             } else {
                 this.value = (JsonNode) value;
             }
@@ -243,7 +238,7 @@ public class Patch {
      */
     public String apply(String json) {
         try {
-            return Json.MAP.writeValueAsString(apply(Json.MAP.readTree(json)));
+            return Json.Map.writeValueAsString(apply(Json.Map.readTree(json)));
         } catch (Exception e) {}
         return json;
     }
@@ -279,9 +274,9 @@ public class Patch {
      */
     public <T> T apply(T o) {
         try {
-            JsonNode n = Json.MAP.valueToTree(o);
+            JsonNode n = Json.Map.valueToTree(o);
             this.apply(n);
-            return (T) Json.MAP.treeToValue(n, o.getClass());
+            return (T) Json.Map.treeToValue(n, o.getClass());
         } catch (JsonProcessingException ex) {
             Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -300,7 +295,7 @@ public class Patch {
      */
     public static <T> T patch(String json, Object o) {
         try {
-            Patch p = new Patch((List<Patch.PatchEntry>)Json.MAP.readValue(json, new TypeReference<List<Patch.PatchEntry>>() { }));
+            Patch p = new Patch((List<Patch.PatchEntry>)Json.Map.readValue(json, new TypeReference<List<Patch.PatchEntry>>() { }));
             return (T) p.apply(o);
         } catch (IOException ex) {
             Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
@@ -311,7 +306,7 @@ public class Patch {
     @Override
     public String toString() {
         try {
-            return Json.MAP.writeValueAsString(this.entries);
+            return Json.Map.writeValueAsString(this.entries);
         } catch (JsonProcessingException ex) {
             ex.printStackTrace(System.out);
             return "[]";

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,14 +13,22 @@ import com.fasterxml.jackson.databind.JsonNode;
 public interface ExpectedResponse {
     
     /**
-     * Edit this Expected Response. It is a node-based API very similar to
-     * that of Jackson, however there are far fewer features. You can do
-     * pretty much anything you could with JSON patching, as well as also
-     * marking certain nodes which should not be considered at all.
+     * Travel to the given path, from this node. Uses the Jackson-style path
+     * selection, strings (for object) and integers (for arrays).
      * 
-     * @return An ExpectedPath for editing the ExpectedResponse
+     * @param path  Target path, Integers or Strings only.
+     * @return 
      */
-    public abstract ExpectedPath edit();
+    public ExpectedNode path(Object... path);
+    
+    /**
+     * Travel to the given path, from this node. Uses the JSON Pointer style
+     * path selection.
+     * 
+     * @param path  Target path, String specifying JSON Pointer
+     * @return 
+     */
+    public ExpectedNode at(String path);
     
     /**
      * Verify this Expected Response. Real is returned, additionally, it acts as

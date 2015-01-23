@@ -7,7 +7,7 @@ package com.orasi.rest.misc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.arven.sandbox.rest.MockMicroblogServer;
-import com.orasi.utils.rest.ExpectedPath;
+import com.orasi.utils.rest.ExpectedNode;
 import com.orasi.utils.rest.ExpectedResponse;
 import com.orasi.utils.rest.PostmanCollection;
 import com.orasi.utils.rest.PostmanEnvironment;
@@ -94,9 +94,9 @@ public class MicroblogExampleTest {
     @Test(groups = "usersVariableVerifyExample", dependsOnGroups = "usersVariableExample")
     public void verifyUserVariableExample2() throws Exception {
         ExpectedResponse res = collection.byName("Check User Variable").withEnv(env2).response("verifyUserVariableExample");
-        res.edit().path("username").replace("arven2");
-        res.edit().path("nickname").replace("A. R. Variadic");
-        res.edit().path("email").replace("arvariadic@arven.info");
+        res.path("username").replace("arven2");
+        res.path("nickname").replace("A. R. Variadic");
+        res.path("email").replace("arvariadic@arven.info");
         res.validate();
     }    
     
@@ -113,28 +113,28 @@ public class MicroblogExampleTest {
     @Test(groups = "postsVerifyExample1", dependsOnGroups = "postsExample")
     public void verifyPostTomExample1() throws Exception {
         ExpectedResponse res = collection.byName("Check Tom's Posts").response("verifyPostTomExample");
-        res.edit().at("/0/created").ignore();
+        res.at("/0/created").ignore();
         res.validate();
     }
     
     @Test(groups = "postsVerifyExample1", dependsOnGroups = "postsExample")
     public void verifyPostLarryExample1() throws Exception {
         ExpectedResponse res = collection.byName("Read Larry's Posts").response("verifyPostLarryExample");
-        res.edit().at("/0/created").ignore();
+        res.at("/0/created").ignore();
         res.validate();
     }
     
     @Test(groups = "postsVerifyExample1", dependsOnGroups = "postsExample")
     public void verifyPostLarrySingleExample1() throws Exception {
         ExpectedResponse res = collection.byName("Another Way to Read a Post").response("verifyPostLarrySingleExample");
-        res.edit().at("/created").ignore();
+        res.at("/created").ignore();
         res.validate();
     }
     
     @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
     public void verifyPostTomExample2() throws Exception {
         ExpectedResponse res = collection.byName("Check Tom's Posts").response("verifyPostTomExample");
-        ExpectedPath p = res.edit().path(0);
+        ExpectedNode p = res.path(0);
         p.path("created").ignore();
         res.validate();
     }
@@ -142,14 +142,14 @@ public class MicroblogExampleTest {
     @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
     public void verifyPostLarryExample2() throws Exception {
         ExpectedResponse res = collection.byName("Read Larry's Posts").response("verifyPostLarryExample");
-        res.edit().path(0, "created").ignore();
+        res.path(0, "created").ignore();
         res.validate();
     }
     
     @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
     public void verifyPostLarrySingleExample2() throws Exception {
         ExpectedResponse res = collection.byName("Another Way to Read a Post").response("verifyPostLarrySingleExample");
-        res.edit().path("created").ignore();
+        res.path("created").ignore();
         res.validate();
     }   
     
