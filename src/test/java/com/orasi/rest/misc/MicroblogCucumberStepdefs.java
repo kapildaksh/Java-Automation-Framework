@@ -27,8 +27,10 @@ import java.util.Map.Entry;
 
 /**
  * These are all of the step definitions that are used in the Cucumber
- * tests.
- * 
+ * tests. To some extent they are reusable, because we are working with
+ * a sort of data warehouse. However, for maximum effectiveness with
+ * this framework, many custom steps should be defined. 
+ *
  * @author Brian Becker
  */
 public class MicroblogCucumberStepdefs {
@@ -112,27 +114,25 @@ public class MicroblogCucumberStepdefs {
         expected.validate();
     }
     
-    @Then("^I want a response like (.*) (ignoring|replacing|without) (.*):$")
-    public void I_expect_a_response_matching_diff(String response, String action, String from, DataTable table) throws Throwable {
+    @Then("^I want a response like (.*)$")
+    public void I_want_a_response(String response) throws Throwable {
         expected = request.response(response);
-        if(action.equals("ignoring")) {
-            List<String> list = table.asList(String.class);
-            for(String li : list) {
-                expected.at(from + li).ignore();
-            }
-        } else if(action.equals("replacing")) {
-            Map<String, String> map = table.asMap(String.class, String.class);
-            for(Entry<String, String> e : map.entrySet()) {
-                expected.at(from + e.getKey()).replace(e.getValue());
-            }
-        } else if(action.equals("without")) {
-            List<String> list = table.asList(String.class);
-            for(String li : list) {
-                expected.at(from + li).remove();
-            }            
-        }
-        expected.validate();
-    }    
+    }
+
+	@But("^with (.*) replaced by (.*)$")
+	public void with_replaced_by(String with, String replace) {
+		expected.at(with).replace(replace);
+	}
+	
+	@But("^with (.*) ignored$")
+	public void with_ignored(String with) {
+		expected.at(with).ignore();
+	}
+	
+	@And("^I expect it to match the new values$")
+	public void I_expect_it_to_match_the_new_values() {
+		expected.validate();
+	}
     
     @Then("^I expect the response to be valid$")
     public void I_expect_the_response_to_be_valid() throws Throwable {
