@@ -2,11 +2,6 @@ package com.orasi.core.interfaces.impl.internal;
 
 import com.orasi.core.interfaces.Element;
 
-import com.orasi.utils.WebDriverSetup;
-
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
@@ -15,8 +10,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.TimeUnit;
-
 import static com.orasi.core.interfaces.impl.internal.ImplementedByProcessor.getWrapperClass;
 
 /**

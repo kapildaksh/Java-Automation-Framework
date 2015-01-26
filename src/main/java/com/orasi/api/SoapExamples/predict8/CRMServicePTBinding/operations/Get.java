@@ -1,7 +1,6 @@
 package com.orasi.api.SoapExamples.predict8.CRMServicePTBinding.operations;
 
 import com.orasi.api.SoapExamples.predict8.CRMServicePTBinding.CRMServicePTBinding;
-import com.orasi.utils.Constants;
 import com.orasi.utils.XMLTools;
 
 public class Get extends CRMServicePTBinding{
