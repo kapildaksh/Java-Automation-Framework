@@ -21,18 +21,23 @@ Feature: Account management
         When I send a request to Check User Larry
 		Then I expect a response matching verifyUserLarryDeletedExample
 
-    Scenario: Create a Named Account
+    Scenario Outline: Create a Named Account
         Given I am not logged in
-		And TomFields's account has not been created
+		And <username>'s account has not been created
 		And I set the environment to:
-			|   username    |   TomFields       |
-			|   nickname    |   Tommy           |
-			|   email       |   tom@arven.info  |
+			|   username    |   <username>    |
+			|   nickname    |   <nickname>    |
+			|   email       |   <email>       |
         When I send a request to Create User Variable
 		Then I expect a response matching createUserVariableExample
         When I send a request to Check User Variable
 		Then I want a response like verifyUserVariableExample 
-		But with /username replaced by TomFields
-		And with /nickname replaced by Tommy
-		And with /email replaced by tom@arven.info
+		But with /username replaced by <username>
+		And with /nickname replaced by <nickname>
+		And with /email replaced by <email>
 		And I expect it to match the new values
+        Examples:
+            |   username    |   nickname    |   email               |
+            |   tomfields   |   TomRFields  |   tom@arven.info      |
+            |   arven       |   arven       |   arven@arven.info    |
+            |   brian       |   BrianJ      |   brianj@arven.info   |

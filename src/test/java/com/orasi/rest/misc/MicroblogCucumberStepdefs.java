@@ -20,10 +20,10 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.But;
 import cucumber.api.java.Before;
 import cucumber.api.java.After;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * These are all of the step definitions that are used in the Cucumber
@@ -99,13 +99,13 @@ public class MicroblogCucumberStepdefs {
     }
     
     @And("^I set the variables to:$")
-    public void I_set_the_variables_to(Map<String,String> table) throws Throwable {
-        request.withEnv(table);
+    public void I_set_the_variables_to(DataTable table) throws Throwable {
+        request.withEnv(table.asMap(String.class, String.class));
     }
     
     @And("^I set the environment to:$")
-    public void I_set_the_environment_to(Map<String,String> table) throws Throwable {
-        collection.withEnv(table);
+    public void I_set_the_environment_to(DataTable table) throws Throwable {
+        collection.withEnv(table.asMap(String.class, String.class));       
     }    
     
     @Then("^I expect a response matching (.*)$")
@@ -119,20 +119,22 @@ public class MicroblogCucumberStepdefs {
         expected = request.response(response);
     }
 
-	@But("^with (.*) replaced by (.*)$")
-	public void with_replaced_by(String with, String replace) {
-		expected.at(with).replace(replace);
-	}
-	
-	@But("^with (.*) ignored$")
-	public void with_ignored(String with) {
-		expected.at(with).ignore();
-	}
-	
-	@And("^I expect it to match the new values$")
-	public void I_expect_it_to_match_the_new_values() {
-		expected.validate();
-	}
+    @But("^with (.*) replaced by (.*)$")
+    public void with_replaced_by(String with, String replace) {
+        expected.at(with).replace(replace);
+    }
+
+    @But("^with (.*) ignored$")
+    public void with_ignored(String with) {
+        for(String s : with.split(" ")) {
+            expected.at(s.trim()).ignore();
+        }
+    }
+
+    @And("^I expect it to match the new values$")
+    public void I_expect_it_to_match_the_new_values() {
+        expected.validate();
+    }
     
     @Then("^I expect the response to be valid$")
     public void I_expect_the_response_to_be_valid() throws Throwable {

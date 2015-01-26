@@ -9,5 +9,5 @@ import cucumber.api.testng.AbstractTestNGCucumberTests;
  * @author Brian Becker
  */
 @CucumberOptions(plugin = {"pretty"})
-public class MicroblogExampleCucumberTest extends AbstractTestNGCucumberTests{
+public class MicroblogExampleCucumberTest extends AbstractTestNGCucumberTests {
 }
