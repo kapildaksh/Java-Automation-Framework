@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.testng.Assert;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
-import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
@@ -76,59 +74,64 @@ public class TestAddNewDept {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Test(dataProvider = "dataScenario", groups = { "regression" })
+    @SuppressWarnings("unused")
+	@Test(dataProvider = "dataScenario", groups = { "regression" })
     public void testCreateNewDept(String testScenario, String role,
-	    String newDept) throws InterruptedException, IOException {
-	
-	String testName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
+			String newDept) throws InterruptedException, IOException {
 
-	WebDriverSetup setup = new WebDriverSetup(application,
-		browserUnderTest, browserVersion, operatingSystem, runLocation,
-		environment);
-	WebDriver driver = setup.initialize();
+		String testName = new Object() {
+		}.getClass().getEnclosingMethod().getName();
 
-	// Login
-	LoginPage loginPage = new LoginPage(driver);
-	TestReporter.assertTrue(loginPage.pageLoaded(),
-		"Verify login page is displayed");
-	loginPage.login(role);
+		WebDriverSetup setup = new WebDriverSetup(application,
+				browserUnderTest, browserVersion, operatingSystem, runLocation,
+				environment);
+		WebDriver driver = setup.initialize();
 
-	// Verify user is logged in
-	TopNavigationBar topNavigationBar = new TopNavigationBar(driver);
-	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
+		// Login
+		LoginPage loginPage = new LoginPage(driver);
+		TestReporter.assertTrue(loginPage.pageLoaded(),
+				"Verify login page is displayed");
+		loginPage.login(role);
 
-	// Navigate to the dept page
-	topNavigationBar.clickAdminLink();
-	topNavigationBar.clickDepartmentsLink();
+		// Verify user is logged in
+		TopNavigationBar topNavigationBar = new TopNavigationBar(driver);
+		TestReporter.assertTrue(topNavigationBar.isLoggedIn(),
+				"Validate the user logged in successfully");
 
-	// Verify navigated to the dept page
-	DepartmentsPage deptPage = new DepartmentsPage(driver);
-	TestReporter.assertTrue(deptPage.pageLoaded(),
-		"Verify list of departments page is displayed");
+		// Navigate to the dept page
+		topNavigationBar.clickAdminLink();
+		topNavigationBar.clickDepartmentsLink();
 
-	// Add a new dept
-	deptPage.clickAddDeptLink();
-	NewDeptPage newDeptPage = new NewDeptPage(driver);
-	TestReporter.assertTrue(newDeptPage.pageLoaded(),
-		"Verify add new department page is displayed");
-	newDeptPage.CreateNewDept(newDept);
+		// Verify navigated to the dept page
+		DepartmentsPage deptPage = new DepartmentsPage(driver);
+		TestReporter.assertTrue(deptPage.pageLoaded(),
+				"Verify list of departments page is displayed");
 
-	// Verify the dept is added
-	TestReporter.assertTrue(deptPage.isSuccessMsgDisplayed(), "Validate success message appears");
-	TestReporter.log("New Dept was created: " + newDept);
+		// Add a new dept
+		deptPage.clickAddDeptLink();
+		NewDeptPage newDeptPage = new NewDeptPage(driver);
+		TestReporter.assertTrue(newDeptPage.pageLoaded(),
+				"Verify add new department page is displayed");
+		newDeptPage.CreateNewDept(newDept);
 
-	// Verify the dept is displayed on the dept results table
-	TestReporter.assertTrue(deptPage.searchTableByDept(newDept), "Validate new department exists in table");
+		// Verify the dept is added
+		TestReporter.assertTrue(deptPage.isSuccessMsgDisplayed(),
+				"Validate success message appears");
+		TestReporter.log("New Dept was created: " + newDept);
 
-	// Delete the new dept
-	deptPage.deleteDept(newDept);
+		// Verify the dept is displayed on the dept results table
+		TestReporter.assertTrue(deptPage.searchTableByDept(newDept),
+				"Validate new department exists in table");
 
-	// Verify the title is deleted
-	DepartmentsPage refreshedPage = new DepartmentsPage(driver);
-	TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(), "Validate success message appears");
+		// Delete the new dept
+		deptPage.deleteDept(newDept);
 
-	// logout
-	topNavigationBar.logout();
+		// Verify the title is deleted
+		DepartmentsPage refreshedPage = new DepartmentsPage(driver);
+		TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(),
+				"Validate success message appears");
+
+		// logout
+		topNavigationBar.logout();
     }
 }

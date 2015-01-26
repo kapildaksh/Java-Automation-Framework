@@ -4,24 +4,19 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.testng.Assert;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
-import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.utils.Base64Coder;
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.Screenshot;
 import com.orasi.utils.WebDriverSetup;
-import com.orasi.utils.dataProviders.CSVDataProvider;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
 import com.orasi.apps.bluesource.ListingTitlesPage;
 import com.orasi.apps.bluesource.LoginPage;
