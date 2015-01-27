@@ -82,7 +82,8 @@ public class MicroblogCucumberStepdefs {
     
     @Given("^I am logged in as (.*)$")
     public void logged_in(String user) throws Throwable {
-        collection.byName("Login As " + user).send();
+        Response res = collection.byName("Login As " + user).send();
+        Assert.assertEquals(res.code(), 200);                
     }
     
     @When("^I log in as \"(.*)\" with password \"(.*)\"")
@@ -97,6 +98,52 @@ public class MicroblogCucumberStepdefs {
     public void account_created(String label) throws Throwable {
         collection.byName("Create User " + label).send();
     }
+    
+    @Given("^the (.*) group has been created by (.*)$")
+    public void group_created(String label, String user) throws Throwable {
+        collection.byName("Create User " + user).send();
+        collection.byName("Login As " + user).send();
+        collection.byName("Create Group " + label).send();
+        collection.byName("Logout").send();
+    }
+    
+    @Given("^(.*) has joined group (.*)")
+    public void group_joined(String user, String label) throws Throwable {
+        collection.byName("Create User " + user).send();
+        collection.byName("Login As " + user).send();
+        collection.byName("Join Group " + label).send();
+        collection.byName("Logout").send();
+    }
+    
+    @Given("^the following groups:$")
+    public void groups_created(DataTable table) throws Throwable {
+        Map<String, String> m = table.asMap(String.class, String.class);
+        for(Map.Entry<String, String> e : m.entrySet()) {
+            String[] vals = e.getValue().split(" ");
+            group_created(e.getKey(), vals[0]);
+            for(int i = 1; i < vals.length; i++) {
+                group_joined(vals[i], e.getKey());
+            }
+        }
+    }
+    
+    @Given("(.*) and (.*) are mutually exclusive$")
+    public void mutually_exclusive(String first, String second) throws Throwable {
+        Map m = new HashMap();
+        m.put("first", first.toLowerCase());
+        m.put("second", second.toLowerCase());
+        Response res = collection.byName("Set Mutual Exclusion").withEnv(m).send();
+        Assert.assertEquals(res.code(), 200);        
+    }
+    
+    @Given("(.*) and (.*) are not mutually exclusive$")
+    public void not_mutually_exclusive(String first, String second) throws Throwable {
+        Map m = new HashMap();
+        m.put("first", first.toLowerCase());
+        m.put("second", second.toLowerCase());
+        Response res = collection.byName("Unset Mutual Exclusion").withEnv(m).send();
+        Assert.assertEquals(res.code(), 200);
+    }    
     
     @And("^(.*) has (.*) on (.*) list of friends$")
     public void friends_list(String first, String second, String pronoun) throws Throwable {
@@ -142,12 +189,6 @@ public class MicroblogCucumberStepdefs {
         } else {
             request.response(response).validate();
         }
-    }
-    
-    @Then("^I expect a successful response")
-    public void success() throws Throwable {
-        Response res = request.send();
-        Assert.assertTrue(res.isSuccessful());
     }
     
     @Then("^I expect a response with code (\\d+) .*$")

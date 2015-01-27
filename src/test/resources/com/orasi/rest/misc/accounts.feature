@@ -23,7 +23,7 @@ Feature: Account management
     Scenario: Delete an Account
         Given I am logged in as Larry
         When I send a request to Larry Deletes Account
-        Then I expect a successful response
+        Then I expect a response with code 200 OK
         When I send a request to Check User Larry
         Then I expect a response matching verifyUserLarryDeletedExample
 

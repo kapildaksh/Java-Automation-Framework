@@ -1,7 +1,7 @@
 Feature: Security
     As a Microblog user
     I want to be able to post messages or change my own account
-    Without other users causing issues
+    Without other users causing issues to my account
 
     Scenario: A Non-Logged In User Can Add User
         When I send a request to Create User Tom

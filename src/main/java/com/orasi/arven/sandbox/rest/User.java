@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.orasi.utils.types.Reference;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +32,14 @@ public class User {
     public String nickname;
     public String email;
     public List<Post> posts;
+            
+    @JsonIgnore
+    public List<String> groups = new LinkedList<String>();
+    
+    @JsonProperty
+    public List<String> getGroups() {
+        return this.groups;
+    }
     
     public Set<Reference<User>> friends;
     

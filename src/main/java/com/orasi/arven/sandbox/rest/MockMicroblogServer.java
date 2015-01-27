@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,6 +85,8 @@ public class MockMicroblogServer {
         
         @Override
         public String render(Object model) throws Exception {
+            String str;
+            
             if(model instanceof ModelMutator) {
                 model = ((ModelMutator)model).model();
             }
@@ -99,6 +102,8 @@ public class MockMicroblogServer {
     private static final Map<String, Reference<User>> users = new HashMap<String, Reference<User>>();
     private static final MultiMap tagdir = new MultiValueMap();
     private static final MultiMap groups = new MultiValueMap();
+    private static final MultiMap exclusions = new MultiValueMap();
+    private static final Map creator = new HashMap();
        
     private final SparkInstance srv;
     
@@ -116,8 +121,10 @@ public class MockMicroblogServer {
     }
     
     public void clear() {
+        groups.clear();
         tagdir.clear();
         users.clear();
+        creator.clear();
     }
     
     public void start() {
@@ -194,13 +201,17 @@ public class MockMicroblogServer {
         srv.post("/groups", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
-                if(req.session().attribute("user") == null) {
+                String user = req.session().attribute("user");
+                User u = users.get(user).value;
+                if(user == null) {
                     srv.halt(401, "Unauthorized");
                 }                
                 res.type("application/json; charset=UTF-8");
-                JsonNode u = Json.Map.readTree(req.body());
-                String name = u.path("name").asText();
+                JsonNode n = Json.Map.readTree(req.body());
+                String name = n.path("name").asText();
                 groups.put(name, req.session().attribute("user"));
+                creator.put(name, req.session().attribute("user"));
+                u.groups.add(name);
                 return new Message(Type.INFORMATIONAL, "Group added.");
             }
         }, new JsonTransformer());
@@ -208,18 +219,86 @@ public class MockMicroblogServer {
         srv.post("/groups/:name/join", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
-                if(req.session().attribute("user") == null) {
+                String user = req.session().attribute("user");
+                User u = users.get(user).value;
+                if(user == null) {
                     srv.halt(401, "Unauthorized");
                 }
-                groups.put(req.params(":name"), req.session().attribute("user"));
+                Collection c = (Collection) groups.get(req.params(":name"));
+                if(c.contains(user)) {
+                    res.status(409);
+                    return new Message(Type.ERROR, "Group already joined.");
+                }
+                for(String group : u.groups) {
+                    if(exclusions.containsKey(req.params(":name"))) {
+                        Collection excludes = (Collection) exclusions.get(req.params(":name"));
+                        if(excludes.contains(group)) {
+                            res.status(409);
+                            return new Message(Type.ERROR, "Your group " + group + " is in mutual exclusion with this group " + req.params(":name"));
+                        }
+                    }
+                }
+                u.groups.add(req.params(":name"));
+                groups.put(req.params(":name"), user);
                 return new Message(Type.INFORMATIONAL, "Group joined.");
             }
         }, new JsonTransformer());
         
+        srv.post("/groups/:name/leave", new Route() {
+            @Override
+            public Object handle(Request req, Response res) throws Exception {
+                String user = req.session().attribute("user");
+                User u = users.get(user).value;                
+                if(user == null) {
+                    srv.halt(401, "Unauthorized");
+                }
+                Collection c = (Collection) groups.get(req.params(":name"));
+                if(!c.contains(user)) {
+                    res.status(409);
+                    return new Message(Type.ERROR, "Not a member of the group.");
+                }
+                users.get(user).value.groups.add(req.params(":name"));
+                groups.remove(req.params(":name"), req.session().attribute("user"));
+                u.groups.remove(req.params(":name"));
+                return new Message(Type.INFORMATIONAL, "Group left.");
+            }
+        }, new JsonTransformer());
+        
+        srv.put("/groups/:name/exclusion/:exclusion", new Route() {
+            @Override
+            public Object handle(Request req, Response res) throws Exception {
+                if(req.session().attribute("user") == null) {
+                    srv.halt(401, "Unauthorized");
+                } else if(!req.session().attribute("user").equals(creator.get(req.params(":name")))) {
+                    srv.halt(403, "Forbidden " + req.session().attribute("user") + " " + req.params(":name"));
+                }
+                exclusions.put(req.params(":name"), req.params(":exclusion"));
+                exclusions.put(req.params(":exclusion"), req.params(":name"));
+                return new Message(Type.INFORMATIONAL, "Exclusion set.");
+            }
+        }, new JsonTransformer());
+        
+        srv.delete("/groups/:name/exclusion/:exclusion", new Route() {
+            @Override
+            public Object handle(Request req, Response res) throws Exception {
+                if(req.session().attribute("user") == null) {
+                    srv.halt(401, "Unauthorized");
+                } else if(!req.session().attribute("user").equals(creator.get(req.params(":name")))) {
+                    srv.halt(403, "Forbidden");
+                }
+                exclusions.remove(req.params(":name"), req.params(":exclusion"));
+                exclusions.remove(req.params(":exclusion"), req.params(":name"));
+                return new Message(Type.INFORMATIONAL, "Exclusion removed.");
+            }
+        }, new JsonTransformer());        
+        
         srv.get("/groups/:name", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
-                res.type("application/json; charset=UTF-8");                
+                res.type("application/json; charset=UTF-8");    
+                if( groups.get(req.params(":name")) == null ) {
+                    res.status(404);
+                }                
                 return groups.get(req.params(":name"));
             }
         }, new JsonTransformer());

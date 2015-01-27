@@ -26,7 +26,15 @@
 		"e701aa91-2fdb-a107-282c-7735c1d31b75",
 		"d9e424a6-5f46-1e29-45d4-0164042e6026",
 		"97874ac9-420e-4a97-690e-0c89f5c57c18",
-		"8903b9ef-6463-67b1-0fac-e06fce01082c"
+		"8903b9ef-6463-67b1-0fac-e06fce01082c",
+		"63b9a98d-8405-46cb-118c-e5a2fc6f10de",
+		"82a7057a-da5e-89e5-1a79-9bee1b8c490e",
+		"984572b7-7e86-2123-f1d9-4a5b17a3ce7f",
+		"ed6b7a25-db37-5d3c-b417-c58841fb3232",
+		"5698e39f-6024-6617-4255-da9ca94762a6",
+		"cb1c2715-c0e7-1802-11ee-cedfe2c02769",
+		"e1a390f8-58a3-cfec-f7ca-edff41bd2eb0",
+		"24c34bce-f0a1-8008-75a3-41437d2782b6"
 	],
 	"folders": [],
 	"timestamp": 1421440517292,
@@ -258,6 +266,27 @@
 			"rawModeData": ""
 		},
 		{
+			"id": "24c34bce-f0a1-8008-75a3-41437d2782b6",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:4567/groups/{{first}}/exclusion/{{second}}",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "DELETE",
+			"data": [],
+			"dataMode": "params",
+			"name": "Unset Mutual Exclusion",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1422379419019,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false
+		},
+		{
 			"id": "358c6540-2c2e-9ba9-e65a-6980b9ba12e4",
 			"headers": "Content-Type: application/json\nAuthorization: Basic dG9tOkRyYWcwbjhlcg==\n",
 			"url": "http://localhost:4567/logout",
@@ -480,6 +509,28 @@
 			"synced": false
 		},
 		{
+			"id": "5698e39f-6024-6617-4255-da9ca94762a6",
+			"headers": "",
+			"url": "http://localhost:4567/groups/omega/leave",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Leave Group Omega",
+			"description": "Leave Group Omega",
+			"descriptionFormat": "html",
+			"time": 1422377580222,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false,
+			"rawModeData": ""
+		},
+		{
 			"id": "5a919fa7-e887-b8aa-5f3f-c35ca46ae8a2",
 			"headers": "Content-Type: application/json\n",
 			"url": "http://localhost:4567/users/larry/posts",
@@ -627,6 +678,28 @@
 			"helperAttributes": {},
 			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
 			"synced": false
+		},
+		{
+			"id": "63b9a98d-8405-46cb-118c-e5a2fc6f10de",
+			"headers": "",
+			"url": "http://localhost:4567/groups/alpha/join",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Join Group Alpha",
+			"description": "Join Group Alpha",
+			"descriptionFormat": "html",
+			"time": 1422373818326,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false,
+			"rawModeData": ""
 		},
 		{
 			"id": "749b3592-ead5-1ca4-979e-4cdabee0884d",
@@ -929,6 +1002,28 @@
 			"synced": false
 		},
 		{
+			"id": "82a7057a-da5e-89e5-1a79-9bee1b8c490e",
+			"headers": "",
+			"url": "http://localhost:4567/groups/alpha/leave",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Leave Group Alpha",
+			"description": "Leave Group Alpha",
+			"descriptionFormat": "html",
+			"time": 1422375766109,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false,
+			"rawModeData": ""
+		},
+		{
 			"id": "8369fe1b-e9de-75f7-74cc-f630b8c08564",
 			"headers": "Content-Type: application/json\nAuthorization: Basic dG9tOkRyYWcwbjhlcg==\n",
 			"url": "http://localhost:4567/login",
@@ -1071,6 +1166,58 @@
 						"tests": "",
 						"version": 2
 					}
+				},
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 16,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "15",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "[\"larry\",\"tom\"]",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "670f97d2-c496-a638-f225-57a0a95e927f",
+					"name": "Larry And Tom",
+					"request": {
+						"url": "http://localhost:4567/groups/alpha",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
 				}
 			],
 			"tests": "",
@@ -1100,6 +1247,28 @@
 			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
 			"synced": false,
 			"rawModeData": "{\n\"name\": \"alpha\"\n}"
+		},
+		{
+			"id": "984572b7-7e86-2123-f1d9-4a5b17a3ce7f",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:4567/groups",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Create Group Omega",
+			"description": "Create Group Omega",
+			"descriptionFormat": "html",
+			"time": 1422377541657,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false,
+			"rawModeData": "{\n\"name\": \"omega\"\n}"
 		},
 		{
 			"id": "9da1731e-1c51-51ca-0b6f-34dd55ed588a",
@@ -1627,6 +1796,27 @@
 			"synced": false
 		},
 		{
+			"id": "cb1c2715-c0e7-1802-11ee-cedfe2c02769",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:4567/groups/omega",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"name": "Group Omega Roster",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1422377703329,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false
+		},
+		{
 			"id": "d9e424a6-5f46-1e29-45d4-0164042e6026",
 			"headers": "Content-Type: application/json\nAuthorization: Basic b21lZ2E6YW5leHRyYWFjdG9y\n",
 			"url": "http://localhost:4567/login",
@@ -1649,6 +1839,27 @@
 			"description": "",
 			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
 			"responses": [],
+			"synced": false
+		},
+		{
+			"id": "e1a390f8-58a3-cfec-f7ca-edff41bd2eb0",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:4567/groups/{{first}}/exclusion/{{second}}",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "PUT",
+			"data": [],
+			"dataMode": "params",
+			"name": "Set Mutual Exclusion",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1422379405141,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
 			"synced": false
 		},
 		{
@@ -1745,6 +1956,28 @@
 			"responses": [],
 			"synced": false,
 			"rawModeData": "{\n\"username\": \"omega\",\n\"nickname\": \"Omega\",\n\"email\": \"omega@muckdragon.info\",\n\"password\": \"anextraactor\"\n}"
+		},
+		{
+			"id": "ed6b7a25-db37-5d3c-b417-c58841fb3232",
+			"headers": "",
+			"url": "http://localhost:4567/groups/omega/join",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Join Group Omega",
+			"description": "Join Group Omega",
+			"descriptionFormat": "html",
+			"time": 1422377557989,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false,
+			"rawModeData": ""
 		},
 		{
 			"id": "f82db5b4-0a66-6d50-9e36-0af0e10de3f9",
