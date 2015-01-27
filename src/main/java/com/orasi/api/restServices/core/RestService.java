@@ -1,7 +1,6 @@
 package com.orasi.api.restServices.core;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,9 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -28,12 +24,9 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import com.orasi.utils.documentConverter.StringToDocumentToString;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.testng.Assert;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -143,9 +136,9 @@ public class RestService {
 		}		
 		
 		if (responseFormat.equalsIgnoreCase("xml")) {
-			setXmlResponseDocument(StringToDocumentToString
-					.convertStringToDocument(rawResponse.toString()));
-
+			//setXmlResponseDocument(StringToDocumentToString.convertStringToDocument(rawResponse.toString()));
+			setXmlResponseDocument(XMLTools.makeXMLDocument((rawResponse.toString())));
+			
 			System.out.println();
 			System.out.println("Raw XML Response");
 			System.out.println(getXmlResponse());
@@ -230,6 +223,7 @@ public class RestService {
 	 * @param doc
 	 *            Document: XML file of the Response to be stored in memory
 	 */
+	@SuppressWarnings("static-access")
 	protected void setXmlResponseDocument(Document doc) {
 		this.xmlResponseDocument = doc;
 		this.xmlResponseDocument.normalize();
@@ -374,6 +368,7 @@ public class RestService {
 	 * 			3) String     -> "<<keyName>>,String;"
 	 * @return String, value of the defined key name
 	 */
+	@SuppressWarnings("unused")
 	public String getJsonResponseValueByKeyString(String keyString) throws JSONException {
 		//Create an array of keys
 		String[] jsonObjects = keyString.split(";");

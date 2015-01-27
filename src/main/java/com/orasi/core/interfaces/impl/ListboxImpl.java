@@ -5,9 +5,6 @@ import com.orasi.utils.TestReporter;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
-import org.testng.Reporter;
-
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -15,7 +12,7 @@ import java.util.List;
  */
 public class ListboxImpl extends ElementImpl implements Listbox {
     private final org.openqa.selenium.support.ui.Select innerSelect;
-    private java.util.Date date= new java.util.Date();
+//    private java.util.Date date= new java.util.Date();
     
     /**
      * @summary - Wraps a WebElement with listbox functionality.
