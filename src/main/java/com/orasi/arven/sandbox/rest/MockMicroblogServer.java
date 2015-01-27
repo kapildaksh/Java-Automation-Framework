@@ -1,6 +1,7 @@
 package com.orasi.arven.sandbox.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -21,16 +22,20 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.codec.binary.StringUtils;
 
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.ssl.Base64;
 
 import sparkfive.ExceptionHandler;
+import sparkfive.Filter;
 import sparkfive.Request;
 import sparkfive.Response;
 import sparkfive.ResponseTransformer;
 import sparkfive.Route;
+import sparkfive.Session;
 import sparkfive.SparkInstance;
 
 public class MockMicroblogServer {
@@ -93,6 +98,7 @@ public class MockMicroblogServer {
     
     private static final Map<String, Reference<User>> users = new HashMap<String, Reference<User>>();
     private static final MultiMap tagdir = new MultiValueMap();
+    private static final MultiMap groups = new MultiValueMap();
        
     private final SparkInstance srv;
     
@@ -116,7 +122,47 @@ public class MockMicroblogServer {
     
     public void start() {
         running = true;
+                
+        srv.before("/users/*", new Filter() {
+            @Override
+            public void handle(Request req, Response res) throws Exception {
+                if(req.session().attribute("user") == null) {
+                    srv.halt(401, "Unauthorized");
+                }
+            }
+        });
         
+        srv.post("/login", new Route() {
+            @Override
+            public Object handle(Request req, Response res) throws Exception {
+                res.type("text/plain; charset=UTF-8");
+                Session s = req.session();
+                if(req.headers("Authorization") != null) {
+                    String auth = req.headers("Authorization").split(" ")[1];
+                    auth = StringUtils.newStringUtf8(Base64.decodeBase64(auth));
+                    String creds[] = auth.split(":");
+                    if(!users.get(creds[0]).value.password.equals(creds[1])) {
+                        srv.halt(401, "Invalid authorization.");
+                    } else {
+                        s.attribute("user", creds[0]);
+                    }
+                }
+                if(s.attribute("user") == null){
+                    res.header("WWW-Authenticate", "Basic realm=\"MicroblogServer\"");
+                    srv.halt(401, "Authorization required.");
+                }
+                return "Login Successful";
+            }
+        });        
+        
+        srv.post("/logout", new Route() {
+            @Override
+            public Object handle(Request request, Response response) throws Exception {
+                request.session().attribute("user", null);
+                return "Logout Successful";
+            }
+        });
+               
         srv.get("/tags", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
@@ -145,6 +191,39 @@ public class MockMicroblogServer {
             }            
         }, new JsonTransformer());
         
+        srv.post("/groups", new Route() {
+            @Override
+            public Object handle(Request req, Response res) throws Exception {
+                if(req.session().attribute("user") == null) {
+                    srv.halt(401, "Unauthorized");
+                }                
+                res.type("application/json; charset=UTF-8");
+                JsonNode u = Json.Map.readTree(req.body());
+                String name = u.path("name").asText();
+                groups.put(name, req.session().attribute("user"));
+                return new Message(Type.INFORMATIONAL, "Group added.");
+            }
+        }, new JsonTransformer());
+        
+        srv.post("/groups/:name/join", new Route() {
+            @Override
+            public Object handle(Request req, Response res) throws Exception {
+                if(req.session().attribute("user") == null) {
+                    srv.halt(401, "Unauthorized");
+                }
+                groups.put(req.params(":name"), req.session().attribute("user"));
+                return new Message(Type.INFORMATIONAL, "Group joined.");
+            }
+        }, new JsonTransformer());
+        
+        srv.get("/groups/:name", new Route() {
+            @Override
+            public Object handle(Request req, Response res) throws Exception {
+                res.type("application/json; charset=UTF-8");                
+                return groups.get(req.params(":name"));
+            }
+        }, new JsonTransformer());
+        
         srv.post("/users", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
@@ -153,7 +232,7 @@ public class MockMicroblogServer {
                 users.put(u.username, new Reference<User>(u));
                 return new Message(Type.INFORMATIONAL, "User added.");
             }
-        }, new JsonTransformer());
+        }, new JsonTransformer());        
                 
         srv.get("/users/:name", new Route() {
             @Override
@@ -167,6 +246,9 @@ public class MockMicroblogServer {
         srv.patch("/users/:name", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
+                if(!req.params(":name").equals(req.session().attribute("user"))) {
+                    srv.halt(403, "Forbidden");
+                }
                 res.type("application/json; charset=UTF-8");
                 Reference<User> u = users.get(req.params(":name"));
                 u.set((User) Patch.patch(req.body(), u.get()));
@@ -177,6 +259,9 @@ public class MockMicroblogServer {
         srv.delete("/users/:name", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
+                if(!req.params(":name").equals(req.session().attribute("user"))) {
+                    srv.halt(403, "Forbidden");
+                }
                 res.type("application/json; charset=UTF-8");
                 return Reference.isNull(users.remove(req.params(":name"))) ? new Message(Type.ERROR, "Could not find user.") : new Message(Type.INFORMATIONAL, "User removed.");
             }
@@ -185,6 +270,9 @@ public class MockMicroblogServer {
         srv.put("/users/:name/friends/:friend", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
+                if(!req.params(":name").equals(req.session().attribute("user"))) {
+                    srv.halt(403, "Forbidden");
+                }
                 res.type("application/json; charset=UTF-8");
                 String fn = req.params(":friend");
                 String mn = req.params(":name");
@@ -203,6 +291,9 @@ public class MockMicroblogServer {
         srv.delete("/users/:name/friends/:friend", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
+                if(!req.params(":name").equals(req.session().attribute("user"))) {
+                    srv.halt(403, "Forbidden");
+                }
                 res.type("application/json; charset=UTF-8");
                 String fn = req.params(":friend");
                 String mn = req.params(":name");
@@ -221,6 +312,9 @@ public class MockMicroblogServer {
         srv.post("/users/:name/posts", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
+                if(!req.params(":name").equals(req.session().attribute("user"))) {
+                    srv.halt(403, "Forbidden");
+                }
                 res.type("application/json; charset=UTF-8");
                 Post p = Json.Map.readValue(req.body(), Post.class);
                 p.created = new Date();

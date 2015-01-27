@@ -7,23 +7,27 @@ package com.orasi.rest.misc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.arven.sandbox.rest.MockMicroblogServer;
+import com.orasi.utils.rest.BaseExpectedNode;
 import com.orasi.utils.rest.ExpectedResponse;
 import com.orasi.utils.rest.PostmanCollection;
 import com.orasi.utils.rest.PostmanEnvironment;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
+import com.orasi.utils.rest.RestSession;
+import com.squareup.okhttp.Response;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import cucumber.api.java.en.Then;
-import cucumber.api.java.en.But;
 import cucumber.api.java.Before;
 import cucumber.api.java.After;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import org.testng.Assert;
 
 /**
  * These are all of the step definitions that are used in the Cucumber
@@ -43,8 +47,13 @@ public class MicroblogCucumberStepdefs {
     public Map env1;
     public Map env2;
     
+    public Map nvars = new HashMap();
+    
     private RestRequest request = null;
     private ExpectedResponse expected = null;
+    private BaseExpectedNode node = null;
+    
+    private final List<String> ignores = new ArrayList<String>();
     
     static {
         server.start();
@@ -53,11 +62,8 @@ public class MicroblogCucumberStepdefs {
     public MicroblogCucumberStepdefs() throws Exception {
         collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
         env1 = PostmanEnvironment.file(getClass().getResource(REST_SANDBOX + "Passwords.postman_environment"));
-        env2 = new HashMap();
-        env2.put("username", "arven2");
-        env2.put("nickname", "A. R. Variadic");
-        env2.put("email", "arvariadic@arven.info");        
         collection.withEnv(env1);
+        collection.withSession(new RestSession());
     }
     
     @Before
@@ -70,80 +76,112 @@ public class MicroblogCucumberStepdefs {
     }
     
     @Given("^I am not logged in$")
-    public void I_am_not_logged_in() {
-        // Do nothing
+    public void not_logged_in() throws Throwable {
+        collection.byName("Logout").send();
     }
     
     @Given("^I am logged in as (.*)$")
-    public void I_am_logged_in_as(String user) {
-        // Do nothing
+    public void logged_in(String user) throws Throwable {
+        collection.byName("Login As " + user).send();
+    }
+    
+    @When("^I log in as \"(.*)\" with password \"(.*)\"")
+    public void log_in(String user, String password) throws Throwable {
+        Map m = new HashMap();
+        m.put("username", user);
+        m.put("password", password);
+        collection.byName("Login As Variable").withEnv(m).send();
     }
     
     @Given("(.*)'s account has been created$")
-    public void account_has_been_created(String label) throws Throwable {
+    public void account_created(String label) throws Throwable {
         collection.byName("Create User " + label).send();
     }
     
     @And("^(.*) has (.*) on (.*) list of friends$")
-    public void has_on_his_list_of_friends(String first, String second, String pronoun) throws Throwable {
+    public void friends_list(String first, String second, String pronoun) throws Throwable {
+        collection.byName("Create User " + first).send();
+        collection.byName("Create User " + second).send();
+        collection.byName("Login As " + first).send();        
         collection.byName(first + " Adds " + second).send();
+        collection.byName("Logout").send();        
     }    
 
     @And("^(.*)'s account has not been created$")
-    public void account_has_not_been_created(String label) {
+    public void account_not_created(String label) {
     }
     
     @When("^I send a request to (.*)$")
-    public void I_send_a_request_to(String label) throws Throwable {
-        request = collection.byName(label);
+    public void request(String label) throws Throwable {
+        request = collection.byName(label).withEnv(env2);
     }
     
-    @And("^I set the variables to:$")
-    public void I_set_the_variables_to(DataTable table) throws Throwable {
-        request.withEnv(table.asMap(String.class, String.class));
-    }
-    
-    @And("^I set the environment to:$")
-    public void I_set_the_environment_to(DataTable table) throws Throwable {
-        collection.withEnv(table.asMap(String.class, String.class));       
-    }    
-    
-    @Then("^I expect a response matching (.*)$")
-    public void I_expect_a_response_matching(String response) throws Throwable {
-        expected = request.response(response);
-        expected.validate();
-    }
-    
-    @Then("^I want a response like (.*)$")
-    public void I_want_a_response(String response) throws Throwable {
-        expected = request.response(response);
-    }
-
-    @But("^with (.*) replaced by (.*)$")
-    public void with_replaced_by(String with, String replace) {
-        expected.at(with).replace(replace);
-    }
-
-    @But("^with (.*) ignored$")
-    public void with_ignored(String with) {
-        for(String s : with.split(" ")) {
-            expected.at(s.trim()).ignore();
+    @And("^I define (.*):$")
+    public void variables(String variable, DataTable table) throws Throwable {
+        nvars.put(variable, table);
+        switch (variable) {
+            case "the environment":
+                collection.withEnv(table.asMap(String.class, String.class));
+                break;
+            case "replacements":
+                env2 = table.asMap(String.class, String.class);
+                break;
         }
     }
+    
+    @And("^I replace the values in (.*) with (.*)")
+    public void substitution(String prefix, String var) {
+        replace_all(prefix, (DataTable) nvars.get(var));
+    }
+    
+    @Then("^I expect a response matching (.*)$")
+    public void matches(String response) throws Throwable {
+        if(node != null) {
+            request.response(response, node).validate();
+            node = null;
+        } else {
+            request.response(response).validate();
+        }
+    }
+    
+    @Then("^I expect a successful response")
+    public void success() throws Throwable {
+        Response res = request.send();
+        Assert.assertTrue(res.isSuccessful());
+    }
+    
+    @Then("^I expect a response with code (\\d+) .*$")
+    public void error_code(String code) throws Throwable {
+        Response res = request.send();
+        Assert.assertEquals(String.valueOf(res.code()), code);
+    }    
 
-    @And("^I expect it to match the new values$")
-    public void I_expect_it_to_match_the_new_values() {
-        expected.validate();
+    @And("^I replace (.*) by (.*)$")
+    public void replace(String with, String replace) {
+        if(node == null) {
+            node = new BaseExpectedNode();
+        }
+        node.at(with).replace(replace);
     }
     
-    @Then("^I expect the response to be valid$")
-    public void I_expect_the_response_to_be_valid() throws Throwable {
-        expected.validate();
+    @And("^I replace (.*) by:$")
+    public void replace_all(String prefix, DataTable table) {
+        if(node == null) {
+            node = new BaseExpectedNode();
+        }
+        for(Entry<String, String> e : table.asMap(String.class, String.class).entrySet()) {
+            node.at(prefix + e.getKey()).replace(e.getValue());
+        }
     }
     
-    @Then("^I expect the response to succeed$")
-    public void I_expect_the_response_to_succeed() throws Throwable {
-        request.send();
+    @And("^I ignore (.*)$")
+    public void ignore(String with) {
+        if(node == null) {
+            node = new BaseExpectedNode();
+        }
+        for(String s : with.split(" ")) {
+            node.at(s.trim()).ignore();
+        }
     }
     
 }

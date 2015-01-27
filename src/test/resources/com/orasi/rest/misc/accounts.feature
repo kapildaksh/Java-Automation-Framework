@@ -6,38 +6,44 @@ Feature: Account management
     Background:
         Given Larry's account has been created
 
+    Scenario: Log In
+        When I send a request to Login As Larry
+        Then I expect a response matching LoginSuccess
+
     Scenario: Create an Account
         Given I am not logged in
-		And Tom's account has not been created
+        And Tom's account has not been created
         When I send a request to Create User Tom
-		Then I expect a response matching createUserTomExample
+        Then I expect a response matching createUserTomExample
+        When I send a request to Login As Tom
+        Then I expect a response matching LoginSuccess
         When I send a request to Check User Tom
-		Then I expect a response matching verifyUserTomExample
+        Then I expect a response matching verifyUserTomExample
 
     Scenario: Delete an Account
         Given I am logged in as Larry
         When I send a request to Larry Deletes Account
-		Then I expect the response to succeed
+        Then I expect a successful response
         When I send a request to Check User Larry
-		Then I expect a response matching verifyUserLarryDeletedExample
+        Then I expect a response matching verifyUserLarryDeletedExample
 
     Scenario Outline: Create a Named Account
-        Given I am not logged in
-		And <username>'s account has not been created
-		And I set the environment to:
-			|   username    |   <username>    |
-			|   nickname    |   <nickname>    |
-			|   email       |   <email>       |
+        Given I am logged in as Larry
+        And I define replacements:
+                |   username    |   <username>    |
+                |   nickname    |   <nickname>    |
+                |   email       |   <email>       |
+                |   password    |   <password>    |
         When I send a request to Create User Variable
-		Then I expect a response matching createUserVariableExample
-        When I send a request to Check User Variable
-		Then I want a response like verifyUserVariableExample 
-		But with /username replaced by <username>
-		And with /nickname replaced by <nickname>
-		And with /email replaced by <email>
-		And I expect it to match the new values
+        Then I expect a response matching createUserVariableExample
+        And I send a request to Check User Variable
+        And I replace the values in / with replacements
+        And I ignore /password
+        Then I expect a response matching verifyUserVariableExample
         Examples:
-            |   username    |   nickname    |   email               |
-            |   tomfields   |   TomRFields  |   tom@arven.info      |
-            |   arven       |   arven       |   arven@arven.info    |
-            |   brian       |   BrianJ      |   brianj@arven.info   |
+        These show username, nickname, and email of some new accounts to create
+        with the template createUserVariableExample.
+            |   username    |   nickname    |   email               |   password    |
+            |   tomfields   |   TomRFields  |   tom@arven.info      |   xyzzy       |
+            |   arven       |   arven       |   arven@arven.info    |   plugh       |
+            |   brian       |   BrianJ      |   brianj@arven.info   |   reisub      |

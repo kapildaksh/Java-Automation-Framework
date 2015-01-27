@@ -12,7 +12,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.ssl.Base64;
 
 /**
  * These are helper functions for generating parts of Rest requests. A string
@@ -59,14 +61,25 @@ public class RestRequestHelpers {
      * Generate a set of headers from a simple string split by newlines.
      * 
      * @param headers
+     * @param auth
+     * @param variables
      * @return 
      */
-    public static Headers headers(String headers) {
+    public static Headers headers(String headers, Map auth, Map variables) {
         Headers.Builder hdrs = new Headers.Builder();
+        boolean authorizationFound = false;
         for(String hdr : headers.split(Pattern.quote("\n"))) {
             String[] h = hdr.split(Pattern.quote(":"), 2);
             if(h.length == 2) {
-                hdrs = hdrs.add(h[0], h[1]);
+                if(!h[0].equals("Authorization")) {
+                    hdrs = hdrs.add(h[0], h[1]);
+                } else {
+                    authorizationFound = true;
+                }
+            }
+            if(authorizationFound && auth.get("username") != null) {
+                    // System.out.println(format(auth.get("username") + ":" + auth.get("password"), variables));
+                    hdrs = hdrs.add(h[0], "Basic " + Base64.encodeBase64String(StringUtils.getBytesUtf8(format(auth.get("username") + ":" + auth.get("password"), variables))));
             }
         }
         return hdrs.build();
@@ -78,6 +91,7 @@ public class RestRequestHelpers {
      * @param type
      * @param headers
      * @param url
+     * @param auth
      * @param format
      * @param data
      * @param rawModeData
@@ -86,7 +100,7 @@ public class RestRequestHelpers {
      * @return 
      * @throws java.lang.Exception 
      */
-    public static Request request(RestRequest.RequestType type, String headers, String url, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, Map variables, String[] parameters) throws Exception {
+    public static Request request(RestRequest.RequestType type, String headers, String url, Map auth, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, Map variables, String[] parameters) throws Exception {
         url = RestRequestHelpers.variables(url, variables);
         rawModeData = RestRequestHelpers.variables(rawModeData, variables);
         if(data != null) {
@@ -112,10 +126,10 @@ public class RestRequestHelpers {
                 }
                 break;
         }
-        
+               
         return new Request.Builder()
                 .url(url)
-                .headers(headers(headers))
+                .headers(headers(headers, auth, variables))
                 .method(type.toString(), type.equals(RequestType.GET) ? null : body).build();
     }
     

@@ -4,18 +4,18 @@ Feature: Friends list
     In order to manage my online presence
 
     Background:
-        Given Larry's account has been created
-		And Tom's account has been created
-		And Larry has Tom on his list of friends
+        Given Larry has Tom on his list of friends
 
     Scenario: Add a Friend
+        Given I am logged in as Tom
         When I send a request to Tom Adds Larry
-		Then I expect a response matching addFriendTomLarryExample
+        Then I expect a response matching addFriendTomLarryExample
         When I send a request to Check User Tom
-		Then I expect a response matching verifyFriendTomLarryExample
+        Then I expect a response matching verifyFriendTomLarryExample
 
     Scenario: Delete a Friend
+        Given I am logged in as Larry
         When I send a request to Larry Removes Tom
-		Then I expect a response matching removeFriendLarryTomExample
+        Then I expect a response matching removeFriendLarryTomExample
         When I send a request to Check User Larry
-		Then I expect a response matching verifyRemoveFriendLarryTomExample
+        Then I expect a response matching verifyRemoveFriendLarryTomExample

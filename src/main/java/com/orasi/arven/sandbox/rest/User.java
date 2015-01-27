@@ -5,7 +5,9 @@
  */
 package com.orasi.arven.sandbox.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.orasi.utils.types.Reference;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +19,14 @@ import java.util.Set;
  */
 @JsonIgnoreProperties({"posts"})
 public class User {   
+    @JsonIgnore
+    public String password;
+    
+    @JsonProperty
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
     public String username;
     public String nickname;
     public String email;

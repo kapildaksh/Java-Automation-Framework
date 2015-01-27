@@ -18,7 +18,15 @@
 		"3ecef213-0fb5-6a14-c1f5-8e68037cddb1",
 		"be640cfd-4bf3-2fb2-859f-c78b4dec320f",
 		"f82db5b4-0a66-6d50-9e36-0af0e10de3f9",
-		"e6bb5409-96be-e76c-cdf3-ae99d06529f3"
+		"e6bb5409-96be-e76c-cdf3-ae99d06529f3",
+		"8369fe1b-e9de-75f7-74cc-f630b8c08564",
+		"75593d43-ec1b-044f-ccc4-f3777a2e5150",
+		"358c6540-2c2e-9ba9-e65a-6980b9ba12e4",
+		"749b3592-ead5-1ca4-979e-4cdabee0884d",
+		"e701aa91-2fdb-a107-282c-7735c1d31b75",
+		"d9e424a6-5f46-1e29-45d4-0164042e6026",
+		"97874ac9-420e-4a97-690e-0c89f5c57c18",
+		"8903b9ef-6463-67b1-0fac-e06fce01082c"
 	],
 	"folders": [],
 	"timestamp": 1421440517292,
@@ -29,16 +37,19 @@
 			"id": "04690250-118b-3350-a634-7402b11929d1",
 			"headers": "Content-Type: application/json\n",
 			"url": "http://localhost:4567/users",
-			"pathVariables": {},
 			"preRequestScript": "",
+			"pathVariables": {},
 			"method": "POST",
 			"data": [],
 			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1422303101314,
 			"name": "Create User Larry",
 			"description": "Create User Larry",
-			"descriptionFormat": "html",
-			"time": 1421441010103,
-			"version": 2,
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
 			"responses": [
 				{
 					"status": "",
@@ -93,12 +104,8 @@
 					}
 				}
 			],
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
 			"synced": false,
-			"rawModeData": "{\n\"username\": \"larry\",\n\"nickname\": \"Larry Wall\"\n}"
+			"rawModeData": "{\n\"username\": \"larry\",\n\"nickname\": \"Larry Wall\",\n\"password\": \"apocalypse\"\n}"
 		},
 		{
 			"id": "15fac41f-eedf-922d-20a7-d909c4830726",
@@ -249,6 +256,80 @@
 			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
 			"synced": false,
 			"rawModeData": ""
+		},
+		{
+			"id": "358c6540-2c2e-9ba9-e65a-6980b9ba12e4",
+			"headers": "Content-Type: application/json\nAuthorization: Basic dG9tOkRyYWcwbjhlcg==\n",
+			"url": "http://localhost:4567/logout",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [],
+			"dataMode": "params",
+			"name": "Logout",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1422310663969,
+			"version": 2,
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 8,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "17",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "text/html; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "Logout Successful",
+					"language": "html",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "68b07bc1-8851-4032-56f4-b05ae0589a83",
+					"name": "LogoutSuccess",
+					"request": {
+						"url": "http://localhost:4567/logout",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "POST",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false
 		},
 		{
 			"id": "35f01e82-ac4c-654d-ed37-3f15fc19860f",
@@ -548,19 +629,123 @@
 			"synced": false
 		},
 		{
-			"id": "75f9ef61-bba5-1f43-a1b5-814c3ee2a5af",
-			"headers": "Content-Type: application/json\n",
-			"url": "http://localhost:4567/users",
+			"id": "749b3592-ead5-1ca4-979e-4cdabee0884d",
+			"headers": "Content-Type: application/json\nAuthorization: Basic YXJ2ZW46RHJhZzBuOGVy\n",
+			"url": "http://localhost:4567/login",
 			"pathVariables": {},
 			"preRequestScript": "",
 			"method": "POST",
 			"data": [],
+			"dataMode": "params",
+			"name": "Login As Variable",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1422366819446,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "basicAuth",
+			"helperAttributes": {
+				"username": "{{username}}",
+				"password": "{{password}}"
+			},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false
+		},
+		{
+			"id": "75593d43-ec1b-044f-ccc4-f3777a2e5150",
+			"headers": "Content-Type: application/json\nAuthorization: Basic bGFycnk6YXBvY2FseXBzZQ==\n",
+			"url": "http://localhost:4567/login",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [],
+			"dataMode": "params",
+			"name": "Login As Larry",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1422303190419,
+			"version": 2,
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 7,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "16",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "text/plain; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "Login Successful",
+					"language": "html",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "d35775cf-475c-aeb5-797a-0df0f9cf1451",
+					"name": "LoginSuccess",
+					"request": {
+						"url": "http://localhost:4567/login",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\nAuthorization: Basic bGFycnk6YXBvY2FseXBzZQ==\n",
+						"dataMode": "params",
+						"method": "POST",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
+			"tests": "",
+			"currentHelper": "basicAuth",
+			"helperAttributes": {
+				"username": "larry",
+				"password": "apocalypse"
+			},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false
+		},
+		{
+			"id": "75f9ef61-bba5-1f43-a1b5-814c3ee2a5af",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:4567/users",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
 			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1422303053933,
 			"name": "Create User Tom",
 			"description": "Create User Tom",
-			"descriptionFormat": "html",
-			"time": 1421440911709,
-			"version": 2,
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
 			"responses": [
 				{
 					"status": "",
@@ -615,12 +800,8 @@
 					}
 				}
 			],
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
 			"synced": false,
-			"rawModeData": "{\n\"username\": \"tom\",\n\"nickname\": \"Tom R. Fields\",\n\"email\": \"tom@muckdragon.info\"\n}"
+			"rawModeData": "{\n\"username\": \"tom\",\n\"nickname\": \"Tom R. Fields\",\n\"email\": \"tom@muckdragon.info\",\n\"password\": \"Drag0n8er\"\n}"
 		},
 		{
 			"id": "7ccd3076-3982-e5c5-c2ad-fe9d3ac4e742",
@@ -746,6 +927,179 @@
 				}
 			],
 			"synced": false
+		},
+		{
+			"id": "8369fe1b-e9de-75f7-74cc-f630b8c08564",
+			"headers": "Content-Type: application/json\nAuthorization: Basic dG9tOkRyYWcwbjhlcg==\n",
+			"url": "http://localhost:4567/login",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [],
+			"dataMode": "params",
+			"name": "Login As Tom",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1422303035108,
+			"version": 2,
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 12,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "16",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "text/plain; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "Login Successful",
+					"language": "html",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "94f2b49d-2404-f3e0-91ea-73a9dab807f7",
+					"name": "LoginSuccess",
+					"request": {
+						"url": "http://localhost:4567/login",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\nAuthorization: Basic dG9tOkRyYWcwbjhlcg==\n",
+						"dataMode": "params",
+						"method": "POST",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
+			"tests": "",
+			"currentHelper": "basicAuth",
+			"helperAttributes": {
+				"username": "tom",
+				"password": "Drag0n8er"
+			},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false
+		},
+		{
+			"id": "8903b9ef-6463-67b1-0fac-e06fce01082c",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:4567/groups/alpha",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"name": "Group Alpha Roster",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1422373253031,
+			"version": 2,
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 13,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "9",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "text/html; charset=UTF-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Server",
+							"key": "Server",
+							"value": "Jetty(9.0.2.v20130417)",
+							"description": "A name for the server"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "[\"larry\"]",
+					"language": "html",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceRaw": false,
+					"id": "3b30c875-308e-e82a-4b67-d02188ec96aa",
+					"name": "Initial Roster",
+					"request": {
+						"url": "http://localhost:4567/groups/alpha",
+						"pathVariables": {},
+						"data": [],
+						"headers": "Content-Type: application/json\n",
+						"dataMode": "params",
+						"method": "GET",
+						"tests": "",
+						"version": 2
+					}
+				}
+			],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false
+		},
+		{
+			"id": "97874ac9-420e-4a97-690e-0c89f5c57c18",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:4567/groups",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Create Group Alpha",
+			"description": "Create User Tom",
+			"descriptionFormat": "html",
+			"time": 1422372991797,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"synced": false,
+			"rawModeData": "{\n\"name\": \"alpha\"\n}"
 		},
 		{
 			"id": "9da1731e-1c51-51ca-0b6f-34dd55ed588a",
@@ -1273,6 +1627,31 @@
 			"synced": false
 		},
 		{
+			"id": "d9e424a6-5f46-1e29-45d4-0164042e6026",
+			"headers": "Content-Type: application/json\nAuthorization: Basic b21lZ2E6YW5leHRyYWFjdG9y\n",
+			"url": "http://localhost:4567/login",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "basicAuth",
+			"helperAttributes": {
+				"username": "omega",
+				"password": "anextraactor",
+				"id": "basic",
+				"timestamp": 1422366766332
+			},
+			"time": 1422371085303,
+			"name": "Login As Omega",
+			"description": "",
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"responses": [],
+			"synced": false
+		},
+		{
 			"id": "e6bb5409-96be-e76c-cdf3-ae99d06529f3",
 			"headers": "Content-Type: application/json\n",
 			"url": "http://localhost:4567/users/{{username}}",
@@ -1347,19 +1726,43 @@
 			"synced": false
 		},
 		{
-			"id": "f82db5b4-0a66-6d50-9e36-0af0e10de3f9",
+			"id": "e701aa91-2fdb-a107-282c-7735c1d31b75",
 			"headers": "Content-Type: application/json\n",
 			"url": "http://localhost:4567/users",
-			"pathVariables": {},
 			"preRequestScript": "",
+			"pathVariables": {},
 			"method": "POST",
 			"data": [],
 			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1422370614784,
+			"name": "Create User Omega",
+			"description": "Create User Omega",
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
+			"responses": [],
+			"synced": false,
+			"rawModeData": "{\n\"username\": \"omega\",\n\"nickname\": \"Omega\",\n\"email\": \"omega@muckdragon.info\",\n\"password\": \"anextraactor\"\n}"
+		},
+		{
+			"id": "f82db5b4-0a66-6d50-9e36-0af0e10de3f9",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:4567/users",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1422303216923,
 			"name": "Create User Variable",
 			"description": "",
-			"descriptionFormat": "html",
-			"time": 1421876068621,
-			"version": 2,
+			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
 			"responses": [
 				{
 					"status": "",
@@ -1414,12 +1817,8 @@
 					}
 				}
 			],
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"collectionId": "ff36b447-470f-47f3-bbe3-3a1233352a46",
 			"synced": false,
-			"rawModeData": "{\n  \"username\": \"{{username}}\",\n  \"nickname\": \"{{nickname}}\",\n  \"email\": \"{{email}}\"\n}"
+			"rawModeData": "{\n  \"username\": \"{{username}}\",\n  \"nickname\": \"{{nickname}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
 		}
 	]
 }

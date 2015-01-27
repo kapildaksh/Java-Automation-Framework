@@ -7,6 +7,7 @@ package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.orasi.utils.types.DefaultingMap;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -37,12 +38,20 @@ public class PostmanCollection implements RestCollection {
 
     @Override
     public RestRequest byId(String id) {
-        return ids.get(id);
+        if(names.containsKey(id)) {
+            return ids.get(id);
+        } else {
+            throw new RuntimeException("Request with id '" + id + "' not found.");
+        }
     }
 
     @Override
     public RestRequest byName(String name) {
-        return names.get(name);
+        if(names.containsKey(name)) {
+            return names.get(name);
+        } else {
+            throw new RuntimeException("Request named '" + name + "' not found.");
+        }
     }
     
     private static class ResponseCode {
@@ -92,32 +101,48 @@ public class PostmanCollection implements RestCollection {
         private PostmanResponseRequest request;
     }
     
-    private static class SampleResponseValidator extends BaseExpectedNode implements ExpectedResponse {
+    private static class SampleResponseValidator implements ExpectedResponse {
 
         private final RestRequest request;
         private final SampleResponseData data;
+        private final BaseExpectedNode node;
         
-        public SampleResponseValidator(RestRequest request, SampleResponseData data) {
+        public SampleResponseValidator(RestRequest request, SampleResponseData data, BaseExpectedNode node) {
             this.request = request;
             this.data = data;
+            this.node = node;
         }
         
         @Override
         public JsonNode validate() {
+            String real = "";
             if(request == null || data.text == null)
                 throw new UnsupportedOperationException("Operation not supported on null ExpectedResponse");
             try {
                 Response res = request.send();
-                String real = res.body().string();
+                real = res.body().string();
                 String expected = data.text;
-                real = ignores.apply(real);
-                expected = patches.apply(expected);
-                expected = ignores.apply(expected);
+                if(real.equals(expected)) {
+                    return new TextNode(data.text);
+                }
+                real = node.ignores.apply(real);
+                expected = node.patches.apply(expected);
+                expected = node.ignores.apply(expected);
                 Assert.assertEquals(expected, real);
                 return Json.Map.readTree(real);
             } catch (Exception e) {
-                throw new RuntimeException("Error while sending message during validation. Validation failed.");
+                throw new RuntimeException("Error while sending message during validation. Validation failed. " + e.getMessage());
             }
+        }
+
+        @Override
+        public ExpectedNode path(Object... path) {
+            return node.path(path);
+        }
+
+        @Override
+        public ExpectedNode at(String path) {
+            return node.at(path);
         }
         
     }
@@ -158,6 +183,7 @@ public class PostmanCollection implements RestCollection {
         
         private Map requestVariables;
         private Map requestDefaultVariables;
+        private Map session;
         private String[] files;
         
         @Override
@@ -165,7 +191,7 @@ public class PostmanCollection implements RestCollection {
             this.requestVariables = vars;
             return this;
         }
-        
+                
         @Override
         public String toString() {
             return fmt.format(new Object[] { data.id, data.url, data.method, data.name });
@@ -192,6 +218,9 @@ public class PostmanCollection implements RestCollection {
         @Override
         public Response send() throws Exception {
             OkHttpClient client = new OkHttpClient();
+            if(this.session != null && this.session.containsKey("session")) {
+                client.setCookieHandler(((RestSession)this.session.get("session")).getCookieManager());
+            }
             RequestFormat format = null;
             switch(data.dataMode) {
                 case "params": format = RequestFormat.MULTIPART_FORM; break;
@@ -200,10 +229,10 @@ public class PostmanCollection implements RestCollection {
                 case "raw": format = RequestFormat.RAW; break;
             }
             
-            Map variables = new DefaultingMap(requestVariables, requestDefaultVariables);            
-            Request request = RestRequestHelpers.request(data.method, data.headers, data.url, format, data.data, data.rawModeData, variables, files);
+            Map variables = new DefaultingMap(requestVariables, requestDefaultVariables);
+            Request request = RestRequestHelpers.request(data.method, data.headers, data.url, data.helperAttributes, format, data.data, data.rawModeData, variables, files);
             Response response = client.newCall(request).execute();
-            
+                        
             requestVariables = null;            
             return response;
         }
@@ -212,7 +241,17 @@ public class PostmanCollection implements RestCollection {
         public ExpectedResponse response(String name) {
             for(SampleResponseData r : data.responses) {
                 if(r.name.equals(name)) {
-                    return new SampleResponseValidator(this, r);
+                    return new SampleResponseValidator(this, r, new BaseExpectedNode());
+                }
+            }
+            throw new RuntimeException("Response named '" + name + "' not found.");
+        }
+        
+        @Override
+        public ExpectedResponse response(String name, BaseExpectedNode diff) {
+            for(SampleResponseData r : data.responses) {
+                if(r.name.equals(name)) {
+                    return new SampleResponseValidator(this, r, diff);
                 }
             }
             throw new RuntimeException("Response named '" + name + "' not found.");
@@ -233,14 +272,17 @@ public class PostmanCollection implements RestCollection {
     
     private final Map<String, RestRequest> ids;
     private final Map<String, RestRequest> names;
+    private final Map session;
     private final Map defaultVariables;
     
     private PostmanCollection(PostmanCollectionData data) throws IOException {
         ids = new HashMap<String, RestRequest>();
         names = new HashMap<String, RestRequest>();
+        session = new HashMap<String, RestSession>();
         defaultVariables = new HashMap();
         for(PostmanRequest req : data.requests) {
             req.requestDefaultVariables = defaultVariables;
+            req.session = session;
             ids.put(req.data.id, req);
             names.put(req.data.name, req);
         }
@@ -250,6 +292,12 @@ public class PostmanCollection implements RestCollection {
     public RestCollection withEnv(Map variables) {
         defaultVariables.clear();
         defaultVariables.putAll(variables);
+        return this;
+    }
+    
+    @Override
+    public RestCollection withSession(RestSession session) {
+        this.session.put("session", session);
         return this;
     }
     

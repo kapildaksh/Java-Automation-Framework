@@ -35,6 +35,7 @@ public interface RestRequest {
     }    
     
     public abstract ExpectedResponse response(String name);
+    public abstract ExpectedResponse response(String name, BaseExpectedNode node);
     public abstract Response send() throws Exception;
     
     public abstract RestRequest withEnv(Map variables);

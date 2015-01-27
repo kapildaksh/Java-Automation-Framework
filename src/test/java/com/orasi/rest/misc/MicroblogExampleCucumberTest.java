@@ -8,6 +8,6 @@ import cucumber.api.testng.AbstractTestNGCucumberTests;
  * 
  * @author Brian Becker
  */
-@CucumberOptions(plugin = {"pretty"})
+@CucumberOptions(plugin = {"com.orasi.utils.test.format.ConsoleFormatter"})
 public class MicroblogExampleCucumberTest extends AbstractTestNGCucumberTests {
 }

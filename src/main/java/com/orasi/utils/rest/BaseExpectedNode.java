@@ -7,7 +7,7 @@ package com.orasi.utils.rest;
  * 
  * @author Brian Becker
  */
-public abstract class BaseExpectedNode {
+public class BaseExpectedNode {
     
     protected final String newPatchPath;
     protected final Patch ignores;

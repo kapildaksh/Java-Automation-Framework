@@ -14,4 +14,5 @@ public interface RestCollection {
     public abstract RestRequest byId(String id);
     public abstract RestRequest byName(String name);
     public abstract RestCollection withEnv(Map variables);
+    public abstract RestCollection withSession(RestSession session);
 }
