@@ -3,25 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.orasi.utils.rest;
+package com.orasi.utils.test.cukes;
 
 import gherkin.formatter.Reporter;
 import gherkin.formatter.model.Match;
 import gherkin.formatter.model.Result;
 
 /**
- * A Shared Reporter for Gherkin
- * This reporter shares the result, making it available in the current
+ * A Logging Reporter for Gherkin
+ * This reporter holds the result, making it available in the current
  * scope. This is necessary for implementing test wrappers, etc.
  * 
  * @author Brian Becker
  */
-public class SharedReporter implements Reporter {
+public class CucumberLoggingReporter implements Reporter {
 
     private Result resultValue;
     private final Reporter reporter;
     
-    public SharedReporter(Reporter r) {
+    public CucumberLoggingReporter(Reporter r) {
         this.reporter = r;
     }
     

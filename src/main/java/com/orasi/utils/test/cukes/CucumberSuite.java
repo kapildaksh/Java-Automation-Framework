@@ -1,4 +1,4 @@
-package com.orasi.utils.rest;
+package com.orasi.utils.test.cukes;
 
 import cucumber.runtime.ClassFinder;
 import cucumber.runtime.Runtime;
@@ -26,10 +26,10 @@ import org.testng.annotations.Factory;
  *   }
  * }
  */
-public class CucumberNG {
+public class CucumberSuite {
     
     private final Formatter formatter;
-    private final SharedReporter reporter;
+    private final CucumberLoggingReporter reporter;
     private final Runtime runtime;
     private final List<CucumberFeature> cucumberFeatures;
     
@@ -41,7 +41,7 @@ public class CucumberNG {
      * @param clazz
      * @throws ClassNotFoundException 
      */
-    public CucumberNG(Class clazz) throws ClassNotFoundException {
+    public CucumberSuite(Class clazz) throws ClassNotFoundException {
         RuntimeOptionsFactory runtimeOptionsFactory = new RuntimeOptionsFactory(clazz);
         RuntimeOptions runtimeOptions = runtimeOptionsFactory.create();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -49,7 +49,7 @@ public class CucumberNG {
         ClassFinder classFinder = new ResourceLoaderClassFinder(resourceLoader, classLoader);
         runtime = new Runtime(resourceLoader, classFinder, classLoader, runtimeOptions);
         formatter = runtimeOptions.formatter(classLoader);
-        reporter = new SharedReporter(runtimeOptions.reporter(classLoader));
+        reporter = new CucumberLoggingReporter(runtimeOptions.reporter(classLoader));
         cucumberFeatures = runtimeOptions.cucumberFeatures(resourceLoader);
     }
     

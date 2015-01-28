@@ -1,6 +1,6 @@
 package com.orasi.rest.misc;
 
-import com.orasi.utils.rest.CucumberNG;
+import com.orasi.utils.test.cukes.CucumberSuite;
 import cucumber.api.CucumberOptions;
 
 /**
@@ -9,7 +9,7 @@ import cucumber.api.CucumberOptions;
  * @author Brian Becker
  */
 @CucumberOptions(plugin = {"com.orasi.utils.test.format.ConsoleFormatter"})
-public class MicroblogExampleCucumberTest extends CucumberNG {
+public class MicroblogExampleCucumberTest extends CucumberSuite {
     public MicroblogExampleCucumberTest() throws ClassNotFoundException {
         super(MicroblogExampleCucumberTest.class);
     }

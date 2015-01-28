@@ -1,4 +1,4 @@
-package com.orasi.utils.rest;
+package com.orasi.utils.test.cukes;
 
 import cucumber.runtime.model.CucumberScenario;
 import gherkin.formatter.Formatter;
@@ -30,7 +30,7 @@ public class CucumberFeatureTest implements ITest {
 
     private final CucumberFeature feature;
     private final Formatter formatter;
-    private final SharedReporter reporter;
+    private final CucumberLoggingReporter reporter;
     private final Runtime runtime;
     
     private String testName;
@@ -45,7 +45,7 @@ public class CucumberFeatureTest implements ITest {
      * @param reporter
      * @param runtime
      */
-    public CucumberFeatureTest(CucumberFeature cf, Formatter formatter, SharedReporter reporter, Runtime runtime) {
+    public CucumberFeatureTest(CucumberFeature cf, Formatter formatter, CucumberLoggingReporter reporter, Runtime runtime) {
         this.feature = cf;
         this.formatter = formatter;
         this.reporter = reporter;
