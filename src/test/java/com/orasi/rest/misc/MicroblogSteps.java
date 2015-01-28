@@ -37,7 +37,7 @@ import org.testng.Assert;
  *
  * @author Brian Becker
  */
-public class MicroblogCucumberStepdefs {
+public class MicroblogSteps {
     
     public static final String REST_SANDBOX = "/rest/sandbox/";
     public static final MockMicroblogServer server = new MockMicroblogServer();
@@ -59,7 +59,7 @@ public class MicroblogCucumberStepdefs {
         server.start();
     }
     
-    public MicroblogCucumberStepdefs() throws Exception {
+    public MicroblogSteps() throws Exception {
         collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
         env1 = PostmanEnvironment.file(getClass().getResource(REST_SANDBOX + "Passwords.postman_environment"));
         collection.withEnv(env1);
@@ -193,7 +193,7 @@ public class MicroblogCucumberStepdefs {
     
     @Then("^I expect a response with code (\\d+) .*$")
     public void error_code(String code) throws Throwable {
-        Response res = request.send();
+        Response res = request.withEnv(env2).send();
         Assert.assertEquals(String.valueOf(res.code()), code);
     }    
 

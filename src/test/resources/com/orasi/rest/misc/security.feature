@@ -3,24 +3,29 @@ Feature: Security
     I want to be able to post messages or change my own account
     Without other users causing issues to my account
 
+    @security @users
     Scenario: A Non-Logged In User Can Add User
         When I send a request to Create User Tom
         Then I expect a response with code 200 OK
 
+    @security @users @messages
     Scenario: A Non-Logged In User Can't Post
         When I send a request to Tom Posts Message
         Then I expect a response with code 401 Unauthorized
 
+    @security @users @friends
     Scenario: A Non-Logged In User Can't Add Friends
         Given Larry has Tom on his list of friends
         When I send a request to Tom Adds Larry
         Then I expect a response with code 401 Unauthorized
 
+    @security @users @friends
     Scenario: A Non-Logged In User Can't Remove Friends
         Given Larry has Tom on his list of friends
         When I send a request to Larry Removes Tom
         Then I expect a response with code 401 Unauthorized
 
+    @security @users @messages
     Scenario: A Wrong User Can't Post
         Given Larry's account has been created
         And Tom's account has been created
@@ -28,6 +33,7 @@ Feature: Security
         When I send a request to Tom Posts Message
         Then I expect a response with code 403 Forbidden
 
+    @security @users @friends
     Scenario: A Wrong User Can't Add To Friend List
         Given Larry's account has been created
         And Tom's account has been created
@@ -35,6 +41,7 @@ Feature: Security
         When I send a request to Tom Adds Larry
         Then I expect a response with code 403 Forbidden
 
+    @security @users @friends
     Scenario: A Wrong User Can't Delete From Friend List
         Given Larry has Tom on his list of friends
         And Omega's account has been created
@@ -42,6 +49,7 @@ Feature: Security
         When I send a request to Larry Removes Tom
         Then I expect a response with code 403 Forbidden
 
+    @security @users
     Scenario: A Wrong User Can't Delete A Given User
         Given Larry's account has been created
         And Tom's account has been created
@@ -49,6 +57,7 @@ Feature: Security
         When I send a request to Larry Deletes Account
         Then I expect a response with code 403 Forbidden
 
+    @security @users
     Scenario: A Wrong User Has Read Access To Users
         Given Larry's account has been created
         Given Tom's account has been created
@@ -56,6 +65,7 @@ Feature: Security
         When I send a request to Check User Tom
         Then I expect a response with code 200 OK
 
+    @security @users @messages
     Scenario: A Wrong User Has Read Access To Posts
         Given Larry's account has been created
         Given Tom's account has been created

@@ -7,6 +7,7 @@ Feature: Messaging
         Given Larry's account has been created
         And Tom's account has been created
 
+    @messages
     Scenario: Send a Message
         Given I am logged in as Tom
         When I send a request to Tom Posts Message
@@ -15,6 +16,7 @@ Feature: Messaging
         And I ignore /0/created
         Then I expect a response matching verifyPostTomExample
 
+    @messages
     Scenario: Send and Read a Single Message
         Given I am logged in as Larry
         When I send a request to Lots of Hash Tags

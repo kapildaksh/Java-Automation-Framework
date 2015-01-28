@@ -6,10 +6,12 @@ Feature: Account management
     Background:
         Given Larry's account has been created
 
+    @users
     Scenario: Log In
         When I send a request to Login As Larry
         Then I expect a response matching LoginSuccess
 
+    @users
     Scenario: Create an Account
         Given I am not logged in
         And Tom's account has not been created
@@ -20,6 +22,13 @@ Feature: Account management
         When I send a request to Check User Tom
         Then I expect a response matching verifyUserTomExample
 
+    @users @conflict
+    Scenario: Displacing Users Should Not Occur
+        Given Tom's account has been created
+        When I send a request to Create User Tom
+        Then I expect a response with code 409 Conflict (Already Exists)
+
+    @users
     Scenario: Delete an Account
         Given I am logged in as Larry
         When I send a request to Larry Deletes Account
@@ -27,6 +36,7 @@ Feature: Account management
         When I send a request to Check User Larry
         Then I expect a response matching verifyUserLarryDeletedExample
 
+    @users
     Scenario Outline: Create a Named Account
         Given I am logged in as Larry
         And I define replacements:

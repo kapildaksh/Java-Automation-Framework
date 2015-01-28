@@ -6,6 +6,7 @@ Feature: Friends list
     Background:
         Given Larry has Tom on his list of friends
 
+    @friends
     Scenario: Add a Friend
         Given I am logged in as Tom
         When I send a request to Tom Adds Larry
@@ -13,6 +14,7 @@ Feature: Friends list
         When I send a request to Check User Tom
         Then I expect a response matching verifyFriendTomLarryExample
 
+    @friends
     Scenario: Delete a Friend
         Given I am logged in as Larry
         When I send a request to Larry Removes Tom

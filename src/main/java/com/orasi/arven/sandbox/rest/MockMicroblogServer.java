@@ -209,6 +209,10 @@ public class MockMicroblogServer {
                 res.type("application/json; charset=UTF-8");
                 JsonNode n = Json.Map.readTree(req.body());
                 String name = n.path("name").asText();
+                if(groups.containsKey(name)) {
+                    res.status(409);
+                    return new Message(Type.ERROR, "Group already exists.");
+                }
                 groups.put(name, req.session().attribute("user"));
                 creator.put(name, req.session().attribute("user"));
                 u.groups.add(name);
@@ -308,6 +312,10 @@ public class MockMicroblogServer {
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
                 User u = Json.Map.readValue(req.body(), User.class);
+                if(users.containsKey(u.username)) {
+                    res.status(409);
+                    return new Message(Type.ERROR, "User already exists.");
+                }
                 users.put(u.username, new Reference<User>(u));
                 return new Message(Type.INFORMATIONAL, "User added.");
             }

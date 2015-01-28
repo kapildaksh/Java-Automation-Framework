@@ -1,7 +1,7 @@
 package com.orasi.rest.misc;
 
+import com.orasi.utils.rest.CucumberNG;
 import cucumber.api.CucumberOptions;
-import cucumber.api.testng.AbstractTestNGCucumberTests;
 
 /**
  * This is another test of the Microblog with Example Warehouse.
@@ -9,5 +9,8 @@ import cucumber.api.testng.AbstractTestNGCucumberTests;
  * @author Brian Becker
  */
 @CucumberOptions(plugin = {"com.orasi.utils.test.format.ConsoleFormatter"})
-public class MicroblogExampleCucumberTest extends AbstractTestNGCucumberTests {
+public class MicroblogExampleCucumberTest extends CucumberNG {
+    public MicroblogExampleCucumberTest() throws ClassNotFoundException {
+        super(MicroblogExampleCucumberTest.class);
+    }
 }
