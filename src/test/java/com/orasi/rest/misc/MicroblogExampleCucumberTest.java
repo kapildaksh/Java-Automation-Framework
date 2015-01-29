@@ -8,7 +8,7 @@ import cucumber.api.CucumberOptions;
  * 
  * @author Brian Becker
  */
-@CucumberOptions(plugin = {"com.orasi.utils.test.format.ConsoleFormatter"})
+@CucumberOptions(plugin = {"com.orasi.utils.test.cukes.ConsoleFormatter"})
 public class MicroblogExampleCucumberTest extends CucumberSuite {
     public MicroblogExampleCucumberTest() throws ClassNotFoundException {
         super(MicroblogExampleCucumberTest.class);

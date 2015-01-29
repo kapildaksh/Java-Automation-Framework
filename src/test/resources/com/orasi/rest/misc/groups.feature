@@ -97,7 +97,7 @@ Feature: Groups
         And I define replacements:
             |   first   |   alpha               |
             |   second  |   omega               |
-        Then I expect a response with code 404 Forbidden
+        Then I expect a response with code 403 Forbidden
 
     @groups
     Scenario: Releasing Mutual Exclusivity On A Group
