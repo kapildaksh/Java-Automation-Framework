@@ -1,4 +1,4 @@
-package com.orasi.arven.sandbox.rest;
+package com.orasi.api.demos;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import com.google.common.collect.Lists;
 
-import com.orasi.arven.sandbox.rest.Message.Type;
+import com.orasi.api.demos.Message.Type;
 import com.orasi.utils.rest.Json;
 import com.orasi.utils.rest.Patch;
 import com.orasi.utils.types.Reference;
@@ -235,12 +235,9 @@ public class MockMicroblogServer {
                     return new Message(Type.ERROR, "Group already joined.");
                 }
                 for(String group : u.groups) {
-                    if(exclusions.containsKey(req.params(":name"))) {
-                        Collection excludes = (Collection) exclusions.get(req.params(":name"));
-                        if(excludes.contains(group)) {
-                            res.status(409);
-                            return new Message(Type.ERROR, "Your group " + group + " is in mutual exclusion with this group " + req.params(":name"));
-                        }
+                    if(exclusions.containsKey(Pair.of(req.params(":name"), group))) {
+                        res.status(409);
+                        return new Message(Type.ERROR, "Your group " + group + " is in mutual exclusion with this group " + req.params(":name"));
                     }
                 }
                 u.groups.add(req.params(":name"));
@@ -277,8 +274,8 @@ public class MockMicroblogServer {
                 } else if(!req.session().attribute("user").equals(creator.get(req.params(":name")))) {
                     srv.halt(403, "Forbidden " + req.session().attribute("user") + " " + req.params(":name"));
                 }
-                exclusions.put(req.params(":name"), req.params(":exclusion"));
-                exclusions.put(req.params(":exclusion"), req.params(":name"));
+                exclusions.put(Pair.of(req.params(":name"), req.params(":exclusion")), req.params(":name"));
+                exclusions.put(Pair.of(req.params(":exclusion"), req.params(":name")), req.params(":name"));
                 return new Message(Type.INFORMATIONAL, "Exclusion set.");
             }
         }, new JsonTransformer());
@@ -291,8 +288,8 @@ public class MockMicroblogServer {
                 } else if(!req.session().attribute("user").equals(creator.get(req.params(":name")))) {
                     srv.halt(403, "Forbidden");
                 }
-                exclusions.remove(req.params(":name"), req.params(":exclusion"));
-                exclusions.remove(req.params(":exclusion"), req.params(":name"));                
+                exclusions.remove(Pair.of(req.params(":name"), req.params(":exclusion")), req.params(":name"));
+                exclusions.remove(Pair.of(req.params(":exclusion"), req.params(":name")), req.params(":name"));
                 return new Message(Type.INFORMATIONAL, "Exclusion removed.");
             }
         }, new JsonTransformer());        

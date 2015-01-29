@@ -7,7 +7,7 @@ package com.orasi.rest.misc;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orasi.arven.sandbox.rest.MockMicroblogServer;
+import com.orasi.api.demos.MockMicroblogServer;
 import com.orasi.utils.rest.RestAssert;
 import com.orasi.utils.rest.PostmanCollection;
 import com.orasi.utils.rest.RestCollection;

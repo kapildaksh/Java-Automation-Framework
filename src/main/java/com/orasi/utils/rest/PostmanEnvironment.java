@@ -17,6 +17,11 @@ import okio.Okio;
  */
 public class PostmanEnvironment extends AbstractMap {
     
+    /**
+     * This is an environment entry, basically just a key value store in 
+     * Json. This specifies all the variables and values, and you can
+     * use these just like a regular map entry in a map.
+     */
     public static class PostmanEnvironmentEntry implements Map.Entry<String, String> {
         
         private String key;
@@ -44,6 +49,11 @@ public class PostmanEnvironment extends AbstractMap {
         
     }
     
+    /**
+     * A bunch of data regarding the entire environment file, there is an id
+     * as well as a name, as well as the list of values, and some other
+     * bookkeeping functions.
+     */
     private static class PostmanEnvironmentData {
         private String id;
         private String name;
@@ -55,14 +65,34 @@ public class PostmanEnvironment extends AbstractMap {
     
     private final PostmanEnvironmentData data;
     
+    /**
+     * Creates a new Postman Environment based on a some deserialized JSON
+     * data.
+     * 
+     * @param data 
+     */
     private PostmanEnvironment(PostmanEnvironmentData data) {
         this.data = data;
     }
-        
+    
+    /**
+     * Build a Postman Environment from a file, either a local file or a file
+     * on an accessible URL.
+     * 
+     * @param environment
+     * @return
+     * @throws Exception 
+     */
     public static Map file(URL environment) throws Exception {
         return new PostmanEnvironment(Json.Map.readValue(Okio.buffer(Okio.source((InputStream)environment.getContent())).readByteArray(), PostmanEnvironmentData.class));
     }    
     
+    /**
+     * This is the key-value store for the Postman Environment. As we are
+     * using an AbstractMap, all functions are based on the Entry Set.
+     * 
+     * @return 
+     */
     @Override
     public Set entrySet() {
         return this.data.values;

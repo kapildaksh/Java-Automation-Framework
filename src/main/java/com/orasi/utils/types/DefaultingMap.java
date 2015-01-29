@@ -25,19 +25,27 @@ public class DefaultingMap extends AbstractMap {
     
     public final Map internal;
     
+    /**
+     * Create a new DefaultingMap.
+     * 
+     * NOTE: There is no synchronization and this works as a copy, it does
+     * not use a reference-based approach.
+     * 
+     * @param list 
+     */
     public DefaultingMap(Map... list) {
-        ArrayUtils.reverse(list);   // When we build the 
+        ArrayUtils.reverse(list);   // First is last and last is first...
         internal = new HashMap();
-        for(Map m : list) {
+        for(Map m : list) {         // Get all the maps
             if(m != null) {
-                internal.putAll(m);
+                internal.putAll(m); // Stuff them into this map class
             }
         }
     }
 
     @Override
     public Set entrySet() {
-        return internal.entrySet();
+        return internal.entrySet(); // Just return the map
     }
     
 }

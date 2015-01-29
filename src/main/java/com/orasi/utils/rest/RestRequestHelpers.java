@@ -78,8 +78,7 @@ public class RestRequestHelpers {
                 }
             }
             if(authorizationFound && auth.get("username") != null) {
-                    // System.out.println(format(auth.get("username") + ":" + auth.get("password"), variables));
-                    hdrs = hdrs.add(h[0], "Basic " + Base64.encodeBase64String(StringUtils.getBytesUtf8(format(auth.get("username") + ":" + auth.get("password"), variables))));
+                hdrs = hdrs.add(h[0], "Basic " + Base64.encodeBase64String(StringUtils.getBytesUtf8(format(auth.get("username") + ":" + auth.get("password"), variables))));
             }
         }
         return hdrs.build();

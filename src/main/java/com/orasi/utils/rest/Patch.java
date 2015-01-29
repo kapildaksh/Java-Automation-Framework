@@ -325,4 +325,20 @@ public class Patch {
         this.entries.addAll(patch.entries);
         return this;
     }
+    
+    /**
+     * Convert a list of path steps like Jackson uses into a JSON Pointer
+     * string.
+     * 
+     * @param objs  A path. Example: fromPath(0, 1, "Testing")
+     * @return JSON pointer string
+     */
+    public static String pointer(Object... objs) {
+        StringBuilder pointer = new StringBuilder("");
+        for(Object o : objs) {
+            pointer.append("/").append(o.toString().replace("~", "~0").replace("/", "~1"));
+        }
+        return pointer.toString();
+    }    
+    
 }

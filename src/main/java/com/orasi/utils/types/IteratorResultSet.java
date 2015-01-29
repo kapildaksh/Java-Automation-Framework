@@ -20,6 +20,11 @@ public class IteratorResultSet implements Iterator {
     private boolean hNext = true;
     private final ResultSet rs;
     
+    /**
+     * Create an iterator over a ResultSet.
+     * 
+     * @param rs 
+     */
     public IteratorResultSet(ResultSet rs) {
         this.rs = rs;
         try {
@@ -30,11 +35,25 @@ public class IteratorResultSet implements Iterator {
         }
     }
 
+    /**
+     * Are there any more results in the database return values?
+     * 
+     * @return 
+     */
     @Override
     public boolean hasNext() {
         return this.hNext;
     }
 
+    /**
+     * Determine if there are any more items in the result set, and if so
+     * then return an object array containing the values from the database.
+     * Each of the objects will be typed, but will have to be inspected.
+     * Fortunately, TestNG data providers will automatically cast the values
+     * because they expect an object array.
+     * 
+     * @return 
+     */
     @Override
     public Object[] next() {
         try {
@@ -51,6 +70,10 @@ public class IteratorResultSet implements Iterator {
         return null;
     }
 
+    /**
+     * We can't remove values from the result set. This is just a view for the
+     * database.
+     */
     @Override
     public void remove() {
         throw new UnsupportedOperationException("Write to test database not supported.");

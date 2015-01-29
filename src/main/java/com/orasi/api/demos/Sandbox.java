@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.orasi.arven.sandbox.rest;
+package com.orasi.api.demos;
 
 import com.orasi.text.MapMessageFormat;
 import com.orasi.text.TemplateFormat;

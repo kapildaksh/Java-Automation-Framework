@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import com.orasi.text.TemplateFormat;
 import com.orasi.utils.types.DefaultingMap;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -20,6 +16,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import okio.Okio;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
@@ -36,6 +35,13 @@ import org.testng.Assert;
  */
 public class PostmanCollection implements RestCollection {
 
+    /**
+     * Get a Postman Rest Request by ID, a UUID like long string which is more
+     * likely to be unique.
+     * 
+     * @param id
+     * @return 
+     */
     @Override
     public RestRequest byId(String id) {
         if(names.containsKey(id)) {
@@ -45,6 +51,12 @@ public class PostmanCollection implements RestCollection {
         }
     }
 
+    /**
+     * Get a Postman Rest Request by name.
+     * 
+     * @param name
+     * @return 
+     */
     @Override
     public RestRequest byName(String name) {
         if(names.containsKey(name)) {
@@ -54,12 +66,20 @@ public class PostmanCollection implements RestCollection {
         }
     }
     
+    /**
+     * A response code (404 Not Found, etc) read from the Postman Response
+     * Data. This is what should be expected to be returned.
+     */
     private static class ResponseCode {
         private Number code;
         private String name;
         private String detail;
     }
     
+    /**
+     * A header, read from the Postman Response Data. This is a header which
+     * was returned on the first successful manual execution of the request.
+     */
     private static class Header {
         private String name;
         private String key;
@@ -67,10 +87,19 @@ public class PostmanCollection implements RestCollection {
         private String description;
     }
     
+    /**
+     * The State object has only the "size" string, as far as has been
+     * determined from various Postman output files.
+     */
     private static class State {
         private String size;
     }
     
+    /**
+     * The ResponseRequest is a series of values which seem to have generated
+     * the REST request, but it is a lot less detailed than the original
+     * request (grandparent object)
+     */
     private static class PostmanResponseRequest {
         private String url;
         private Map pathVariables;
@@ -82,6 +111,11 @@ public class PostmanCollection implements RestCollection {
         private Number version;
     }
     
+    /**
+     * The SampleResponseData consists of the data values retrieved from the
+     * request. It represents an actual request which has been generated in an
+     * exploratory test.
+     */
     public static class SampleResponseData {        
         private String status;
         private ResponseCode responseCode;
@@ -101,18 +135,41 @@ public class PostmanCollection implements RestCollection {
         private PostmanResponseRequest request;
     }
     
+    /**
+     * This is a validation engine for the responses. Each and every collection
+     * type requires the use of a validation class which will take the actual
+     * rest request, the sample response, and a list of changes to be applied
+     * to both of them programmatically. Then the request is fired off by the
+     * validate, and a valid node is returned or an exception is thrown.
+     */
     private static class SampleResponseValidator implements ExpectedResponse {
 
         private final RestRequest request;
         private final SampleResponseData data;
         private final BaseExpectedNode node;
         
+        /**
+         * Create a new Response Validator with a REST request, data for
+         * this class, as well as the patch node.
+         * 
+         * @param request
+         * @param data
+         * @param node 
+         */
         public SampleResponseValidator(RestRequest request, SampleResponseData data, BaseExpectedNode node) {
             this.request = request;
             this.data = data;
             this.node = node;
         }
         
+        /**
+         * Fire off the request and validate it. Both values (real and
+         * expected) are patched, the equality of the expected and real
+         * values are asserted, and a tree is returned if they are a
+         * match.
+         * 
+         * @return 
+         */
         @Override
         public JsonNode validate() {
             String real = "";
@@ -122,24 +179,44 @@ public class PostmanCollection implements RestCollection {
                 Response res = request.send();
                 real = res.body().string();
                 String expected = data.text;
-                if(real.equals(expected)) {
-                    return new TextNode(data.text);
-                }
                 real = node.ignores.apply(real);
                 expected = node.patches.apply(expected);
                 expected = node.ignores.apply(expected);
                 Assert.assertEquals(expected, real);
                 return Json.Map.readTree(real);
+            } catch (IOException ex) {
+                // We want to break out of the exception if it's just a regular
+                // Json parsing exception.
+                if(real.equals(data.text)) {
+                    return new TextNode(data.text);
+                }
             } catch (Exception e) {
-                throw new RuntimeException("Error while sending message during validation. Validation failed. " + e.getMessage());
+                throw new RuntimeException("Error while sending message during validation." + e.getMessage());
             }
+            return null;
         }
 
+        /**
+         * Select a path from which to start making changes to this validator.
+         * The changes will be stored as a separate Patch which will be applied
+         * to the expected node.
+         * 
+         * @param path
+         * @return 
+         */
         @Override
         public ExpectedNode path(Object... path) {
             return node.path(path);
         }
 
+        /**
+         * An alternate to using the .path("object", "path") style path
+         * selection, which is a little less verbose for very long paths
+         * and is easier to manipulate via string manipulations.
+         * 
+         * @param path
+         * @return 
+         */
         @Override
         public ExpectedNode at(String path) {
             return node.at(path);
@@ -147,6 +224,10 @@ public class PostmanCollection implements RestCollection {
         
     }
 
+    /**
+     * The Postman Request Data is the bulk of the data which is imported by
+     * the PostmanCollection class.
+     */
     private static class PostmanRequestData {
         private String id;
         private String headers;
@@ -170,12 +251,21 @@ public class PostmanCollection implements RestCollection {
         private String rawModeData;
     }
     
-    public static class PostmanRequest implements RestRequest {        
+    /**
+     * A PostmanRequest is a type of RestRequest which is based on Postman
+     * requests stored in a collection file.
+     */
+    public static class PostmanRequest extends RestRequest {        
         private static final MessageFormat fmt = new MessageFormat(
                 "-- ID: {0} URL: {2} Method: {5} Name: {8} --");
         
         private final PostmanRequestData data;
         
+        /**
+         * Create a PostmanRequest with the required data.
+         * 
+         * @param data 
+         */
         @JsonCreator(mode = JsonCreator.Mode.DELEGATING)        
         private PostmanRequest(PostmanRequestData data) {
             this.data = data;
@@ -186,17 +276,36 @@ public class PostmanCollection implements RestCollection {
         private Map session;
         private String[] files;
         
+        /**
+         * Set an environment (list of variables) on the request. This
+         * environment is a local set of variables which can be called
+         * on by entering specifiers such as {{var}} into the URL or
+         * any request. Unfortunately, no variable substitution in requests
+         * yet, as postman doesn't output this type of file.
+         * 
+         * @param vars
+         * @return 
+         */
         @Override
         public RestRequest withEnv(Map vars) {
             this.requestVariables = vars;
             return this;
         }
-                
+        
         @Override
         public String toString() {
             return fmt.format(new Object[] { data.id, data.url, data.method, data.name });
         }
         
+        /**
+         * Set a bunch of parameters on this REST request. These parameters
+         * are specified like substitutions in Spark and many other web
+         * frameworks. This just replaces the parameters from first to last
+         * as they are specified.
+         * 
+         * @param parts
+         * @return 
+         */
         @Override
         public RestRequest withParams(String... parts) {
             String[] temp = StringUtils.substringsBetween(data.url, "/:", "/");
@@ -209,12 +318,46 @@ public class PostmanCollection implements RestCollection {
             return this;
         }
         
+        /**
+         * This is an alternate withParams method which is more flexible and
+         * can be used to replace with a mapping of names to values.
+         * 
+         * @param parts
+         * @return 
+         */
+        @Override
+        public RestRequest withParams(Map parts) {
+            for(String str : StringUtils.substringsBetween(data.url, "/:", "/")) {
+                System.out.println(str);
+                if(parts.containsKey(str)) {
+                    data.url = data.url.replace("/:" + str + "/", "/" + parts.get(str) + "/");
+                }
+            }
+            return this;
+        }
+        
+        /**
+         * Set a bunch of files to be used with this REST request. Files are
+         * specified in Postman, but they must be selected on every run of
+         * a file. Therefore they are available for replacement programmatically.
+         * 
+         * @param files
+         * @return 
+         */
         @Override
         public RestRequest withFiles(String... files) {
             this.files = files;
             return this;
         }
         
+        /**
+         * Send this request, and get an OkHttpClient response back which
+         * can be evaluated. This does no checking, only providing a quick
+         * way to fire off REST requests based on a transcript.
+         * 
+         * @return
+         * @throws Exception 
+         */
         @Override
         public Response send() throws Exception {
             OkHttpClient client = new OkHttpClient();
@@ -237,16 +380,18 @@ public class PostmanCollection implements RestCollection {
             return response;
         }
         
-        @Override
-        public ExpectedResponse response(String name) {
-            for(SampleResponseData r : data.responses) {
-                if(r.name.equals(name)) {
-                    return new SampleResponseValidator(this, r, new BaseExpectedNode());
-                }
-            }
-            throw new RuntimeException("Response named '" + name + "' not found.");
-        }
-        
+        /**
+         * This returns an expected response, which is a predetermined response
+         * which was returned by the server for this given request in the past.
+         *
+         * NOTE: Expected responses tend to vary because of time and other
+         * factors. Make sure to remove expectations which you know the server
+         * has no reason to keep.
+         * 
+         * @param name
+         * @param diff
+         * @return 
+         */
         @Override
         public ExpectedResponse response(String name, BaseExpectedNode diff) {
             for(SampleResponseData r : data.responses) {
@@ -257,7 +402,13 @@ public class PostmanCollection implements RestCollection {
             throw new RuntimeException("Response named '" + name + "' not found.");
         }
     }
-        
+    
+    /**
+     * This is the root of the Postman Collection, a bunch of data from
+     * the JSON file. Most of this is not actually used, things like ordering
+     * and folders, etc. However, the "requests" is further traversed to
+     * make this collection useful.
+     */
     private static class PostmanCollectionData {        
         private String id;
         private String name;
@@ -275,6 +426,13 @@ public class PostmanCollection implements RestCollection {
     private final Map session;
     private final Map defaultVariables;
     
+    /**
+     * A PostmanCollection requires data from its JSON file. This class can
+     * be constructed by passing a URL to a JSON file in the correct format.
+     * 
+     * @param data
+     * @throws IOException 
+     */
     private PostmanCollection(PostmanCollectionData data) throws IOException {
         ids = new HashMap<String, RestRequest>();
         names = new HashMap<String, RestRequest>();
@@ -288,6 +446,16 @@ public class PostmanCollection implements RestCollection {
         }
     }
     
+    /**
+     * Pass an environment to the whole collection. Not only is this permanent,
+     * not being cleared on requests, it also applies to all instances of the
+     * request object. This can cause numerous debugging issues, but the
+     * values from these replacements will always be overloaded by local
+     * variables.
+     * 
+     * @param variables
+     * @return 
+     */
     @Override
     public RestCollection withEnv(Map variables) {
         defaultVariables.clear();
@@ -295,12 +463,27 @@ public class PostmanCollection implements RestCollection {
         return this;
     }
     
+    /**
+     * Pass a Session object to the collection. This is an object which should
+     * be used to preserve things such as cookies, etc.
+     * 
+     * @param session
+     * @return 
+     */
     @Override
     public RestCollection withSession(RestSession session) {
         this.session.put("session", session);
         return this;
     }
     
+    /**
+     * Create a Collection from a file. This takes in a JSON file and returns
+     * a class of the PostmanCollection type.
+     * 
+     * @param collection
+     * @return
+     * @throws Exception 
+     */
     public static RestCollection file(URL collection) throws Exception {   
         return new PostmanCollection(Json.Map.readValue(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), PostmanCollectionData.class));
     }

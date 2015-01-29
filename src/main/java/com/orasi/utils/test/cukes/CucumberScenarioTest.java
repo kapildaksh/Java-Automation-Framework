@@ -11,12 +11,10 @@ import cucumber.runtime.model.CucumberFeature;
 import cucumber.runtime.model.CucumberScenario;
 import cucumber.runtime.model.CucumberScenarioOutline;
 import gherkin.formatter.Formatter;
-import gherkin.formatter.model.ScenarioOutline;
-import java.util.List;
 import org.testng.ITest;
 import org.testng.SkipException;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 
 /**

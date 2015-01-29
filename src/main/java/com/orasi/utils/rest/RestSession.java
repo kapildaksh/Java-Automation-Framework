@@ -1,16 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.rest;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 
 /**
- *
- * @author brian.becker
+ * The RestSession signifies a central repository for a given RestCollection
+ * which can be used to store state-related data. Primarily, in the realm of
+ * web services we will be dealing with cookies which hold a session key.
+ * 
+ * @author Brian Becker
  */
 public class RestSession {
     private CookieManager cookieManager = new CookieManager();

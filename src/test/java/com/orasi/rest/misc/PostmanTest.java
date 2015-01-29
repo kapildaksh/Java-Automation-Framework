@@ -94,7 +94,9 @@ public class PostmanTest {
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
-        collection.byName("Url Parameters").withEnv(env).withParams("more").send();
+        Map params = new HashMap();
+        params.put("which", "more");
+        collection.byName("Url Parameters").withEnv(env).withParams(params).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3&x=file:///var/variable HTTP/1.1", rr.getRequestLine());
     }        

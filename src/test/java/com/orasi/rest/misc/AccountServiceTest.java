@@ -5,8 +5,8 @@
  */
 package com.orasi.rest.misc;
 
-import com.orasi.arven.sandbox.rest.ServiceResponse;
-import com.orasi.arven.sandbox.rest.AccountInformation;
+import com.orasi.api.demos.ServiceResponse;
+import com.orasi.api.demos.AccountInformation;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

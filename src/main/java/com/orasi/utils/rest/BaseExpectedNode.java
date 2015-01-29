@@ -31,7 +31,7 @@ public class BaseExpectedNode {
      * @return 
      */
     public ExpectedNode path(Object... path) {
-        return new ExpectedNode((newPatchPath != null ? newPatchPath : "") + JsonPointer.fromPath(path), this);
+        return new ExpectedNode((newPatchPath != null ? newPatchPath : "") + Patch.pointer(path), this);
     }
     
     /**
