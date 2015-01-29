@@ -194,7 +194,7 @@ public class MicroblogSteps {
     @Then("^I expect a response with code (\\d+) .*$")
     public void error_code(String code) throws Throwable {
         Response res = request.withEnv(env2).send();
-        Assert.assertEquals(String.valueOf(res.code()), code);
+        Assert.assertEquals(String.valueOf(res.code()), code, res.body().string());
     }    
 
     @And("^I replace (.*) by (.*)$")

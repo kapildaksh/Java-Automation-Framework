@@ -125,6 +125,7 @@ public class MockMicroblogServer {
         tagdir.clear();
         users.clear();
         creator.clear();
+        exclusions.clear();
     }
     
     public void start() {
@@ -291,7 +292,7 @@ public class MockMicroblogServer {
                     srv.halt(403, "Forbidden");
                 }
                 exclusions.remove(req.params(":name"), req.params(":exclusion"));
-                exclusions.remove(req.params(":exclusion"), req.params(":name"));
+                exclusions.remove(req.params(":exclusion"), req.params(":name"));                
                 return new Message(Type.INFORMATIONAL, "Exclusion removed.");
             }
         }, new JsonTransformer());        

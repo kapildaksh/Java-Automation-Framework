@@ -85,7 +85,7 @@ Feature: Groups
         When I send a request to Join Group Alpha
         Then I expect a response with code 409 Conflict (Mutual Exclusion)
 
-    @groups @security
+    @groups @security @conflict
     Scenario: Releasing Mutual Exclusivity On A Group Requires Ownership
         Given the following groups:
             |   Alpha   |   Larry Tom           |
@@ -98,6 +98,8 @@ Feature: Groups
             |   first   |   alpha               |
             |   second  |   omega               |
         Then I expect a response with code 403 Forbidden
+        When I send a request to Join Group Alpha
+        Then I expect a response with code 409 Conflict (Mutual Exclusion)
 
     @groups
     Scenario: Releasing Mutual Exclusivity On A Group
@@ -111,4 +113,7 @@ Feature: Groups
         And I define replacements:
             |   first   |   alpha               |
             |   second  |   omega               |
+        Then I expect a response with code 200 OK
+        Given I am logged in as Omega
+        When I send a request to Join Group Alpha
         Then I expect a response with code 200 OK

@@ -28,7 +28,6 @@ import org.testng.annotations.Test;
  */
 public class CucumberScenarioTest implements ITest, CucumberMethod {
 
-    public static int number = 0;
     private final CucumberScenario scenario;
     private final CucumberScenarioOutline outline;
     private final Formatter formatter;
@@ -61,7 +60,7 @@ public class CucumberScenarioTest implements ITest, CucumberMethod {
      * 
      * @throws Throwable 
      */
-    @Test(priority = 0)
+    @Test
     public void test() throws Throwable {
         if(firstScenario && outline != null) {
             outline.formatOutlineScenario(formatter);
@@ -83,14 +82,13 @@ public class CucumberScenarioTest implements ITest, CucumberMethod {
             case "undefined":
                 throw new SkipException("Undefined");
         }
-        number++;
     }    
 
-    ///**
-    // * Before the method, get the test name to stuff into the current
-    // * test name value.
-    // * @param params
-    // */
+    /**
+     * Before the method, get the test name to stuff into the current
+     * test name value.
+     * @param params
+     */
     @BeforeMethod(alwaysRun = true)
     public void before(Object[] params) {
         testName = scenario.getGherkinModel().getName();
