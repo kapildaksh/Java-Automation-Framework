@@ -180,30 +180,21 @@ public class MicroblogSteps {
     
     @Then("^I expect a response matching (.*)$")
     public void matches(String response) throws Throwable {
-        if(node != null) {
-            request.response(response, node).verify();
-            node = new BaseExpectedNode();
-        } else {
-            request.response(response).verify();
-        }
+        request.response(response, node).verify();
+        node = new BaseExpectedNode();
     }
     
     @Then("^I expect a response matching:$")
     public void matches_doc(String response) throws Throwable {
-        Response res = ((RestRequest)request).send();
+        Response res = request.env(env2).send();
         JsonNode tree = Json.Map.readTree(res.body().string());
         JsonNode expected = Json.Map.readTree(response);
-        if(node != null) {
-            node.verify(tree, expected);
-        } else {
-            throw new RuntimeException("The patch node is null");
-        }
+        node.verify(tree, expected);
     }    
     
     @Then("^I expect a response with code (\\d+) .*$")
     public void error_code(String code) throws Throwable {
-        Response res;
-        res = request.env(env2).send();
+        Response res = request.env(env2).send();
         Assert.assertEquals(String.valueOf(res.code()), code, res.body().string());
     }    
 
