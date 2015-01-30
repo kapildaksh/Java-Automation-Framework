@@ -225,6 +225,7 @@ public class PostmanCollection implements RestCollection {
                 "-- ID: {0} URL: {2} Method: {5} Name: {8} --");
         
         private final PostmanRequestData data;
+        private Reference<RestSession> session;
         
         /**
          * Create a PostmanRequest with the required data.
@@ -236,63 +237,14 @@ public class PostmanCollection implements RestCollection {
             this.data = data;
         }
         
-        private Map requestVariables;
         private Map requestDefaultVariables;
-        private Reference<RestSession> session;
         private String[] files;
-        
-        /**
-         * Set an environment (list of variables) on the request. This
-         * environment is a local set of variables which can be called
-         * on by entering specifiers such as {{var}} into the URL or
-         * any request. Unfortunately, no variable substitution in requests
-         * yet, as postman doesn't output this type of file.
-         * 
-         * @param vars
-         * @return 
-         */
-        @Override
-        public RestRequest env(Map vars) {
-            this.requestVariables = vars;
-            return this;
-        }
         
         @Override
         public String toString() {
             return fmt.format(new Object[] { data.id, data.url, data.method, data.name });
         }
-        
-        /**
-         * Set parameters (URI Parameters) on the REST request.
-         * 
-         * @param parts
-         * @return 
-         */
-        @Override
-        public RestRequest params(Map parts) {
-            for(String str : StringUtils.substringsBetween(data.url, "/:", "/")) {
-                System.out.println(str);
-                if(parts.containsKey(str)) {
-                    data.url = data.url.replace("/:" + str + "/", "/" + parts.get(str) + "/");
-                }
-            }
-            return this;
-        }
-        
-        /**
-         * Set a bunch of files to be used with this REST request. Files are
-         * specified in Postman, but they must be selected on every run of
-         * a file. Therefore they are available for replacement programmatically.
-         * 
-         * @param files
-         * @return 
-         */
-        @Override
-        public RestRequest files(String... files) {
-            this.files = files;
-            return this;
-        }
-        
+               
         /**
          * Send this request, and get an OkHttpClient response back which
          * can be evaluated. This does no checking, only providing a quick
@@ -315,11 +267,10 @@ public class PostmanCollection implements RestCollection {
                 case "raw": format = RequestFormat.RAW; break;
             }
             
-            Map variables = new DefaultingMap(requestVariables, requestDefaultVariables);
-            Request request = RestRequestHelpers.request(data.method, data.headers, data.url, data.helperAttributes, format, data.data, data.rawModeData, variables, files);
+            Map variables = new DefaultingMap(getVariables(), requestDefaultVariables);
+            Request request = RestRequestHelpers.request(data.method, data.headers, applyParams(data.url), data.helperAttributes, format, data.data, data.rawModeData, variables, getFiles());
             Response response = client.newCall(request).execute();
                         
-            requestVariables = null;            
             return response;
         }
         

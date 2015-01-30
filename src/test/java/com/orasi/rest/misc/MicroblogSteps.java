@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.rest.misc;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -10,11 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.api.demos.MockMicroblogServer;
 import com.orasi.utils.rest.BaseExpectedNode;
 import com.orasi.utils.rest.Json;
+import com.orasi.utils.rest.OkRestRequest;
 import com.orasi.utils.rest.PostmanCollection;
 import com.orasi.utils.rest.PostmanEnvironment;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
-import com.squareup.okhttp.OkHttpClient;
+import com.orasi.utils.types.DefaultingMap;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
@@ -25,7 +21,6 @@ import cucumber.api.java.en.When;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.Before;
 import cucumber.api.java.After;
-import gherkin.formatter.model.DocString;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,12 +48,10 @@ public class MicroblogSteps {
     
     public Map nvars = new HashMap();
     
-    private Object request = null;
+    private RestRequest request = null;
     private BaseExpectedNode node = new BaseExpectedNode();
     
     private final List<String> ignores = new ArrayList<String>();
-    
-    private OkHttpClient client = new OkHttpClient();
     
     static {
         server.start();
@@ -187,45 +180,30 @@ public class MicroblogSteps {
     
     @Then("^I expect a response matching (.*)$")
     public void matches(String response) throws Throwable {
-        if(request instanceof RestRequest) {
-            if(node != null) {
-                ((RestRequest)request).response(response, node).verify();
-                node = new BaseExpectedNode();
-            } else {
-                ((RestRequest)request).response(response).verify();
-            }
+        if(node != null) {
+            request.response(response, node).verify();
+            node = new BaseExpectedNode();
         } else {
-            throw new AssertionError("Nothing to match, not a RestRequest.");
+            request.response(response).verify();
         }
     }
     
     @Then("^I expect a response matching:$")
     public void matches_doc(String response) throws Throwable {
-        if(request instanceof Request) {
-            Response res = client.newCall((Request)request).execute();
-            Assert.assertEquals(response, res.body().string());
-        } else if(request instanceof RestRequest) {
-            Response res = ((RestRequest)request).send();
-            JsonNode tree = Json.Map.readTree(res.body().string());
-            JsonNode expected = Json.Map.readTree(response);
-            if(node != null) {
-                node.verify(tree, expected);
-            } else {
-                throw new RuntimeException("The patch node is null");
-            }
+        Response res = ((RestRequest)request).send();
+        JsonNode tree = Json.Map.readTree(res.body().string());
+        JsonNode expected = Json.Map.readTree(response);
+        if(node != null) {
+            node.verify(tree, expected);
         } else {
-            throw new AssertionError("Nothing to match, not a Request.");
+            throw new RuntimeException("The patch node is null");
         }
     }    
     
     @Then("^I expect a response with code (\\d+) .*$")
     public void error_code(String code) throws Throwable {
-        Response res = null;
-        if(request instanceof RestRequest) {
-            res = ((RestRequest)request).env(env2).send();
-        } else if(request instanceof Request) {
-            res = client.newCall((Request)request).execute();
-        }
+        Response res;
+        res = request.env(env2).send();
         Assert.assertEquals(String.valueOf(res.code()), code, res.body().string());
     }    
 
@@ -259,9 +237,10 @@ public class MicroblogSteps {
     
     @When("^I send the (.*) request to (.*):$")
     public void request_document(String method, String url, String req) throws Exception {
+        Map defVar = new DefaultingMap(env1, env2);
         RequestBody body = RequestBody.create(null, req);
-        client.setCookieHandler(collection.session().getCookieManager());
-        request = new Request.Builder().url(url).method(method, body).build();
+        Request okreq = new Request.Builder().url(url).method(method, body).build();
+        request = new OkRestRequest(okreq).session(collection.session()).env(defVar);
     }
     
 }

@@ -99,7 +99,7 @@ public class RestRequestHelpers {
      * @return 
      * @throws java.lang.Exception 
      */
-    public static Request request(RestRequest.RequestType type, String headers, String url, Map auth, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, Map variables, String[] parameters) throws Exception {
+    public static Request request(RestRequest.RequestType type, String headers, String url, Map auth, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, Map variables, List<String> parameters) throws Exception {
         url = RestRequestHelpers.variables(url, variables);
         rawModeData = RestRequestHelpers.variables(rawModeData, variables);
         if(data != null) {
@@ -173,7 +173,7 @@ public class RestRequestHelpers {
      * @param parameters
      * @return 
      */
-    public static RequestBody params(List<RequestData> data, String... parameters) {
+    public static RequestBody params(List<RequestData> data, List<String> parameters) {
         int fileIdx = 0;
         MultipartBuilder mb = new MultipartBuilder();
         mb.type(MultipartBuilder.FORM);
@@ -183,8 +183,8 @@ public class RestRequestHelpers {
                     mb.addFormDataPart(dt.key, dt.value);
                     break;
                 case "file":
-                    if(fileIdx < parameters.length) {
-                        mb.addFormDataPart(dt.key, parameters[fileIdx++]);
+                    if(fileIdx < parameters.size()) {
+                        mb.addFormDataPart(dt.key, parameters.get(fileIdx++));
                     }
                     break;
             }
@@ -210,7 +210,7 @@ public class RestRequestHelpers {
      * @param parameters
      * @return 
      */
-    public static RequestBody binary(String... parameters) {
-        return RequestBody.create(null, parameters[0]);
+    public static RequestBody binary(List<String> parameters) {
+        return RequestBody.create(null, parameters.get(0));
     }
 }
