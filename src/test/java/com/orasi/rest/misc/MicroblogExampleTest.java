@@ -58,38 +58,38 @@ public class MicroblogExampleTest {
         
     @Test(groups = "usersExample")
     public void createUserTomExample() throws Exception {
-        collection.get("Create User Tom").response("createUserTomExample").validate();
+        collection.get("Create User Tom").response("createUserTomExample").verify();
     }
     
     @Test(groups = "usersExample")
     public void createUserLarryExample() throws Exception {
-        collection.get("Create User Larry").response("createUserLarryExample").validate();     
+        collection.get("Create User Larry").response("createUserLarryExample").verify();     
     }
 
     @Test(groups = "usersVerifyExample", dependsOnGroups = "usersExample")
     public void verifyUserTomExample() throws Exception {
-        collection.get("Check User Tom").response("verifyUserTomExample").validate();
+        collection.get("Check User Tom").response("verifyUserTomExample").verify();
     }    
     
     @Test(groups = "usersVerifyExample", dependsOnGroups = "usersExample")
     public void verifyUserLarryExample() throws Exception {
-        collection.get("Check User Larry").response("verifyUserLarryExample").validate();
+        collection.get("Check User Larry").response("verifyUserLarryExample").verify();
     }
     
     @Test(groups = "usersVariableExample")
     public void createUserVariableExample1() throws Exception {
-        collection.get("Create User Variable").response("createUserVariableExample").validate();
+        collection.get("Create User Variable").response("createUserVariableExample").verify();
     }    
     
     @Test(groups = "usersVariableVerifyExample", dependsOnGroups = "usersVariableExample")
     public void verifyUserVariableExample1() throws Exception {
         ExpectedResponse res = collection.get("Check User Variable").response("verifyUserVariableExample");
-        res.validate();
+        res.verify();
     }
     
     @Test(groups = "usersVariableExample")
     public void createUserVariableExample2() throws Exception {
-        collection.get("Create User Variable").env(env2).response("createUserVariableExample").validate();
+        collection.get("Create User Variable").env(env2).response("createUserVariableExample").verify();
     }    
     
     @Test(groups = "usersVariableVerifyExample", dependsOnGroups = "usersVariableExample")
@@ -98,40 +98,40 @@ public class MicroblogExampleTest {
         res.path("username").replace("arven2");
         res.path("nickname").replace("A. R. Variadic");
         res.path("email").replace("arvariadic@arven.info");
-        res.validate();
+        res.verify();
     }    
     
     @Test(groups = "postsExample", dependsOnGroups = "usersExample")
     public void createPostTomExample() throws Exception {
         collection.get("Login As Tom").send();
-        collection.get("Tom Posts Message").response("createPostTomExample").validate();
+        collection.get("Tom Posts Message").response("createPostTomExample").verify();
     }
     
     @Test(groups = "postsExample", dependsOnGroups = "usersExample")
     public void createPostLarryExample() throws Exception {
         collection.get("Login As Larry").send();
-        collection.get("Lots of Hash Tags").response("createPostLarryExample").validate();
+        collection.get("Lots of Hash Tags").response("createPostLarryExample").verify();
     }
     
     @Test(groups = "postsVerifyExample1", dependsOnGroups = "postsExample")
     public void verifyPostTomExample1() throws Exception {
         ExpectedResponse res = collection.get("Check Tom's Posts").response("verifyPostTomExample");
         res.at("/0/created").ignore();
-        res.validate();
+        res.verify();
     }
     
     @Test(groups = "postsVerifyExample1", dependsOnGroups = "postsExample")
     public void verifyPostLarryExample1() throws Exception {
         ExpectedResponse res = collection.get("Read Larry's Posts").response("verifyPostLarryExample");
         res.at("/0/created").ignore();
-        res.validate();
+        res.verify();
     }
     
     @Test(groups = "postsVerifyExample1", dependsOnGroups = "postsExample")
     public void verifyPostLarrySingleExample1() throws Exception {
         ExpectedResponse res = collection.get("Another Way to Read a Post").response("verifyPostLarrySingleExample");
         res.at("/created").ignore();
-        res.validate();
+        res.verify();
     }
     
     @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
@@ -139,65 +139,65 @@ public class MicroblogExampleTest {
         ExpectedResponse res = collection.get("Check Tom's Posts").response("verifyPostTomExample");
         ExpectedNode p = res.path(0);
         p.path("created").ignore();
-        res.validate();
+        res.verify();
     }
     
     @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
     public void verifyPostLarryExample2() throws Exception {
         ExpectedResponse res = collection.get("Read Larry's Posts").response("verifyPostLarryExample");
         res.path(0, "created").ignore();
-        res.validate();
+        res.verify();
     }
     
     @Test(groups = "postsVerifyExample2", dependsOnGroups = "postsExample")
     public void verifyPostLarrySingleExample2() throws Exception {
         ExpectedResponse res = collection.get("Another Way to Read a Post").response("verifyPostLarrySingleExample");
         res.path("created").ignore();
-        res.validate();
+        res.verify();
     }   
     
     @Test(groups = "friendsExample", dependsOnGroups = "usersVerifyExample")
     public void addFriendTomLarryExample() throws Exception {
         collection.get("Login As Tom").send();
-        collection.get("Tom Adds Larry").response("addFriendTomLarryExample").validate();
+        collection.get("Tom Adds Larry").response("addFriendTomLarryExample").verify();
     }
     
     @Test(groups = "friendsExample", dependsOnGroups = "usersVerifyExample")
     public void addFriendLarryTomExample() throws Exception {
         collection.get("Login As Larry").send();
-        collection.get("Larry Adds Tom").response("addFriendLarryTomExample").validate();
+        collection.get("Larry Adds Tom").response("addFriendLarryTomExample").verify();
     }
     
     @Test(groups = "friendsVerifyExample", dependsOnGroups = "friendsExample")
     public void verifyFriendTomLarryExample() throws Exception {
-        collection.get("Check User Tom").response("verifyFriendTomLarryExample").validate();
+        collection.get("Check User Tom").response("verifyFriendTomLarryExample").verify();
     }
     
     @Test(groups = "friendsVerifyExample", dependsOnGroups = "friendsExample")
     public void verifyFriendLarryTomExample() throws Exception {
-        collection.get("Check User Larry").response("verifyFriendLarryTomExample").validate();
+        collection.get("Check User Larry").response("verifyFriendLarryTomExample").verify();
     }
     
     @Test(groups = "friendsRemoveExample", dependsOnGroups = "friendsVerifyExample")
     public void removeFriendLarryTomExample() throws Exception {
         collection.get("Login As Larry").send();
-        collection.get("Larry Removes Tom").response("removeFriendLarryTomExample").validate();
+        collection.get("Larry Removes Tom").response("removeFriendLarryTomExample").verify();
     }
     
     @Test(groups = "friendsRemoveVerifyExample", dependsOnGroups = "friendsRemoveExample")
     public void verifyRemoveFriendLarryTomExample() throws Exception {
-        collection.get("Check User Larry").response("verifyRemoveFriendLarryTomExample").validate();
+        collection.get("Check User Larry").response("verifyRemoveFriendLarryTomExample").verify();
     }
     
     @Test(groups = "patchEmailExample", dependsOnGroups = "friendsRemoveVerifyExample")
     public void patchLarryEmailExample() throws Exception {
         collection.get("Login As Larry").send();
-        collection.get("Larry Adds Email Address").response("patchLarryEmailExample").validate();
+        collection.get("Larry Adds Email Address").response("patchLarryEmailExample").verify();
     }
     
     @Test(groups = "patchEmailVerifyExample", dependsOnGroups = "patchEmailExample")
     public void verifyPatchEmailExample() throws Exception {
-        collection.get("Check User Larry").response("verifyPatchEmailExample").validate();
+        collection.get("Check User Larry").response("verifyPatchEmailExample").verify();
     }
     
 }

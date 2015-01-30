@@ -17,7 +17,7 @@ public interface ExpectedResponse {
      * selection, strings (for object) and integers (for arrays).
      * 
      * @param path  Target path, Integers or Strings only.
-     * @return 
+     * @return new node referring to the selected path
      */
     public ExpectedNode path(Object... path);
     
@@ -26,7 +26,7 @@ public interface ExpectedResponse {
      * path selection.
      * 
      * @param path  Target path, String specifying JSON Pointer
-     * @return 
+     * @return new node referring to the selected pointer
      */
     public ExpectedNode at(String path);
     
@@ -38,8 +38,8 @@ public interface ExpectedResponse {
      * expected method, which can be used to traverse the path of nodes and
      * change expected values.
      * 
-     * @return A validated JsonNode
+     * @return a value which matches the modified expectations
      */
-    public abstract JsonNode validate();
+    public abstract JsonNode verify();
     
 }

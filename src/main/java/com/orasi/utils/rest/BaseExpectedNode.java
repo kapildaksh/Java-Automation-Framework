@@ -67,9 +67,18 @@ public class BaseExpectedNode {
         }
     }
     
+    /**
+     * Apply the expectation modifications to the real data. If the data
+     * is not JSON data, then we simply compare it with the real string
+     * value.
+     * 
+     * @param node
+     * @param expected
+     * @return 
+     */
     public JsonNode verify(String node, String expected) {
         try {                
-            this.verify(Json.Map.readTree(node), Json.Map.readTree(expected));
+            return this.verify(Json.Map.readTree(node), Json.Map.readTree(expected));
         } catch (JsonParseException jpe) {
             if(node.equals(expected)) {
                 return new TextNode(node);

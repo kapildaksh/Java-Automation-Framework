@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.test.cukes;
 
 import cucumber.runtime.Runtime;
@@ -14,7 +9,6 @@ import gherkin.formatter.Formatter;
 import org.testng.ITest;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 
 /**
@@ -24,31 +18,27 @@ import org.testng.annotations.Test;
  * 
  * @author Brian Becker
  */
-public class CucumberScenarioTest implements ITest, CucumberMethod {
+public class CucumberScenarioTest implements ITest {
 
     private final CucumberScenario scenario;
     private final CucumberScenarioOutline outline;
     private final Formatter formatter;
     private final CucumberLoggingReporter reporter;
     private final Runtime runtime; 
-    private final boolean firstScenario;
     private final int priority;
     private final CucumberFeature feature;
-    private final boolean firstTestInFeature;
     
     private String testName;
     
     public CucumberScenarioTest(CucumberScenario cs, CucumberScenarioOutline cso, Formatter formatter,
-            CucumberLoggingReporter reporter, Runtime runtime, boolean firstScenario, int priority, CucumberFeature feature, boolean firstTestInFeature) {
+            CucumberLoggingReporter reporter, Runtime runtime, int priority, CucumberFeature feature) {
         this.scenario = cs;
         this.outline = cso;
         this.formatter = formatter;
         this.reporter = reporter;
         this.runtime = runtime;
-        this.firstScenario = firstScenario;
         this.priority = priority;
         this.feature = feature;
-        this.firstTestInFeature = firstTestInFeature;
     }    
     
     /**
@@ -60,13 +50,13 @@ public class CucumberScenarioTest implements ITest, CucumberMethod {
      */
     @Test
     public void test() throws Throwable {
-        if(firstScenario && outline != null) {
+        if(outline != null) {
             outline.formatOutlineScenario(formatter);
             for(CucumberExamples exs : outline.getCucumberExamplesList()) {
                 formatter.examples(exs.getExamples());
             }
         }
-        if(firstTestInFeature && feature != null) {
+        if(feature != null) {
             formatter.uri(feature.getPath());
             formatter.feature(feature.getGherkinFeature());
         }
@@ -84,7 +74,10 @@ public class CucumberScenarioTest implements ITest, CucumberMethod {
 
     /**
      * Before the method, get the test name to stuff into the current
-     * test name value.
+     * test name value. This is a pretty formatted name which consists
+     * of the actual Scenario title, as well as the parameters if
+     * the scenario is actually a scenario outline.
+     * 
      * @param params
      */
     @BeforeMethod(alwaysRun = true)
@@ -107,7 +100,14 @@ public class CucumberScenarioTest implements ITest, CucumberMethod {
         return this.testName != null ? this.testName : "Unknown";
     }
 
-    @Override
+    /**
+     * This is the Priority which is retrieved by the CucumberInterceptor
+     * to rearrange the selected methods. The priority should be changed
+     * so that the entire sequence of scenarios is executed in a well
+     * defined order according to the specifications.
+     * 
+     * @return 
+     */
     public int priority() {
         return this.priority;
     }

@@ -189,10 +189,10 @@ public class MicroblogSteps {
     public void matches(String response) throws Throwable {
         if(request instanceof RestRequest) {
             if(node != null) {
-                ((RestRequest)request).response(response, node).validate();
+                ((RestRequest)request).response(response, node).verify();
                 node = new BaseExpectedNode();
             } else {
-                ((RestRequest)request).response(response).validate();
+                ((RestRequest)request).response(response).verify();
             }
         } else {
             throw new AssertionError("Nothing to match, not a RestRequest.");
@@ -227,7 +227,6 @@ public class MicroblogSteps {
             res = client.newCall((Request)request).execute();
         }
         Assert.assertEquals(String.valueOf(res.code()), code, res.body().string());
-        
     }    
 
     @And("^I replace (.*) by (.*)$")

@@ -450,9 +450,11 @@ public class ConsoleFormatter implements Reporter, Formatter {
     }
 
     public void docString(DocString docString) {
+        out.println(AnsiEscapes.YELLOW.toString() + AnsiEscapes.INTENSITY_BOLD.toString());
         out.println("      \"\"\"");
         out.println(escapeTripleQuotes(indent(docString.getValue(), "      ")));
         out.println("      \"\"\"");
+        out.println(AnsiEscapes.DEFAULT.toString());
     }
 
     @Override

@@ -80,14 +80,14 @@ public class CucumberSuite {
                     boolean firstScenario = true;
                     for (CucumberExamples examples : outline.getCucumberExamplesList()) {
                         for (CucumberScenario cs : examples.createExampleScenarios()) {
-                            CucumberScenarioTest test = new CucumberScenarioTest(cs, outline, formatter, reporter, runtime, firstScenario, priority++, f, firstTestInFeature);                           
+                            CucumberScenarioTest test = new CucumberScenarioTest(cs, firstScenario ? outline : null, formatter, reporter, runtime, priority++, firstTestInFeature ? f : null);                           
                             tests.add(test);
                             firstScenario = false;
                         }
                     }
                 }
                 if(ts instanceof CucumberScenario) {
-                    tests.add(new CucumberScenarioTest((CucumberScenario) ts, null, formatter, reporter, runtime, false, priority++, f, firstTestInFeature));
+                    tests.add(new CucumberScenarioTest((CucumberScenario) ts, null, formatter, reporter, runtime, priority++, firstTestInFeature ? f : null));
                 }
                 firstTestInFeature = false;
             }

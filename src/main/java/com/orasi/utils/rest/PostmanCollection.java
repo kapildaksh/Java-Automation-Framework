@@ -1,10 +1,7 @@
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.MissingNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 import com.orasi.utils.types.DefaultingMap;
 import com.orasi.utils.types.Reference;
 import com.squareup.okhttp.OkHttpClient;
@@ -18,11 +15,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import okio.Okio;
 import org.apache.commons.lang3.StringUtils;
-import org.testng.Assert;
 
 /**
  * The PostmanCollection allows one to load a Postman Collection file, which
@@ -127,7 +121,7 @@ public class PostmanCollection implements RestCollection {
      * to both of them programmatically. Then the request is fired off by the
      * validate, and a valid node is returned or an exception is thrown.
      */
-    private static class SampleResponseValidator implements ExpectedResponse {
+    private static class ResponseVerifier implements ExpectedResponse {
 
         private final RestRequest request;
         private final SampleResponseData data;
@@ -141,7 +135,7 @@ public class PostmanCollection implements RestCollection {
          * @param data
          * @param node 
          */
-        public SampleResponseValidator(RestRequest request, SampleResponseData data, BaseExpectedNode node) {
+        public ResponseVerifier(RestRequest request, SampleResponseData data, BaseExpectedNode node) {
             this.request = request;
             this.data = data;
             this.node = node;
@@ -156,7 +150,7 @@ public class PostmanCollection implements RestCollection {
          * @return 
          */
         @Override
-        public JsonNode validate() {
+        public JsonNode verify() {
             String res = null;
             try {
                 res = request.send().body().string();
@@ -345,7 +339,7 @@ public class PostmanCollection implements RestCollection {
         public ExpectedResponse response(String name, BaseExpectedNode diff) {
             for(SampleResponseData r : data.responses) {
                 if(r.name.equals(name)) {
-                    return new SampleResponseValidator(this, r, diff);
+                    return new ResponseVerifier(this, r, diff);
                 }
             }
             throw new RuntimeException("Response named '" + name + "' not found.");
@@ -418,8 +412,22 @@ public class PostmanCollection implements RestCollection {
      * 
      * @return 
      */
+    @Override
     public RestSession session() {
         return this.session.get();
+    }
+    
+    /**
+     * Set the Session for this collection, which is necessary to share the
+     * session from another collection or from custom responses.
+     * 
+     * @param session
+     * @return
+     */
+    @Override
+    public RestCollection session(RestSession session) {
+        this.session.set(session);
+        return this;
     }
     
     /**

@@ -27,8 +27,8 @@ public class CucumberInterceptor implements IMethodInterceptor {
         Comparator<IMethodInstance> comparator = new Comparator<IMethodInstance>() {
             private int getPriority(IMethodInstance mi) {
                 Object inst = mi.getInstance();
-                if(inst instanceof CucumberMethod) {
-                    CucumberMethod ccm = (CucumberMethod) inst;
+                if(inst instanceof CucumberScenarioTest) {
+                    CucumberScenarioTest ccm = (CucumberScenarioTest) inst;
                     return ccm.priority();
                 }
                 return 0;
@@ -39,6 +39,7 @@ public class CucumberInterceptor implements IMethodInterceptor {
                 return getPriority(m1) - getPriority(m2);
             }
         };
+        
         Collections.sort(methods, comparator);
         return methods;
     }

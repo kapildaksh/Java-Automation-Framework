@@ -12,7 +12,9 @@ import gherkin.formatter.model.Result;
 /**
  * A Logging Reporter for Gherkin
  * This reporter holds the result, making it available in the current
- * scope. This is necessary for implementing test wrappers, etc.
+ * scope. This is necessary for implementing test wrappers and test
+ * engines which show pretty-printed reports alongside running TestNG
+ * tests.
  * 
  * @author Brian Becker
  */
