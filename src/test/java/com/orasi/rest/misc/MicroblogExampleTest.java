@@ -46,7 +46,7 @@ public class MicroblogExampleTest {
         env2.put("username", "arven2");
         env2.put("nickname", "A. R. Variadic");
         env2.put("email", "arvariadic@arven.info");        
-        collection.env(env1);
+        collection.session().env(env1);
         server = new MockMicroblogServer();
         server.start();
     }

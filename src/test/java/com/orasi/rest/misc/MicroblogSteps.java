@@ -61,7 +61,7 @@ public class MicroblogSteps {
     public MicroblogSteps() throws Exception {
         collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
         env1 = PostmanEnvironment.file(getClass().getResource(REST_SANDBOX + "Passwords.postman_environment"));
-        collection.env(env1);
+        collection.session().env(env1);
     }
     
     @Before
@@ -166,7 +166,7 @@ public class MicroblogSteps {
         nvars.put(variable, table);
         switch (variable) {
             case "the environment":
-                collection.env(table.asMap(String.class, String.class));
+                collection.session().env(table.asMap(String.class, String.class));
                 break;
             case "replacements":
                 env2 = table.asMap(String.class, String.class);

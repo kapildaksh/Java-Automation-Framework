@@ -12,7 +12,6 @@ import java.util.Map;
  */
 public interface RestCollection {
     public abstract RestRequest get(String name);
-    public abstract RestCollection env(Map variables);
     public abstract RestCollection session(RestSession sess);
     public abstract RestSession session();
 }

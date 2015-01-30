@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.MissingNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The root node of an ExpectedResponse, this abstract class is extended by
