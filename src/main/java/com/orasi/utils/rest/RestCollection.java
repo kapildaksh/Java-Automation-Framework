@@ -11,8 +11,7 @@ import java.util.Map;
  * @author Brian Becker
  */
 public interface RestCollection {
-    public abstract RestRequest byId(String id);
-    public abstract RestRequest byName(String name);
-    public abstract RestCollection withEnv(Map variables);
-    public abstract RestCollection withSession(RestSession session);
+    public abstract RestRequest get(String name);
+    public abstract RestCollection env(Map variables);
+    public abstract RestSession session();
 }

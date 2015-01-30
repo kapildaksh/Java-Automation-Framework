@@ -17,6 +17,21 @@ Feature: Messaging
         Then I expect a response matching verifyPostTomExample
 
     @messages
+    Scenario: Send A Message Directly
+        Given I am logged in as Tom
+        When I send the POST request to http://localhost:4567/users/tom/posts:
+            """
+            { "text": "This is just a quick test." }
+            """
+        Then I expect a response with code 200 OK
+        When I send a request to Check Tom's Posts
+        And I ignore /0/created
+        Then I expect a response matching:
+            """
+            [{ "id": 0, "text": "This is just a quick test." }]
+            """
+
+    @messages
     Scenario: Send and Read a Single Message
         Given I am logged in as Larry
         When I send a request to Lots of Hash Tags

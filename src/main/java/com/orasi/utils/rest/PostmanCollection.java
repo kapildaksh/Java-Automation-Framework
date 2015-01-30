@@ -1,10 +1,12 @@
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.MissingNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import com.orasi.text.TemplateFormat;
 import com.orasi.utils.types.DefaultingMap;
+import com.orasi.utils.types.Reference;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -16,7 +18,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import okio.Okio;
@@ -36,29 +37,13 @@ import org.testng.Assert;
 public class PostmanCollection implements RestCollection {
 
     /**
-     * Get a Postman Rest Request by ID, a UUID like long string which is more
-     * likely to be unique.
-     * 
-     * @param id
-     * @return 
-     */
-    @Override
-    public RestRequest byId(String id) {
-        if(names.containsKey(id)) {
-            return ids.get(id);
-        } else {
-            throw new RuntimeException("Request with id '" + id + "' not found.");
-        }
-    }
-
-    /**
      * Get a Postman Rest Request by name.
      * 
      * @param name
      * @return 
      */
     @Override
-    public RestRequest byName(String name) {
+    public RestRequest get(String name) {
         if(names.containsKey(name)) {
             return names.get(name);
         } else {
@@ -172,28 +157,14 @@ public class PostmanCollection implements RestCollection {
          */
         @Override
         public JsonNode validate() {
-            String real = "";
-            if(request == null || data.text == null)
-                throw new UnsupportedOperationException("Operation not supported on null ExpectedResponse");
+            String res = null;
             try {
-                Response res = request.send();
-                real = res.body().string();
-                String expected = data.text;
-                real = node.ignores.apply(real);
-                expected = node.patches.apply(expected);
-                expected = node.ignores.apply(expected);
-                Assert.assertEquals(expected, real);
-                return Json.Map.readTree(real);
-            } catch (IOException ex) {
-                // We want to break out of the exception if it's just a regular
-                // Json parsing exception.
-                if(real.equals(data.text)) {
-                    return new TextNode(data.text);
-                }
-            } catch (Exception e) {
-                throw new RuntimeException("Error while sending message during validation." + e.getMessage());
+                res = request.send().body().string();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
-            return null;
+            
+            return this.node.verify(res, data.text);
         }
 
         /**
@@ -273,7 +244,7 @@ public class PostmanCollection implements RestCollection {
         
         private Map requestVariables;
         private Map requestDefaultVariables;
-        private Map session;
+        private Reference<RestSession> session;
         private String[] files;
         
         /**
@@ -287,7 +258,7 @@ public class PostmanCollection implements RestCollection {
          * @return 
          */
         @Override
-        public RestRequest withEnv(Map vars) {
+        public RestRequest env(Map vars) {
             this.requestVariables = vars;
             return this;
         }
@@ -298,35 +269,13 @@ public class PostmanCollection implements RestCollection {
         }
         
         /**
-         * Set a bunch of parameters on this REST request. These parameters
-         * are specified like substitutions in Spark and many other web
-         * frameworks. This just replaces the parameters from first to last
-         * as they are specified.
+         * Set parameters (URI Parameters) on the REST request.
          * 
          * @param parts
          * @return 
          */
         @Override
-        public RestRequest withParams(String... parts) {
-            String[] temp = StringUtils.substringsBetween(data.url, "/:", "/");
-            int i = 0;
-            if(temp != null && temp.length > 0) {
-                for(String t : temp) {
-                     data.url = data.url.replace("/:" + t + "/", "/" + parts[i++] + "/");
-                }
-            }
-            return this;
-        }
-        
-        /**
-         * This is an alternate withParams method which is more flexible and
-         * can be used to replace with a mapping of names to values.
-         * 
-         * @param parts
-         * @return 
-         */
-        @Override
-        public RestRequest withParams(Map parts) {
+        public RestRequest params(Map parts) {
             for(String str : StringUtils.substringsBetween(data.url, "/:", "/")) {
                 System.out.println(str);
                 if(parts.containsKey(str)) {
@@ -345,7 +294,7 @@ public class PostmanCollection implements RestCollection {
          * @return 
          */
         @Override
-        public RestRequest withFiles(String... files) {
+        public RestRequest files(String... files) {
             this.files = files;
             return this;
         }
@@ -361,8 +310,8 @@ public class PostmanCollection implements RestCollection {
         @Override
         public Response send() throws Exception {
             OkHttpClient client = new OkHttpClient();
-            if(this.session != null && this.session.containsKey("session")) {
-                client.setCookieHandler(((RestSession)this.session.get("session")).getCookieManager());
+            if(!Reference.isNull(session)) {
+                client.setCookieHandler(this.session.get().getCookieManager());
             }
             RequestFormat format = null;
             switch(data.dataMode) {
@@ -423,7 +372,7 @@ public class PostmanCollection implements RestCollection {
     
     private final Map<String, RestRequest> ids;
     private final Map<String, RestRequest> names;
-    private final Map session;
+    private final Reference<RestSession> session;
     private final Map defaultVariables;
     
     /**
@@ -436,7 +385,7 @@ public class PostmanCollection implements RestCollection {
     private PostmanCollection(PostmanCollectionData data) throws IOException {
         ids = new HashMap<String, RestRequest>();
         names = new HashMap<String, RestRequest>();
-        session = new HashMap<String, RestSession>();
+        session = new Reference<RestSession>(new RestSession());
         defaultVariables = new HashMap();
         for(PostmanRequest req : data.requests) {
             req.requestDefaultVariables = defaultVariables;
@@ -457,23 +406,20 @@ public class PostmanCollection implements RestCollection {
      * @return 
      */
     @Override
-    public RestCollection withEnv(Map variables) {
+    public RestCollection env(Map variables) {
         defaultVariables.clear();
         defaultVariables.putAll(variables);
         return this;
     }
     
     /**
-     * Pass a Session object to the collection. This is an object which should
-     * be used to preserve things such as cookies, etc.
+     * Get the Session for this collection, which is necessary for the use of
+     * a login generated by one collection.
      * 
-     * @param session
      * @return 
      */
-    @Override
-    public RestCollection withSession(RestSession session) {
-        this.session.put("session", session);
-        return this;
+    public RestSession session() {
+        return this.session.get();
     }
     
     /**

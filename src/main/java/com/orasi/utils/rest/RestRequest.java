@@ -36,9 +36,8 @@ public abstract class RestRequest {
     public abstract ExpectedResponse response(String name, BaseExpectedNode node);
     public abstract Response send() throws Exception;
     
-    public abstract RestRequest withEnv(Map variables);
-    public abstract RestRequest withParams(Map args);
-    public abstract RestRequest withParams(String... args);
-    public abstract RestRequest withFiles(String... files);
+    public abstract RestRequest env(Map variables);
+    public abstract RestRequest params(Map args);
+    public abstract RestRequest files(String... files);
     
 }

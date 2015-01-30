@@ -68,7 +68,7 @@ public class PostmanTest {
         mws.enqueue(new MockResponse());       
         mws.play(TESTING_PORT);
         
-        collection.byName("Test Parameters").send();
+        collection.get("Test Parameters").send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3 HTTP/1.1", rr.getRequestLine());
 }
@@ -81,7 +81,7 @@ public class PostmanTest {
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
-        collection.byName("Test Variables").withEnv(env).send();
+        collection.get("Test Variables").env(env).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3&x=file:///var/variable HTTP/1.1", rr.getRequestLine());
     }    
@@ -96,7 +96,7 @@ public class PostmanTest {
         env.put("var", "file:///var/variable");
         Map params = new HashMap();
         params.put("which", "more");
-        collection.byName("Url Parameters").withEnv(env).withParams(params).send();
+        collection.get("Url Parameters").env(env).params(params).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3&x=file:///var/variable HTTP/1.1", rr.getRequestLine());
     }        
@@ -107,7 +107,7 @@ public class PostmanTest {
         mws.enqueue(new MockResponse());       
         mws.play(TESTING_PORT);
         
-        collection.byName("Test Url Encoding").send();
+        collection.get("Test Url Encoding").send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("q=v1&v=v2&a=v3", rr.getUtf8Body());
     }
@@ -120,7 +120,7 @@ public class PostmanTest {
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
-        collection.byName("Test Url Encoding Variables").withEnv(env).send();
+        collection.get("Test Url Encoding Variables").env(env).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("q=v1&v=v2&a=v3&x=" + URLEncoder.encode("file:///var/variable", "UTF-8"), rr.getUtf8Body());
     }    
@@ -143,7 +143,7 @@ public class PostmanTest {
         mws.enqueue(new MockResponse());       
         mws.play(TESTING_PORT);
         
-        collection.byName("Test Form Encoding").send();
+        collection.get("Test Form Encoding").send();
 
         RecordedRequest rr = mws.takeRequest();
 
@@ -159,7 +159,7 @@ public class PostmanTest {
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
-        collection.byName("Test Form Variables").withEnv(env).send();
+        collection.get("Test Form Variables").env(env).send();
 
         RecordedRequest rr = mws.takeRequest();
 
@@ -176,7 +176,7 @@ public class PostmanTest {
         mws.enqueue(new MockResponse());       
         mws.play(TESTING_PORT);
         
-        collection.byName("Test Raw Data").send();
+        collection.get("Test Raw Data").send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("This is only a raw document, no formatting or special data type.", rr.getUtf8Body());
     }
@@ -189,7 +189,7 @@ public class PostmanTest {
         
         Map env = new HashMap();
         env.put("var", "file:///var/variable");
-        collection.byName("Test Raw Variables").withEnv(env).send();
+        collection.get("Test Raw Variables").env(env).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("This is only a raw document, no formatting or special data type. It does, however, support file:///var/variable", rr.getUtf8Body());
     }    
@@ -211,7 +211,7 @@ public class PostmanTest {
         mws.enqueue(new MockResponse());       
         mws.play(TESTING_PORT);
         
-        collection.byName("Test Binary Data").withFiles(new String(Files.readAllBytes(Paths.get(getClass().getResource(REST_SANDBOX).toURI()).resolve("schema.json")))).send();
+        collection.get("Test Binary Data").files(new String(Files.readAllBytes(Paths.get(getClass().getResource(REST_SANDBOX).toURI()).resolve("schema.json")))).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertTrue(rr.getUtf8Body().contains("patternProperties"));
     }

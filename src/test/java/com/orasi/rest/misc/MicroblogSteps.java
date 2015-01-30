@@ -5,15 +5,18 @@
  */
 package com.orasi.rest.misc;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.api.demos.MockMicroblogServer;
 import com.orasi.utils.rest.BaseExpectedNode;
-import com.orasi.utils.rest.ExpectedResponse;
+import com.orasi.utils.rest.Json;
 import com.orasi.utils.rest.PostmanCollection;
 import com.orasi.utils.rest.PostmanEnvironment;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
-import com.orasi.utils.rest.RestSession;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
@@ -22,6 +25,7 @@ import cucumber.api.java.en.When;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.Before;
 import cucumber.api.java.After;
+import gherkin.formatter.model.DocString;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +43,7 @@ import org.testng.Assert;
  */
 public class MicroblogSteps {
     
-    public static final String REST_SANDBOX = "/rest/sandbox/";
+    public static final String REST_SANDBOX = "/com/orasi/rest/misc/";
     public static final MockMicroblogServer server = new MockMicroblogServer();
     
     public ObjectMapper map;
@@ -49,11 +53,12 @@ public class MicroblogSteps {
     
     public Map nvars = new HashMap();
     
-    private RestRequest request = null;
-    private ExpectedResponse expected = null;
-    private BaseExpectedNode node = null;
+    private Object request = null;
+    private BaseExpectedNode node = new BaseExpectedNode();
     
     private final List<String> ignores = new ArrayList<String>();
+    
+    private OkHttpClient client = new OkHttpClient();
     
     static {
         server.start();
@@ -62,8 +67,7 @@ public class MicroblogSteps {
     public MicroblogSteps() throws Exception {
         collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
         env1 = PostmanEnvironment.file(getClass().getResource(REST_SANDBOX + "Passwords.postman_environment"));
-        collection.withEnv(env1);
-        collection.withSession(new RestSession());
+        collection.env(env1);
     }
     
     @Before
@@ -77,12 +81,12 @@ public class MicroblogSteps {
     
     @Given("^I am not logged in$")
     public void not_logged_in() throws Throwable {
-        collection.byName("Logout").send();
+        collection.get("Logout").send();
     }
     
     @Given("^I am logged in as (.*)$")
     public void logged_in(String user) throws Throwable {
-        Response res = collection.byName("Login As " + user).send();
+        Response res = collection.get("Login As " + user).send();
         Assert.assertEquals(res.code(), 200);                
     }
     
@@ -91,28 +95,28 @@ public class MicroblogSteps {
         Map m = new HashMap();
         m.put("username", user);
         m.put("password", password);
-        collection.byName("Login As Variable").withEnv(m).send();
+        collection.get("Login As Variable").env(m).send();
     }
     
     @Given("(.*)'s account has been created$")
     public void account_created(String label) throws Throwable {
-        collection.byName("Create User " + label).send();
+        collection.get("Create User " + label).send();
     }
     
     @Given("^the (.*) group has been created by (.*)$")
     public void group_created(String label, String user) throws Throwable {
-        collection.byName("Create User " + user).send();
-        collection.byName("Login As " + user).send();
-        collection.byName("Create Group " + label).send();
-        collection.byName("Logout").send();
+        collection.get("Create User " + user).send();
+        collection.get("Login As " + user).send();
+        collection.get("Create Group " + label).send();
+        collection.get("Logout").send();
     }
     
     @Given("^(.*) has joined group (.*)")
     public void group_joined(String user, String label) throws Throwable {
-        collection.byName("Create User " + user).send();
-        collection.byName("Login As " + user).send();
-        collection.byName("Join Group " + label).send();
-        collection.byName("Logout").send();
+        collection.get("Create User " + user).send();
+        collection.get("Login As " + user).send();
+        collection.get("Join Group " + label).send();
+        collection.get("Logout").send();
     }
     
     @Given("^the following groups:$")
@@ -132,7 +136,7 @@ public class MicroblogSteps {
         Map m = new HashMap();
         m.put("first", first.toLowerCase());
         m.put("second", second.toLowerCase());
-        Response res = collection.byName("Set Mutual Exclusion").withEnv(m).send();
+        Response res = collection.get("Set Mutual Exclusion").env(m).send();
         Assert.assertEquals(res.code(), 200);        
     }
     
@@ -141,17 +145,17 @@ public class MicroblogSteps {
         Map m = new HashMap();
         m.put("first", first.toLowerCase());
         m.put("second", second.toLowerCase());
-        Response res = collection.byName("Unset Mutual Exclusion").withEnv(m).send();
+        Response res = collection.get("Unset Mutual Exclusion").env(m).send();
         Assert.assertEquals(res.code(), 200);
     }    
     
     @And("^(.*) has (.*) on (.*) list of friends$")
     public void friends_list(String first, String second, String pronoun) throws Throwable {
-        collection.byName("Create User " + first).send();
-        collection.byName("Create User " + second).send();
-        collection.byName("Login As " + first).send();        
-        collection.byName(first + " Adds " + second).send();
-        collection.byName("Logout").send();        
+        collection.get("Create User " + first).send();
+        collection.get("Create User " + second).send();
+        collection.get("Login As " + first).send();        
+        collection.get(first + " Adds " + second).send();
+        collection.get("Logout").send();        
     }    
 
     @And("^(.*)'s account has not been created$")
@@ -160,7 +164,7 @@ public class MicroblogSteps {
     
     @When("^I send a request to (.*)$")
     public void request(String label) throws Throwable {
-        request = collection.byName(label).withEnv(env2);
+        request = collection.get(label).env(env2);
     }
     
     @And("^I define (.*):$")
@@ -168,7 +172,7 @@ public class MicroblogSteps {
         nvars.put(variable, table);
         switch (variable) {
             case "the environment":
-                collection.withEnv(table.asMap(String.class, String.class));
+                collection.env(table.asMap(String.class, String.class));
                 break;
             case "replacements":
                 env2 = table.asMap(String.class, String.class);
@@ -183,18 +187,47 @@ public class MicroblogSteps {
     
     @Then("^I expect a response matching (.*)$")
     public void matches(String response) throws Throwable {
-        if(node != null) {
-            request.response(response, node).validate();
-            node = null;
+        if(request instanceof RestRequest) {
+            if(node != null) {
+                ((RestRequest)request).response(response, node).validate();
+                node = new BaseExpectedNode();
+            } else {
+                ((RestRequest)request).response(response).validate();
+            }
         } else {
-            request.response(response).validate();
+            throw new AssertionError("Nothing to match, not a RestRequest.");
         }
     }
     
+    @Then("^I expect a response matching:$")
+    public void matches_doc(String response) throws Throwable {
+        if(request instanceof Request) {
+            Response res = client.newCall((Request)request).execute();
+            Assert.assertEquals(response, res.body().string());
+        } else if(request instanceof RestRequest) {
+            Response res = ((RestRequest)request).send();
+            JsonNode tree = Json.Map.readTree(res.body().string());
+            JsonNode expected = Json.Map.readTree(response);
+            if(node != null) {
+                node.verify(tree, expected);
+            } else {
+                throw new RuntimeException("The patch node is null");
+            }
+        } else {
+            throw new AssertionError("Nothing to match, not a Request.");
+        }
+    }    
+    
     @Then("^I expect a response with code (\\d+) .*$")
     public void error_code(String code) throws Throwable {
-        Response res = request.withEnv(env2).send();
+        Response res = null;
+        if(request instanceof RestRequest) {
+            res = ((RestRequest)request).env(env2).send();
+        } else if(request instanceof Request) {
+            res = client.newCall((Request)request).execute();
+        }
         Assert.assertEquals(String.valueOf(res.code()), code, res.body().string());
+        
     }    
 
     @And("^I replace (.*) by (.*)$")
@@ -223,6 +256,13 @@ public class MicroblogSteps {
         for(String s : with.split(" ")) {
             node.at(s.trim()).ignore();
         }
+    }
+    
+    @When("^I send the (.*) request to (.*):$")
+    public void request_document(String method, String url, String req) throws Exception {
+        RequestBody body = RequestBody.create(null, req);
+        client.setCookieHandler(collection.session().getCookieManager());
+        request = new Request.Builder().url(url).method(method, body).build();
     }
     
 }

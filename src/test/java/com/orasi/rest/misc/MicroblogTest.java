@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
  */
 public class MicroblogTest {
     
-    public static final String REST_SANDBOX = "/rest/sandbox/";
+    public static final String REST_SANDBOX = "/com/orasi/rest/misc/";
     
     public ObjectMapper map;
     public RestCollection collection;
@@ -48,7 +48,7 @@ public class MicroblogTest {
         
     @Test(groups = "users")
     public void createUserTom() throws Exception {
-        Response res = collection.byName("Create User Tom").send();
+        Response res = collection.get("Create User Tom").send();
         Assert.assertTrue(res.isSuccessful());        
         JsonNode n = map.readTree(res.body().string());
         Assert.assertEquals("User added.", n.path("message").asText());
@@ -56,7 +56,7 @@ public class MicroblogTest {
     
     @Test(groups = "users")
     public void createUserLarry() throws Exception {
-        Response res = collection.byName("Create User Larry").send();
+        Response res = collection.get("Create User Larry").send();
         Assert.assertTrue(res.isSuccessful());        
         JsonNode n = map.readTree(res.body().string());
         Assert.assertEquals("User added.", n.path("message").asText());        
@@ -64,7 +64,7 @@ public class MicroblogTest {
 
     @Test(groups = "usersVerify", dependsOnGroups = "users")
     public void verifyUserTom() throws Exception {
-        Response res = collection.byName("Check User Tom").send();
+        Response res = collection.get("Check User Tom").send();
         Assert.assertTrue(res.isSuccessful());        
         JsonNode n = map.readTree(res.body().string());
         Assert.assertEquals("tom", n.path("username").asText());
@@ -74,7 +74,7 @@ public class MicroblogTest {
     
     @Test(groups = "usersVerify", dependsOnGroups = "users")
     public void verifyUserLarry() throws Exception {
-        Response res = collection.byName("Check User Larry").send();
+        Response res = collection.get("Check User Larry").send();
         Assert.assertTrue(res.isSuccessful());        
         JsonNode n = map.readTree(res.body().string());
         Assert.assertEquals("larry", n.path("username").asText());        
@@ -84,19 +84,21 @@ public class MicroblogTest {
     
     @Test(groups = "posts", dependsOnGroups = "users")
     public void createPostTom() throws Exception {
-        Response res = collection.byName("Tom Posts Message").send();
+        collection.get("Login As Tom").send();
+        Response res = collection.get("Tom Posts Message").send();
         Assert.assertTrue(res.isSuccessful());
     }
     
     @Test(groups = "posts", dependsOnGroups = "users")
     public void createPostLarry() throws Exception {
-        Response res = collection.byName("Lots of Hash Tags").send();
+        collection.get("Login As Larry").send();
+        Response res = collection.get("Lots of Hash Tags").send();
         Assert.assertTrue(res.isSuccessful());
     }
     
     @Test(groups = "postsVerify", dependsOnGroups = "posts")
     public void verifyPostTom() throws Exception {
-        Response res = collection.byName("Check Tom's Posts").send();
+        Response res = collection.get("Check Tom's Posts").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
         RestAssert.assertIsArray(n.path(0).path("tags"));
@@ -107,7 +109,7 @@ public class MicroblogTest {
     
     @Test(groups = "postsVerify", dependsOnGroups = "posts")
     public void verifyPostLarry() throws Exception {
-        Response res = collection.byName("Read Larry's Posts").send();
+        Response res = collection.get("Read Larry's Posts").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
         RestAssert.assertIsArray(n.path(0).path("tags"));
@@ -117,7 +119,7 @@ public class MicroblogTest {
     
     @Test(groups = "postsVerify", dependsOnGroups = "posts")
     public void verifyPostLarrySingle() throws Exception {
-        Response res = collection.byName("Another Way to Read a Post").send();
+        Response res = collection.get("Another Way to Read a Post").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
         RestAssert.assertIsArray(n.path("tags"));
@@ -127,19 +129,21 @@ public class MicroblogTest {
     
     @Test(groups = "friends", dependsOnGroups = "usersVerify")
     public void addFriendTomLarry() throws Exception {
-        Response res = collection.byName("Tom Adds Larry").send();
+        collection.get("Login As Tom").send();
+        Response res = collection.get("Tom Adds Larry").send();
         Assert.assertTrue(res.isSuccessful());
     }
     
     @Test(groups = "friends", dependsOnGroups = "usersVerify")
     public void addFriendLarryTom() throws Exception {
-        Response res = collection.byName("Larry Adds Tom").send();
+        collection.get("Login As Larry").send();
+        Response res = collection.get("Larry Adds Tom").send();
         Assert.assertTrue(res.isSuccessful());        
     }
     
     @Test(groups = "friendsVerify", dependsOnGroups = "friends")
     public void verifyFriendTomLarry() throws Exception {
-        Response res = collection.byName("Check User Tom").send();
+        Response res = collection.get("Check User Tom").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
         RestAssert.assertIsArray(n.path("friends"));
@@ -148,7 +152,7 @@ public class MicroblogTest {
     
     @Test(groups = "friendsVerify", dependsOnGroups = "friends")
     public void verifyFriendLarryTom() throws Exception {
-        Response res = collection.byName("Check User Larry").send();
+        Response res = collection.get("Check User Larry").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
         RestAssert.assertIsArray(n.path("friends"));
@@ -157,13 +161,14 @@ public class MicroblogTest {
     
     @Test(groups = "friendsRemove", dependsOnGroups = "friendsVerify")
     public void removeFriendLarryTom() throws Exception {
-        Response res = collection.byName("Larry Removes Tom").send();
+        collection.get("Login As Larry").send();
+        Response res = collection.get("Larry Removes Tom").send();
         Assert.assertTrue(res.isSuccessful());        
     }
     
     @Test(groups = "friendsRemoveVerify", dependsOnGroups = "friendsRemove")
     public void verifyRemoveFriendLarryTom() throws Exception {
-        Response res = collection.byName("Check User Larry").send();
+        Response res = collection.get("Check User Larry").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
         RestAssert.assertNotArray(n.path("friends"));
@@ -171,13 +176,14 @@ public class MicroblogTest {
     
     @Test(groups = "patchEmail", dependsOnGroups = "usersVerify")
     public void patchLarryEmail() throws Exception {
-        Response res = collection.byName("Larry Adds Email Address").send();
+        collection.get("Login As Larry").send();
+        Response res = collection.get("Larry Adds Email Address").send();
         Assert.assertTrue(res.isSuccessful());
     }
     
     @Test(groups = {"patchEmailVerify", "one"}, dependsOnGroups = "patchEmail")
     public void verifyPatchEmail() throws Exception {
-        Response res = collection.byName("Check User Larry").send();
+        Response res = collection.get("Check User Larry").send();
         Assert.assertTrue(res.isSuccessful());
         JsonNode n = map.readTree(res.body().string());
         Assert.assertEquals("larry@wall.org", n.path("email").asText());        
