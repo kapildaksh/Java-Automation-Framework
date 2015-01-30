@@ -155,7 +155,7 @@ public class PostmanCollection implements RestCollection {
     }
     
     private final Map<String, RestRequest> names;
-    private RestSession session;
+    private final RestSession session;
     
     /**
      * A PostmanCollection requires data from its JSON file. This class can
@@ -182,19 +182,6 @@ public class PostmanCollection implements RestCollection {
     @Override
     public RestSession session() {
         return this.session;
-    }
-    
-    /**
-     * Set the Session for this collection, which is necessary to share the
-     * session from another collection or from custom responses.
-     * 
-     * @param session
-     * @return
-     */
-    @Override
-    public RestCollection session(RestSession session) {
-        this.session = session;
-        return this;
     }
     
     /**

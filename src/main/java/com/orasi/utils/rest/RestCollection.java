@@ -1,7 +1,5 @@
 package com.orasi.utils.rest;
 
-import java.util.Map;
-
 /**
  * The RestCollection is a warehouse of REST service calls. You should be able
  * to look up calls by ID or by name, the meaning of such which is defined by
@@ -12,6 +10,5 @@ import java.util.Map;
  */
 public interface RestCollection {
     public abstract RestRequest get(String name);
-    public abstract RestCollection session(RestSession sess);
     public abstract RestSession session();
 }
