@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class RestSession {
     
-    private CookieManager cookieManager = new CookieManager();
+    private final CookieManager cookieManager = new CookieManager();
     private Map environment;
     
     public RestSession() {
@@ -39,6 +39,13 @@ public class RestSession {
         return this;
     }
     
+    /**
+     * This is the environment of the whole collection. It is stored in a
+     * session-wide variable so that it's assignable to every single item
+     * in the collection.
+     * 
+     * @return 
+     */
     public Map env() {
         return this.environment;
     }

@@ -5,12 +5,14 @@
  */
 package com.orasi.utils.rest;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 /**
- *
+ * OkRestResponse is a RestResponse which is implemented using an OkHttp
+ * Response object. This particular implementation caches the body().string()
+ * for convenience so that it's not lost unintentionally, it stores the code
+ * from HTTP response.
+ * 
  * @author Brian Becker
  */
 public class OkRestResponse extends RestResponse {
@@ -19,6 +21,11 @@ public class OkRestResponse extends RestResponse {
     private String data;
     private int status;
     
+    /**
+     * Get a new OkRestResponse from an OkHttp Response
+     * 
+     * @param response 
+     */
     public OkRestResponse(Response response) {
         this.res = response;
         try {
@@ -29,11 +36,21 @@ public class OkRestResponse extends RestResponse {
         }
     }
 
+    /**
+     * Get the entire body of received data.
+     * 
+     * @return 
+     */
     @Override
     public String data() {
         return this.data;
     }
 
+    /**
+     * Get the error (or success) code.
+     * 
+     * @return 
+     */
     @Override
     public int code() {
         return this.status;

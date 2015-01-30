@@ -1,16 +1,13 @@
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.utils.types.DefaultingMap;
-import com.orasi.utils.types.Reference;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +76,6 @@ public class PostmanCollection implements RestCollection {
                 "-- ID: {0} URL: {2} Method: {5} Name: {8} --");
         
         private final PostmanRequestData data;
-        private Reference<RestSession> session;
         
         /**
          * Create a PostmanRequest with the required data.
@@ -90,9 +86,7 @@ public class PostmanCollection implements RestCollection {
         private PostmanRequest(PostmanRequestData data) {
             this.data = data;
         }
-        
-        private String[] files;
-        
+                
         @Override
         public String toString() {
             return fmt.format(new Object[] { data.id, data.url, data.method, data.name });
@@ -109,8 +103,8 @@ public class PostmanCollection implements RestCollection {
         @Override
         public RestResponse send() throws Exception {
             OkHttpClient client = new OkHttpClient();
-            if(!Reference.isNull(session)) {
-                client.setCookieHandler(this.session.get().getCookieManager());
+            if(session() != null) {
+                client.setCookieHandler(session().getCookieManager());
             }
             RequestFormat format = null;
             switch(data.dataMode) {
@@ -120,8 +114,8 @@ public class PostmanCollection implements RestCollection {
                 case "raw": format = RequestFormat.RAW; break;
             }
             
-            Map variables = new DefaultingMap(getVariables(), session.get().env());
-            Request request = RestRequestHelpers.request(data.method, data.headers, applyParams(data.url), data.helperAttributes, format, data.data, data.rawModeData, variables, getFiles());
+            Map variables = new DefaultingMap(env(), session().env());
+            Request request = RestRequestHelpers.request(data.method, data.headers, applyParams(data.url), data.helperAttributes, format, data.data, data.rawModeData, variables, files());
             RestResponse response = new OkRestResponse(client.newCall(request).execute());
                         
             return response;
@@ -156,22 +150,12 @@ public class PostmanCollection implements RestCollection {
      * and folders, etc. However, the "requests" is further traversed to
      * make this collection useful.
      */
-    private static class PostmanCollectionData {        
-        private String id;
-        private String name;
-        private String description;
-        private List<String> order;
-        private List<String> folders;
-        private Date timestamp;
-        private Boolean synced;
-        private String remoteLink;
+    private static class PostmanCollectionData {
         private List<PostmanRequest> requests;
     }
     
-    private final Map<String, RestRequest> ids;
     private final Map<String, RestRequest> names;
-    private final Reference<RestSession> session;
-    private final Map defaultVariables;
+    private RestSession session;
     
     /**
      * A PostmanCollection requires data from its JSON file. This class can
@@ -181,14 +165,11 @@ public class PostmanCollection implements RestCollection {
      * @throws IOException 
      */
     private PostmanCollection(PostmanCollectionData data) throws IOException {
-        ids = new HashMap<String, RestRequest>();
         names = new HashMap<String, RestRequest>();
-        session = new Reference<RestSession>(new RestSession());
-        defaultVariables = new HashMap();
+        session = new RestSession();
         for(PostmanRequest req : data.requests) {
-            req.session = session;
-            ids.put(req.data.id, req);
             names.put(req.data.name, req);
+            req.session(session);
         }
     }
     
@@ -200,7 +181,7 @@ public class PostmanCollection implements RestCollection {
      */
     @Override
     public RestSession session() {
-        return this.session.get();
+        return this.session;
     }
     
     /**
@@ -212,7 +193,7 @@ public class PostmanCollection implements RestCollection {
      */
     @Override
     public RestCollection session(RestSession session) {
-        this.session.set(session);
+        this.session = session;
         return this;
     }
     

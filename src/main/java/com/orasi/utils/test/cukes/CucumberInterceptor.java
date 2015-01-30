@@ -13,9 +13,10 @@ import org.testng.IMethodInstance;
 import org.testng.IMethodInterceptor;
 import org.testng.ITestContext;
 import org.testng.collections.Maps;
-
 /**
- * Interceptor to change the order of the collection of tests.
+ * Interceptor to change the order of the collection of tests. This is used
+ * for a pretty printing view when the TestNG tests are also running in Maven
+ * or an IDE.
  * 
  * @author Brian Becker
  */

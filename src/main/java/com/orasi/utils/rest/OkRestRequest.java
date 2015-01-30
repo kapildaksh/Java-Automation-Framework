@@ -7,25 +7,48 @@ package com.orasi.utils.rest;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 /**
- *
+ * The OkRestRequest is an implementation of RestRequest which uses the
+ * OkHttp Request object to send the data and receive its response. It
+ * returns a RestResponse upon sending.
+ * 
  * @author Brian Becker
  */
 public class OkRestRequest extends RestRequest {
 
     private final Request req;
     
+    /**
+     * Get a new OkRestRequest from an OkHttp Request.
+     * 
+     * @param request 
+     */
     public OkRestRequest(Request request) {
         this.req = request;
     }
     
+    /**
+     * Get a "Dummy Response" from this request. The name of the request
+     * is simply the actual response body.
+     * 
+     * @param name
+     * @param node
+     * @return 
+     */
     @Override
     public ExpectedResponse response(String name, BaseExpectedNode node) {
-        throw new UnsupportedOperationException("ExpectedResponse Not Valid on Traditional Requests"); //To change body of generated methods, choose Tools | Templates.
+        return new ResponseVerifier(this, name, node);
     }
 
+    /**
+     * Send the Request and return a RestResponse upon receiving a real
+     * response. This is intended to normalize any API between different
+     * HTTP Clients.
+     * 
+     * @return
+     * @throws Exception 
+     */
     @Override
     public RestResponse send() throws Exception {
         OkHttpClient client = new OkHttpClient();

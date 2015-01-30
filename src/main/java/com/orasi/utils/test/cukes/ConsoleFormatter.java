@@ -43,6 +43,13 @@ import static gherkin.util.FixJava.map;
  * prettier. That is, with consistent indentation. This class is also a {@link Reporter},
  * which means it can be used to print execution results - highlighting arguments,
  * printing source information and exception information.
+ * 
+ * NOTE:
+ * This is pretty much an exact copy of the PrettyFormatter from Gherkin.
+ * However, it has a few added frills, such as actually being able to see
+ * the data tables and the doc strings in console output.
+ * 
+ * @author Brian Becker
  */
 public class ConsoleFormatter implements Reporter, Formatter {
     private final StepPrinter stepPrinter = new StepPrinter();

@@ -19,16 +19,13 @@ public class PostmanEnvironment extends AbstractMap {
     
     /**
      * This is an environment entry, basically just a key value store in 
-     * Json. This specifies all the variables and values, and you can
+     * JSON. This specifies all the variables and values, and you can
      * use these just like a regular map entry in a map.
      */
     public static class PostmanEnvironmentEntry implements Map.Entry<String, String> {
         
         private String key;
         private String value;
-        private String type;
-        private String name;
-        private Boolean enabled;
 
         @Override
         public String getKey() {
@@ -55,12 +52,7 @@ public class PostmanEnvironment extends AbstractMap {
      * bookkeeping functions.
      */
     private static class PostmanEnvironmentData {
-        private String id;
-        private String name;
         private Set<PostmanEnvironmentEntry> values;        
-        private Number timestamp;
-        private Boolean synced;
-        private String syncedFilename;
     }
     
     private final PostmanEnvironmentData data;

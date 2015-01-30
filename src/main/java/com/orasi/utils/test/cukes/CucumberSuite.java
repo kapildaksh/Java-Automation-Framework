@@ -15,9 +15,7 @@ import cucumber.runtime.model.CucumberTagStatement;
 import gherkin.formatter.Formatter;
 import java.util.LinkedList;
 import java.util.List;
-import org.testng.ITestContext;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Listeners;
 
@@ -95,10 +93,11 @@ public class CucumberSuite {
         return tests.toArray();
     }
     
-    @BeforeSuite
-    public void cucumberStart(ITestContext suite) {
-    }
-    
+    /**
+     * We want to close the formatter and runtime cleanly, as well as
+     * print a summary of the Cucumber tasks we have completed. The
+     * TestNG results are not as fine-grained.
+     */
     @AfterSuite
     public void cucumberDone() {
         formatter.done();

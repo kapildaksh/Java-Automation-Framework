@@ -62,6 +62,8 @@ public class CucumberScenarioTest implements ITest {
         }
         scenario.run(formatter, reporter, runtime);
         formatter.eof();
+        // Fail, skip, or undefined. However, we can only fail or skip tests,
+        // so let's call undefined a skip.
         switch(reporter.getLastResult().getStatus()) {
             case "failed":
                 throw reporter.getLastResult().getError();
