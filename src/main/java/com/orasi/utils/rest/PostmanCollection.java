@@ -153,7 +153,7 @@ public class PostmanCollection implements RestCollection {
         public JsonNode verify() {
             String res = null;
             try {
-                res = request.send().body().string();
+                res = request.send().data();
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -254,7 +254,7 @@ public class PostmanCollection implements RestCollection {
          * @throws Exception 
          */
         @Override
-        public Response send() throws Exception {
+        public RestResponse send() throws Exception {
             OkHttpClient client = new OkHttpClient();
             if(!Reference.isNull(session)) {
                 client.setCookieHandler(this.session.get().getCookieManager());
@@ -269,7 +269,7 @@ public class PostmanCollection implements RestCollection {
             
             Map variables = new DefaultingMap(getVariables(), requestDefaultVariables);
             Request request = RestRequestHelpers.request(data.method, data.headers, applyParams(data.url), data.helperAttributes, format, data.data, data.rawModeData, variables, getFiles());
-            Response response = client.newCall(request).execute();
+            RestResponse response = new OkRestResponse(client.newCall(request).execute());
                         
             return response;
         }

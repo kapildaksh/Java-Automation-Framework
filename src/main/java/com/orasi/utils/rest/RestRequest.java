@@ -42,7 +42,7 @@ public abstract class RestRequest {
     }
     
     public abstract ExpectedResponse response(String name, BaseExpectedNode node);
-    public abstract Response send() throws Exception;
+    public abstract RestResponse send() throws Exception;
     
     /**
      * Set an environment (list of variables) on the request. This

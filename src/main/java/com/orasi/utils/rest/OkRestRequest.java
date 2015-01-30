@@ -27,10 +27,10 @@ public class OkRestRequest extends RestRequest {
     }
 
     @Override
-    public Response send() throws Exception {
+    public RestResponse send() throws Exception {
         OkHttpClient client = new OkHttpClient();
         client.setCookieHandler(session().getCookieManager());
-        return client.newCall(req).execute();
+        return new OkRestResponse(client.newCall(req).execute());
     }
     
 }

@@ -7,7 +7,7 @@ package com.orasi.rest.misc;
 
 import com.orasi.api.demos.AccountInformation;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.orasi.utils.rest.Json;
 import com.orasi.utils.rest.Patch;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -17,23 +17,17 @@ import org.testng.annotations.Test;
  * @author brian.becker
  */
 public class PatchUtilityTest {
-    
-    private final ObjectMapper map;
-    
-    public PatchUtilityTest() {
-        this.map = new ObjectMapper();
-    }
-    
+        
     @Test
     public void buildPatchTest() throws Exception {
         Patch patch = new Patch.Builder().test("/username", "trfields").build();
         System.out.println(patch.toString());
-        JsonNode n = map.readTree(patch.toString());
+        JsonNode n = Json.Map.readTree(patch.toString());
         Assert.assertEquals(n.size(), 1);
         
         AccountInformation m = new AccountInformation("trfields", "T. R. Fields");
         
-        JsonNode toPatch = map.valueToTree(m);
+        JsonNode toPatch = Json.Map.valueToTree(m);
         Assert.assertNotNull(patch.apply(toPatch));
     }
     
@@ -44,7 +38,7 @@ public class PatchUtilityTest {
         
         AccountInformation m = new AccountInformation("trfields", "T. R. Fields");
         
-        JsonNode toPatch = map.valueToTree(m);
+        JsonNode toPatch = Json.Map.valueToTree(m);
         Assert.assertNotNull(patch.apply(toPatch));
         Assert.assertEquals(toPatch.at("/username").asText(), "trfields2");
     }
@@ -56,7 +50,7 @@ public class PatchUtilityTest {
         
         AccountInformation m = new AccountInformation("trfields", "T. R. Fields");
         
-        JsonNode toPatch = map.valueToTree(m);
+        JsonNode toPatch = Json.Map.valueToTree(m);
         Assert.assertNotNull(patch.apply(toPatch));
         Assert.assertTrue(toPatch.at("/username").isMissingNode());
     }
@@ -68,7 +62,7 @@ public class PatchUtilityTest {
         
         AccountInformation m = new AccountInformation("trfields", "T. R. Fields");
         
-        JsonNode toPatch = map.valueToTree(m);
+        JsonNode toPatch = Json.Map.valueToTree(m);
         Assert.assertNotNull(patch.apply(toPatch));
         Assert.assertEquals(toPatch.at("/username2").asText(), "testing");
     }
@@ -80,7 +74,7 @@ public class PatchUtilityTest {
         
         AccountInformation m = new AccountInformation("trfields", "T. R. Fields");
         
-        JsonNode toPatch = map.valueToTree(m);
+        JsonNode toPatch = Json.Map.valueToTree(m);
         Assert.assertNotNull(patch.apply(toPatch));
         Assert.assertEquals(toPatch.at("/username2").asText(), "trfields");
         Assert.assertTrue(toPatch.at("/username").isMissingNode());
@@ -93,7 +87,7 @@ public class PatchUtilityTest {
         
         AccountInformation m = new AccountInformation("trfields", "T. R. Fields");
         
-        JsonNode toPatch = map.valueToTree(m);
+        JsonNode toPatch = Json.Map.valueToTree(m);
         Assert.assertNotNull(patch.apply(toPatch));
         Assert.assertEquals(toPatch.at("/username2").asText(), "trfields");
         Assert.assertEquals(toPatch.at("/username2").asText(), "trfields");

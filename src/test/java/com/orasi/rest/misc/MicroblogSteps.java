@@ -10,6 +10,7 @@ import com.orasi.utils.rest.PostmanCollection;
 import com.orasi.utils.rest.PostmanEnvironment;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
+import com.orasi.utils.rest.RestResponse;
 import com.orasi.utils.types.DefaultingMap;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
@@ -79,7 +80,7 @@ public class MicroblogSteps {
     
     @Given("^I am logged in as (.*)$")
     public void logged_in(String user) throws Throwable {
-        Response res = collection.get("Login As " + user).send();
+        RestResponse res = collection.get("Login As " + user).send();
         Assert.assertEquals(res.code(), 200);                
     }
     
@@ -129,7 +130,7 @@ public class MicroblogSteps {
         Map m = new HashMap();
         m.put("first", first.toLowerCase());
         m.put("second", second.toLowerCase());
-        Response res = collection.get("Set Mutual Exclusion").env(m).send();
+        RestResponse res = collection.get("Set Mutual Exclusion").env(m).send();
         Assert.assertEquals(res.code(), 200);        
     }
     
@@ -138,7 +139,7 @@ public class MicroblogSteps {
         Map m = new HashMap();
         m.put("first", first.toLowerCase());
         m.put("second", second.toLowerCase());
-        Response res = collection.get("Unset Mutual Exclusion").env(m).send();
+        RestResponse res = collection.get("Unset Mutual Exclusion").env(m).send();
         Assert.assertEquals(res.code(), 200);
     }    
     
@@ -186,16 +187,14 @@ public class MicroblogSteps {
     
     @Then("^I expect a response matching:$")
     public void matches_doc(String response) throws Throwable {
-        Response res = request.env(env2).send();
-        JsonNode tree = Json.Map.readTree(res.body().string());
-        JsonNode expected = Json.Map.readTree(response);
-        node.verify(tree, expected);
+        RestResponse res = request.env(env2).send();
+        node.verify(res.json(), Json.Map.readTree(response));
     }    
     
     @Then("^I expect a response with code (\\d+) .*$")
     public void error_code(String code) throws Throwable {
-        Response res = request.env(env2).send();
-        Assert.assertEquals(String.valueOf(res.code()), code, res.body().string());
+        RestResponse res = request.env(env2).send();
+        Assert.assertEquals(String.valueOf(res.code()), code, res.data());
     }    
 
     @And("^I replace (.*) by (.*)$")
