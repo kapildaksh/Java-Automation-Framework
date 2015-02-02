@@ -44,8 +44,8 @@ public class CucumberSuite {
      * should be called with the class of the location of the Step Definitions
      * and the Feature Files (in the resource directory).
      * 
-     * @param clazz
-     * @throws ClassNotFoundException 
+     * @param   clazz       Class used for ClassLoader for Cucumber Resources
+     * @throws  ClassNotFoundException 
      */
     public CucumberSuite(Class clazz) throws ClassNotFoundException {
         RuntimeOptionsFactory runtimeOptionsFactory = new RuntimeOptionsFactory(clazz);
@@ -63,8 +63,8 @@ public class CucumberSuite {
      * Test Factory returns a complete TestNG Test class, annotated with a single
      * test. The test is generated from a feature file.
      * 
-     * @return 
-     * @throws java.lang.Exception 
+     * @return  Factory for generating TestNG Test classes
+     * @throws  java.lang.Exception 
      */    
     @Factory
     public Object[] cucumberFactory() throws Exception {

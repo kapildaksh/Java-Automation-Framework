@@ -79,11 +79,9 @@ public class CucumberScenarioTest implements ITest {
      * test name value. This is a pretty formatted name which consists
      * of the actual Scenario title, as well as the parameters if
      * the scenario is actually a scenario outline.
-     * 
-     * @param params
      */
     @BeforeMethod(alwaysRun = true)
-    public void before(Object[] params) {
+    public void before() {
         testName = scenario.getGherkinModel().getName();
         if(outline != null) {
             testName = testName + " [" + scenario.getVisualName().substring(1,scenario.getVisualName().length() - 1) + "]";
@@ -95,7 +93,7 @@ public class CucumberScenarioTest implements ITest {
      * Name. It will be displayed in NetBeans and Eclipse test frontends,
      * and is needed to implement ITest.
      * 
-     * @return test name
+     * @return  Name of this Cucumber Scenario
      */
     @Override
     public String getTestName() {
@@ -108,7 +106,7 @@ public class CucumberScenarioTest implements ITest {
      * so that the entire sequence of scenarios is executed in a well
      * defined order according to the specifications.
      * 
-     * @return 
+     * @return  Priority (ordering) for this Test
      */
     public int priority() {
         return this.priority;

@@ -28,9 +28,9 @@ public class RestRequestHelpers {
      * Generate the key and value strings for the request data by processing
      * them through the variable formatter.
      * 
-     * @param data
-     * @param variables
-     * @return 
+     * @param   data            List of data entries for non-raw data
+     * @param   variables       Map of variables
+     * @return  List of processed request data
      */
     public static List<RequestData> variables(List<RequestData> data, Map variables) {
         List<RequestData> data2 = new LinkedList<RequestData>();
@@ -45,6 +45,17 @@ public class RestRequestHelpers {
         return data2;
     }
     
+    /**
+     * Generate the correct URL string for the request by processing it through
+     * the variable formatter. This does not replace the parameters in the
+     * URL, solely the actual templated variables which are either in a
+     * global or local scope. Non-resolvable variables will remain the variable
+     * name encased in the {{ }} string.
+     * 
+     * @param   url             Unprocessed URL
+     * @param   variables       Map of variables
+     * @return  Processed URL
+     */
     public static String variables(String url, Map variables) {
         return format(url, variables);
     }
@@ -58,12 +69,20 @@ public class RestRequestHelpers {
     }
     
     /**
-     * Generate a set of headers from a simple string split by newlines.
+     * Generate a set of headers from a simple string split by newlines. This
+     * method will additionally remove any Authorization headers and replace
+     * with the proper encoded values. The Authorization header is not
+     * necessary when there is authentication data.
      * 
-     * @param headers
-     * @param auth
-     * @param variables
-     * @return 
+     * NOTE: Rework this for holding auth header data in a non-plaintext
+     * form. We could just go ahead and preprocess with Base64, etc. We
+     * should probably instead use variables, as that would break compat
+     * with actual Postman for editing.
+     * 
+     * @param   headers     String containing \n separated headers
+     * @param   auth        Map of username, password, etc.
+     * @param   variables   Substitution variables
+     * @return  OkHttp Headers object
      */
     public static Headers headers(String headers, Map auth, Map variables) {
         Headers.Builder hdrs = new Headers.Builder();
@@ -85,19 +104,21 @@ public class RestRequestHelpers {
     }
     
     /**
-     * Create a request based on a request type, a string header, url, and body.
+     * The main REST request generation method. This is a long method designed
+     * solely to delegate to headers and auth processing, url processing, data
+     * processing, as well as files and parameters attachment.
      * 
-     * @param type
-     * @param headers
-     * @param url
-     * @param auth
-     * @param format
-     * @param data
-     * @param rawModeData
-     * @param variables
-     * @param parameters
-     * @return 
-     * @throws java.lang.Exception 
+     * @param   type            GET, POST, PUT, PATCH...
+     * @param   headers         Request Headers
+     * @param   url             Unsubstituted URL
+     * @param   auth            Authentication Info (user, pass)
+     * @param   format          URL Encoded, RAW, Multipart Form...
+     * @param   data            Unsubstituted, unserialized data
+     * @param   rawModeData     Raw data to be sent
+     * @param   variables       Map containing variables and values
+     * @param   parameters      Parameters for the various data formats
+     * @return  Request in the form of an OkHttp request
+     * @throws  java.lang.Exception 
      */
     public static Request request(RestRequest.RequestType type, String headers, String url, Map auth, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, Map variables, List<String> parameters) throws Exception {
         url = RestRequestHelpers.variables(url, variables);
@@ -133,14 +154,14 @@ public class RestRequestHelpers {
     }
     
     /**
-     * Encode a request body with URL encoder. If it's a get request, create or
+     * Encode a request body with URL encoder. If it's a GET request, create or
      * add to the URL parameters.
      * 
-     * @param type
-     * @param url
-     * @param data
-     * @return
-     * @throws Exception 
+     * @param   type        type of request (we need to know if it's GET)
+     * @param   url         url for GET requests
+     * @param   data        data to serialize
+     * @return  ( new body, new URL string)
+     * @throws  Exception 
      */
     public static Pair<RequestBody, String> urlencode(RestRequest.RequestType type, String url, List<RequestData> data) throws Exception {
         StringBuilder text = new StringBuilder("");
@@ -169,9 +190,9 @@ public class RestRequestHelpers {
      * request data. This format can handle sending files, the parameters
      * are the file contents, not file name.
      * 
-     * @param data
-     * @param parameters
-     * @return 
+     * @param   data        data to serialize
+     * @param   parameters  parameters, which are file contents
+     * @return  Request Body for message to send
      */
     public static RequestBody params(List<RequestData> data, List<String> parameters) {
         int fileIdx = 0;
@@ -196,8 +217,8 @@ public class RestRequestHelpers {
      * Raw mode passes a single string into the request body which has been
      * generated through some method such as a JSON generator.
      * 
-     * @param rawModeData
-     * @return 
+     * @param   rawModeData data to serialize
+     * @return  Request Body for message to send
      */
     public static RequestBody raw(String rawModeData) {
         return RequestBody.create(null, rawModeData);
@@ -207,8 +228,8 @@ public class RestRequestHelpers {
      * Simple case of the params request body function, there is only one
      * file.
      * 
-     * @param parameters
-     * @return 
+     * @param   parameters  a request which consists of a single file
+     * @return  Request Body for message to send
      */
     public static RequestBody binary(List<String> parameters) {
         return RequestBody.create(null, parameters.get(0));

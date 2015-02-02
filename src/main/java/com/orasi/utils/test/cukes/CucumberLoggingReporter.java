@@ -33,6 +33,14 @@ public class CucumberLoggingReporter implements Reporter {
         this.reporter.result(result);
     }
     
+    /**
+     * We can grab the last result of the reporter, which can be used to
+     * launch a particular action by the TestNG Test: Passed, we can do
+     * nothing. Skipped or Undefined, we can throw a Skipped Exception.
+     * Failed, we can throw an error which we receive from this result.
+     * 
+     * @return      Last result which the reporter itself was given
+     */
     public Result getLastResult() {
         return this.resultValue;
     }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.utils.test.cukes;
 
 import java.util.Collections;
@@ -13,6 +8,7 @@ import org.testng.IMethodInstance;
 import org.testng.IMethodInterceptor;
 import org.testng.ITestContext;
 import org.testng.collections.Maps;
+
 /**
  * Interceptor to change the order of the collection of tests. This is used
  * for a pretty printing view when the TestNG tests are also running in Maven
@@ -23,6 +19,14 @@ import org.testng.collections.Maps;
 public class CucumberInterceptor implements IMethodInterceptor {
     private final Map<Class, List<Object>> m_instances = Maps.newHashMap();
 
+    /**
+     * Intercept the method instances as they are about to be passed to the
+     * test runner.
+     * 
+     * @param   methods     Methods to be re-ordered
+     * @param   context     Test Context
+     * @return  List of Method Instances in desired order
+     */
     @Override
     public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context) {
         Comparator<IMethodInstance> comparator = new Comparator<IMethodInstance>() {

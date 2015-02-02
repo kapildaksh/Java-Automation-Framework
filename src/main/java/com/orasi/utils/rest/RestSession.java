@@ -9,17 +9,28 @@ import java.util.Map;
  * which can be used to store state-related data. Primarily, in the realm of
  * web services we will be dealing with cookies which hold a session key.
  * 
- * @author Brian Becker
+ * @author  Brian Becker
  */
 public class RestSession {
     
     private final CookieManager cookieManager = new CookieManager();
     private Map environment;
     
+    /**
+     * Create a new RestSession. This is a repository for a given RestCollection
+     * of various types of information, such as cookie manager, global
+     * environment variables, etc.
+     */
     public RestSession() {
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
     }
     
+    /**
+     * Retrieve the CookieManager. This is used for transferring the state
+     * of login between different RestCollection's.
+     * 
+     * @return CookieManager
+     */
     public CookieManager getCookieManager() {
         return this.cookieManager;
     }
@@ -31,8 +42,8 @@ public class RestSession {
      * values from these replacements will always be overloaded by local
      * variables.
      * 
-     * @param variables
-     * @return 
+     * @param   variables       Environment to be used as a global
+     * @return  this
      */    
     public RestSession env(Map variables) {
         this.environment = variables;
@@ -44,7 +55,7 @@ public class RestSession {
      * session-wide variable so that it's assignable to every single item
      * in the collection.
      * 
-     * @return 
+     * @return  Environment which is being used as a global
      */
     public Map env() {
         return this.environment;
