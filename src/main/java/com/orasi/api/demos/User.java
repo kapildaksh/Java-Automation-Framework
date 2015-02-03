@@ -8,7 +8,7 @@ package com.orasi.api.demos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.orasi.utils.types.Reference;
+import com.orasi.utils.types.Name;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -41,7 +41,7 @@ public class User {
         return this.groups;
     }
     
-    public Set<Reference<User>> friends;
+    public Set<Name<User>> friends;
     
     @Override
     public String toString() {

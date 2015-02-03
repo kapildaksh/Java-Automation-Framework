@@ -1,8 +1,6 @@
 package com.orasi.utils.types;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Objects;
 
 /**
@@ -31,7 +29,7 @@ public class Reference<T> {
     /**
      * Get the value stored in the reference.
      * 
-     * @return 
+     * @return
      */
     public T get() {
         return this.value;
@@ -84,7 +82,7 @@ public class Reference<T> {
     @Override
     public boolean equals(Object o) {
         if(o instanceof Reference) {
-            return this.name().equals(((Reference)o).name());
+            return this.value.equals(((Reference)o).value);
         } else {
             return false;
         }
@@ -92,38 +90,7 @@ public class Reference<T> {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.name());
-    }
-    
-    /**
-     * The JSON serialization is simply the name of the reference. This means
-     * all references will only ever return the value of the reference's
-     * name, never the value.
-     * 
-     * @return 
-     */
-    @JsonValue
-    public String name () {
-        return this.value.toString();
-    }
-    
-    /**
-     * Get a reference with the given name. We add a NoValue into the
-     * reference to signify that it has no real value assigned to it.
-     * This implementation could use a centralized repository, which
-     * would provide the ability to determine if the reference truly
-     * is invalid.
-     * 
-     * NOTE: With no centralized lookup repository, the fact that one has
-     * a reference with a name and a NoValue does not mean there is actually
-     * no value assigned to another given object.
-     * 
-     * @param ref
-     * @return 
-     */
-    @JsonCreator
-    public static Reference<Object> name (String ref) {
-        return new Reference<Object>(new NoValue());
+        return Objects.hashCode(this.value);
     }
     
     /**

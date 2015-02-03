@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 import com.orasi.api.demos.Message.Type;
 import com.orasi.utils.rest.Json;
 import com.orasi.utils.rest.Patch;
-import com.orasi.utils.types.Reference;
+import com.orasi.utils.types.Name;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -99,7 +99,7 @@ public class MockMicroblogServer {
 
     }
     
-    private static final Map<String, Reference<User>> users = new HashMap<String, Reference<User>>();
+    private static final Map<String, Name<User>> users = new HashMap<String, Name<User>>();
     private static final MultiMap tagdir = new MultiValueMap();
     private static final MultiMap groups = new MultiValueMap();
     private static final MultiMap exclusions = new MultiValueMap();
@@ -314,7 +314,7 @@ public class MockMicroblogServer {
                     res.status(409);
                     return new Message(Type.ERROR, "User already exists.");
                 }
-                users.put(u.username, new Reference<User>(u));
+                users.put(u.username, new Name<User>(u));
                 return new Message(Type.INFORMATIONAL, "User added.");
             }
         }, new JsonTransformer());        
@@ -323,8 +323,8 @@ public class MockMicroblogServer {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
-                Reference<User> user = users.get(req.params(":name"));
-                return Reference.safeGet(user);
+                Name<User> user = users.get(req.params(":name"));
+                return Name.safeGet(user);
             }
         }, new JsonTransformer());
         
@@ -335,7 +335,7 @@ public class MockMicroblogServer {
                     srv.halt(403, "Forbidden");
                 }
                 res.type("application/json; charset=UTF-8");
-                Reference<User> u = users.get(req.params(":name"));
+                Name<User> u = users.get(req.params(":name"));
                 u.set((User) Patch.patch(req.body(), u.get()));
                 return new Message(Type.INFORMATIONAL, "New Username: ".concat(u.get().username));                    
             }
@@ -348,7 +348,7 @@ public class MockMicroblogServer {
                     srv.halt(403, "Forbidden");
                 }
                 res.type("application/json; charset=UTF-8");
-                return Reference.isNull(users.remove(req.params(":name"))) ? new Message(Type.ERROR, "Could not find user.") : new Message(Type.INFORMATIONAL, "User removed.");
+                return Name.isNull(users.remove(req.params(":name"))) ? new Message(Type.ERROR, "Could not find user.") : new Message(Type.INFORMATIONAL, "User removed.");
             }
         }, new JsonTransformer());
         
@@ -362,8 +362,8 @@ public class MockMicroblogServer {
                 String fn = req.params(":friend");
                 String mn = req.params(":name");
                 if(users.containsKey(mn) && users.containsKey(fn)) {
-                    Reference<User> u = users.get(mn);
-                    Reference<User> u2 = users.get(fn);
+                    Name<User> u = users.get(mn);
+                    Name<User> u2 = users.get(fn);
                     if(u.get().friends == null)
                         u.get().friends = new HashSet();
                     u.get().friends.add(u2);
@@ -383,8 +383,8 @@ public class MockMicroblogServer {
                 String fn = req.params(":friend");
                 String mn = req.params(":name");
                 if(users.containsKey(mn) && users.containsKey(fn)) {
-                    Reference<User> u = users.get(mn);
-                    Reference<User> u2 = users.get(fn);
+                    Name<User> u = users.get(mn);
+                    Name<User> u2 = users.get(fn);
                     if(u.get().friends.contains(u2)) {
                         u.get().friends.remove(u2);
                         return new Message(Type.INFORMATIONAL, "Friend removed.");
@@ -404,7 +404,7 @@ public class MockMicroblogServer {
                 Post p = Json.Map.readValue(req.body(), Post.class);
                 p.created = new Date();
                 if(users.containsKey(req.params(":name"))) {
-                    Reference<User> u = users.get(req.params(":name"));
+                    Name<User> u = users.get(req.params(":name"));
                     if(u.get().posts == null) {
                         u.get().posts = new ArrayList<Post>();
                     }
@@ -426,7 +426,7 @@ public class MockMicroblogServer {
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
                 if(users.containsKey(req.params(":name"))) {
-                    Reference<User> u = users.get(req.params(":name"));
+                    Name<User> u = users.get(req.params(":name"));
                     if(u.get().posts == null) {
                         u.get().posts = new ArrayList<Post>();
                     }
@@ -442,7 +442,7 @@ public class MockMicroblogServer {
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
                 if(users.containsKey(req.params(":name"))) {
-                    Reference<User> u = users.get(req.params(":name"));
+                    Name<User> u = users.get(req.params(":name"));
                     int number = Integer.valueOf(req.params(":number"));
                     if(number < u.get().posts.size()) {
                         return u.get().posts.get(number);
