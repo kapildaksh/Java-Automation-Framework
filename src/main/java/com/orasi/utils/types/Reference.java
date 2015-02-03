@@ -11,16 +11,14 @@ import java.util.Objects;
  * @param <T>
  */
 public class Reference<T> {
-    
-    public static class NoValue { }
-    
+       
     @JsonIgnore
-    public T value;
+    private T value;
     
     /**
      * Set the value stored in the reference.
      * 
-     * @param value 
+     * @param   value   Value to set the reference to
      */
     public void set(T value) {
         this.value = value;
@@ -29,7 +27,7 @@ public class Reference<T> {
     /**
      * Get the value stored in the reference.
      * 
-     * @return
+     * @return  value stored in the reference
      */
     public T get() {
         return this.value;
@@ -39,7 +37,7 @@ public class Reference<T> {
      * Create a new reference with a given value, which can be
      * replaced.
      * 
-     * @param value 
+     * @param   value 
      */
     public Reference(T value) {
         this.value = value;
@@ -50,25 +48,13 @@ public class Reference<T> {
      * reference null. There is a difference, and this is safer against
      * null pointer exceptions.
      * 
-     * @param i
+     * @param   i       Value to check for null
      * @return 
      */
     public static boolean isNull(Reference i) {
         return i == null || i.value == null;
     }
     
-    /**
-     * The reference name being equal means the reference is equal. This
-     * is an assumption which is made to allow for working around a few
-     * issues with JSON serialization.
-     * 
-     * NOTE: With no centralized lookup repository, the fact that one has
-     * a reference with a name and a NoValue does not mean there is actually
-     * no value assigned to another given object.
-     * 
-     * @param   o   object to compare with
-     * @return  are the two objects equal
-     */
     @Override
     public boolean equals(Object o) {
         if(o instanceof Reference) {
@@ -86,12 +72,25 @@ public class Reference<T> {
     /**
      * Safely get the value, even if the reference is null.
      * 
-     * @param <T>
-     * @param i
-     * @return 
+     * @param   <T>
+     * @param   i
+     * @return  Value that reference points to
      */
-    public static <T> T safeGet(Reference<T> i) {
-        return i == null ? null : (i.value == null) ? null : i.value;
+    public static <T> T get(Reference<T> i) {
+        return (T) i == null ? null : (i.value == null) ? null : i.value;
     }
+    
+    /**
+     * Safely set the value, even if the reference is null.
+     * 
+     * @param   <T>     Type of values
+     * @param   i       Reference
+     * @param   value   Value to assign reference
+     */
+    public static <T> void set(Reference<T> i, T value) {
+        if(i != null) {
+            i.value = value;
+        }
+    }    
     
 }

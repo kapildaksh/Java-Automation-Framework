@@ -149,7 +149,7 @@ public class MockMicroblogServer {
                     String auth = req.headers("Authorization").split(" ")[1];
                     auth = StringUtils.newStringUtf8(Base64.decodeBase64(auth));
                     String creds[] = auth.split(":");
-                    if(!users.get(creds[0]).value.password.equals(creds[1])) {
+                    if(!Name.get(users.get(creds[0])).password.equals(creds[1])) {
                         srv.halt(401, "Invalid authorization.");
                     } else {
                         s.attribute("user", creds[0]);
@@ -203,7 +203,7 @@ public class MockMicroblogServer {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 String user = req.session().attribute("user");
-                User u = users.get(user).value;
+                User u = Name.get(users.get(user));
                 if(user == null) {
                     srv.halt(401, "Unauthorized");
                 }                
@@ -225,7 +225,7 @@ public class MockMicroblogServer {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 String user = req.session().attribute("user");
-                User u = users.get(user).value;
+                User u = Name.get(users.get(user));
                 if(user == null) {
                     srv.halt(401, "Unauthorized");
                 }
@@ -250,7 +250,7 @@ public class MockMicroblogServer {
             @Override
             public Object handle(Request req, Response res) throws Exception {
                 String user = req.session().attribute("user");
-                User u = users.get(user).value;                
+                User u = Name.get(users.get(user));
                 if(user == null) {
                     srv.halt(401, "Unauthorized");
                 }
@@ -259,7 +259,7 @@ public class MockMicroblogServer {
                     res.status(409);
                     return new Message(Type.ERROR, "Not a member of the group.");
                 }
-                users.get(user).value.groups.add(req.params(":name"));
+                Name.get(users.get(user)).groups.add(req.params(":name"));
                 groups.remove(req.params(":name"), req.session().attribute("user"));
                 u.groups.remove(req.params(":name"));
                 return new Message(Type.INFORMATIONAL, "Group left.");
@@ -324,7 +324,7 @@ public class MockMicroblogServer {
             public Object handle(Request req, Response res) throws Exception {
                 res.type("application/json; charset=UTF-8");
                 Name<User> user = users.get(req.params(":name"));
-                return Name.safeGet(user);
+                return Name.get(user);
             }
         }, new JsonTransformer());
         
@@ -336,8 +336,8 @@ public class MockMicroblogServer {
                 }
                 res.type("application/json; charset=UTF-8");
                 Name<User> u = users.get(req.params(":name"));
-                u.set((User) Patch.patch(req.body(), u.get()));
-                return new Message(Type.INFORMATIONAL, "New Username: ".concat(u.get().username));                    
+                u.set((User) Patch.patch(req.body(), Name.get(u)));
+                return new Message(Type.INFORMATIONAL, "New Username: ".concat(Name.get(u).username));                    
             }
         }, new JsonTransformer());
         
@@ -364,9 +364,9 @@ public class MockMicroblogServer {
                 if(users.containsKey(mn) && users.containsKey(fn)) {
                     Name<User> u = users.get(mn);
                     Name<User> u2 = users.get(fn);
-                    if(u.get().friends == null)
-                        u.get().friends = new HashSet();
-                    u.get().friends.add(u2);
+                    if(Name.get(u).friends == null)
+                        Name.get(u).friends = new HashSet();
+                    Name.get(u).friends.add(u2);
                     return new Message(Type.INFORMATIONAL, "Added friend to set.");
                 }
                 return new Message(Type.ERROR, "Could not find user or friend.");
@@ -385,8 +385,8 @@ public class MockMicroblogServer {
                 if(users.containsKey(mn) && users.containsKey(fn)) {
                     Name<User> u = users.get(mn);
                     Name<User> u2 = users.get(fn);
-                    if(u.get().friends.contains(u2)) {
-                        u.get().friends.remove(u2);
+                    if(Name.get(u).friends.contains(u2)) {
+                        Name.get(u).friends.remove(u2);
                         return new Message(Type.INFORMATIONAL, "Friend removed.");
                     }
                 }
@@ -405,11 +405,11 @@ public class MockMicroblogServer {
                 p.created = new Date();
                 if(users.containsKey(req.params(":name"))) {
                     Name<User> u = users.get(req.params(":name"));
-                    if(u.get().posts == null) {
-                        u.get().posts = new ArrayList<Post>();
+                    if(Name.get(u).posts == null) {
+                        Name.get(u).posts = new ArrayList<Post>();
                     }
-                    p.id = u.get().posts.size();
-                    u.get().posts.add(p);
+                    p.id = Name.get(u).posts.size();
+                    Name.get(u).posts.add(p);
                     for(String tag : p.getTags()) {
                         tagdir.put(tag, p);
                     }
@@ -427,10 +427,10 @@ public class MockMicroblogServer {
                 res.type("application/json; charset=UTF-8");
                 if(users.containsKey(req.params(":name"))) {
                     Name<User> u = users.get(req.params(":name"));
-                    if(u.get().posts == null) {
-                        u.get().posts = new ArrayList<Post>();
+                    if(Name.get(u).posts == null) {
+                        Name.get(u).posts = new ArrayList<Post>();
                     }
-                    return new ArrayOffset(req.queryParams("offset"), 20, Lists.reverse(u.get().posts));
+                    return new ArrayOffset(req.queryParams("offset"), 20, Lists.reverse(Name.get(u).posts));
                 }
                 res.status(404);
                 return new Message(Type.ERROR, "Could not find user.");
@@ -444,8 +444,8 @@ public class MockMicroblogServer {
                 if(users.containsKey(req.params(":name"))) {
                     Name<User> u = users.get(req.params(":name"));
                     int number = Integer.valueOf(req.params(":number"));
-                    if(number < u.get().posts.size()) {
-                        return u.get().posts.get(number);
+                    if(number < Name.get(u).posts.size()) {
+                        return Name.get(u).posts.get(number);
                     } else {
                         return new Message(Type.ERROR, "Could not find post.");
                     }

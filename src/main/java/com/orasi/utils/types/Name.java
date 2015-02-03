@@ -1,7 +1,6 @@
 package com.orasi.utils.types;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Objects;
 
@@ -12,30 +11,9 @@ import java.util.Objects;
  * @author Brian Becker
  * @param <T>
  */
-public class Name<T> {
+public class Name<T> extends Reference<T> {
     
-    public static class NoValue { }
-    
-    @JsonIgnore
-    public T value;
-    
-    /**
-     * Set the value stored in the reference.
-     * 
-     * @param value 
-     */
-    public void set(T value) {
-        this.value = value;
-    }
-    
-    /**
-     * Get the value stored in the reference.
-     * 
-     * @return
-     */
-    public T get() {
-        return this.value;
-    }
+    public static class NoValue<T> { }
     
     /**
      * Create a new reference with a given value, which can be
@@ -44,19 +22,7 @@ public class Name<T> {
      * @param value 
      */
     public Name(T value) {
-        this.value = value;
-    }
-    
-    /**
-     * Is the value stored in the reference null, or is the value of the
-     * reference null. There is a difference, and this is safer against
-     * null pointer exceptions.
-     * 
-     * @param   i   is the object null
-     * @return 
-     */
-    public static boolean isNull(Name i) {
-        return i == null || i.value == null;
+        super(value);
     }
     
     /**
@@ -94,7 +60,7 @@ public class Name<T> {
      */
     @JsonValue
     public String name () {
-        return this.value.toString();
+        return this.get().toString();
     }
     
     /**
@@ -108,23 +74,13 @@ public class Name<T> {
      * a reference with a name and a NoValue does not mean there is actually
      * no value assigned to another given object.
      * 
+     * @param   <T>     Type of the object
      * @param   ref     Name of the object
      * @return 
      */
     @JsonCreator
-    public static Name<Object> name (String ref) {
-        return new Name<Object>(new NoValue());
-    }
-    
-    /**
-     * Safely get the value, even if the reference is null.
-     * 
-     * @param   <T>     Type of the object
-     * @param   i       Object to attempt to get value from
-     * @return 
-     */
-    public static <T> T safeGet(Name<T> i) {
-        return i == null ? null : (i.value == null) ? null : i.value;
+    public static <T> Name<T> name (String ref) {
+        return new Name<T>(null);
     }
     
 }
