@@ -7,6 +7,8 @@ package com.orasi.utils.rest;
 
 import com.orasi.utils.rest.RestRequest.RequestData;
 import com.squareup.okhttp.Request;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,17 +19,16 @@ import java.util.Map;
  * @author Brian Becker
  */
 public class RestRequestBuilder {    
-    private RestRequest.RequestType method;
-    private RestRequest.RequestFormat format;
-    private List<RequestData> data;
-    private String rawData;
-    private Map variables;
-    private Map helperAttributes;
-    private List<String> files;
+    private RestRequest.RequestType method = RestRequest.RequestType.GET;
+    private RestRequest.RequestFormat format = RestRequest.RequestFormat.RAW;
+    private List<RequestData> data = new LinkedList<RequestData>();
+    private String rawData = "{}";
+    private Map variables = new HashMap();
+    private Map helperAttributes = new HashMap();
+    private List<String> files = new LinkedList<String>();
     private final Request.Builder builder = new Request.Builder();
     
     public RestRequestBuilder() {
-        
     }
     
     public RestRequestBuilder method(RestRequest.RequestType method) {
