@@ -14,6 +14,8 @@ import java.util.Objects;
  */
 public class Reference<T> {
     
+    public static class NoValue { }
+    
     @JsonIgnore
     public T value;
     
@@ -70,10 +72,14 @@ public class Reference<T> {
     /**
      * The reference name being equal means the reference is equal. This
      * is an assumption which is made to allow for working around a few
+     * issues with JSON serialization.
      * 
+     * NOTE: With no centralized lookup repository, the fact that one has
+     * a reference with a name and a NoValue does not mean there is actually
+     * no value assigned to another given object.
      * 
-     * @param o
-     * @return 
+     * @param   o   object to compare with
+     * @return  are the two objects equal
      */
     @Override
     public boolean equals(Object o) {
@@ -102,14 +108,22 @@ public class Reference<T> {
     }
     
     /**
-     * Get a reference with the given name.
+     * Get a reference with the given name. We add a NoValue into the
+     * reference to signify that it has no real value assigned to it.
+     * This implementation could use a centralized repository, which
+     * would provide the ability to determine if the reference truly
+     * is invalid.
+     * 
+     * NOTE: With no centralized lookup repository, the fact that one has
+     * a reference with a name and a NoValue does not mean there is actually
+     * no value assigned to another given object.
      * 
      * @param ref
      * @return 
      */
     @JsonCreator
     public static Reference<Object> name (String ref) {
-        return new Reference<Object>(ref);
+        return new Reference<Object>(new NoValue());
     }
     
     /**
