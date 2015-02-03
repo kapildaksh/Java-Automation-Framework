@@ -7,7 +7,14 @@ import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 
 /**
  * Static instances of ObjectMapper components, as well as other components
- * which are safe to be shared as single static instances. 
+ * which are safe to be shared as single static instances. These components
+ * should not incur any performance penalty to be shared between all
+ * instances of a given runtime.
+ * 
+ * Additionally, some of the components, such as the ObjectMapper, are safe
+ * for use with multiple threads concurrently. However, the configuration of
+ * these is not. If you need a configured variant, they must be generated
+ * per-instance.
  * 
  * @author Brian Becker
  */

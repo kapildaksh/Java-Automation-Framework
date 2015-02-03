@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.node.MissingNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 /**
- * The root node of an ExpectedResponse, this abstract class is extended by
- * implementations of ExpectedResponse to allow traversing the JSON nodes
- * and altering the values.
+ * The root node of an ExpectedResponse, this class is extended by objects
+ * which want to be able to expose a way to transform the expected response
+ * for a given validation.
  * 
  * @author Brian Becker
  */
@@ -18,10 +18,24 @@ public class BaseExpectedNode {
     protected final Patch ignores;
     protected final Patch patches;    
     
+    /**
+     * A new BaseExpectedNode. This should be exposed via all objects which
+     * want to allow the user to change the expectations of a validation.
+     */
     public BaseExpectedNode() {
         this("", new Patch(), new Patch());
     }
     
+    /**
+     * A new BaseExpectedNode with the given patch path, ignores, patches,
+     * etc. This should be used for generating an expected node which is
+     * only intended to be used on a certain subset of the data that can
+     * be specified as a single path.
+     * 
+     * @param   newPatchPath    Where the patches should be applied. "" is /
+     * @param   ignores         What patches should be applied to both nodes
+     * @param   patches         What patches should be applied to expected only
+     */
     public BaseExpectedNode(String newPatchPath, Patch ignores, Patch patches) {
         this.newPatchPath = newPatchPath;
         this.ignores = ignores;
@@ -32,7 +46,7 @@ public class BaseExpectedNode {
      * Travel to the given path, from this node. Uses the Jackson-style path
      * selection, strings (for object) and integers (for arrays).
      * 
-     * @param path  Target path, Integers or Strings only.
+     * @param   path        Target path, Integers or Strings only.
      * @return 
      */
     public ExpectedNode path(Object... path) {
@@ -43,7 +57,7 @@ public class BaseExpectedNode {
      * Travel to the given path, from this node. Uses the JSON Pointer style
      * path selection.
      * 
-     * @param path  Target path, String specifying JSON Pointer
+     * @param   path        Target path, String specifying JSON Pointer
      * @return 
      */
     public ExpectedNode at(String path) {
@@ -53,8 +67,8 @@ public class BaseExpectedNode {
     /**
      * Apply the expectation modifications to the real JsonNode.
      * 
-     * @param node
-     * @param expected
+     * @param   node        node to be verified
+     * @param   expected    node which specifies what's required
      * @return 
      */
     public JsonNode verify(JsonNode node, JsonNode expected) {
@@ -70,8 +84,8 @@ public class BaseExpectedNode {
      * is not JSON data, then we simply compare it with the real string
      * value.
      * 
-     * @param node
-     * @param expected
+     * @param   node        node to be verified
+     * @param   expected    node which specifies what's required
      * @return 
      */
     public JsonNode verify(String node, String expected) {

@@ -6,8 +6,6 @@ import java.net.URL;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import okio.Okio;
 
 /**

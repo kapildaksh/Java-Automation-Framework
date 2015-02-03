@@ -18,6 +18,11 @@ public class CucumberLoggingReporter implements Reporter {
     private Result resultValue;
     private final Reporter reporter;
     
+    /**
+     * Create a new logging reporter.
+     * 
+     * @param   r   Reporter to tie this reporter to
+     */
     public CucumberLoggingReporter(Reporter r) {
         this.reporter = r;
     }

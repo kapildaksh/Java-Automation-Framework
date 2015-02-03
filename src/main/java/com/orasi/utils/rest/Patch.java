@@ -28,6 +28,9 @@ import java.util.logging.Logger;
  */
 public class Patch {
 
+    /**
+     * An operation on a JSON tree, for use with the Patch Entry type.
+     */
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     public static enum Op {        
         TEST, REMOVE, ADD, REPLACE, MOVE, COPY;
@@ -38,6 +41,10 @@ public class Patch {
         }
     }
     
+    /**
+     * The primary building block of the Patch type, this entry is an atomic
+     * operation to be performed on a JSON tree.
+     */
     public static class PatchEntry {
         public final Op op;
         @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -46,6 +53,17 @@ public class Patch {
         @JsonInclude(JsonInclude.Include.NON_NULL)
         public final JsonNode value;
                
+        /**
+         * A Patch Entry is the primary building block of the Patch type,
+         * which contains all of the properties in one element of a Patch.
+         * Not all values will be used in patch entries, only the ones
+         * which make sense for a given patch type.
+         * 
+         * @param   op      patching operation (test, remove, add, replace, move, copy)
+         * @param   from    source of operation involving another path
+         * @param   path    primary path argument
+         * @param   value   value to add, insert, etc to location.
+         */
         @JsonCreator
         public PatchEntry(@JsonProperty("op") Op op, @JsonProperty("from") String from, @JsonProperty("path") String path, @JsonProperty("value") Object value) {
             if(!(value instanceof JsonNode)) {
@@ -57,6 +75,13 @@ public class Patch {
             this.op = op; this.path = path; this.from = from;
         }
         
+        /**
+         * This method removes the element with the given name or index
+         * under the specified node.
+         * 
+         * @param   node    node to erase element from
+         * @param   element element to erase
+         */
         private void remove(JsonNode node, String element) {
             if(node instanceof ObjectNode) {
                 ((ObjectNode)node).remove(element);
@@ -65,6 +90,13 @@ public class Patch {
             }
         }
         
+        /**
+         * This method replaces the node with a value.
+         * 
+         * @param   node    node to replace value in
+         * @param   element ary key or array index
+         * @param   value   value to be replaced with
+         */
         private void replace(JsonNode node, String element, JsonNode value) {
             if(node instanceof ObjectNode) {
                 ((ObjectNode)node).set(element, value);
@@ -73,6 +105,15 @@ public class Patch {
             }
         }
         
+        /**
+         * This method adds the given value to the given node. If it is an
+         * object, then it will instead replace the object if the "element"
+         * key is already taken.
+         * 
+         * @param node      node to add value to
+         * @param element   ary key or array index
+         * @param value     value to be added
+         */
         private void add(JsonNode node, String element, JsonNode value) {
             if(node instanceof ObjectNode) {
                 ((ObjectNode)node).set(element, value);
@@ -81,6 +122,12 @@ public class Patch {
             }
         }
         
+        /**
+         * 
+         * @param   node        node to apply the partial patch to
+         * @return
+         * @throws  Exception 
+         */
         private JsonNode apply(JsonNode node) throws Exception {
             String newpath = path.substring(0, path.lastIndexOf("/"));
             String element = path.substring(path.lastIndexOf("/"));
@@ -122,7 +169,18 @@ public class Patch {
     }
     
     /**
-     * Builder for HTTP Patch Request (JSON-PATCH format)
+     * Builder for HTTP Patch Request (JSON-PATCH format). This class allows
+     * for the easy construction of patches because all of the defined actions
+     * are convenient methods. If one needs to perform actions on a JSON
+     * tree which has a defined schema or a specification but the actual tree
+     * is not available to the program at the current time, the Patch Builder
+     * is useful for performing these actions and then executing them when
+     * the JSON tree is available as data.
+     * 
+     * This method may also be used for the modification of JSON objects which
+     * are well-defined when one does not want to deal with the casting between
+     * the many different types of JSON nodes. Adding an object will add it
+     * in the preferred representation of the global JSON mapper.
      * 
      * @author Brian Becker
      */
@@ -133,9 +191,9 @@ public class Patch {
          * Create a JSON Patch test node. This determines if the given path
          * contains the given value.
          * 
-         * @param path location to test
-         * @param value value to ensure location matches
-         * @return this
+         * @param   path    location to test
+         * @param   value   value to ensure location matches
+         * @return  this
          */
         public Builder test(String path, Object value) {
             this.entries.add(new PatchEntry(Op.TEST, null, path, value));
@@ -146,9 +204,9 @@ public class Patch {
          * Create a JSON Patch add node. This adds a value or a structure at
          * the given path.
          * 
-         * @param path location of node to be appended to
-         * @param value value to append to node
-         * @return this
+         * @param   path    location of node to be appended to
+         * @param   value   value to append to node
+         * @return  this
          */
         public Builder add(String path, Object value) {
             this.entries.add(new PatchEntry(Op.ADD, null, path, value));
@@ -159,9 +217,9 @@ public class Patch {
          * Create a JSON Patch replace node. This replaces a value or structure
          * at a given path with a given value.
          * 
-         * @param path location of node to be replaced
-         * @param value value to replace node with
-         * @return this
+         * @param   path    location of node to be replaced
+         * @param   value   value to replace node with
+         * @return  this
          */
         public Builder replace(String path, Object value) {
             this.entries.add(new PatchEntry(Op.REPLACE, null, path, value));
@@ -173,9 +231,9 @@ public class Patch {
          * at a given path with another given path, and removes the from
          * location.
          * 
-         * @param from location of source node (to be removed)
-         * @param path location of destination node
-         * @return this
+         * @param   from    location of source node (to be removed)
+         * @param   path    location of destination node
+         * @return  this
          */
         public Builder move(String from, String path) {
             this.entries.add(new PatchEntry(Op.MOVE, from, path, null));
@@ -186,9 +244,9 @@ public class Patch {
          * Create a JSON Patch copy node. This adds a value or structure at
          * a given path with another given path, leaving the original intact.
          * 
-         * @param from location of source node
-         * @param path location of destination node
-         * @return this
+         * @param   from    location of source node
+         * @param   path    location of destination node
+         * @return  this
          */
         public Builder copy(String from, String path) {
             this.entries.add(new PatchEntry(Op.COPY, from, path, null));
@@ -199,8 +257,8 @@ public class Patch {
          * Create a JSON Patch remove node. This removes a value or structure
          * at a given path.
          * 
-         * @param path location of node to be removed
-         * @return this
+         * @param   path    location of node to be removed
+         * @return  this
          */
         public Builder remove(String path) {
             this.entries.add(new PatchEntry(Op.REMOVE, null, path, null));
@@ -211,7 +269,7 @@ public class Patch {
          * Build a JSON Patch, which can be applied to a string value that is
          * valid JSON or can be applied to a JsonNode itself.
          * 
-         * @return Patch object
+         * @return  Patch object
          */
         public Patch build() {
             return new Patch(this.entries);
@@ -220,10 +278,22 @@ public class Patch {
     
     private final List<PatchEntry> entries;
     
+    /**
+     * Create a new patch, with the given Patch entries. This requires
+     * generating the entries in order, in a given syntax, so it is
+     * best achieved through the use of the Patch builder.
+     * 
+     * @param   entries 
+     */
     public Patch(List<PatchEntry> entries) {
         this.entries = entries;
     }
     
+    /**
+     * Create a new, empty patch. This is the degenerate case, applying a
+     * patch containing nothing is unspecified but in this implementation
+     * will simply do nothing.
+     */
     public Patch() {
         this.entries = new LinkedList<PatchEntry>();
     }
@@ -233,7 +303,7 @@ public class Patch {
      * string with the patch applied. If the patch failed to apply, the
      * string will be unchanged.
      * 
-     * @param json the string to evaluate
+     * @param   json    the string to evaluate
      * @return 
      */
     public String apply(String json) {
@@ -248,7 +318,7 @@ public class Patch {
      * node with the patch applied (and the existing node is not preserved). If
      * the patch failed to apply, the node will be unchanged.
      * 
-     * @param node the node to evaluate
+     * @param   node    the node to evaluate
      * @return 
      */
     public JsonNode apply(JsonNode node) {
@@ -268,9 +338,9 @@ public class Patch {
      * the object with the patch applied (and the existing object is not
      * preserved). If the patch failed to apply, the object will be unchanged.
      * 
-     * @param <T> type of java object
-     * @param o java object
-     * @return modified object
+     * @param   <T>     type of java object
+     * @param   o       java object
+     * @return  the modified object
      */
     public <T> T apply(T o) {
         try {
@@ -288,10 +358,10 @@ public class Patch {
      * to create a Patch object, and then applying the patch to the passed
      * object.
      * 
-     * @param <T> type of java object
-     * @param json the patch, as a string
-     * @param o the object to modify
-     * @return the modified object
+     * @param   <T>     type of java object
+     * @param   json    the patch, as a string
+     * @param   o       the object to modify
+     * @return  the modified object
      */
     public static <T> T patch(String json, Object o) {
         try {
@@ -303,6 +373,13 @@ public class Patch {
         return (T) o;
     }    
     
+    /**
+     * The patch is written as a string by writing it out by the global
+     * object mapper. The entries are raw JSON of the format defined
+     * for JSON patch.
+     * 
+     * @return 
+     */
     @Override
     public String toString() {
         try {
@@ -313,6 +390,16 @@ public class Patch {
         }
     }
     
+    /**
+     * Add the contents of a collection of JSON patches together. Note
+     * that this method will take the collection of patches provided
+     * to it and add the contents of each in order. This ordering is
+     * defined on the collection itself, so any complex patches should
+     * be given a list which has a definite order.
+     * 
+     * @param   patches
+     * @return  A single patch which contains all patches in order
+     */
     public static Patch add(Collection<Patch> patches) {
         List<PatchEntry> entries = new LinkedList<PatchEntry>();
         for(Patch p : patches) {
@@ -339,6 +426,6 @@ public class Patch {
             pointer.append("/").append(o.toString().replace("~", "~0").replace("/", "~1"));
         }
         return pointer.toString();
-    }    
+    }
     
 }
