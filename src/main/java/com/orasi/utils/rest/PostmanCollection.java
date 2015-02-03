@@ -11,6 +11,8 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import okio.Okio;
 
 /**
@@ -189,11 +191,14 @@ public class PostmanCollection implements RestCollection {
      * a class of the PostmanCollection type.
      * 
      * @param collection
-     * @return
-     * @throws Exception 
+     * @return 
      */
-    public static RestCollection file(URL collection) throws Exception {   
-        return new PostmanCollection(Json.Map.readValue(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), PostmanCollectionData.class));
+    public static RestCollection file(URL collection) {   
+        try {
+            return new PostmanCollection(Json.Map.readValue(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), PostmanCollectionData.class));
+        } catch (IOException ex) {
+            throw new RuntimeException("Invalid Collection File Specified");
+        }
     }
 
 }

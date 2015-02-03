@@ -1,10 +1,13 @@
 package com.orasi.utils.rest;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import okio.Okio;
 
 /**
@@ -72,11 +75,14 @@ public class PostmanEnvironment extends AbstractMap {
      * on an accessible URL.
      * 
      * @param environment
-     * @return
-     * @throws Exception 
+     * @return 
      */
-    public static Map file(URL environment) throws Exception {
-        return new PostmanEnvironment(Json.Map.readValue(Okio.buffer(Okio.source((InputStream)environment.getContent())).readByteArray(), PostmanEnvironmentData.class));
+    public static Map file(URL environment) {
+        try {
+            return new PostmanEnvironment(Json.Map.readValue(Okio.buffer(Okio.source((InputStream)environment.getContent())).readByteArray(), PostmanEnvironmentData.class));
+        } catch (IOException ex) {
+            throw new RuntimeException("Postman Environment File Invalid");
+        }
     }    
     
     /**

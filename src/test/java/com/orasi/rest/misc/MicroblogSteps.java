@@ -1,20 +1,17 @@
 package com.orasi.rest.misc;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.api.demos.MockMicroblogServer;
 import com.orasi.utils.rest.BaseExpectedNode;
 import com.orasi.utils.rest.Json;
 import com.orasi.utils.rest.OkRestRequest;
-import com.orasi.utils.rest.PostmanCollection;
-import com.orasi.utils.rest.PostmanEnvironment;
+import com.orasi.utils.rest.PostmanWarehouse;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
 import com.orasi.utils.rest.RestResponse;
 import com.orasi.utils.types.DefaultingMap;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.And;
@@ -59,8 +56,9 @@ public class MicroblogSteps {
     }
     
     public MicroblogSteps() throws Exception {
-        collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
-        env1 = PostmanEnvironment.file(getClass().getResource(REST_SANDBOX + "Passwords.postman_environment"));
+        PostmanWarehouse wh = PostmanWarehouse.dir(REST_SANDBOX);
+        collection = wh.collection("MicroBlog");
+        env1 = wh.environment("Passwords");
         collection.session().env(env1);
     }
     
