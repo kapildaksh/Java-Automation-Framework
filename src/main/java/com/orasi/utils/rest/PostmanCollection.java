@@ -1,6 +1,7 @@
 package com.orasi.utils.rest;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import static com.orasi.utils.rest.RestRequestHelpers.headers;
 import com.orasi.utils.types.DefaultingMap;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -115,10 +116,18 @@ public class PostmanCollection implements RestCollection {
             }
             
             Map variables = new DefaultingMap(env(), session().env());
-            Request request = RestRequestHelpers.request(data.method, data.headers, applyParams(data.url), data.helperAttributes, format, data.data, data.rawModeData, variables, files());
-            RestResponse response = new OkRestResponse(client.newCall(request).execute());
-                        
-            return response;
+
+            Request request = new RestRequestBuilder()
+                    .format(format)
+                    .method(data.method)
+                    .variables(variables)
+                    .files(files())
+                    .data(data.data, data.rawModeData)
+                    .auth(data.helperAttributes)
+                    .url(data.url)
+                    .headers(data.headers).build();
+            
+            return new OkRestResponse(client.newCall(request).execute());
         }
         
         /**

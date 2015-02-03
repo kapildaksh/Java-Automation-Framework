@@ -2,11 +2,10 @@ package com.orasi.utils.rest;
 
 import com.orasi.text.TemplateFormat;
 import com.orasi.utils.rest.RestRequest.RequestData;
-import com.orasi.utils.rest.RestRequest.RequestType;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MultipartBuilder;
-import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,6 +59,24 @@ public class RestRequestHelpers {
         return format(url, variables);
     }
     
+    /**
+     * Generate the correct URL string for the request by processing it through
+     * the variable formatter. This does not replace the parameters in the
+     * URL, solely the actual templated variables which are either in a
+     * global or local scope. Non-resolvable variables will remain the variable
+     * name encased in the {{ }} string.
+     * 
+     * @param   type            Type of request
+     * @param   url             Unprocessed URL
+     * @param   data            Unprocessed Data
+     * @param   variables       Map of variables
+     * @return  Processed URL
+     */
+    public static String url(RestRequest.RequestType type, String url, List<RequestData> data, Map variables) {
+        url = urlencode(type, url, data).getRight();
+        return format(url, variables);
+    }    
+    
     public static String format(String key, Map variables) {
         try {
             return (new TemplateFormat(key, "{{", "}}", '$')).format(variables);
@@ -109,9 +126,6 @@ public class RestRequestHelpers {
      * processing, as well as files and parameters attachment.
      * 
      * @param   type            GET, POST, PUT, PATCH...
-     * @param   headers         Request Headers
-     * @param   url             Unsubstituted URL
-     * @param   auth            Authentication Info (user, pass)
      * @param   format          URL Encoded, RAW, Multipart Form...
      * @param   data            Unsubstituted, unserialized data
      * @param   rawModeData     Raw data to be sent
@@ -120,37 +134,26 @@ public class RestRequestHelpers {
      * @return  Request in the form of an OkHttp request
      * @throws  java.lang.Exception 
      */
-    public static Request request(RestRequest.RequestType type, String headers, String url, Map auth, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, Map variables, List<String> parameters) throws Exception {
-        url = RestRequestHelpers.variables(url, variables);
-        rawModeData = RestRequestHelpers.variables(rawModeData, variables);
-        if(data != null) {
-            data = RestRequestHelpers.variables(data, variables);
-        }
-        
+    public static RequestBody body(RestRequest.RequestType type, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, Map variables, List<String> parameters) throws Exception {
         RequestBody body = null;
         switch(format) {
             case URLENCODE:
-                Pair<RequestBody, String> p = RestRequestHelpers.urlencode(type, url, data);
+                Pair<RequestBody, String> p = RestRequestHelpers.urlencode(type, "", data);
                 body = p.getLeft();
-                url = p.getRight();
                 break;
             case RAW:
                 if(rawModeData != null)
-                    body = RestRequestHelpers.raw(rawModeData);
+                    body = RestRequestHelpers.raw(format(rawModeData, variables));
                 else
                     body = RestRequestHelpers.binary(parameters);
                 break;
             case MULTIPART_FORM:
                 if(data != null && data.size() > 0) {
-                    body = RestRequestHelpers.params(data, parameters);
+                    body = RestRequestHelpers.params(variables(data, variables), parameters);
                 }
                 break;
         }
-               
-        return new Request.Builder()
-                .url(url)
-                .headers(headers(headers, auth, variables))
-                .method(type.toString(), type.equals(RequestType.GET) ? null : body).build();
+        return body;
     }
     
     /**
@@ -160,27 +163,33 @@ public class RestRequestHelpers {
      * @param   type        type of request (we need to know if it's GET)
      * @param   url         url for GET requests
      * @param   data        data to serialize
-     * @return  ( new body, new URL string)
-     * @throws  Exception 
+     * @return  ( new body, new URL string) 
      */
-    public static Pair<RequestBody, String> urlencode(RestRequest.RequestType type, String url, List<RequestData> data) throws Exception {
+    public static Pair<RequestBody, String> urlencode(RestRequest.RequestType type, String url, List<RequestData> data) {
         StringBuilder text = new StringBuilder("");
         RequestBody body = null;
-        for(RestRequest.RequestData dt : data) {
-            text.append(URLEncoder.encode(dt.key, "UTF-8"));
-            text.append("=");
-            text.append(URLEncoder.encode(dt.value, "UTF-8"));
-            text.append("&");
-        }
-        text.deleteCharAt(text.length() - 1);
-        if(type.equals(RestRequest.RequestType.GET)) {
-            if(url.endsWith("?")) {
-                url = url + "&" + text.toString();
-            } else {
-                url = url + "?" + text.toString();
+        if(!data.isEmpty()) {
+            for(RestRequest.RequestData dt : data) {
+                try {
+                    text.append(URLEncoder.encode(dt.key, "UTF-8"));
+                    text.append("=");
+                    text.append(URLEncoder.encode(dt.value, "UTF-8"));
+                    text.append("&");
+                } catch (UnsupportedEncodingException ex) {
+                    throw new RuntimeException("Unsupported Encoding");
+                }
             }
+            text.deleteCharAt(text.length() - 1);     
         } else {
-            body = RequestBody.create(null, text.toString());
+            if(type.equals(RestRequest.RequestType.GET)) {
+                if(url.endsWith("?")) {
+                    url = url + "&" + text.toString();
+                } else {
+                    url = url + "?" + text.toString();
+                }
+            } else {
+                body = RequestBody.create(null, text.toString());
+            }
         }
         return Pair.of(body, url);
     }
