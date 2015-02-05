@@ -3,7 +3,6 @@ package com.orasi.utils.rest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * A RestRequest is intended to send the request to the server, with any
@@ -30,6 +29,8 @@ public abstract class RestRequest {
         LINK, UNLINK, PURGE, LOCK, UNLOCK, PROPFIND
     }
     
+    private RequestType method;
+    
     /**
      * The valid request formats for a request. They currently consist of
      * URL encoded, a multi part form, and a raw message body. The first
@@ -41,6 +42,8 @@ public abstract class RestRequest {
     public static enum RequestFormat {
         URLENCODE, MULTIPART_FORM, RAW
     }
+    
+    private RequestFormat format;
     
     /**
      * RequestData is specifically key-value for form data. The type is only
@@ -131,24 +134,12 @@ public abstract class RestRequest {
     }
     
     /**
-     * Apply the parameters list to the URL in an appropriate way. This
-     * will match all occurrences of :test, :this, etc. The parameters
-     * which have been given to this object determine the end values.
+     * Get the parameters list for building the REST request.
      * 
-     * @param   url         The url which needs parameters applied
-     * @return  url with parameters applied
+     * @return  Map of parameters
      */
-    public String applyParams(String url) {
-        if(params != null) {
-            for(Object e : params.entrySet()) {
-                String key = ((Entry)e).getKey().toString();
-                String val = ((Entry)e).getValue().toString();
-                if(url.contains(":" + key)) {
-                    url = url.replace(":" + key, val);
-                }
-            }
-        }
-        return url;
+    public Map params() {
+        return params;
     }    
 
     /**

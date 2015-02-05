@@ -123,7 +123,7 @@ public class PostmanTest {
         collection.get("Test Url Encoding Variables").env(env).send();
         RecordedRequest rr = mws.takeRequest();
         Assert.assertEquals("q=v1&v=v2&a=v3&x=" + URLEncoder.encode("file:///var/variable", "UTF-8"), rr.getUtf8Body());
-    }    
+    }
     
     @Test
     public void testMultipartForm() throws Exception {

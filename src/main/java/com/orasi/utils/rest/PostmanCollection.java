@@ -121,6 +121,7 @@ public class PostmanCollection implements RestCollection {
                     .format(format)
                     .method(data.method)
                     .variables(variables)
+                    .params(params())
                     .files(files())
                     .data(data.data, data.rawModeData)
                     .auth(data.helperAttributes)

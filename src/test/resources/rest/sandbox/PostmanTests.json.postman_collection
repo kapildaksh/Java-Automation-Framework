@@ -85,76 +85,42 @@
 			"id": "50a152bf-69da-a8ac-baaf-745622a37533",
 			"headers": "",
 			"url": "http://localhost:8045/more/testing?q=v1&v=v2&a=v3",
-			"pathVariables": {},
 			"preRequestScript": "",
+			"pathVariables": {},
 			"method": "GET",
-			"data": [
-				{
-					"key": "var1",
-					"value": "A",
-					"type": "text",
-					"enabled": true
-				}
-			],
+			"data": [],
 			"dataMode": "params",
-			"name": "Test Parameters",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1421700626027,
 			"version": 2,
-			"responses": [],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
+			"time": 1423144831031,
+			"name": "Test Parameters",
+			"description": "",
 			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"responses": [],
 			"synced": false
 		},
 		{
 			"id": "68eab554-1e14-2423-6ea6-00f98c334498",
 			"headers": "",
 			"url": "http://localhost:8045/:which/testing?q=v1&v=v2&a=v3&x={{var}}",
+			"preRequestScript": "",
 			"pathVariables": {
 				"which": ""
 			},
-			"preRequestScript": "",
 			"method": "GET",
-			"data": [
-				{
-					"key": "q",
-					"value": "v1",
-					"type": "text",
-					"enabled": true
-				},
-				{
-					"key": "v",
-					"value": "v2",
-					"type": "text",
-					"enabled": true
-				},
-				{
-					"key": "a",
-					"value": "v3",
-					"type": "text",
-					"enabled": true
-				},
-				{
-					"key": "x",
-					"value": "{{var}}",
-					"type": "text",
-					"enabled": true
-				}
-			],
+			"data": [],
 			"dataMode": "params",
-			"name": "Url Parameters",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1421791452113,
 			"version": 2,
-			"responses": [],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
+			"time": 1423144997186,
+			"name": "Url Parameters",
+			"description": "",
 			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"responses": [],
 			"synced": false
 		},
 		{
@@ -229,40 +195,20 @@
 			"id": "9065d039-dcdb-a609-a5fd-3e28d3703ec4",
 			"headers": "",
 			"url": "http://localhost:8045/more/testing?q=v1&v=v2&a=v3&x={{var}}",
-			"pathVariables": {},
 			"preRequestScript": "",
+			"pathVariables": {},
 			"method": "GET",
-			"data": [
-				{
-					"key": "q",
-					"value": "v1",
-					"type": "text",
-					"enabled": true
-				},
-				{
-					"key": "v",
-					"value": "v2",
-					"type": "text",
-					"enabled": true
-				},
-				{
-					"key": "a",
-					"value": "{{var}}",
-					"type": "text",
-					"enabled": true
-				}
-			],
+			"data": [],
 			"dataMode": "params",
-			"name": "Test Variables",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1421774557051,
 			"version": 2,
-			"responses": [],
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
+			"time": 1423144772739,
+			"name": "Test Variables",
+			"description": "",
 			"collectionId": "73b12b1f-1001-6367-3f7d-d5145a472150",
+			"responses": [],
 			"synced": false
 		},
 		{

@@ -10,6 +10,7 @@ import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -51,30 +52,26 @@ public class RestRequestHelpers {
      * global or local scope. Non-resolvable variables will remain the variable
      * name encased in the {{ }} string.
      * 
-     * @param   url             Unprocessed URL
-     * @param   variables       Map of variables
-     * @return  Processed URL
-     */
-    public static String variables(String url, Map variables) {
-        return format(url, variables);
-    }
-    
-    /**
-     * Generate the correct URL string for the request by processing it through
-     * the variable formatter. This does not replace the parameters in the
-     * URL, solely the actual templated variables which are either in a
-     * global or local scope. Non-resolvable variables will remain the variable
-     * name encased in the {{ }} string.
-     * 
      * @param   type            Type of request
      * @param   url             Unprocessed URL
      * @param   data            Unprocessed Data
      * @param   variables       Map of variables
+     * @param   params          Replacement params
      * @return  Processed URL
      */
-    public static String url(RestRequest.RequestType type, String url, List<RequestData> data, Map variables) {
-        url = urlencode(type, url, data).getRight();
-        return format(url, variables);
+    public static String url(RestRequest.RequestType type, String url, List<RequestData> data, Map variables, Map params) {
+        if(params != null) {
+            for(Object e : params.entrySet()) {
+                String key = ((Entry)e).getKey().toString();
+                String val = ((Entry)e).getValue().toString();
+                if(url.contains(":" + key)) {
+                    url = url.replace(":" + key, val);
+                }
+            }
+        }
+        url = format(url, variables);
+        url = urlencode(type, url, data, variables).getRight();
+        return url;
     }    
     
     public static String format(String key, Map variables) {
@@ -138,8 +135,10 @@ public class RestRequestHelpers {
         RequestBody body = null;
         switch(format) {
             case URLENCODE:
-                Pair<RequestBody, String> p = RestRequestHelpers.urlencode(type, "", data);
-                body = p.getLeft();
+                //if(!type.equals(RestRequest.RequestType.GET)) {
+                    Pair<RequestBody, String> p = RestRequestHelpers.urlencode(type, "", data, variables);
+                    body = p.getLeft();
+                //}
                 break;
             case RAW:
                 if(rawModeData != null)
@@ -163,24 +162,24 @@ public class RestRequestHelpers {
      * @param   type        type of request (we need to know if it's GET)
      * @param   url         url for GET requests
      * @param   data        data to serialize
+     * @param   variables   variables for substitution
      * @return  ( new body, new URL string) 
      */
-    public static Pair<RequestBody, String> urlencode(RestRequest.RequestType type, String url, List<RequestData> data) {
+    public static Pair<RequestBody, String> urlencode(RestRequest.RequestType type, String url, List<RequestData> data, Map variables) {
         StringBuilder text = new StringBuilder("");
         RequestBody body = null;
-        if(!data.isEmpty()) {
+        if(data != null && !data.isEmpty()) {
             for(RestRequest.RequestData dt : data) {
                 try {
-                    text.append(URLEncoder.encode(dt.key, "UTF-8"));
+                    text.append(URLEncoder.encode(format(dt.key, variables), "UTF-8"));
                     text.append("=");
-                    text.append(URLEncoder.encode(dt.value, "UTF-8"));
+                    text.append(URLEncoder.encode(format(dt.value, variables), "UTF-8"));
                     text.append("&");
                 } catch (UnsupportedEncodingException ex) {
                     throw new RuntimeException("Unsupported Encoding");
                 }
             }
-            text.deleteCharAt(text.length() - 1);     
-        } else {
+            text.deleteCharAt(text.length() - 1);
             if(type.equals(RestRequest.RequestType.GET)) {
                 if(url.endsWith("?")) {
                     url = url + "&" + text.toString();
@@ -189,7 +188,7 @@ public class RestRequestHelpers {
                 }
             } else {
                 body = RequestBody.create(null, text.toString());
-            }
+            }            
         }
         return Pair.of(body, url);
     }
