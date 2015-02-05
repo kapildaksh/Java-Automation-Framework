@@ -6,6 +6,7 @@
 package com.orasi.utils.rest;
 
 import com.orasi.utils.rest.RestRequest.RequestData;
+import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.Request;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,6 +28,8 @@ public class RestRequestBuilder {
     private Map helperAttributes = new HashMap();
     private List<String> files = new LinkedList<String>();
     private final Request.Builder builder = new Request.Builder();
+    private String headers;
+    private String url;
     
     public RestRequestBuilder() {
     }
@@ -63,19 +66,17 @@ public class RestRequestBuilder {
     }
     
     public RestRequestBuilder url(String url) {
-        builder.url(RestRequestHelpers.url(method, url, data, variables));
+        this.url = url;
         return this;
     }
     
     public RestRequestBuilder headers(String headers) {
-        builder.headers(RestRequestHelpers.headers(headers, helperAttributes, variables));
+        this.headers = headers;
         return this;
     }
     
     public Request build() throws Exception {
-        if(!method.equals(RestRequest.RequestType.GET)) {
-            builder.method(method.toString(), RestRequestHelpers.body(method, format, data, rawData, variables, files));
-        }
+        builder.url(RestRequestHelpers.url(method, url, data, variables)).headers(RestRequestHelpers.headers(headers, helperAttributes, variables)).method(method.toString(), RestRequestHelpers.body(method, format, data, rawData, variables, files));
         return builder.build();
     }
 }
