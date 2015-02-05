@@ -72,7 +72,8 @@ public class PostmanCollection implements RestCollection {
      * A PostmanRequest is a type of RestRequest which is based on Postman
      * requests stored in a collection file.
      */
-    public static class PostmanRequest extends RestRequest {        
+    public static class PostmanRequest extends RestRequest {       
+
         private static final MessageFormat fmt = new MessageFormat(
                 "-- ID: {0} URL: {2} Method: {5} Name: {8} --");
         

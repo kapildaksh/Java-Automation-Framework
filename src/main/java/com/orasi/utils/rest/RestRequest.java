@@ -29,8 +29,6 @@ public abstract class RestRequest {
         LINK, UNLINK, PURGE, LOCK, UNLOCK, PROPFIND
     }
     
-    private RequestType method;
-    
     /**
      * The valid request formats for a request. They currently consist of
      * URL encoded, a multi part form, and a raw message body. The first
@@ -42,8 +40,6 @@ public abstract class RestRequest {
     public static enum RequestFormat {
         URLENCODE, MULTIPART_FORM, RAW
     }
-    
-    private RequestFormat format;
     
     /**
      * RequestData is specifically key-value for form data. The type is only
