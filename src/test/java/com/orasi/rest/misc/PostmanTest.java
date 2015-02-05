@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.orasi.rest.misc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,7 +44,7 @@ public class PostmanTest {
     @BeforeClass
     public void setUp() throws Exception {
         map = new ObjectMapper();
-        collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "PostmanTests.json.postman_collection"));
+	collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "PostmanTests.json.postman_collection"));
     }
     
     @BeforeMethod
