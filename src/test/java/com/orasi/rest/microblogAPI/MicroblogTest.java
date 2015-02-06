@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
  */
 public class MicroblogTest {
     
-    public static final String REST_SANDBOX = "/com/orasi/rest/misc/";
+    public static final String REST_SANDBOX = "/com/orasi/rest/microblogAPI/";
     
     public ObjectMapper map;
     public RestCollection collection;

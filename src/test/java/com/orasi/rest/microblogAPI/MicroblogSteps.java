@@ -34,7 +34,7 @@ import org.testng.Assert;
  */
 public class MicroblogSteps {
     
-    public static final String REST_SANDBOX = "/com/orasi/rest/misc/";
+    public static final String REST_SANDBOX = "/com/orasi/rest/microblogAPI/";
     public static final MockMicroblogServer server = new MockMicroblogServer();
     
     public ObjectMapper map;
@@ -300,8 +300,8 @@ public class MicroblogSteps {
     }
  
     /**
-     * This replacement function just removes the paths listed from the expected node,
-     * and tells the expectations code to ignore the path for the real results as well.
+     * This replacement removes paths from the expected node, and stages the changes
+     * for the real node. 
      */
     @And("^I ignore (.*)$")
     public void ignore(String with) {
