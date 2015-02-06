@@ -1,4 +1,4 @@
-package com.orasi.rest.misc;
+package com.orasi.rest.microblogAPI;
 
 import com.orasi.utils.test.cukes.CucumberSuite;
 import cucumber.api.CucumberOptions;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.orasi.rest.misc.schema;
+package com.orasi.rest.microblogAPI.schema;
 
 /**
  *

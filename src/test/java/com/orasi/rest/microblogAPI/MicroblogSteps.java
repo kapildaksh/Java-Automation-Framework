@@ -1,4 +1,4 @@
-package com.orasi.rest.misc;
+package com.orasi.rest.microblogAPI;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.api.demos.MockMicroblogServer;
