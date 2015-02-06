@@ -47,7 +47,7 @@ public class BaseExpectedNode {
      * selection, strings (for object) and integers (for arrays).
      * 
      * @param   path        Target path, Integers or Strings only.
-     * @return 
+     * @return	ExpectedNode for altering assertions 
      */
     public ExpectedNode path(Object... path) {
         return new ExpectedNode((newPatchPath != null ? newPatchPath : "") + Patch.pointer(path), this);
@@ -58,7 +58,7 @@ public class BaseExpectedNode {
      * path selection.
      * 
      * @param   path        Target path, String specifying JSON Pointer
-     * @return 
+     * @return	ExpectedNode for altering assertions 
      */
     public ExpectedNode at(String path) {
         return new ExpectedNode((newPatchPath != null ? newPatchPath : "") + path, this);
@@ -69,7 +69,7 @@ public class BaseExpectedNode {
      * 
      * @param   node        node to be verified
      * @param   expected    node which specifies what's required
-     * @return 
+     * @return	A JSON node containing verified data 
      */
     public JsonNode verify(JsonNode node, JsonNode expected) {
         if(!this.ignores.apply(node).equals(this.ignores.apply(this.patches.apply(expected)))) {
@@ -86,7 +86,7 @@ public class BaseExpectedNode {
      * 
      * @param   node        node to be verified
      * @param   expected    node which specifies what's required
-     * @return 
+     * @return  A JSON node containing verified data 
      */
     public JsonNode verify(String node, String expected) {
         try {                

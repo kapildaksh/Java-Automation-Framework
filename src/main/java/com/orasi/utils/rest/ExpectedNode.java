@@ -49,7 +49,7 @@ public class ExpectedNode extends BaseExpectedNode {
      * a list and have some sort of baseline.
      * 
      * @param value Value to add at this path
-     * @return 
+     * @return 	this
      */
     public ExpectedNode add(Object value) {
         Patch p = new Patch.Builder().add(newPatchPath, value).build();
@@ -58,9 +58,10 @@ public class ExpectedNode extends BaseExpectedNode {
     }
 
     /**
-     * Remove this value altogether.
+     * Remove this value altogether. The item is not ignored, in fact it
+     * is now required to not exist during validation.
      * 
-     * @return 
+     * @return	this 
      */
     public ExpectedNode remove() {
         Patch p = new Patch.Builder().remove(newPatchPath).build();
