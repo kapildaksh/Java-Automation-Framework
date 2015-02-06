@@ -170,17 +170,17 @@ public class MicroblogTest {
         RestAssert.assertNotArray(res.json().path("friends"));
     }
     
-    @Test(groups = "patchEmail", dependsOnGroups = "usersVerify")
+    @Test(groups = "patchEmail", dependsOnGroups = "friendsRemoveVerify")
     public void patchLarryEmail() throws Exception {
         collection.get("Login As Larry").send();
         RestResponse res = collection.get("Larry Adds Email Address").send();
         Assert.assertTrue(res.success());
     }
     
-    @Test(groups = {"patchEmailVerify", "one"}, dependsOnGroups = "patchEmail")
+    @Test(groups = {"patchEmailVerify"}, dependsOnGroups = "patchEmail")
     public void verifyPatchEmail() throws Exception {
         RestResponse res = collection.get("Check User Larry").send();
-        Assert.assertEquals("larry@wall.org", res.json().path("email").asText());        
+        Assert.assertEquals("larry@wall.org", res.json().path("email").asText());
     }
 
 }
