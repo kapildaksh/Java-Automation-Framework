@@ -12,7 +12,6 @@ import com.squareup.okhttp.Response;
  */
 public class OkRestResponse extends RestResponse {
 
-    private final Response res;
     private String data;
     private int status;
     
@@ -22,7 +21,6 @@ public class OkRestResponse extends RestResponse {
      * @param response 
      */
     public OkRestResponse(Response response) {
-        this.res = response;
         try {
             this.data = response.body().string();
             this.status = response.code();

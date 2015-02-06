@@ -19,7 +19,7 @@ public abstract class IteratorMap <S,T> implements Iterator <T> {
      * 
      * @param data 
      */
-    public IteratorMap(Iterator data) {
+    public IteratorMap(Iterator<S> data) {
         this.data = data;
     }
     

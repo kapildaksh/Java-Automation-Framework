@@ -37,7 +37,6 @@ public class ObjectMap implements Map {
         return object.getClass().getFields().length == 0;
     }
     
-    @SuppressWarnings("UseSpecificCatch")
     public Object field(Field fld, Object... value) {
         try {
             fld.setAccessible(true);
@@ -68,7 +67,6 @@ public class ObjectMap implements Map {
         return b.toString();
     }
 
-    @SuppressWarnings("UseSpecificCatch")
     public boolean containsKey(Object key) {
         Method[] methods = object.getClass().getMethods();
         for(Method m : methods) {
@@ -85,7 +83,6 @@ public class ObjectMap implements Map {
         }
     }
 
-    @SuppressWarnings("UseSpecificCatch")
     public boolean containsValue(Object value) {
         try {
             Method[] methods = object.getClass().getMethods();
@@ -107,7 +104,6 @@ public class ObjectMap implements Map {
         return false;
     }
 
-    @SuppressWarnings("UseSpecificCatch")
     public Object get(Object key) {
         try {
             Method[] methods = object.getClass().getMethods();
@@ -124,7 +120,6 @@ public class ObjectMap implements Map {
         }
     }
 
-    @SuppressWarnings("UseSpecificCatch")
     public Object put(Object key, Object value) {
         try {
             Method[] methods = object.getClass().getMethods();
@@ -141,7 +136,6 @@ public class ObjectMap implements Map {
         }
     }
 
-    @SuppressWarnings("UseSpecificCatch")
     public Object remove(Object key) {
         throw new UnsupportedOperationException("Property cannot be removed from underlying object");        
     }
@@ -170,19 +164,16 @@ public class ObjectMap implements Map {
         return this.asHashMap().keySet();
     }
 
-    @SuppressWarnings("UseSpecificCatch")
     public Collection values() {
         return this.asHashMap().values();
     }
 
-    @SuppressWarnings("UseSpecificCatch")
     public Set entrySet() {
         return this.asHashMap().entrySet();
     }
     
-    @SuppressWarnings("UseSpecificCatch")
     public Map asHashMap() {
-        Map s = new HashMap();
+        Map<String, Object> s = new HashMap<String, Object>();
         for(Field f : object.getClass().getDeclaredFields()) {
             try {
                 s.put(f.getName(), field(f));

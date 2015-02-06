@@ -19,7 +19,9 @@ public class CucumberLoggingReporter implements Reporter {
     private final Reporter reporter;
     
     /**
-     * Create a new logging reporter.
+     * Create a new logging reporter. This reporter will be accessed in
+     * a state-changing fashion only when wrapped reporter commands are
+     * called.
      * 
      * @param   r   Reporter to tie this reporter to
      */
@@ -29,7 +31,7 @@ public class CucumberLoggingReporter implements Reporter {
     
     @Override
     public void before(Match match, Result result) {
-        this.reporter.before(match, result);
+        this.reporter.before(match, result);	
     }
 
     @Override

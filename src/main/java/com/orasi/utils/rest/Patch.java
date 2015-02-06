@@ -285,8 +285,13 @@ public class Patch {
      * 
      * @param   entries 
      */
-    public Patch(List<PatchEntry> entries) {
-        this.entries = entries;
+    public Patch(List<?> entries) {
+    	this.entries = new LinkedList<PatchEntry>();
+    	for(Object o : entries) {
+    		if(o instanceof PatchEntry) {
+    			this.entries.add((PatchEntry)o);
+    		}
+    	}
     }
     
     /**
@@ -342,11 +347,11 @@ public class Patch {
      * @param   o       java object
      * @return  the modified object
      */
-    public <T> T apply(T o) {
+    public <T> Object apply(T o) {
         try {
             JsonNode n = Json.Map.valueToTree(o);
             this.apply(n);
-            return (T) Json.Map.treeToValue(n, o.getClass());
+            return Json.Map.treeToValue(n, o.getClass());
         } catch (JsonProcessingException ex) {
             Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -363,10 +368,13 @@ public class Patch {
      * @param   o       the object to modify
      * @return  the modified object
      */
-    public static <T> T patch(String json, Object o) {
+    public static <T> Object patch(String json, T o) {
         try {
-            Patch p = new Patch((List<Patch.PatchEntry>)Json.Map.readValue(json, new TypeReference<List<Patch.PatchEntry>>() { }));
-            return (T) p.apply(o);
+        	Object val = Json.Map.readValue(json, new TypeReference<List<Patch.PatchEntry>>() { });
+        	if(val instanceof List<?>){ 
+        		Patch p = new Patch((List<?>) val);
+                return p.apply(o);
+        	}
         } catch (IOException ex) {
             Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
         }

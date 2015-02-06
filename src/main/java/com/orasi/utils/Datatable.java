@@ -45,6 +45,7 @@ public class Datatable {
 	 * *//*
 	
 	private static Recordset getInfo(String table, String searchTest){
+		table.
 		return VirtualTable.compileJSON(virtualTablePath + table, new VirtualTable().getRows(virtualTablePath+ table, "Scenario", searchTest ));
 	}
 	

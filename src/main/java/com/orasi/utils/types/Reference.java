@@ -77,7 +77,11 @@ public class Reference<T> {
      * @return  Value that reference points to
      */
     public static <T> T get(Reference<T> i) {
-        return (T) i == null ? null : (i.value == null) ? null : i.value;
+    	if(i == null) {
+    		return (T) null;
+    	} else {
+    		return i.value;
+    	}
     }
     
     /**

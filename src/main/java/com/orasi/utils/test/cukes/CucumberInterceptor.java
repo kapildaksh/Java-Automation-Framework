@@ -3,11 +3,9 @@ package com.orasi.utils.test.cukes;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import org.testng.IMethodInstance;
 import org.testng.IMethodInterceptor;
 import org.testng.ITestContext;
-import org.testng.collections.Maps;
 
 /**
  * Interceptor to change the order of the collection of tests. This is used
@@ -17,11 +15,15 @@ import org.testng.collections.Maps;
  * @author Brian Becker
  */
 public class CucumberInterceptor implements IMethodInterceptor {
-    private final Map<Class, List<Object>> m_instances = Maps.newHashMap();
 
     /**
      * Intercept the method instances as they are about to be passed to the
-     * test runner.
+     * test runner. This uses the sort order of the methods according to their
+     * priority value, in ascending order. This is essentially just a way of
+     * forcing an order onto the test instances, to maintain the appearance
+     * of a straightforward test. This interceptor can be removed or added
+     * at will depending on the desire to have an asynchronous, fast test or
+     * some pretty test logs.
      * 
      * @param   methods     Methods to be re-ordered
      * @param   context     Test Context
@@ -48,4 +50,5 @@ public class CucumberInterceptor implements IMethodInterceptor {
         Collections.sort(methods, comparator);
         return methods;
     }
+
 }

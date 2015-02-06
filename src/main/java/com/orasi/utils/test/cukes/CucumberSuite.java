@@ -47,7 +47,7 @@ public class CucumberSuite {
      * @param   clazz       Class used for ClassLoader for Cucumber Resources
      * @throws  ClassNotFoundException 
      */
-    public CucumberSuite(Class clazz) throws ClassNotFoundException {
+    public CucumberSuite(Class<?> clazz) throws ClassNotFoundException {
         RuntimeOptionsFactory runtimeOptionsFactory = new RuntimeOptionsFactory(clazz);
         RuntimeOptions runtimeOptions = runtimeOptionsFactory.create();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();

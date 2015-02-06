@@ -13,8 +13,6 @@ import java.util.Objects;
  */
 public class Name<T> extends Reference<T> {
     
-    public static class NoValue<T> { }
-    
     /**
      * Create a new reference with a given value, which can be
      * replaced.
@@ -71,12 +69,12 @@ public class Name<T> extends Reference<T> {
      * is invalid.
      * 
      * NOTE: With no centralized lookup repository, the fact that one has
-     * a reference with a name and a NoValue does not mean there is actually
+     * a reference with a name and a null does not mean there is actually
      * no value assigned to another given object.
      * 
      * @param   <T>     Type of the object
      * @param   ref     Name of the object
-     * @return 
+     * @return	The Name with an associated value 
      */
     @JsonCreator
     public static <T> Name<T> name (String ref) {
