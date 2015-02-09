@@ -25,6 +25,11 @@
 	</repositories>
 	<dependencies>
                 <dependency>
+                        <groupId>org.pegdown</groupId>
+                        <artifactId>pegdown</artifactId>
+                        <version>1.4.2</version>
+                </dependency>            
+                <dependency>
                     <groupId>info.cukes</groupId>
                     <artifactId>cucumber-jvm-deps</artifactId>
                     <version>1.0.3</version>

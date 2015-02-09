@@ -1,7 +1,7 @@
 package com.orasi.rest.microblogAPI;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orasi.utils.rest.PostmanCollection;
+import com.orasi.utils.rest.postman.PostmanCollection;
 import com.orasi.utils.rest.RestCollection;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;

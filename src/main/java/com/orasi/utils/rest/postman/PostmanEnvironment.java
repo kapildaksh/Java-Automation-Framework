@@ -1,5 +1,6 @@
-package com.orasi.utils.rest;
+package com.orasi.utils.rest.postman;
 
+import com.orasi.utils.rest.Json;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;

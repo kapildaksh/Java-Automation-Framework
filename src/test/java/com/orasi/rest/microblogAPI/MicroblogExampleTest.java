@@ -5,15 +5,15 @@
  */
 package com.orasi.rest.microblogAPI;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.api.demos.MockMicroblogServer;
 import com.orasi.utils.rest.ExpectedNode;
 import com.orasi.utils.rest.ExpectedResponse;
-import com.orasi.utils.rest.PostmanCollection;
-import com.orasi.utils.rest.PostmanEnvironment;
+import com.orasi.utils.rest.postman.PostmanWarehouse;
 import com.orasi.utils.rest.RestCollection;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -30,7 +30,6 @@ public class MicroblogExampleTest {
     
     public static final String REST_SANDBOX = "/com/orasi/rest/microblogAPI/";
     
-    public ObjectMapper map;
     public RestCollection collection;
     public Map env1;
     public Map env2;
@@ -38,10 +37,9 @@ public class MicroblogExampleTest {
     
     @BeforeClass
     public void setUp() throws Exception {
-        map = new ObjectMapper();
-        System.out.println(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
-        collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
-        env1 = PostmanEnvironment.file(getClass().getResource(REST_SANDBOX + "Passwords.postman_environment"));
+        PostmanWarehouse wh = new PostmanWarehouse(REST_SANDBOX);
+	collection = wh.collection("MicroBlog");
+        env1 = wh.environment("Passwords");
         env2 = new HashMap();
         env2.put("username", "arven2");
         env2.put("nickname", "A. R. Variadic");

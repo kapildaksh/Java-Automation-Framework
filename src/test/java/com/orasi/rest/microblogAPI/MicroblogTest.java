@@ -6,13 +6,11 @@
 package com.orasi.rest.microblogAPI;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.api.demos.MockMicroblogServer;
+import com.orasi.utils.rest.postman.PostmanWarehouse;
 import com.orasi.utils.rest.RestAssert;
-import com.orasi.utils.rest.PostmanCollection;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestResponse;
-import com.squareup.okhttp.Response;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -30,14 +28,13 @@ public class MicroblogTest {
     
     public static final String REST_SANDBOX = "/com/orasi/rest/microblogAPI/";
     
-    public ObjectMapper map;
     public RestCollection collection;
     public MockMicroblogServer server;
     
     @BeforeClass
     public void setUp() throws Exception {
-        map = new ObjectMapper();
-        collection = PostmanCollection.file(getClass().getResource(REST_SANDBOX + "MicroBlog.json.postman_collection"));
+        PostmanWarehouse wh = new PostmanWarehouse(REST_SANDBOX);
+	collection = wh.collection("MicroBlog");
         server = new MockMicroblogServer();
         server.start();
     }

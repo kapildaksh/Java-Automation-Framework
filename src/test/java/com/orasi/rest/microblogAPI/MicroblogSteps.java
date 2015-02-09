@@ -5,7 +5,7 @@ import com.orasi.api.demos.MockMicroblogServer;
 import com.orasi.utils.rest.BaseExpectedNode;
 import com.orasi.utils.rest.Json;
 import com.orasi.utils.rest.OkRestRequest;
-import com.orasi.utils.rest.PostmanWarehouse;
+import com.orasi.utils.rest.postman.PostmanWarehouse;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
 import com.orasi.utils.rest.RestResponse;

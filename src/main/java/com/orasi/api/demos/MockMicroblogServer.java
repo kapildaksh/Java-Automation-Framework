@@ -140,6 +140,14 @@ public class MockMicroblogServer {
             }
         });
         
+        srv.get("/version", new Route() {
+            @Override
+            public Object handle(Request request, Response response) throws Exception {
+                response.type("text/plain; charset=UTF-8");
+                return "v1.0";
+            }
+        });
+        
         srv.post("/login", new Route() {
             @Override
             public Object handle(Request req, Response res) throws Exception {
