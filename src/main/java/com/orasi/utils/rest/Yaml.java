@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 /**
  * Static instances of ObjectMapper components, as well as other components
@@ -18,12 +19,12 @@ import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
  * 
  * @author Brian Becker
  */
-public class Json {
+public class Yaml {
     
     public static final ObjectMapper Map;
 
     static {
-        Map = new ObjectMapper();
+        Map = new ObjectMapper(new YAMLFactory());
         Map.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
         Map.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Map.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);

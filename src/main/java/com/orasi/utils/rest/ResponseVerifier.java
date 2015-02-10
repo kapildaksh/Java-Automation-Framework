@@ -45,7 +45,7 @@ public class ResponseVerifier implements ExpectedResponse {
     @Override
     public JsonNode verify() {
         try {
-            return this.node.verify(request.send().data(), data);
+            return this.node.verify(request.send().data().trim(), data.trim());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

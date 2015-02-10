@@ -89,6 +89,8 @@ public class BaseExpectedNode {
      * @return  A JSON node containing verified data 
      */
     public JsonNode verify(String node, String expected) {
+        //System.out.println(node);
+        //System.out.println(expected);
         try {                
             return this.verify(Json.Map.readTree(node), Json.Map.readTree(expected));
         } catch (JsonParseException jpe) {

@@ -85,8 +85,6 @@ public class MockMicroblogServer {
         
         @Override
         public String render(Object model) throws Exception {
-            String str;
-            
             if(model instanceof ModelMutator) {
                 model = ((ModelMutator)model).model();
             }
@@ -144,7 +142,7 @@ public class MockMicroblogServer {
             @Override
             public Object handle(Request request, Response response) throws Exception {
                 response.type("text/plain; charset=UTF-8");
-                return "v1.0";
+                return "v1.0\n";
             }
         });
         

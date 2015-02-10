@@ -1,6 +1,7 @@
 package com.orasi.utils.rest.postman;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.orasi.text.Data;
 import com.orasi.utils.rest.BaseExpectedNode;
 import com.orasi.utils.rest.ExpectedResponse;
 import com.orasi.utils.rest.Json;
@@ -15,13 +16,11 @@ import com.orasi.utils.types.DefaultingMap;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import okio.Okio;
 
 /**
  * The PostmanCollection allows one to load a Postman Collection file, which
@@ -213,7 +212,7 @@ public class PostmanCollection implements RestCollection {
      */
     public static RestCollection file(URL collection) {   
         try {
-            return new PostmanCollection(Json.Map.readValue(Okio.buffer(Okio.source((InputStream)collection.getContent())).readByteArray(), PostmanCollectionData.class));
+            return new PostmanCollection(Json.Map.readValue(Data.get(collection), PostmanCollectionData.class));
         } catch (IOException ex) {
             throw new RuntimeException("Invalid Collection File Specified");
         }
