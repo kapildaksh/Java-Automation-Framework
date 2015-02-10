@@ -6,6 +6,7 @@
 package com.orasi.utils.rest;
 
 import com.orasi.utils.rest.RestRequest.RequestData;
+import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.Request;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,13 +25,11 @@ public class RestRequestBuilder {
     private RestRequest.RequestFormat format = RestRequest.RequestFormat.RAW;
     private List<RequestData> data = new LinkedList<RequestData>();
     private String rawData = "";
-    private Map variables = new HashMap();
     private Map helperAttributes = new HashMap();
     private List<String> files = new LinkedList<String>();
     private final Request.Builder builder = new Request.Builder();
-    private String headers;
+    private Object headers;
     private String url;
-    private Map params = new HashMap();
     
     public RestRequestBuilder() {
     }
@@ -56,16 +55,6 @@ public class RestRequestBuilder {
         return this;
     }
     
-    public RestRequestBuilder variables(Map variables) {
-        this.variables = variables;
-        return this;
-    }
-    
-    public RestRequestBuilder params(Map params) {
-        this.params = params;
-        return this;
-    }
-    
     public RestRequestBuilder auth(Map helperAttributes) {
         this.helperAttributes = helperAttributes;
         return this;
@@ -76,17 +65,22 @@ public class RestRequestBuilder {
         return this;
     }
     
-    public RestRequestBuilder headers(String headers) {
+    public RestRequestBuilder headers(Object headers) {
         this.headers = headers;
         return this;
     }
     
     public Request build() throws Exception {
-        builder.url(RestRequestHelpers.url(method, url, data, variables, params)).headers(RestRequestHelpers.headers(headers, helperAttributes, variables));
+        builder.url(RestRequestHelpers.url(method, url, data));
+        if(headers instanceof String) {
+            builder.headers(RestRequestHelpers.headers((String)headers));
+        } else if(headers instanceof Headers) {
+            builder.headers((Headers)headers);
+        }
         if(method.equals(RestRequest.RequestType.GET)) {
             builder.get();
         } else {
-            builder.method(method.toString(), RestRequestHelpers.body(method, format, data, rawData, variables, files));
+            builder.method(method.toString(), RestRequestHelpers.body(method, format, data, rawData, files));
         }
         return builder.build();
     }

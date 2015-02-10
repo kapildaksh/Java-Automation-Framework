@@ -55,22 +55,20 @@ public class RestRequestHelpers {
      * @param   type            Type of request
      * @param   url             Unprocessed URL
      * @param   data            Unprocessed Data
-     * @param   variables       Map of variables
-     * @param   params          Replacement params
      * @return  Processed URL
      */
-    public static String url(RestRequest.RequestType type, String url, List<RequestData> data, Map variables, Map params) {
-        if(params != null) {
-            for(Object e : params.entrySet()) {
-                String key = ((Entry)e).getKey().toString();
-                String val = ((Entry)e).getValue().toString();
-                if(url.contains(":" + key)) {
-                    url = url.replace(":" + key, val);
-                }
-            }
-        }
-        url = format(url, variables);
-        url = urlencode(type, url, data, variables).getRight();
+    public static String url(RestRequest.RequestType type, String url, List<RequestData> data) {
+        //if(params != null) {
+        //    for(Object e : params.entrySet()) {
+        //        String key = ((Entry)e).getKey().toString();
+        //        String val = ((Entry)e).getValue().toString();
+        //        if(url.contains(":" + key)) {
+        //            url = url.replace(":" + key, val);
+        //        }
+        //    }
+        //}
+        //url = format(url, variables);
+        url = urlencode(type, url, data).getRight();
         return url;
     }    
     
@@ -98,20 +96,13 @@ public class RestRequestHelpers {
      * @param   variables   Substitution variables
      * @return  OkHttp Headers object
      */
-    public static Headers headers(String headers, Map auth, Map variables) {
+    public static Headers headers(String headers) {
         Headers.Builder hdrs = new Headers.Builder();
         boolean authorizationFound = false;
         for(String hdr : headers.split(Pattern.quote("\n"))) {
             String[] h = hdr.split(Pattern.quote(":"), 2);
             if(h.length == 2) {
-                if(!h[0].equals("Authorization")) {
-                    hdrs = hdrs.add(h[0], h[1]);
-                } else {
-                    authorizationFound = true;
-                }
-            }
-            if(authorizationFound && auth.get("username") != null) {
-                hdrs = hdrs.add(h[0], "Basic " + Base64.encodeBase64String(StringUtils.getBytesUtf8(format(auth.get("username") + ":" + auth.get("password"), variables))));
+                hdrs = hdrs.add(h[0], h[1]);
             }
         }
         return hdrs.build();
@@ -126,29 +117,28 @@ public class RestRequestHelpers {
      * @param   format          URL Encoded, RAW, Multipart Form...
      * @param   data            Unsubstituted, unserialized data
      * @param   rawModeData     Raw data to be sent
-     * @param   variables       Map containing variables and values
      * @param   parameters      Parameters for the various data formats
      * @return  Request in the form of an OkHttp request
      * @throws  java.lang.Exception 
      */
-    public static RequestBody body(RestRequest.RequestType type, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, Map variables, List<String> parameters) throws Exception {
+    public static RequestBody body(RestRequest.RequestType type, RestRequest.RequestFormat format, List<RequestData> data, String rawModeData, List<String> parameters) throws Exception {
         RequestBody body = null;
         switch(format) {
             case URLENCODE:
                 //if(!type.equals(RestRequest.RequestType.GET)) {
-                    Pair<RequestBody, String> p = RestRequestHelpers.urlencode(type, "", data, variables);
+                    Pair<RequestBody, String> p = RestRequestHelpers.urlencode(type, "", data);
                     body = p.getLeft();
                 //}
                 break;
             case RAW:
                 if(rawModeData != null)
-                    body = RestRequestHelpers.raw(format(rawModeData, variables));
+                    body = RestRequestHelpers.raw(rawModeData);
                 else
                     body = RestRequestHelpers.binary(parameters);
                 break;
             case MULTIPART_FORM:
                 if(data != null && data.size() > 0) {
-                    body = RestRequestHelpers.params(variables(data, variables), parameters);
+                    body = RestRequestHelpers.params(data, parameters);
                 }
                 break;
         }
@@ -165,15 +155,15 @@ public class RestRequestHelpers {
      * @param   variables   variables for substitution
      * @return  ( new body, new URL string) 
      */
-    public static Pair<RequestBody, String> urlencode(RestRequest.RequestType type, String url, List<RequestData> data, Map variables) {
+    public static Pair<RequestBody, String> urlencode(RestRequest.RequestType type, String url, List<RequestData> data) {
         StringBuilder text = new StringBuilder("");
         RequestBody body = null;
         if(data != null && !data.isEmpty()) {
             for(RestRequest.RequestData dt : data) {
                 try {
-                    text.append(URLEncoder.encode(format(dt.key, variables), "UTF-8"));
+                    text.append(URLEncoder.encode(dt.key, "UTF-8"));
                     text.append("=");
-                    text.append(URLEncoder.encode(format(dt.value, variables), "UTF-8"));
+                    text.append(URLEncoder.encode(dt.value, "UTF-8"));
                     text.append("&");
                 } catch (UnsupportedEncodingException ex) {
                     throw new RuntimeException("Unsupported Encoding");

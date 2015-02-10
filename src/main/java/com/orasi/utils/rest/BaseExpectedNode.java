@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.MissingNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import org.testng.Assert;
 
 /**
  * The root node of an ExpectedResponse, this class is extended by objects
@@ -89,14 +90,14 @@ public class BaseExpectedNode {
      * @return  A JSON node containing verified data 
      */
     public JsonNode verify(String node, String expected) {
-        //System.out.println(node);
-        //System.out.println(expected);
         try {                
             return this.verify(Json.Map.readTree(node), Json.Map.readTree(expected));
         } catch (JsonParseException jpe) {
             if(node.equals(expected)) {
                 return new TextNode(node);
-            }                
+            } else {
+                Assert.assertEquals(node, expected);
+            }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

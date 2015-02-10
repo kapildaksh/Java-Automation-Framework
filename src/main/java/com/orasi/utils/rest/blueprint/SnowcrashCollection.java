@@ -5,7 +5,10 @@
  */
 package com.orasi.utils.rest.blueprint;
 
+import com.damnhandy.uri.template.UriTemplate;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.orasi.text.TemplateFormat;
 import com.orasi.utils.rest.BaseExpectedNode;
 import com.orasi.utils.rest.ExpectedResponse;
 import com.orasi.utils.rest.OkRestResponse;
@@ -16,14 +19,20 @@ import com.orasi.utils.rest.RestRequestBuilder;
 import com.orasi.utils.rest.RestResponse;
 import com.orasi.utils.rest.RestSession;
 import com.orasi.utils.rest.Yaml;
+import com.orasi.utils.types.DefaultingMap;
+import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
@@ -49,9 +58,24 @@ public class SnowcrashCollection implements RestCollection {
 
         @Override
         public ExpectedResponse response(String name, BaseExpectedNode node) {
-            for(JsonNode r : action.path("examples").path(0).path("responses")) {
-                return new ResponseVerifier(this, r.path("body").asText(), node);
-            }
+            Map variables = new DefaultingMap(env(), session().env());            
+            boolean found = false;
+            for(JsonNode exa : action.path("examples")) {
+                for(JsonNode req : exa.path("requests")) {
+                    if(req.path("name").asText().equals(this.name)) {
+                        found = true;
+                    }
+                }
+                if(exa.path("requests").asText().equals("")) { found = true; }
+                if(found) {
+                    for(JsonNode res : exa.path("responses")) {
+                        if(res.path("name").asText().equals(name)) {
+                            return new ResponseVerifier(this, TemplateFormat.format(res.path("body").asText(), variables), node);
+                        }
+                    }
+                }
+                found = false;                
+            }   
             throw new RuntimeException("Response named '" + name + "' not found.");
         }
 
@@ -64,22 +88,30 @@ public class SnowcrashCollection implements RestCollection {
             RequestFormat format = null;
             
             String body = null;
-            for(JsonNode req : action.path("examples").get(0).path("requests")) {
-                if(req.path("name").asText().equals(name)) {
-                    body = req.path("body").asText();
-                }
-            }
-            
+            Map variables = new DefaultingMap(env(), session().env());
+            Headers.Builder hb = new Headers.Builder();
+            for(JsonNode exa : action.path("examples")) {
+                for(JsonNode req : exa.path("requests")) {
+                    if(req.path("name").asText().equals(name)) {
+                        body = req.path("body").asText();
+                        for(JsonNode n : req.path("headers")) {
+                            hb.add(TemplateFormat.format(n.path("name").asText(), variables), TemplateFormat.format(n.path("value").asText(), variables));
+                        }
+                    }
+                }                
+            }                   
+                    
+            String url = TemplateFormat.format(this.url + resource.path("uriTemplate").asText(), variables);
+            url = UriTemplate.fromTemplate(url).set(params()).expand();
+
             Request request = new RestRequestBuilder()
                     .format(RequestFormat.RAW)
                     .method(RequestType.valueOf(action.path("method").asText()))
-                    .variables(new HashMap())
-                    .params(params())
                     .files(files())
-                    .data(new LinkedList<RequestData>(), body)
-                    .auth(new HashMap())
-                    .url(this.url + resource.path("uriTemplate").asText())
-                    .headers("").build();            
+                    .data(new LinkedList<RequestData>(), TemplateFormat.format(body, variables))
+                    .url(url)
+                    .headers(hb.build()).build();
+
             return new OkRestResponse(client.newCall(request).execute());
         }
     }
@@ -92,6 +124,11 @@ public class SnowcrashCollection implements RestCollection {
         this.session = new RestSession();
         this.data = data;
         this.url = endpoint;
+            try {
+                System.out.println(Yaml.Map.writerWithDefaultPrettyPrinter().writeValueAsString(data));
+            } catch (JsonProcessingException ex) {
+                Logger.getLogger(SnowcrashCollection.class.getName()).log(Level.SEVERE, null, ex);
+            }        
     }
     
     /**
@@ -112,9 +149,9 @@ public class SnowcrashCollection implements RestCollection {
                         for(JsonNode act : res.path("actions")) {
                             if(act.path("name").asText().equals(actname)) {
                                 if(names.size() == 3) {
-                                    return new SnowcrashRequest(this.url, res, act, names.get(2));
+                                    return new SnowcrashRequest(this.url, res, act, names.get(2)).session(session());
                                 } else {
-                                    return new SnowcrashRequest(this.url, res, act, "");
+                                    return new SnowcrashRequest(this.url, res, act, "").session(session());
                                 }
                             }
                         }
