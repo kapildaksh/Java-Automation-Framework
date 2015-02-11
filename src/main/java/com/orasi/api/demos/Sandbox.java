@@ -6,7 +6,7 @@
 package com.orasi.api.demos;
 
 import com.orasi.text.MapMessageFormat;
-import com.orasi.text.TemplateFormat;
+import com.orasi.text.Template;
 import com.orasi.utils.reflection.ObjectMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +69,7 @@ public class Sandbox {
         Map p2 = (Map) template.parseObject(f2);
         System.out.println(p2);*/
         
-        TemplateFormat templateObj = new TemplateFormat("${tst}This is a test, $${arv}. Now we will use real variables. ${arv}zx, ${trf}st, ys${prs}li: all${xyz} ${0} ${p:xyzf}");
+        Template templateObj = new Template("${tst}This is a test, $${arv}. Now we will use real variables. ${arv}zx, ${trf}st, ys${prs}li: all${xyz} ${0} ${p:xyzf}");
         ObjectMap m = new ObjectMap(new Names());
         String f3 = templateObj.format(m);
         System.out.println(f3);

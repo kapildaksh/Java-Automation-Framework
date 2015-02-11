@@ -8,7 +8,7 @@ package com.orasi.utils.rest.blueprint;
 import com.damnhandy.uri.template.UriTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.orasi.text.TemplateFormat;
+import com.orasi.text.Template;
 import com.orasi.utils.rest.BaseExpectedNode;
 import com.orasi.utils.rest.ExpectedResponse;
 import com.orasi.utils.rest.OkRestResponse;
@@ -70,7 +70,7 @@ public class SnowcrashCollection implements RestCollection {
                 if(found) {
                     for(JsonNode res : exa.path("responses")) {
                         if(res.path("name").asText().equals(name)) {
-                            return new ResponseVerifier(this, TemplateFormat.format(res.path("body").asText(), variables), node);
+                            return new ResponseVerifier(this, Template.format(res.path("body").asText(), variables), node);
                         }
                     }
                 }
@@ -95,20 +95,20 @@ public class SnowcrashCollection implements RestCollection {
                     if(req.path("name").asText().equals(name)) {
                         body = req.path("body").asText();
                         for(JsonNode n : req.path("headers")) {
-                            hb.add(TemplateFormat.format(n.path("name").asText(), variables), TemplateFormat.format(n.path("value").asText(), variables));
+                            hb.add(Template.format(n.path("name").asText(), variables), Template.format(n.path("value").asText(), variables));
                         }
                     }
                 }                
             }                   
                     
-            String url = TemplateFormat.format(this.url + resource.path("uriTemplate").asText(), variables);
+            String url = Template.format(this.url + resource.path("uriTemplate").asText(), variables);
             url = UriTemplate.fromTemplate(url).set(params()).expand();
 
             Request request = new RestRequestBuilder()
                     .format(RequestFormat.RAW)
                     .method(RequestType.valueOf(action.path("method").asText()))
                     .files(files())
-                    .data(new LinkedList<RequestData>(), TemplateFormat.format(body, variables))
+                    .data(new LinkedList<RequestData>(), Template.format(body, variables))
                     .url(url)
                     .headers(hb.build()).build();
 

@@ -9,8 +9,6 @@ import com.orasi.api.demos.MockMicroblogServer;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
 import com.orasi.utils.rest.blueprint.SnowcrashCollection;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 

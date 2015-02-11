@@ -1,6 +1,6 @@
 package com.orasi.utils.rest;
 
-import com.orasi.text.TemplateFormat;
+import com.orasi.text.Template;
 import com.orasi.utils.rest.RestRequest.RequestData;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MultipartBuilder;
@@ -74,7 +74,7 @@ public class RestRequestHelpers {
     
     public static String format(String key, Map variables) {
         try {
-            return (new TemplateFormat(key, "{{", "}}", '$')).format(variables);
+            return (new Template(key, "{{", "}}", '$')).format(variables);
         } catch (Exception e) {
             return key;
         }

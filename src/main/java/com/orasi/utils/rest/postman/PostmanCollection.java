@@ -2,6 +2,7 @@ package com.orasi.utils.rest.postman;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.orasi.text.Data;
+import com.orasi.text.Template;
 import com.orasi.utils.rest.BaseExpectedNode;
 import com.orasi.utils.rest.ExpectedResponse;
 import com.orasi.utils.rest.Json;
@@ -21,6 +22,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.xalan.xsltc.compiler.Constants;
 
 /**
  * The PostmanCollection allows one to load a Postman Collection file, which
@@ -124,17 +126,22 @@ public class PostmanCollection implements RestCollection {
                 case "raw": format = RequestFormat.RAW; break;
             }
             
-            Map variables = new DefaultingMap(env(), session().env());
-
+            Map variables = new DefaultingMap(env(), session().env());            
+            
+            if(data.data != null) {
+            for(RequestData d : data.data) {
+                    d.key = Template.braces(d.key, variables);
+                    d.value = Template.braces(d.value, variables);
+                }
+            }
+            
             Request request = new RestRequestBuilder()
                     .format(format)
                     .method(data.method)
-                    .variables(variables)
-                    .params(params())
                     .files(files())
-                    .data(data.data, data.rawModeData)
+                    .data(data.data, Template.braces(data.rawModeData, variables))
                     .auth(data.helperAttributes)
-                    .url(data.url)
+                    .url(Template.sinatra(Template.braces(data.url, variables), params()))
                     .headers(data.headers).build();
             
             return new OkRestResponse(client.newCall(request).execute());

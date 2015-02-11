@@ -1,5 +1,6 @@
 package com.orasi.text;
 
+import com.google.common.collect.ForwardingMap;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
@@ -21,7 +22,7 @@ import java.util.regex.Pattern;
  * 
  * @author Brian Becker
  */
-public class TemplateFormat extends Format {
+public class Template extends Format {
 
     private final List<TemplateElement> elements;
     private final String fieldLeft;
@@ -51,11 +52,11 @@ public class TemplateFormat extends Format {
         }
     }
     
-    public TemplateFormat(String pattern) throws Exception {
+    public Template(String pattern) throws Exception {
         this(pattern, "${", "}", '$');
     }
 
-    public TemplateFormat(String pattern, String left, String right, char escape) throws Exception {
+    public Template(String pattern, String left, String right, char escape) throws Exception {
         this.fieldLeft = left;
         this.fieldRight = right;
         this.fieldEscape = escape;
@@ -112,7 +113,35 @@ public class TemplateFormat extends Format {
     
     public static String format(String str, Map format) {
         try {
-            return new TemplateFormat(str).format(format);
+            return new Template(str).format(format);
+        } catch (Exception e) {
+            return str;
+        }
+    }
+    
+    public static String braces(String str, Map format) {
+        try {
+            return new Template(str, "{{", "}}", '$').format(format);
+        } catch (Exception e) {
+            return str;
+        }
+    }
+    
+    public static String sinatra(String str, final Map format) {
+        try {
+            Map vars = new ForwardingMap() {
+                Map delegate = format;
+                @Override
+                protected Map delegate() {
+                    return delegate;
+                }
+                
+                @Override
+                public Object get(Object key) {
+                    return delegate.get(key).toString() + "/";
+                }
+            };
+            return new Template(str, ":", "/", '$').format(vars);
         } catch (Exception e) {
             return str;
         }

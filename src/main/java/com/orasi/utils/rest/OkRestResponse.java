@@ -1,6 +1,6 @@
 package com.orasi.utils.rest;
 
-import com.orasi.text.TemplateFormat;
+import com.orasi.text.Template;
 import com.squareup.okhttp.Response;
 import java.util.Map;
 
