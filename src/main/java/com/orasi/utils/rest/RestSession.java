@@ -21,7 +21,6 @@ import javax.ws.rs.core.NewCookie;
  */
 public class RestSession implements ClientRequestFilter, ClientResponseFilter {
     
-    private final CookieManager cookieManager = new CookieManager();
     private Map environment;
     private final Map<String, NewCookie> cookies;
     
@@ -31,18 +30,7 @@ public class RestSession implements ClientRequestFilter, ClientResponseFilter {
      * environment variables, etc.
      */
     public RestSession() {
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         cookies = new HashMap<String, NewCookie>();
-    }
-    
-    /**
-     * Retrieve the CookieManager. This is used for transferring the state
-     * of login between different RestCollection's.
-     * 
-     * @return CookieManager
-     */
-    public CookieManager getCookieManager() {
-        return this.cookieManager;
     }
     
     /**
@@ -73,10 +61,10 @@ public class RestSession implements ClientRequestFilter, ClientResponseFilter {
 
     @Override
     public void filter(ClientRequestContext requestContext) throws IOException {
+        // System.out.println(requestContext.getHeaders());
         for(Cookie c : cookies.values()) {
             requestContext.getHeaders().add("Cookie", c.toString());
         }
-        System.out.println(requestContext.getHeaders());
     }
 
     @Override

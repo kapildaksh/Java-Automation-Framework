@@ -5,17 +5,15 @@
  */
 package com.orasi.utils.rest.blueprint;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.text.Template;
 import com.orasi.utils.rest.BaseExpectedNode;
 import com.orasi.utils.rest.ExpectedResponse;
+import com.orasi.utils.rest.NullRestRequest;
 import com.orasi.utils.rest.ResponseVerifier;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
-import com.orasi.utils.rest.RestResponse;
 import com.orasi.utils.rest.RestSession;
-import com.orasi.utils.rest.RxRestResponse;
 import com.orasi.utils.rest.Yaml;
 import com.orasi.utils.types.DefaultingMap;
 import java.io.InputStream;
@@ -23,8 +21,6 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -78,7 +74,7 @@ public class SnowcrashCollection implements RestCollection {
         }
 
         @Override
-        public RestResponse send() throws Exception {
+        public Response send() throws Exception {
             
             String body = null;
             String mediatype = null;
@@ -104,8 +100,6 @@ public class SnowcrashCollection implements RestCollection {
             Client client = ClientBuilder.newClient().register(session());
             Entity payload = Entity.entity(Template.format(body, variables), mediatype);
             
-            System.out.println(this.url + " " + resource.path("uriTemplate").asText());
-            System.out.println(body);
             Response response = client.target(url)
                     .path(resource.path("uriTemplate").asText())
                     .resolveTemplates(params())
@@ -113,7 +107,7 @@ public class SnowcrashCollection implements RestCollection {
                     .headers(headers)
                     .method(action.path("method").asText(), payload);
             
-            return new RxRestResponse(response);
+            return response;
         }
     }
     
@@ -158,17 +152,7 @@ public class SnowcrashCollection implements RestCollection {
             throw new RuntimeException("Name parsing exception: Expects \"Resource Name: Action Name\" or \"Resource Name: Action Name: #\"");
         }
                
-        return new RestRequest() {
-            @Override
-            public ExpectedResponse response(String name, BaseExpectedNode node) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public RestResponse send() throws Exception {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        };
+        return new NullRestRequest();
     }
 
     @Override

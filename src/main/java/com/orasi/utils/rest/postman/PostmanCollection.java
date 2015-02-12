@@ -1,22 +1,16 @@
 package com.orasi.utils.rest.postman;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.text.Data;
 import com.orasi.text.Template;
 import com.orasi.utils.rest.BaseExpectedNode;
 import com.orasi.utils.rest.ExpectedResponse;
 import com.orasi.utils.rest.Json;
-import com.orasi.utils.rest.OkRestResponse;
 import com.orasi.utils.rest.ResponseVerifier;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
-import com.orasi.utils.rest.RestResponse;
 import com.orasi.utils.rest.RestSession;
-import com.orasi.utils.rest.RxRestResponse;
 import com.orasi.utils.types.DefaultingMap;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -36,9 +30,7 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
-import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
-import org.apache.xalan.xsltc.compiler.Constants;
 
 /**
  * The PostmanCollection allows one to load a Postman Collection file, which
@@ -129,7 +121,7 @@ public class PostmanCollection implements RestCollection {
          * @throws Exception 
          */
         @Override
-        public RestResponse send() throws Exception {
+        public Response send() throws Exception {
             Map variables = new DefaultingMap(env(), session().env());            
             
             Client client = ClientBuilder.newClient().register(session());
@@ -145,7 +137,6 @@ public class PostmanCollection implements RestCollection {
                 case "raw": format = RequestFormat.RAW_DATA; break;
             }
             
-            System.out.println(format);
             if(data.data != null && data.method == RequestType.GET) {
                 for(RequestData d : data.data) {
                     target = target.queryParam(Template.braces(d.key, variables), Template.braces(d.value, variables));
@@ -167,7 +158,6 @@ public class PostmanCollection implements RestCollection {
             } else if(format == RequestFormat.MULTIPART_DATA && data.data == null) {
                 if(files().size() == 1) {
                     URI file = files().get(0);
-                    System.out.println(file.toURL().getFile());
                     payload = Entity.entity(file.toURL().getContent(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
                 }
             }
@@ -176,7 +166,7 @@ public class PostmanCollection implements RestCollection {
             
             for (String hdr : data.headers.split(Pattern.quote("\n"))) {
                 if(hdr.contains(":")) {
-                    String v[] = hdr.split(Pattern.quote(":"), 2);
+                    String v[] = hdr.split(Pattern.quote(": "), 2);
                     headers.add(v[0], v[1]);
                 }
             }
@@ -186,7 +176,7 @@ public class PostmanCollection implements RestCollection {
                     .headers(headers)
                     .method(data.method.name(), payload);
             
-            return new RxRestResponse(response);
+            return response;
         }
         
         /**

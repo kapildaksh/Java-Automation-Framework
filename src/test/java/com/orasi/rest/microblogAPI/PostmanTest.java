@@ -208,7 +208,6 @@ public class PostmanTest {
 
         collection.get("Test Binary Data").files(getClass().getResource(REST_SANDBOX).toURI().resolve("schema.json")).send();
         RecordedRequest rr = mws.takeRequest();
-        System.out.println("TESTBINARY: " + rr.getUtf8Body());
         Assert.assertTrue(rr.getUtf8Body().contains("patternProperties"));
     }
     

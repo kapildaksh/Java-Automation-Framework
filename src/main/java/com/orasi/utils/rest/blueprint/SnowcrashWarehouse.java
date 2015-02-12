@@ -1,7 +1,10 @@
 package com.orasi.utils.rest.blueprint;
 
 /**
- *
+ * Data Warehouse for files in the API Blueprints (parsed by the snowcrash
+ * binary) format. These are Markdown-formatted testing documents which
+ * provide basically a full API that can be introspected.
+ * 
  * @author Brian Becker
  */
 import com.orasi.utils.rest.RestCollection;

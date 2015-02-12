@@ -1,17 +1,15 @@
 package com.orasi.rest.microblogAPI;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orasi.api.demos.MockMicroblogServer;
 import com.orasi.utils.rest.BaseExpectedNode;
 import com.orasi.utils.rest.Json;
-import com.orasi.utils.rest.OkRestRequest;
 import com.orasi.utils.rest.postman.PostmanWarehouse;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
-import com.orasi.utils.rest.RestResponse;
+import com.orasi.utils.rest.RxRestRequest;
 import com.orasi.utils.types.DefaultingMap;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.And;
@@ -22,6 +20,10 @@ import cucumber.api.java.After;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
 import org.testng.Assert;
 
 /**
@@ -89,8 +91,8 @@ public class MicroblogSteps {
      */
     @Given("^I am logged in as (.*)$")
     public void logged_in(String user) throws Throwable {
-        RestResponse res = collection.get("Login As " + user).send();
-        Assert.assertEquals(res.code(), 200);                
+        Response res = collection.get("Login As " + user).send();
+        Assert.assertEquals(res.getStatus(), 200);                
     }
     
     /**
@@ -163,8 +165,8 @@ public class MicroblogSteps {
         Map m = new HashMap();
         m.put("first", first.toLowerCase());
         m.put("second", second.toLowerCase());
-        RestResponse res = collection.get("Set Mutual Exclusion").env(m).send();
-        Assert.assertEquals(res.code(), 200);        
+        Response res = collection.get("Set Mutual Exclusion").env(m).send();
+        Assert.assertEquals(res.getStatus(), 200);        
     }
     
     /**
@@ -177,8 +179,8 @@ public class MicroblogSteps {
         Map m = new HashMap();
         m.put("first", first.toLowerCase());
         m.put("second", second.toLowerCase());
-        RestResponse res = collection.get("Unset Mutual Exclusion").env(m).send();
-        Assert.assertEquals(res.code(), 200);
+        Response res = collection.get("Unset Mutual Exclusion").env(m).send();
+        Assert.assertEquals(res.getStatus(), 200);
     }    
     
     /**
@@ -257,8 +259,8 @@ public class MicroblogSteps {
      */
     @Then("^I expect a response matching:$")
     public void matches_doc(String response) throws Throwable {
-        RestResponse res = request.env(env2).send();
-        node.verify(res.json(), Json.Map.readTree(response));
+        Response res = request.env(env2).send();
+        node.verify(Json.Map.readTree(res.readEntity(String.class)), Json.Map.readTree(response));
     }    
     
     /**
@@ -269,8 +271,8 @@ public class MicroblogSteps {
      */
     @Then("^I expect a response with code (\\d+) .*$")
     public void error_code(String code) throws Throwable {
-        RestResponse res = request.env(env2).send();
-        Assert.assertEquals(String.valueOf(res.code()), code, res.data());
+        Response res = request.env(env2).send();
+        Assert.assertEquals(String.valueOf(res.getStatus()), code, res.readEntity(String.class));
     }    
 
     /**
@@ -320,10 +322,9 @@ public class MicroblogSteps {
      */
     @When("^I send the (.*) request to (.*):$")
     public void request_document(String method, String url, String req) throws Exception {
-        Map defVar = new DefaultingMap(env1, env2);
-        RequestBody body = RequestBody.create(null, req);
-        Request okreq = new Request.Builder().url(url).method(method, body).build();
-        request = new OkRestRequest(okreq).session(collection.session()).env(defVar);
+        Map defVar = new DefaultingMap(env1, env2);        
+        Client client = ClientBuilder.newClient().register(collection.session());
+        request = new RxRestRequest(client.target(url).request().method(method, Entity.json(req)));
     }
     
 }

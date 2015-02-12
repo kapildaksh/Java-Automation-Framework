@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.ws.rs.core.Response;
 
 /**
  * A RestRequest is intended to send the request to the server, with any
@@ -90,7 +91,7 @@ public abstract class RestRequest {
      * @return  Rest response
      * @throws Exception 
      */
-    public abstract RestResponse send() throws Exception;
+    public abstract Response send() throws Exception;
     
     /**
      * Set an environment (list of variables) on the request. This
