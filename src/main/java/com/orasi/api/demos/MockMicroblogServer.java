@@ -152,7 +152,6 @@ public class MockMicroblogServer {
                 res.type("text/plain; charset=UTF-8");
                 Session s = req.session();
                 if(req.headers("Authorization") != null) {
-                    System.out.println(req.headers("Authorization"));
                     String auth = req.headers("Authorization").split(" ")[1];
                     auth = StringUtils.newStringUtf8(Base64.decodeBase64(auth));
                     String creds[] = auth.split(":");

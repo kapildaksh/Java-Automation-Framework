@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  *
- * @author brian.becker
+ * @author Brian Becker
  */
 public class BlueprintExperiments {
     public static void main(String[] args) {

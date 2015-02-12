@@ -18,7 +18,6 @@ public class Data {
 
     public static String get(URL collection) {
         try {
-            System.out.println(collection.toString());
             return Okio.buffer(Okio.source((InputStream)collection.getContent())).readUtf8();
         } catch (IOException ex) {
             throw new RuntimeException("File Not Found", ex);
