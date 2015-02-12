@@ -1,6 +1,7 @@
 package com.orasi.utils.rest;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,8 +15,8 @@ import java.util.Map;
  */
 public abstract class RestRequest {
     
-    private Map environment;
-    private Map params;
+    private Map environment = new HashMap();
+    private Map params = new HashMap();
     private List<String> files;
     private RestSession session;
     

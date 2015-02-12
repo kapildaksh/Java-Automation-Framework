@@ -5,34 +5,32 @@
  */
 package com.orasi.utils.rest.blueprint;
 
-import com.damnhandy.uri.template.UriTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.text.Template;
 import com.orasi.utils.rest.BaseExpectedNode;
 import com.orasi.utils.rest.ExpectedResponse;
-import com.orasi.utils.rest.OkRestResponse;
 import com.orasi.utils.rest.ResponseVerifier;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
-import com.orasi.utils.rest.RestRequestBuilder;
 import com.orasi.utils.rest.RestResponse;
 import com.orasi.utils.rest.RestSession;
+import com.orasi.utils.rest.RxRestResponse;
 import com.orasi.utils.rest.Yaml;
 import com.orasi.utils.types.DefaultingMap;
-import com.squareup.okhttp.Headers;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
@@ -81,54 +79,52 @@ public class SnowcrashCollection implements RestCollection {
 
         @Override
         public RestResponse send() throws Exception {
-            OkHttpClient client = new OkHttpClient();
-            if(session() != null) {
-                client.setCookieHandler(session().getCookieManager());
-            }
-            RequestFormat format = null;
             
             String body = null;
+            String mediatype = null;
             Map variables = new DefaultingMap(env(), session().env());
-            Headers.Builder hb = new Headers.Builder();
+            MultivaluedMap headers = new MultivaluedHashMap();
             for(JsonNode exa : action.path("examples")) {
                 for(JsonNode req : exa.path("requests")) {
                     if(req.path("name").asText().equals(name)) {
                         body = req.path("body").asText();
                         for(JsonNode n : req.path("headers")) {
-                            hb.add(Template.format(n.path("name").asText(), variables), Template.format(n.path("value").asText(), variables));
+                            headers.add(Template.format(n.path("name").asText(), variables), Template.format(n.path("value").asText(), variables));
+                            if(n.path("name").asText().equals("Content-Type")) {
+                                mediatype = n.path("value").asText();
+                            }
                         }
                     }
                 }                
-            }                   
+            }                 
+            
+            if(mediatype == null) mediatype = "text/plain; charset=utf-8";
+            if(body == null) body = "";
                     
-            String url = Template.format(this.url + resource.path("uriTemplate").asText(), variables);
-            url = UriTemplate.fromTemplate(url).set(params()).expand();
-
-            Request request = new RestRequestBuilder()
-                    .format(RequestFormat.RAW)
-                    .method(RequestType.valueOf(action.path("method").asText()))
-                    .files(files())
-                    .data(new LinkedList<RequestData>(), Template.format(body, variables))
-                    .url(url)
-                    .headers(hb.build()).build();
-
-            return new OkRestResponse(client.newCall(request).execute());
+            Client client = ClientBuilder.newClient().register(session());
+            Entity payload = Entity.entity(Template.format(body, variables), mediatype);
+            
+            System.out.println(this.url + " " + resource.path("uriTemplate").asText());
+            System.out.println(body);
+            Response response = client.target(url)
+                    .path(resource.path("uriTemplate").asText())
+                    .resolveTemplates(params())
+                    .request()
+                    .headers(headers)
+                    .method(action.path("method").asText(), payload);
+            
+            return new RxRestResponse(response);
         }
     }
     
     private final JsonNode data;
     private final RestSession session;
-    private String url;
+    private final String url;
     
     private SnowcrashCollection(JsonNode data, String endpoint) {
         this.session = new RestSession();
         this.data = data;
         this.url = endpoint;
-            try {
-                System.out.println(Yaml.Map.writerWithDefaultPrettyPrinter().writeValueAsString(data));
-            } catch (JsonProcessingException ex) {
-                Logger.getLogger(SnowcrashCollection.class.getName()).log(Level.SEVERE, null, ex);
-            }        
     }
     
     /**

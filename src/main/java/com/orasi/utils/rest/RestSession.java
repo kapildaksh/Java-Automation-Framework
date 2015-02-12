@@ -1,8 +1,16 @@
 package com.orasi.utils.rest;
 
+import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.HashMap;
 import java.util.Map;
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.ClientResponseContext;
+import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.NewCookie;
 
 /**
  * The RestSession signifies a central repository for a given RestCollection
@@ -11,10 +19,11 @@ import java.util.Map;
  * 
  * @author  Brian Becker
  */
-public class RestSession {
+public class RestSession implements ClientRequestFilter, ClientResponseFilter {
     
     private final CookieManager cookieManager = new CookieManager();
     private Map environment;
+    private final Map<String, NewCookie> cookies;
     
     /**
      * Create a new RestSession. This is a repository for a given RestCollection
@@ -23,6 +32,7 @@ public class RestSession {
      */
     public RestSession() {
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        cookies = new HashMap<String, NewCookie>();
     }
     
     /**
@@ -59,6 +69,19 @@ public class RestSession {
      */
     public Map env() {
         return this.environment;
+    }
+
+    @Override
+    public void filter(ClientRequestContext requestContext) throws IOException {
+        for(Cookie c : cookies.values()) {
+            requestContext.getHeaders().add("Cookie", c.toString());
+        }
+        System.out.println(requestContext.getHeaders());
+    }
+
+    @Override
+    public void filter(ClientRequestContext arg0, ClientResponseContext arg1) throws IOException {
+        cookies.putAll(arg1.getCookies());
     }
     
 }

@@ -22,8 +22,8 @@ public class RxRestResponse extends RestResponse {
      */
     public RxRestResponse(Response response) {
         try {
-            this.data = response.getEntity().toString();
             this.status = response.getStatus();
+            this.data = response.readEntity(String.class);
         } catch (Exception e) {
             this.status = -1;
         }

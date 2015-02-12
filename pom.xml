@@ -22,38 +22,30 @@
                         <id>snowcrash-java-binding</id>
                         <url>https://bitbucket.org/outofcoffee/snowcrash-java-binding/raw/HEAD/repo/</url>
                 </repository>
-                <repository>
-                    <id>maven-restlet</id>
-                    <name>Restlet repository</name>
-                    <url>http://maven.restlet.com</url>
-                </repository>                
 	</repositories>
-	<dependencies>      
+	<dependencies>
+                <dependency>
+                  <groupId>org.apache.cxf</groupId>
+                  <artifactId>cxf-rt-rs-client</artifactId>
+                  <version>${cxf.version}</version>
+                </dependency>   
+                <dependency>
+                  <groupId>org.apache.cxf</groupId>
+                  <artifactId>cxf-rt-transports-http-hc</artifactId>
+                  <!-- 2.7.8 or 3.0.0-milestone1 -->
+                  <version>${cxf.version}</version>
+                </dependency>                             
                 <dependency>
                     <groupId>javax.servlet</groupId>
                     <artifactId>javax.servlet-api</artifactId>
                     <version>3.1.0</version>
                 </dependency>
                 <dependency>
-                    <groupId>org.restlet.jse</groupId>
-                    <artifactId>org.restlet</artifactId>
-                    <version>2.0.15</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.restlet.jse</groupId>
-                    <artifactId>org.restlet.ext.jackson</artifactId>
-                    <version>2.0.15</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.restlet.jse</groupId>
-                    <artifactId>org.restlet.ext.jaxrs</artifactId>
-                    <version>2.0.15</version>
-                </dependency> 
-                <dependency>
-                   <groupId>org.restlet.jee</groupId>
-                   <artifactId>org.restlet.ext.servlet</artifactId>
-                   <version>2.0.0</version>
-                </dependency>                                                                          
+                    <groupId>javax.ws.rs</groupId>
+                    <artifactId>javax.ws.rs-api</artifactId>
+                    <version>2.0.1</version>
+                    <scope>provided</scope>
+                </dependency>                                                                                     
                 <dependency>
                   <groupId>com.damnhandy</groupId>
                   <artifactId>handy-uri-templates</artifactId>
@@ -336,6 +328,7 @@
 	<properties>
 		<!-- <testNGSourceDirectory>src/test/resources/sandbox</testNGSourceDirectory> -->
 		<!-- <testNGSourceDirectory>src/test/resources/bluesource/testngXMLs</testNGSourceDirectory> -->
+                <cxf.version>3.0.3</cxf.version>                
 		<testNGSourceDirectory>src/test/resources</testNGSourceDirectory>
 	</properties>
 	<build>
