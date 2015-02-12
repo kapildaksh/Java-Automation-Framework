@@ -12,11 +12,13 @@ import com.orasi.utils.rest.RestRequest;
 import com.orasi.utils.rest.RestSession;
 import com.orasi.utils.types.DefaultingMap;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -30,6 +32,7 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
+import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 
 /**
@@ -133,7 +136,7 @@ public class PostmanCollection implements RestCollection {
             switch(data.dataMode) {
                 case "params": format = RequestFormat.MULTIPART_DATA; break;
                 case "urlencoded": format = RequestFormat.ENCODED_DATA; break;
-                case "binary": format = RequestFormat.MULTIPART_DATA; break;
+                case "binary": format = RequestFormat.RAW_DATA; break;
                 case "raw": format = RequestFormat.RAW_DATA; break;
             }
             
@@ -151,11 +154,19 @@ public class PostmanCollection implements RestCollection {
                 payload = Entity.entity(Template.braces(data.rawModeData, variables), MediaType.WILDCARD_TYPE);
             } else if(format == RequestFormat.MULTIPART_DATA && data.data != null && data.data.size() > 0) {
                 List<Attachment> attachments = new ArrayList<Attachment>();
+                Iterator<URI> fi = files().iterator();
                 for(RequestData d : data.data) {
-                    attachments.add(new Attachment(Template.braces(d.key, variables), "text/plain", Template.braces(d.value, variables)));
+                    if(d.type.equals("file")) {
+                        if(fi.hasNext()) {
+                            URL file = fi.next().toURL();
+                            attachments.add(new Attachment(Template.braces(d.key, variables), (InputStream)file.getContent(), new ContentDisposition("form-data; name=\"" + Template.braces(d.key, variables) + "\"; filename=\"" + file.getFile() + "\"")));
+                        }
+                    } else {
+                        attachments.add(new Attachment(Template.braces(d.key, variables), "text/plain", Template.braces(d.value, variables)));
+                    }
                 }
                 payload = Entity.entity(new MultipartBody(attachments), MediaType.MULTIPART_FORM_DATA_TYPE);
-            } else if(format == RequestFormat.MULTIPART_DATA && data.data == null) {
+            } else if(format == RequestFormat.RAW_DATA && data.data == null) {
                 if(files().size() == 1) {
                     URI file = files().get(0);
                     payload = Entity.entity(file.toURL().getContent(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
