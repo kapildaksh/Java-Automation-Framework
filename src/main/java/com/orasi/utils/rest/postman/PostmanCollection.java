@@ -1,6 +1,7 @@
 package com.orasi.utils.rest.postman;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.orasi.text.Data;
 import com.orasi.text.Template;
 import com.orasi.utils.rest.BaseExpectedNode;
@@ -11,17 +12,34 @@ import com.orasi.utils.rest.ResponseVerifier;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
 import com.orasi.utils.rest.RestRequestBuilder;
+import com.orasi.utils.rest.RestRequestHelpers;
 import com.orasi.utils.rest.RestResponse;
 import com.orasi.utils.rest.RestSession;
+import com.orasi.utils.rest.RxRestResponse;
 import com.orasi.utils.types.DefaultingMap;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import org.apache.cxf.jaxrs.ext.multipart.Attachment;
+import org.apache.cxf.jaxrs.ext.multipart.Multipart;
+import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.apache.xalan.xsltc.compiler.Constants;
 
 /**
@@ -114,37 +132,63 @@ public class PostmanCollection implements RestCollection {
          */
         @Override
         public RestResponse send() throws Exception {
-            OkHttpClient client = new OkHttpClient();
-            if(session() != null) {
-                client.setCookieHandler(session().getCookieManager());
-            }
-            RequestFormat format = null;
-            switch(data.dataMode) {
-                case "params": format = RequestFormat.MULTIPART_FORM; break;
-                case "urlencoded": format = RequestFormat.URLENCODE; break;
-                case "binary": format = RequestFormat.RAW; break;
-                case "raw": format = RequestFormat.RAW; break;
-            }
-            
             Map variables = new DefaultingMap(env(), session().env());            
             
-            if(data.data != null) {
-            for(RequestData d : data.data) {
-                    d.key = Template.braces(d.key, variables);
-                    d.value = Template.braces(d.value, variables);
+            Client client = ClientBuilder.newClient().register(session());
+            WebTarget target = client.target(Template.sinatra(Template.braces(data.url, variables), params()));
+            
+            Entity payload = null;
+            
+            RequestFormat format = null;
+            switch(data.dataMode) {
+                case "params": format = RequestFormat.MULTIPART_DATA; break;
+                case "urlencoded": format = RequestFormat.ENCODED_DATA; break;
+                case "binary": format = RequestFormat.MULTIPART_DATA; break;
+                case "raw": format = RequestFormat.RAW_DATA; break;
+            }
+            
+            System.out.println(format);
+            if(data.data != null && data.method == RequestType.GET) {
+                for(RequestData d : data.data) {
+                    target = target.queryParam(Template.braces(d.key, variables), Template.braces(d.value, variables));
+                }
+            } else if(format == RequestFormat.ENCODED_DATA && data.data != null && data.method != RequestType.GET) {
+                Form form = new Form();
+                for(RequestData d : data.data) {
+                    form.param(Template.braces(d.key, variables), Template.braces(d.value, variables));
+                }
+                payload = Entity.form(form);
+            } else if(format == RequestFormat.RAW_DATA && data.rawModeData != null) {
+                payload = Entity.entity(Template.braces(data.rawModeData, variables), MediaType.WILDCARD_TYPE);
+            } else if(format == RequestFormat.MULTIPART_DATA && data.data != null && data.data.size() > 0) {
+                List<Attachment> attachments = new ArrayList<Attachment>();
+                for(RequestData d : data.data) {
+                    attachments.add(new Attachment(Template.braces(d.key, variables), "text/plain", Template.braces(d.value, variables)));
+                }
+                payload = Entity.entity(new MultipartBody(attachments), MediaType.MULTIPART_FORM_DATA_TYPE);
+            } else if(format == RequestFormat.MULTIPART_DATA && data.data == null) {
+                if(files().size() == 1) {
+                    URI file = files().get(0);
+                    System.out.println(file.toURL().getFile());
+                    payload = Entity.entity(file.toURL().getContent(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
                 }
             }
             
-            Request request = new RestRequestBuilder()
-                    .format(format)
-                    .method(data.method)
-                    .files(files())
-                    .data(data.data, Template.braces(data.rawModeData, variables))
-                    .auth(data.helperAttributes)
-                    .url(Template.sinatra(Template.braces(data.url, variables), params()))
-                    .headers(data.headers).build();
+            MultivaluedMap headers = new MultivaluedHashMap();
             
-            return new OkRestResponse(client.newCall(request).execute());
+            for (String hdr : data.headers.split(Pattern.quote("\n"))) {
+                if(hdr.contains(":")) {
+                    String v[] = hdr.split(Pattern.quote(":"), 2);
+                    headers.add(v[0], v[1]);
+                }
+            }
+            
+            Response response = target
+                    .request()
+                    .headers(headers)
+                    .method(data.method.name(), payload);
+            
+            return new RxRestResponse(response);
         }
         
         /**

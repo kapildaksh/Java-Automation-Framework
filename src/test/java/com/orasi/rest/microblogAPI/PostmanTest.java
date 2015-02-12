@@ -6,6 +6,7 @@ import com.orasi.utils.rest.RestCollection;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -78,7 +79,7 @@ public class PostmanTest {
         env.put("var", "file:///var/variable");
         collection.get("Test Variables").env(env).send();
         RecordedRequest rr = mws.takeRequest();
-        Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3&x=file:///var/variable HTTP/1.1", rr.getRequestLine());
+        Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3&x=file%3A///var/variable HTTP/1.1", rr.getRequestLine());
     }    
     
     @Test
@@ -93,7 +94,7 @@ public class PostmanTest {
         params.put("which", "more");
         collection.get("Url Parameters").env(env).params(params).send();
         RecordedRequest rr = mws.takeRequest();
-        Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3&x=file:///var/variable HTTP/1.1", rr.getRequestLine());
+        Assert.assertEquals("GET /more/testing?q=v1&v=v2&a=v3&x=file%3A///var/variable HTTP/1.1", rr.getRequestLine());
     }        
     
     @Test
@@ -164,7 +165,6 @@ public class PostmanTest {
         Assert.assertTrue(rr.getUtf8Body().contains("file:///var/variable"));   
     }
     
-    
     @Test
     public void testRaw() throws Exception {
         // This is only a raw document, no formatting or special data type.
@@ -205,9 +205,10 @@ public class PostmanTest {
         // }
         mws.enqueue(new MockResponse());       
         mws.play(TESTING_PORT);
-        
-        collection.get("Test Binary Data").files(new String(Files.readAllBytes(Paths.get(getClass().getResource(REST_SANDBOX).toURI()).resolve("schema.json")))).send();
+
+        collection.get("Test Binary Data").files(getClass().getResource(REST_SANDBOX).toURI().resolve("schema.json")).send();
         RecordedRequest rr = mws.takeRequest();
+        System.out.println("TESTBINARY: " + rr.getUtf8Body());
         Assert.assertTrue(rr.getUtf8Body().contains("patternProperties"));
     }
     

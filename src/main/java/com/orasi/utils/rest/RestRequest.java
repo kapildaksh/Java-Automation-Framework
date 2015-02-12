@@ -1,5 +1,6 @@
 package com.orasi.utils.rest;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,7 @@ public abstract class RestRequest {
     
     private Map environment = new HashMap();
     private Map params = new HashMap();
-    private List<String> files;
+    private List<URI> files;
     private RestSession session;
     
     /**
@@ -39,7 +40,7 @@ public abstract class RestRequest {
      * which may be JSON, XML, plain text, or any other format.
      */
     public static enum RequestFormat {
-        URLENCODE, MULTIPART_FORM, RAW
+        ENCODED_DATA, MULTIPART_DATA, RAW_DATA
     }
     
     /**
@@ -149,7 +150,7 @@ public abstract class RestRequest {
      * @param   files       The files which should be used for multi form
      * @return  this
      */    
-    public RestRequest files(String... files) {
+    public RestRequest files(URI... files) {
         this.files = Arrays.asList(files);
         return this;
     }
@@ -160,7 +161,7 @@ public abstract class RestRequest {
      * 
      * @return  The list of files which should be used for multi form
      */
-    public List<String> files() {
+    public List<URI> files() {
         return this.files;
     }    
     
