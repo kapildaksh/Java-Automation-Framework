@@ -22,7 +22,7 @@ public class RxRestResponse extends RestResponse {
      */
     public RxRestResponse(Response response) {
         try {
-            this.data = response.readEntity(String.class);
+            this.data = response.getEntity().toString();
             this.status = response.getStatus();
         } catch (Exception e) {
             this.status = -1;
