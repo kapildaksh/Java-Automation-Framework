@@ -11,8 +11,6 @@ import com.orasi.utils.rest.OkRestResponse;
 import com.orasi.utils.rest.ResponseVerifier;
 import com.orasi.utils.rest.RestCollection;
 import com.orasi.utils.rest.RestRequest;
-import com.orasi.utils.rest.RestRequestBuilder;
-import com.orasi.utils.rest.RestRequestHelpers;
 import com.orasi.utils.rest.RestResponse;
 import com.orasi.utils.rest.RestSession;
 import com.orasi.utils.rest.RxRestResponse;
