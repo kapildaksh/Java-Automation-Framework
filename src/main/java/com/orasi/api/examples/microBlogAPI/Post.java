@@ -8,16 +8,14 @@ package com.orasi.api.examples.microBlogAPI;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Simple User POJO for the MicroBlog server. 
- * 
- * @author Brian Becker
+ *
+ * @author brian.becker
  */
 @XmlRootElement
-public class User {   
-
+public class Post {
+    
+    public String title;
+    public String message;
     public String username;
-    public String nickname;
-    public String email;
-    public String password;
     
 }

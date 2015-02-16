@@ -56,12 +56,27 @@
                         <groupId>org.glassfish.grizzly</groupId>
                         <artifactId>grizzly-http-servlet-server</artifactId>
                         <version>2.3.18</version>
-                </dependency>      
+                </dependency>   
+                <dependency>
+                        <groupId>org.glassfish.grizzly</groupId>
+                        <artifactId>grizzly-http-servlet</artifactId>
+                        <version>2.3.18</version>
+                </dependency>                                 
                 <dependency>
                         <groupId>org.apache.cxf</groupId>
                         <artifactId>cxf-rt-frontend-jaxrs</artifactId>
                         <version>${cxf.version}</version>
-                </dependency>                    
+                </dependency>   
+                <dependency>
+                  <groupId>org.apache.cxf</groupId>
+                  <artifactId>cxf-rt-rs-service-description</artifactId>
+                  <version>${cxf.version}</version>
+                </dependency>                
+                <dependency>
+	            <groupId>org.apache.cxf</groupId>
+	            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+	            <version>${cxf.version}</version>                   
+	        </dependency>                                 
                 <dependency>
                         <groupId>org.apache.cxf</groupId>
                         <artifactId>cxf-integration-cdi</artifactId>
@@ -339,7 +354,7 @@
 			<groupId>org.codehaus.woodstox</groupId>
 			<artifactId>woodstox-core-asl</artifactId>
 			<version>4.4.1</version>
-		</dependency>
+		</dependency>           
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
@@ -385,7 +400,7 @@
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-web</artifactId>
                     <version>4.1.4.RELEASE</version>
-                </dependency>
+                </dependency>                
                 <dependency>
                     <groupId>com.sun.xml.bind</groupId>
                     <artifactId>jaxb-core</artifactId>
