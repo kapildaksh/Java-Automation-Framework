@@ -217,7 +217,10 @@ public class OrasiReporter {
 
 		reportPrintWriter.println("<html>");
 		reportPrintWriter.println("<body>");
+		//Header
+		reportPrintWriter.println("<head><center><h2>"+outputName+"</h2></center></head>");
 		//Pie Chart
+		//See: https://developers.google.com/chart/interactive/docs/gallery/piechart
 		reportPrintWriter.println("<center><div id=\"piechart\" style=\"width: 500px; height: 300px;\"></div>");
 		//Summary Variables
 		reportPrintWriter.println("<table border=\"1\" style=\"width:25%\">");
@@ -369,6 +372,7 @@ public class OrasiReporter {
 		reportPrintWriter.println("}");
 		reportPrintWriter.println("</script>");
 		//Generate Pie Chart
+		//See: https://developers.google.com/chart/interactive/docs/gallery/piechart
 		reportPrintWriter.println("<script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>");
 		reportPrintWriter.println("<script type=\"text/javascript\">");
 		reportPrintWriter.println("var nPassed = parseInt(document.getElementById('totalPassed').innerHTML);");
@@ -384,7 +388,8 @@ public class OrasiReporter {
 		reportPrintWriter.println("['Warning', nWarning],");
 		reportPrintWriter.println("]);");
 		reportPrintWriter.println("var options = {");
-		reportPrintWriter.println("title: 'Suite Summary',");
+		reportPrintWriter.println("chartArea:{left:'auto',top:10,width:'50%',height:'75%'},");
+		reportPrintWriter.println("legend: 'bottom',");
 		reportPrintWriter.println("slices:{");
 		reportPrintWriter.println("0: {color:'green'},");
 		reportPrintWriter.println("1: {color:'red'},");
