@@ -85,7 +85,6 @@ public class ListingTitlesPage {
 			//if it matches the title, then click on the trash element
 			if(element.getText().equals(title)){
 				//click on the trash element
-				
 				element.findElement(By.cssSelector("a[data-method = 'delete']")).click();
 				
 				//accept the alert that pops up

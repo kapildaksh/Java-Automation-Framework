@@ -3,9 +3,12 @@ package com.orasi.utils;
 import org.testng.Assert;
 import org.testng.Reporter;
 
+import com.orasi.reporting.OrasiReporter;
 import com.orasi.utils.date.SimpleDate;
 
 public class TestReporter {
+	static OrasiReporter htmlReport = new OrasiReporter();
+
     private static boolean printToConsole = false;
     
     private static String getTimestamp(){
@@ -58,27 +61,37 @@ public class TestReporter {
     }
 
     public static void assertTrue(boolean condition, String description) {	
-	try{
-	    Assert.assertTrue(condition, description);
-	}catch (AssertionError failure){
-	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert True - " + description + "</font></u></b><br />");
-	    if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert True Failed- " + trimHtml(description));
-	    Assert.fail(description);
-	}
-	Reporter.log(getTimestamp() + " <font size = 2 color=\"green\"><b><u>Assert True - " + description + "</font></u></b><br />");
-	if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert True - " + trimHtml(description));
+//	try{
+//	    Assert.assertTrue(condition, description);
+//	}catch (AssertionError failure){
+//	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert True - " + description + "</font></u></b><br />");
+//	    if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert True Failed- " + trimHtml(description));
+//	    Assert.fail(description);
+//	}
+//	Reporter.log(getTimestamp() + " <font size = 2 color=\"green\"><b><u>Assert True - " + description + "</font></u></b><br />");
+//	if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert True - " + trimHtml(description));
+//    }
+		if(condition){
+			htmlReport.ReportEvent("Pass", "Assert True", description, false);
+		}else{
+			htmlReport.ReportEvent("Fail", "Assert True Failed", description + " assertion failed", true);
+		}
     }
-    
     public static void assertFalse(boolean condition, String description) {	
-   	try{
-   	    Assert.assertFalse(condition, description);
-   	}catch (AssertionError failure){
-   	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert False - " + description + "</font></u></b><br />");
-   	 if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert False Failed- " + trimHtml(description));
-   	    Assert.fail(description);
-   	}
-   	Reporter.log(getTimestamp() + " <font size = 2 color=\"green\"><b><u>Assert False - " + description + "</font></u></b><br />");
-   	if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert False - " + trimHtml(description));
+//   	try{
+//   	    Assert.assertFalse(condition, description);
+//   	}catch (AssertionError failure){
+//   	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert False - " + description + "</font></u></b><br />");
+//   	 if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert False Failed- " + trimHtml(description));
+//   	    Assert.fail(description);
+//   	}
+//   	Reporter.log(getTimestamp() + " <font size = 2 color=\"green\"><b><u>Assert False - " + description + "</font></u></b><br />");
+//   	if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert False - " + trimHtml(description));
+		if(condition){
+			htmlReport.ReportEvent("Pass", "Assert False", description, false);
+		}else{
+			htmlReport.ReportEvent("Fail", "Assert False Failed", description + " assertion was true when it was expected to be false.", true);
+		}
        }
     
     public static void assertEquals(boolean condition, String description) {

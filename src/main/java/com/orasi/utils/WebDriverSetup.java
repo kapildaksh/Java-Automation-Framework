@@ -27,7 +27,7 @@ import org.testng.Assert;
 
 public class WebDriverSetup {
 
-	public WebDriver driver;
+	public static WebDriver driver;
 	private String testEnvironment = "";
 	private String testApplication = "";
 	private String driverWindow = "";
@@ -58,7 +58,7 @@ public class WebDriverSetup {
 		setRunLocation(runLocation);
 		this.testEnvironment = environment;
 		
-		verifyExpectedAndActualOS();
+		//verifyExpectedAndActualOS();
 	}
 	
 	//Getters & Setters
@@ -126,7 +126,7 @@ public class WebDriverSetup {
 		driver = driverSession;
 	}
 	
-	public WebDriver getDriver(){
+	public static WebDriver getDriver(){
 		return driver;
 	}
 	

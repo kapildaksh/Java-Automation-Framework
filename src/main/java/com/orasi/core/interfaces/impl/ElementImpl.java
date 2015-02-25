@@ -20,7 +20,9 @@ import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import com.orasi.core.interfaces.Element;
+import com.orasi.reporting.OrasiReporter;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.WebDriverSetup;
 import com.orasi.utils.date.SimpleDate;
@@ -30,6 +32,7 @@ import com.orasi.utils.date.SimpleDate;
  * underlying WebElement instance for custom functionality.
  */
 public class ElementImpl implements Element {
+	OrasiReporter htmlReport = new OrasiReporter();
 
 	protected WebElement element;
 	private java.util.Date date = new java.util.Date();
@@ -47,13 +50,19 @@ public class ElementImpl implements Element {
 	    	try{
 	    	    element.click();
 	    	}catch(RuntimeException rte){
+	    		/**
 	    	    TestReporter.interfaceLog(SimpleDate.getTimestamp()
         		+ " :: Clicked [ <font size = 2 color=\"red\"><b>@FindBy: " + getElementLocatorInfo()
         		+ " </font></b>]");
+        		*/
 	    	}
+	    	/**
 		TestReporter.interfaceLog(SimpleDate.getTimestamp()
 				+ " :: Clicked [ <b>@FindBy: " + getElementLocatorInfo()
 				+ " </b>]");
+				*/
+        htmlReport.ReportEvent("Info", "["+getElementLocatorInfo() + "] Element Clicked", "The element [" + getElementLocatorInfo() + "] was clicked.", false);
+
 	}
 
 	public void jsClick(WebDriver driver) {

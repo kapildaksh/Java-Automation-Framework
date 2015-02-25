@@ -37,9 +37,13 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     public void clear() {
 		try {
 			getWrappedElement().clear();
-			TestReporter.interfaceLog(" Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]");
+			//TestReporter.interfaceLog(" Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]");
+	    	htmlReport.ReportEvent("Info","["+ getElementLocatorInfo()  + "] Textbox Cleared", "The textbox [" + getElementLocatorInfo()  + "] was cleared.", false);
+
 		} catch (RuntimeException rte) {
-			TestReporter.interfaceLog("Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]", true);
+			//TestReporter.interfaceLog("Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]", true);
+	    	htmlReport.ReportEvent("Info","["+ getElementLocatorInfo()  + "] Textbox Cleared", "The textbox [" + getElementLocatorInfo()  + "] was cleared.", false);
+
 			throw rte;
 		}
     }
@@ -56,9 +60,13 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 			try {
 				getWrappedElement().clear();
 				getWrappedElement().sendKeys(text);
-				TestReporter.log(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+				//TestReporter.log(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+	        	htmlReport.ReportEvent("Info","["+ getElementLocatorInfo()  + "] Textbox Set", "The textbox [" + getElementLocatorInfo()  + "] was set to [" + text.toString() + "].", false);
+
 			} catch (RuntimeException rte) {
-				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
+				//TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
+	        	htmlReport.ReportEvent("Info", "["+ getElementLocatorInfo()  + "] Textbox Set", "The textbox [" + getElementLocatorInfo()  + "] was set to [" + text.toString() + "].", false);
+
 				throw rte;
 			}
 		} else {
@@ -81,14 +89,17 @@ public class TextboxImpl extends ElementImpl implements Textbox {
                 executor.executeScript("arguments[0].scrollIntoView(true);arguments[0].click();", element);
             	getWrappedElement().clear();
             	getWrappedElement().sendKeys(text); 
-            	TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+            	//TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+            	htmlReport.ReportEvent("Info","["+ getElementLocatorInfo()  + "] Textbox Set", "The textbox [" + getElementLocatorInfo()  + "] was set to [" + text.toString() + "].", false);
                 
             }catch(RuntimeException rte){
-                TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
+               // TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
+            	htmlReport.ReportEvent("Info","["+ getElementLocatorInfo()  + "] Textbox Set", "The textbox [" + getElementLocatorInfo()  + "] was set to [" + text.toString() + "].", false);
                 throw rte;
             }           
         }else{
-            TestReporter.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+            //TestReporter.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+        	htmlReport.ReportEvent("Info","["+ getElementLocatorInfo()  + "] Textbox Set", "The textbox [" + getElementLocatorInfo()  + "] was set to [" + text.toString() + "].", false);
         }
     }
 
@@ -107,9 +118,11 @@ public class TextboxImpl extends ElementImpl implements Textbox {
         	getWrappedElement().sendKeys(Keys.CONTROL + "a");
         	getWrappedElement().sendKeys(text);
         	getWrappedElement().sendKeys(Keys.TAB);
-        	TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+        	//TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+        	htmlReport.ReportEvent("Info","["+ getElementLocatorInfo()  + "] Textbox Set", "The textbox [" + getElementLocatorInfo()  + "] was set to [" + text.toString() + "].", false);
             }catch(RuntimeException rte){
-                TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
+                //TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [  <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
+            	htmlReport.ReportEvent("Info","["+ getElementLocatorInfo()  + "] Textbox Set", "The textbox [" + getElementLocatorInfo()  + "] was set to [" + text.toString() + "].", false);
                 throw rte;
             }
         }else{
