@@ -74,6 +74,7 @@ public class TestAddNewTitle {
 	public void testCreateNewTitle(String testScenario, String role,
 			String newTitle) {
 
+		
 		TestReporter.logScenario(testScenario);
 		String testName = new Object() {
 		}.getClass().getEnclosingMethod().getName();
