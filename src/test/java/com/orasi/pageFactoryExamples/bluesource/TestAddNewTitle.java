@@ -27,113 +27,124 @@ import com.orasi.apps.bluesource.TopNavigationBar;
 
 public class TestAddNewTitle {
 
-    private String application = "";
-    private String browserUnderTest = "";
-    private String browserVersion = "";
-    private String operatingSystem = "";
-    private String runLocation = "";
-    private String environment = "";
-    private Map<String, WebDriver> drivers = new HashMap<String, WebDriver>();
+	private String application = "";
+	private String browserUnderTest = "";
+	private String browserVersion = "";
+	private String operatingSystem = "";
+	private String runLocation = "";
+	private String environment = "";
+	private Map<String, WebDriver> drivers = new HashMap<String, WebDriver>();
 
-    @DataProvider(name = "dataScenario")
-    public Object[][] scenarios() {
-	return new ExcelDataProvider(Constants.BLUESOURCE_CSV_PATH
-		+ "TestAddNewTitle.xlsx", "TestAddNewTitle").getTestData();
-    }
+	@DataProvider(name = "dataScenario")
+	public Object[][] scenarios() {
+		return new ExcelDataProvider(Constants.BLUESOURCE_CSV_PATH
+				+ "TestAddNewTitle.xlsx", "TestAddNewTitle").getTestData();
+	}
 
-    @BeforeTest(groups = { "regression" })
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
-	    "operatingSystem", "environment" })
-    public void setup(@Optional String runLocation, String browserUnderTest,
-	    String browserVersion, String operatingSystem, String environment) {
-	this.application = "Bluesource";
-	this.runLocation = runLocation;
-	this.browserUnderTest = browserUnderTest;
-	this.browserVersion = browserVersion;
-	this.operatingSystem = operatingSystem;
-	this.environment = environment;
+	@BeforeTest(groups = { "regression" })
+	@Parameters({ "runLocation", "browserUnderTest", "browserVersion",
+			"operatingSystem", "environment" })
+	public void setup(@Optional String runLocation, String browserUnderTest,
+			String browserVersion, String operatingSystem, String environment) {
+		this.application = "Bluesource";
+		this.runLocation = runLocation;
+		this.browserUnderTest = browserUnderTest;
+		this.browserVersion = browserVersion;
+		this.operatingSystem = operatingSystem;
+		this.environment = environment;
 
-    }
+	}
 
-    @AfterMethod(groups = { "regression" })
-    public synchronized void closeSession(ITestResult test) {
-	System.out.println(test.getMethod().getMethodName());
-	WebDriver driver = drivers.get(test.getMethod().getMethodName());
-	driver.quit();
-    }
+	@AfterMethod(groups = { "regression" })
+	public synchronized void closeSession(ITestResult test) {
+		System.out.println(test.getMethod().getMethodName());
+		WebDriver driver = drivers.get(test.getMethod().getMethodName());
+		driver.quit();
+	}
 
-    /**
-     * @throws Exception
-     * @Summary: Adds a housekeeper to the schedule
-     * @Precondition:NA
-     * @Author: Jessica Marshall
-     * @Version: 10/6/2014
-     * @Return: N/A
-     */
-    @Test(dataProvider = "dataScenario", groups = { "regression" })
-    public void testCreateNewTitle(String testScenario, String role,
-	    String newTitle) {
+	/**
+	 * @throws Exception
+	 * @Summary: Adds a housekeeper to the schedule
+	 * @Precondition:NA
+	 * @Author: Jessica Marshall
+	 * @Version: 10/6/2014
+	 * @Return: N/A
+	 */
+	@Test(dataProvider = "dataScenario", groups = { "regression" })
+	public void testCreateNewTitle(String testScenario, String role,
+			String newTitle) {
 
-	String testName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
+		TestReporter.logScenario(testScenario);
+		String testName = new Object() {
+		}.getClass().getEnclosingMethod().getName();
 
-	WebDriverSetup setup = new WebDriverSetup(application,
-		browserUnderTest, browserVersion, operatingSystem, runLocation,
-		environment);
-	WebDriver driver = setup.initialize();
-	System.out.println(testName);
-	drivers.put(testName, driver);
+		WebDriverSetup setup = new WebDriverSetup(application,
+				browserUnderTest, browserVersion, operatingSystem, runLocation,
+				environment);
+		WebDriver driver = setup.initialize();
+		System.out.println(testName);
+		drivers.put(testName, driver);
 
-	// Login
-	LoginPage loginPage = new LoginPage(driver);
-	Assert.assertTrue(loginPage.pageLoaded(),
-		"Verify login page is displayed");
-	loginPage.login(role);
+		// Login
+		TestReporter.logStep("Login");
+		LoginPage loginPage = new LoginPage(driver);
+		Assert.assertTrue(loginPage.pageLoaded(),
+				"Verify login page is displayed");
+		loginPage.login(role);
 
-	// Verify user is logged in
-	TopNavigationBar topNavigationBar = new TopNavigationBar(driver);
-	Assert.assertTrue(topNavigationBar.isLoggedIn());
-	TestReporter.log("User was logged in successfully");
+		// Verify user is logged in
+		TestReporter.logStep("Verify Successful User Login");
+		TopNavigationBar topNavigationBar = new TopNavigationBar(driver);
+		Assert.assertTrue(topNavigationBar.isLoggedIn());
+		TestReporter.log("User was logged in successfully");
 
-	// Navigate to the title page
-	topNavigationBar.clickAdminLink();
-	topNavigationBar.clickTitlesLink();
+		// Navigate to the title page
+		TestReporter.logStep("Navigate to the title page");
+		topNavigationBar.clickAdminLink();
+		topNavigationBar.clickTitlesLink();
 
-	// Verify navigated to the title page
-	ListingTitlesPage listingTitlesPage = new ListingTitlesPage(driver);
-	Assert.assertTrue(listingTitlesPage.pageLoaded(),
-		"Verify listing titles page is displayed");
-	TestReporter.log("Navigated to the listing titles page");
+		// Verify navigated to the title page
+		TestReporter.logStep("Verify Successful Title screen Navigation");
+		ListingTitlesPage listingTitlesPage = new ListingTitlesPage(driver);
+		Assert.assertTrue(listingTitlesPage.pageLoaded(),
+				"Verify listing titles page is displayed");
+		TestReporter.log("Navigated to the listing titles page");
 
-	// Click new title
-	listingTitlesPage.clickNewTitle();
-	TestReporter.log("Navigated to the new title page");
+		// Click new title
+		TestReporter.logStep("Click 'New Title'");
+		listingTitlesPage.clickNewTitle();
+		TestReporter.log("Navigated to the new title page");
 
-	// Instantiate the New titles page and create a new title
-	NewTitlePage newTitlePage = new NewTitlePage(driver);
-	Assert.assertTrue(newTitlePage.pageLoaded(),
-		"Verify create new title page is displayed");
-	newTitlePage.createNewTitle(newTitle);
+		// Instantiate the New titles page and create a new title
+		TestReporter.logStep("Create a New Title");
+		NewTitlePage newTitlePage = new NewTitlePage(driver);
+		Assert.assertTrue(newTitlePage.pageLoaded(),
+				"Verify create new title page is displayed");
+		newTitlePage.createNewTitle(newTitle);
 
-	// Verify the title was created
-	Assert.assertTrue(listingTitlesPage.isSuccessMsgDisplayed());
-	TestReporter.log("New Title was created: " + newTitle);
+		// Verify the title was created
+		TestReporter.logStep("Verify Successful Title Creation");
+		Assert.assertTrue(listingTitlesPage.isSuccessMsgDisplayed());
+		TestReporter.log("New Title was created: " + newTitle);
 
-	// Verify the title is displayed on the title results table
-	Assert.assertTrue(listingTitlesPage.searchTableByTitle(newTitle));
-	TestReporter.log("New title was found in table of titles");
+		// Verify the title is displayed on the title results table
+		TestReporter.logStep("Verify New Title is Found in the Results Table");
+		Assert.assertTrue(listingTitlesPage.searchTableByTitle(newTitle));
+		TestReporter.log("New title was found in table of titles");
 
-	// Delete the new title
-	listingTitlesPage.deleteTitle(newTitle);
+		// Delete the new title
+		TestReporter.logStep("Delete the New Title");
+		listingTitlesPage.deleteTitle(newTitle);
 
-	// Verify the title is deleted
-	ListingTitlesPage refreshedPage = new ListingTitlesPage(driver);
-	Assert.assertTrue(refreshedPage.isSuccessMsgDisplayed());
-	TestReporter.log("New title was deleted successfully");
+		// Verify the title is deleted
+		TestReporter.logStep("Verify Successful Title Deletion");
+		ListingTitlesPage refreshedPage = new ListingTitlesPage(driver);
+		Assert.assertTrue(refreshedPage.isSuccessMsgDisplayed());
+		TestReporter.log("New title was deleted successfully");
 
-	// logout
-	topNavigationBar.logout();
-
-    }
+		// logout
+		TestReporter.logStep("Logout");
+		topNavigationBar.logout();
+	}
 
 }
