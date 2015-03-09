@@ -227,7 +227,7 @@
 						</suiteXmlFiles>
 						-->
 						<suiteXmlFiles>
-							<suiteXmlFile>${testNGSourceDirectory}/suite_housekeeping.xml</suiteXmlFile>
+							<suiteXmlFile>${testNGSourceDirectory}/MavenBuild.xml</suiteXmlFile>
 						</suiteXmlFiles>
 					</configuration>
 				</plugin>
