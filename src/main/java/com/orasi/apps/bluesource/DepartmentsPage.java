@@ -12,6 +12,7 @@ import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
+import com.orasi.utils.Sleeper;
 public class DepartmentsPage {
 	
 	private WebDriver driver;
@@ -56,6 +57,7 @@ public class DepartmentsPage {
 	
 	//return if the success message is displayed
 	public boolean isSuccessMsgDisplayed(){
+	    Sleeper.sleep(1000);
 		return lblSuccessMsg.isDisplayed();
 	}
 	
@@ -79,7 +81,9 @@ public class DepartmentsPage {
 		for(WebElement element:elementList){
 			
 			//if it matches the title, then click on the trash element
-			if(element.getText().equals(dept)){
+		    	// Justin: Updated to use contains as new text is appearing in fields
+			//if(element.getText().equals(dept)){
+		    	if(element.getText().contains(dept)){
 		
 				//click on the trash element
 				element.findElement(By.cssSelector("a[data-method = 'delete']")).click();

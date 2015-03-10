@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="CRUD" parallel="none">
+  <test name="CRUD">
+    <classes>
+      <class name="com.orasi.soap.predic8.articleServicePTBinding.CRUD"/>
+    </classes>
+  </test> <!-- CRUD -->
+</suite> <!-- CRUD -->

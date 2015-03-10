@@ -32,21 +32,19 @@ public class ListingTitlesPage {
 	// *********************
 	// ** Build page area **
 	// *********************
-	public ListingTitlesPage(WebDriver driver){
+	public ListingTitlesPage(WebDriver driver) {
 		this.driver = driver;
 		ElementFactory.initElements(driver, this);
 	}
-	
-	public boolean pageLoaded(){
-		//return new PageLoaded().isElementLoaded(this.getClass(), driver, lnkNewTitle); 
+
+	public boolean pageLoaded() {
+		// return new PageLoaded().isElementLoaded(this.getClass(), driver, lnkNewTitle);
 		return new PageLoaded().isDomInteractive(driver);
-		  
 	}
-	
+
 	public ListingTitlesPage initialize() {
-		return ElementFactory.initElements(driver,
-				this.getClass());       
-	 }
+		return ElementFactory.initElements(driver, this.getClass());
+	}
 
 	// *****************************************
 	// ***Page Interactions ***
@@ -68,7 +66,6 @@ public class ListingTitlesPage {
 	}
 	
 	public boolean searchTableByTitle(String title){
-		
 		//Get all the rows in the table by CSS
 		List<WebElement> elementList = driver.findElements(By.cssSelector("td"));
 		for(WebElement element:elementList){
@@ -85,11 +82,10 @@ public class ListingTitlesPage {
 		//Get all the rows in the table by CSS
 		List<WebElement> elementList = driver.findElements(By.cssSelector("td"));
 		for(WebElement element:elementList){
-			
 			//if it matches the title, then click on the trash element
 			if(element.getText().equals(title)){
-		
 				//click on the trash element
+				
 				element.findElement(By.cssSelector("a[data-method = 'delete']")).click();
 				
 				//accept the alert that pops up

@@ -1,5 +1,6 @@
 package com.orasi.utils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,6 +17,10 @@ public class ExcelDocumentReader {
     
     public ExcelDocumentReader(String filepath){
 	this.filepath = filepath;
+    }
+    
+    public ExcelDocumentReader(File filepath){
+	this.filepath = filepath.getPath();
     }
 
     /**

@@ -34,9 +34,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.orasi.api.soapServices.core.BaseSoapService;
+import com.orasi.api.soapServices.core.SoapService;
 
-public class XMLTools extends BaseSoapService {
+public class XMLTools extends SoapService {
 
     public static Document addAttribute(Document doc, String nodeName,
 	    String xpath) {
@@ -281,53 +281,53 @@ public class XMLTools extends BaseSoapService {
     }
 
     public static Document makeXMLDocument(String xml) {
-	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	factory.setNamespaceAware(false);
-	factory.setIgnoringElementContentWhitespace(true);
-	DocumentBuilder builder;
-	Document doc = null;
-	try {
-	    builder = factory.newDocumentBuilder();
-	    InputSource source = new InputSource(new ByteArrayInputStream(xml
-		    .toString().getBytes()));
-	    doc = builder.parse(source);
-	} catch (ParserConfigurationException pce) {
-	    throw new RuntimeException(
-		    "Failed to create a Document Builder Factory",
-		    pce.getCause());
-	} catch (SAXException saxe) {
-	    throw new RuntimeException("Failed to parse the xml",
-		    saxe.getCause());
-	} catch (IOException ioe) {
-	    throw new RuntimeException("Failed to find the source XML",
-		    ioe.getCause());
-	}
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(false);
+		factory.setIgnoringElementContentWhitespace(true);
+		DocumentBuilder builder;
+		Document doc = null;
+		try {
+			builder = factory.newDocumentBuilder();
+			InputSource source = new InputSource(new ByteArrayInputStream(xml
+					.toString().getBytes()));
+			doc = builder.parse(source);
+		} catch (ParserConfigurationException pce) {
+			throw new RuntimeException(
+					"Failed to create a Document Builder Factory",
+					pce.getCause());
+		} catch (SAXException saxe) {
+			throw new RuntimeException("Failed to parse the xml",
+					saxe.getCause());
+		} catch (IOException ioe) {
+			throw new RuntimeException("Failed to find the source XML",
+					ioe.getCause());
+		}
 
-	doc.getDocumentElement().normalize();
-	return doc;
+		doc.getDocumentElement().normalize();
+		return doc;
 
     }
 
     public static Document removeNode(Document doc, String xpath) {
-	XPathFactory xPathFactory = XPathFactory.newInstance();
-	XPath xPath = xPathFactory.newXPath();
-	XPathExpression expr;
-	NodeList nList = null;
+		XPathFactory xPathFactory = XPathFactory.newInstance();
+		XPath xPath = xPathFactory.newXPath();
+		XPathExpression expr;
+		NodeList nList = null;
 
-	try {
-	    expr = xPath.compile(xpath);
-	    nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-	} catch (XPathExpressionException xpe) {
-	    throw new RuntimeException("Failed remove node from XML",
-		    xpe.getCause());
-	}
+		try {
+			expr = xPath.compile(xpath);
+			nList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+		} catch (XPathExpressionException xpe) {
+			throw new RuntimeException("Failed remove node from XML",
+					xpe.getCause());
+		}
 
-	Element element = (Element) nList.item(0);
-	element.getParentNode().removeChild(element);
+		Element element = (Element) nList.item(0);
+		element.getParentNode().removeChild(element);
 
-	doc.normalize();
+		doc.normalize();
 
-	return doc;
+		return doc;
     }
 
     public static Node removeComments(Node node) {
@@ -767,8 +767,6 @@ public class XMLTools extends BaseSoapService {
 	    } else {
 		// report error
 	    }
-	case "fx:conversationid":
-	    return Randomness.generateConversationId();
 
 	case "fx:messageid":
 	    return Randomness.generateMessageId();
