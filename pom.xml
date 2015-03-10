@@ -268,11 +268,7 @@
 
 						<!-- parameterized testNG suite via maven <suiteXmlFiles> -->
 						<suiteXmlFiles>
-<<<<<<< HEAD
 							<suiteXmlFile>${testNGSourceDirectory}/MavenBuild.xml</suiteXmlFile>
-=======
-							<suiteXmlFile>${testNGSourceDirectory}/TestDataSources.xml</suiteXmlFile>
->>>>>>> dc062f0706538ccf5620e3701c0c797534338ae9
 						</suiteXmlFiles>
 					</configuration>
 				</plugin>
