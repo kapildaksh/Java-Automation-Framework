@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -23,18 +24,11 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import com.orasi.utils.documentConverter.StringToDocumentToString;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.testng.Assert;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-
-
-
-
 
 import com.orasi.utils.XMLTools;
 
@@ -93,8 +87,9 @@ public class RestService {
 	 *            - endpoint for the REST service
 	 * @return Returns the response to the "Get" request as a string
 	 * @throws JSONException
+	 * @throws TransformerException 
 	 */
-	public String sendGetRequest(String url) throws IOException, JSONException {
+	public String sendGetRequest(String url) throws IOException, JSONException, TransformerException {
 		return sendGetRequest(url, getDefaultResponseFormat());
 	}
 
@@ -108,9 +103,11 @@ public class RestService {
 	 *            - endpoint for the REST service
 	 * @return Returns the response to the "Get" request as a string
 	 * @throws JSONException
+	 * @throws UnsupportedEncodingException 
+	 * @throws TransformerException 
 	 */
 	public String sendGetRequest(String url, String responseFormat)
-			throws JSONException {
+			throws JSONException, UnsupportedEncodingException, TransformerException {
 		System.out.println("REST endpoint: " + url);
 
 		StringBuilder rawResponse = new StringBuilder();
@@ -120,8 +117,8 @@ public class RestService {
 
 		// Build the connection string
 		HttpURLConnection conn = httpConnectionBuilder(url, "GET",
-				responseFormat);
-
+				responseFormat);	
+		
 		InputStream stream = null;
 		String buffer = "";
 
@@ -136,15 +133,16 @@ public class RestService {
 			}
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe.getMessage());
-		}
-
+		}		
+		
 		if (responseFormat.equalsIgnoreCase("xml")) {
-			setXmlResponseDocument(StringToDocumentToString
-					.convertStringToDocument(rawResponse.toString()));
-
+			//setXmlResponseDocument(StringToDocumentToString.convertStringToDocument(rawResponse.toString()));
+			setXmlResponseDocument(XMLTools.makeXMLDocument((rawResponse.toString())));
+			
 			System.out.println();
 			System.out.println("Raw XML Response");
 			System.out.println(getXmlResponse());
+			
 		} else if (responseFormat.equalsIgnoreCase("json")) {
 			System.out.println();
 			System.out.println("Raw JSON Response");
@@ -225,9 +223,10 @@ public class RestService {
 	 * @param doc
 	 *            Document: XML file of the Response to be stored in memory
 	 */
+	@SuppressWarnings("static-access")
 	protected void setXmlResponseDocument(Document doc) {
-		xmlResponseDocument = doc;
-		xmlResponseDocument.normalize();
+		this.xmlResponseDocument = doc;
+		this.xmlResponseDocument.normalize();
 	}
 
 	/**
@@ -253,7 +252,7 @@ public class RestService {
 	 * @version Created: 08/28/2014
 	 * @return Returns the stored Response XML as a Document object
 	 */
-	protected static Document getXmlResponseDocument() {
+	protected Document getXmlResponseDocument() {
 		return xmlResponseDocument;
 	}
 
@@ -369,6 +368,7 @@ public class RestService {
 	 * 			3) String     -> "<<keyName>>,String;"
 	 * @return String, value of the defined key name
 	 */
+	@SuppressWarnings("unused")
 	public String getJsonResponseValueByKeyString(String keyString) throws JSONException {
 		//Create an array of keys
 		String[] jsonObjects = keyString.split(";");

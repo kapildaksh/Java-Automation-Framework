@@ -1,5 +1,8 @@
 package com.orasi.rest.googleApi.geoCode;
 
+import java.io.UnsupportedEncodingException;
+
+import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.json.JSONException;
@@ -49,6 +52,8 @@ public class Geocode {
     /**
      * @throws XPathExpressionException
      * @throws JSONException 
+     * @throws UnsupportedEncodingException 
+     * @throws TransformerException 
      * @Summary: Invokes the Google "Geocode" API REST service and validates the XML response
      * @Precondition:NA
      * @Author: Jessica Marshall
@@ -60,7 +65,7 @@ public class Geocode {
 						String streetname, String streetNameTarget,
 						String postalCode, String postalCodeTarget,
 						String city, String cityTarget, String fullAddress,
-						String format) throws XPathExpressionException, JSONException {
+						String format) throws XPathExpressionException, JSONException, UnsupportedEncodingException, TransformerException {
 		rest = new RestService();
 		rest.setDefaultResponseFormat(format);
 		rest.sendGetRequest(

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.orasi</groupId>
 	<artifactId>Java-Automation-Framework</artifactId>
-	<version>1.0</version>
+	<version>1.0</version>	
 	<!-- Usually specified in .m2/settings.xml, we'll have to revisit later -->
 	<repositories>
 		<repository>
@@ -110,9 +110,9 @@
 			<version>0.9.8</version>
 		</dependency>
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.4.4</version>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-lgpl</artifactId>
+			<version>1.9.13</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -154,8 +154,11 @@
 			<artifactId>languagesupport</artifactId>
 			<version>r751</version>
 		</dependency>
-
-
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.6</version>
+		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.htmlunit</groupId>
 			<artifactId>htmlunit-core-js</artifactId>
@@ -233,7 +236,9 @@
 		</dependency>
 	</dependencies>
 	<properties>
-		<testNGSourceDirectory>src/test/resources/sandbox</testNGSourceDirectory>
+		<!-- <testNGSourceDirectory>src/test/resources/sandbox</testNGSourceDirectory> -->
+		<!-- <testNGSourceDirectory>src/test/resources/bluesource/testngXMLs</testNGSourceDirectory> -->
+		<testNGSourceDirectory>src/test/resources</testNGSourceDirectory>
 	</properties>
 	<build>
 		<pluginManagement>
@@ -287,4 +292,4 @@
 			</plugin>
 		</plugins>
 	</reporting>
-</project>
+</project>	

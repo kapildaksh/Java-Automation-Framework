@@ -1,6 +1,5 @@
 package com.orasi.core.interfaces.impl;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -21,8 +20,6 @@ import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Reporter;
-
 import com.orasi.core.interfaces.Element;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.WebDriverSetup;

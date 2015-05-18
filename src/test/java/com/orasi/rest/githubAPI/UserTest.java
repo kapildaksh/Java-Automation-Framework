@@ -32,11 +32,5 @@ public class UserTest {
 		System.out.println(user.getId());
 		System.out.println(user.getLogin());
 		Assert.assertTrue(user.getLogin().equalsIgnoreCase(gitHubUser));
-		
-
-
-	   
-       
 	}
-
 }
