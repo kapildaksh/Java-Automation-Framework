@@ -5,7 +5,7 @@
 	<parameter name="environment" value="staging" />
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="31.0" />
-	<parameter name="operatingSystem" value="linux" />
+	<parameter name="operatingSystem" value="windows" />
 	<!-- <parameter name="runLocation" value="remote"</parameter> -->
 	<test name="Test">
 		<classes>
