@@ -3,28 +3,16 @@ package com.orasi.utils.database.databaseImpl;
 import com.orasi.utils.database.Database;
 
 public class OracleDatabase extends Database {
-	private String dbGeneralUsername = "APPDEV_RO";
-	private String dbGeneralPassword = "APPDEV_RO#1";
 	
-	public OracleDatabase(String environment, String tnsName){
+	public OracleDatabase(String tnsName){
 		setDbDriver("oracle.jdbc.driver.OracleDriver");
-		setDbConnectionString("jdbc:oracle:thin:@" + environment.toUpperCase() + "_" + tnsName.toUpperCase());
-		
-		switch(tnsName.toLowerCase()){
-		case "dreams":
-			setDbUserName(dbGeneralUsername);
-			setDbPassword(dbGeneralPassword);
-			break;
-			
-		case "sales":
-			setDbUserName(dbGeneralUsername);
-			setDbPassword(dbGeneralPassword);
-			break;
-		
-		}
-		
+		setDbConnectionString("jdbc:oracle:thin:@" + tnsName.toUpperCase());	
 	}
-
+	public OracleDatabase(String host, String port, String sid){
+		setDbDriver("oracle.jdbc.driver.OracleDriver");
+		setDbConnectionString("jdbc:oracle:thin:@" + host + ":" + port+ ":" + sid);	
+	}
+	
 	@Override
 	protected void setDbDriver(String driver) {
 		super.strDriver = driver;	

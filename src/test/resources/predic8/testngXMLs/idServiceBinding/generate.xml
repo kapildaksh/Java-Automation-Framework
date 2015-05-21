@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="GenerateTest" parallel="none">
+  <test name="GenerateTest">
+    <classes>
+      <class name="com.orasi.soap.predic8.idServiceBinding.GenerateTest"/>
+    </classes>
+  </test> <!-- GenerateTest -->
+</suite> <!-- GenerateTest -->

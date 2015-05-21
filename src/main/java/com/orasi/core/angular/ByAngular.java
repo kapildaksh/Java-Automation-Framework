@@ -44,7 +44,8 @@ public class ByAngular {
             this.jse = jse;
         }
 
-        protected final void errorIfNull(Object o) {
+        @SuppressWarnings("rawtypes")
+		protected final void errorIfNull(Object o) {
             if (o == null || o instanceof List && ((List) o).size() == 0) {
                 throw new NoSuchElementException(this + " didn't have any matching elements at this place in the DOM");
             }

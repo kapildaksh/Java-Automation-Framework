@@ -1,22 +1,17 @@
 package com.orasi.core.interfaces.impl;
 
-import java.sql.Timestamp;
-
 import com.orasi.core.interfaces.Link;
 import com.orasi.utils.TestReporter;
-import com.orasi.utils.WebDriverSetup;
 
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.testng.Reporter;
 
 /**
  * Wraps a label on a html form with some behavior.
  */
 public class LinkImpl extends ElementImpl implements Link {
-	private java.util.Date date= new java.util.Date();
+	//private java.util.Date date= new java.util.Date();
     /**
      * Creates a Element for a given WebElement.
      *
@@ -28,19 +23,26 @@ public class LinkImpl extends ElementImpl implements Link {
     
     @Override
     public void jsClick(WebDriver driver) {
-    	TestReporter.debugLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
     	JavascriptExecutor executor = (JavascriptExecutor)driver;
-    	executor.executeScript("arguments[0].click();", element);
+    	try{
+    	    executor.executeScript("arguments[0].click();", element);
+    	}catch(RuntimeException rte){
+    	    TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
+    	    throw rte;
+    	}
+    	TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+        
     }
     
     @Override
-    public void click() {
-    	TestReporter.debugLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
-    	getWrappedElement().click();
-    }
-    
-    public void mouseClick(){
-    	Point xy = element.getLocation();
-    	//new Mouse(WebDriverSetup.driver).click(xy.getX(), xy.getY())
+    public void click() {    	
+        try{
+            getWrappedElement().click();
+        }catch(RuntimeException rte){
+            TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
+            throw rte;
+        }
+    	TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+    	
     }
 }

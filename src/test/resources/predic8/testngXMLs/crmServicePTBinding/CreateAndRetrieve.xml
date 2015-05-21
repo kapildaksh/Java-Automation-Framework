@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="CreateAndRetrieve" parallel="none">
+  <test name="CreateAndRetrieve">
+    <classes>
+      <class name="com.orasi.soap.predic8.crmServicePTBinding.CreateAndRetrieve"/>
+    </classes>
+  </test> <!-- CreateAndRetrieve -->
+</suite> <!-- CreateAndRetrieve -->
