@@ -50,24 +50,26 @@ public class TopNavigationBar {
 		lnkAdminDrop.click();
 	}
 	
-	@Step("And I navigated to the \"Departments Page\"")
+	@Step("And I navigate to the \"Departments Page\"")
 	public void clickDepartmentsLink(){
 		lnkDept.click();
 	}
 	
-	@Step("And I navigated to the \"Titles Page\"")
+	@Step("And I navigate to the \"Titles Page\"")
 	public void clickTitlesLink(){
 		lnkTitle.click();
 	}
 	
 	//Verify logout link is displayed
+	@Step("And I log in successfully")
 	public boolean isLoggedIn(){
 		return lnkLogout.isDisplayed();
 	}
 	
+	
 	//Click logout
 	@Step("And I Log Out")
-	public void logout(){
+	public void clickLogout(){
 		lnkLogout.click();
 	}
 }

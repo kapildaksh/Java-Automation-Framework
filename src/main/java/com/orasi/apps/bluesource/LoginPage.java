@@ -7,6 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.allure.annotations.Step;
 
 import com.orasi.core.interfaces.Button;
+import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
@@ -25,6 +26,9 @@ public class LoginPage {
 	@FindBy(name = "commit")
 	private Button btnLogin;
 	
+	@FindBy(className = "alert-danger")
+	private Element eleAlert;
+	
 	// *********************
 	// ** Build page area **
 	// *********************
@@ -39,17 +43,27 @@ public class LoginPage {
 
 	@Step("Given I login with the role \"{0}\"")
 	public void login(String role) {
-		final String username;
-		final String password;
+		String username = "";
+		String password = "";
 		final ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
-		username = userCredentialRepo.getString("BLUESOURCE_" + role.toUpperCase());
-		password = userCredentialRepo.getString("BLUESOURCE_ENCODED_PASSWORD");
+		if (!role.toUpperCase().equals("SKIP_USER")) {
+		    username = userCredentialRepo.getString("BLUESOURCE_" + role.toUpperCase());
+		}
+		
+		if (!role.toUpperCase().equals("SKIP_PASSWORD")) {
+		    password = userCredentialRepo.getString("BLUESOURCE_ENCODED_PASSWORD");			
+		}
 				
 		te.getDriver().switchTo().defaultContent();
 		
 		txtUsername.safeSet(username);
 		txtPassword.setSecure(password);
 		btnLogin.click();
+	}
+	
+	@Step("Then I did not log in successfully")
+	public boolean isNotLoggedIn(){
+		return btnLogin.isDisplayed();
 	}
 }

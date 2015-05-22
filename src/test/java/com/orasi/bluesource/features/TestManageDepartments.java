@@ -1,4 +1,4 @@
-package com.orasi.bluesource;
+package com.orasi.bluesource.features;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,9 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Parameter;
 import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestEnvironment;
@@ -30,7 +32,7 @@ import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 
-public class TestAddNewDept  extends TestEnvironment {
+public class TestManageDepartments  extends TestEnvironment {
 
     private String application = "";
     
@@ -67,10 +69,11 @@ public class TestAddNewDept  extends TestEnvironment {
      * @Return: N/A
      */
     @Features("Manage Departments")
-    @Stories("Given when I login as the \"{1}\" role, I can add and delete Departments")
+    @Stories("Given when I login as an admin role, I can add and delete Departments")
+    @Title("Manage Departments")
     @Test(dataProvider = "dataScenario", groups = { "regression" })
-    public void testCreateNewDept(String testScenario, String role,
-	    String newDept) {
+    public void testCreateNewDept(@Parameter String testScenario, @Parameter String role,
+	    @Parameter String newDept) {
 	
 	String testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -115,6 +118,6 @@ public class TestAddNewDept  extends TestEnvironment {
 	TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(), "Validate success message appears");
 
 	// logout
-	topNavigationBar.logout();
+	topNavigationBar.clickLogout();
     }
 }

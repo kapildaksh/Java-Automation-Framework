@@ -1,4 +1,4 @@
-package com.orasi.bluesource;
+package com.orasi.bluesource.features;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +15,11 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Parameter;
 import ru.yandex.qatools.allure.annotations.Stories;
+import ru.yandex.qatools.allure.annotations.Title;
 
 import com.orasi.utils.Base64Coder;
 import com.orasi.utils.Constants;
@@ -31,7 +34,7 @@ import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.NewTitlePage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 
-public class TestAddNewTitle extends TestEnvironment{
+public class TestManageTitles extends TestEnvironment{
 
     private String application = "";
     
@@ -68,10 +71,11 @@ public class TestAddNewTitle extends TestEnvironment{
      * @Return: N/A
      */
     @Features("Manage Titles")
-    @Stories("Given when I login as the \"{1}\" role, I can add and delete Titles")
+    @Stories("Given when I login as an admin role, I can add and delete Titles")
+    @Title("Manage Titles")
     @Test(dataProvider = "dataScenario", groups = { "regression" })
-    public void testCreateNewTitle(String testScenario, String role,
-	    String newTitle) {
+    public void testCreateNewTitle(@Parameter String testScenario, @Parameter String role,
+	    @Parameter String newTitle) {
 	String testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	testStart(testName);
@@ -116,7 +120,7 @@ public class TestAddNewTitle extends TestEnvironment{
 	TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(), "Validate success message appears");
 
 	// logout
-	topNavigationBar.logout();
+	topNavigationBar.clickLogout();
 
     }
 

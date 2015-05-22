@@ -78,7 +78,7 @@ public class DepartmentsPage {
 		for(WebElement element:elementList){
 			
 			//if it matches the title, then click on the trash element
-			if(element.getText().equals(dept)){
+			if(element.getText().contains(dept)){
 		
 				//click on the trash element
 				element.findElement(By.cssSelector("a[data-method = 'delete']")).click();
