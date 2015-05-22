@@ -23,6 +23,15 @@ public class TopNavigationBar {
 	@FindBy(linkText = "Logout")
 	private Link lnkLogout;
 	
+	@FindBy(xpath = "//a[text() = 'Directory']")
+	private Link lnkDirectory;
+	
+	@FindBy(xpath = "//a[text() = 'Projects']")
+	private Link lnkProjects;
+	
+	@FindBy(xpath = "//a[text() = 'Employees']")
+	private Link lnkEmployees;
+	
 	@FindBy(xpath = "//a[text() = 'Admin ']")
 	private Link lnkAdminDrop;
 	
@@ -42,7 +51,7 @@ public class TopNavigationBar {
 	}
 	
 	public boolean pageLoaded(){
-	    return te.pageLoaded(this.getClass(), lnkLogout);
+	    return te.pageLoaded().isElementLoaded(this.getClass(), lnkLogout);
 	}
 	// *****************************************
 	// ***Page Interactions ***
@@ -63,6 +72,20 @@ public class TopNavigationBar {
 		lnkTitle.click();
 	}
 	
+	@Step("And I navigate to the \"Directory Page\"")
+	public void clickDirectoryLink(){
+		lnkDirectory.click();
+	}
+	
+	@Step("And I navigate to the \"Projects Page\"")
+	public void clickProjectsLink(){
+		lnkProjects.click();
+	}
+	
+	@Step("And I navigate to the \"Employees Page\"")
+	public void clickEmployeesLink(){
+		lnkEmployees.click();
+	}
 	//Verify logout link is displayed
 	@Step("And I log in successfully")
 	public boolean isLoggedIn(){

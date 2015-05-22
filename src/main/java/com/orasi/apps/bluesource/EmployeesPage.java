@@ -10,19 +10,24 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 
+import com.orasi.core.by.angular.FindByNG;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
+import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
+import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
+import com.orasi.utils.TestEnvironment;
+import com.orasi.utils.TestReporter;
 
 public class EmployeesPage {
-	private WebDriver driver;
+	private TestEnvironment te;
 	
 	//All the page elements
-	@FindBy(css = "button[type = 'submit']")	
+	@FindByNG(ngButtonText= "Add")	
 	private Button btnAdd;
 	
 	@FindBy(css = "input[id = 'search-bar']")
@@ -34,26 +39,51 @@ public class EmployeesPage {
 	@FindBy(css = ".alert-success.alert-dismissable")
 	private Label lblSuccessMsg;
 	
+	@FindBy(className = "table")
+	private Webtable tabEmployeeTable;
+	
+	@FindByNG(ngShow = "showFirstName" )
+	private Link lnkFirstNameSort;
+
+	@FindByNG(ngShow = "showLastName" )
+	private Link lnkLastNameSort;
+
+	@FindByNG(ngShow = "showTitle" )
+	private Link lnkTitleSort;
+
+	@FindByNG(ngShow = "showSupervisor" )
+	private Link lnkSupervisorSort;
+
+	@FindByNG(ngShow = "showProject" )
+	private Link lnkProjectSort;
+
+	@FindByNG(ngShow = "showLocation" )
+	private Link lnkLocationSort;
+
+	@FindByNG(ngShow = "showVacation" )
+	private Link lnkVacationSort;
+
+	@FindByNG(ngShow = "showSick" )
+	private Link lnkSickSort;
+
+	@FindByNG(ngShow = "showFloatingHoliday" )
+	private Link lnkFloatingHolidaySort;
+	
 	// *********************
 	// ** Build page area **
 	// *********************
-	public EmployeesPage(WebDriver driver){
-		this.driver = driver;
-		ElementFactory.initElements(driver, this);
+	public EmployeesPage(TestEnvironment te){
+		this.te = te;
+		ElementFactory.initElements(te.getDriver(), this);
 	}
 	
 	public boolean pageLoaded(){
-		return new PageLoaded().isElementLoaded(this.getClass(), driver, btnAdd); 
-		  
+	    return te.pageLoaded().isElementLoaded(this.getClass(), btnAdd); 
+		 
 	}
 	
-	public EmployeesPage initialize() {
-		return ElementFactory.initElements(driver,
-				this.getClass());       
-	 }
-	
 	// *****************************************
-	// ***Page Interactions ***trfd
+	// ***Page Interactions ***
 	// *****************************************
 	
 	//Click the add button
@@ -63,16 +93,60 @@ public class EmployeesPage {
 	}
 	
 	public boolean isSuccessMsgDisplayed(){
-		return lblSuccessMsg.isDisplayed();
+	    return lblSuccessMsg.isDisplayed();
 	}
 	
 	public String getSuccessMsgText(){
-		return lblSuccessMsg.getText();
+	    return lblSuccessMsg.getText();
 	}
+	
+	public void sortOnFirstName(){
+	    lnkFirstNameSort.click();
+	}
+	
+	public void sortOnLastName(){
+	    lnkLastNameSort.click();
+	}
+	
+	public void sortOnSupervisor(){
+	    lnkSupervisorSort.click();
+	}
+	
+	public void sortOnTitle(){
+	    lnkTitleSort.click();
+	}
+	
+	public void sortOnProject(){
+	    lnkProjectSort.click();
+	}
+	
+	public void sortOnLocation(){
+	    lnkLocationSort.click();
+	}
+	
+	public void sortOnVacationDaysLeft(){
+	    lnkVacationSort.click();
+	}
+	
+	public void sortOnSickDaysLeft(){
+	    lnkSickSort.click();
+	}
+	
+	public void sortFloatingHolidayLeft(){
+	    lnkFloatingHolidaySort.click();
+	}
+	
+	public void enterSearchText(String text){
+	    txtSearch.syncVisible(te.getDriver());
+	    txtSearch.click();
+	    txtSearch.safeSet(text);
+	    tabEmployeeTable.syncTextInElement(te.getDriver(), text);
+	}
+	
 	
 	//search the employee results table by first & last name & click on it
 	public boolean searchTableByFirstAndLastName(String firstName, String lastName){
-		WebDriverWait wait = new WebDriverWait(driver, 30);
+		WebDriverWait wait = new WebDriverWait(te.getDriver(), 30);
 		
 		//enter the name to search by
 		//driver.findElement(By.cssSelector("input[id = 'search-bar']")).sendKeys(firstName + " " + lastName);
@@ -82,7 +156,7 @@ public class EmployeesPage {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a.ng-binding")));
 		
 		//Get all the elements by CSS in the table that are the individual cells
-		List<WebElement> elementList = driver.findElements(By.cssSelector("a.ng-binding"));
+		List<WebElement> elementList = te.getDriver().findElements(By.cssSelector("a.ng-binding"));
 		for (int i = 0; i < elementList.size(); i++){
 			
 			//if it's the last element then just stop as it won't match
@@ -91,16 +165,16 @@ public class EmployeesPage {
 				break;
 			}
 			if (elementList.get(i).getText().trim().equals(firstName)){
-				Reporter.log("First name was found in table of employees");
+				TestReporter.log("First name was found in table of employees");
 				
 				//If it matches, then see if the following element matches the last name
 				if (elementList.get(i+1).getText().trim().equals(lastName)){
-					Reporter.log("Last name was found in table of employees");
+				    TestReporter.log("Last name was found in table of employees");
 					//click on the element 
 					elementList.get(i).click();
 					
 					//return true
-					Reporter.log("The employee was found in the table of employees");
+					TestReporter.log("The employee was found in the table of employees");
 					return true;
 				}
 			}
@@ -117,7 +191,7 @@ public class EmployeesPage {
 	public void selectFirstEmployee(){
 		
 		//Get all the table elements
-		List<WebElement> elementList = driver.findElements(By.cssSelector("a.ng-binding"));
+		List<WebElement> elementList = te.getDriver().findElements(By.cssSelector("a.ng-binding"));
 		
 		//click on the first one
 		elementList.get(0).click();

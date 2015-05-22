@@ -33,12 +33,12 @@ public class LoginPage {
 	// ** Build page area **
 	// *********************
 	public LoginPage(TestEnvironment te){
-		this.te = te;
+		this.te = te;		
 		ElementFactory.initElements(te.getDriver(), this);
 	}
 	
 	public boolean pageLoaded(){
-	    return te.pageLoaded(this.getClass(), btnLogin);
+	    return te.pageLoaded().isElementLoaded(this.getClass(), btnLogin);
 	}
 	
 	// *****************************************

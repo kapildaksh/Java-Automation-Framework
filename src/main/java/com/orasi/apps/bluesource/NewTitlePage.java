@@ -33,7 +33,7 @@ public class NewTitlePage {
 	}
 	
 	public boolean pageLoaded(){
-	    return te.pageLoaded(this.getClass(), txtTitle);
+	    return te.pageLoaded().isElementLoaded(this.getClass(), txtTitle);
 	}
 
 	// *****************************************

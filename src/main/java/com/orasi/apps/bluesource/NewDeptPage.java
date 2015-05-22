@@ -35,7 +35,7 @@ public class NewDeptPage {
 	}
 	
 	public boolean pageLoaded(){
-	    return te.pageLoaded(this.getClass(), btnCreateDept);
+	    return te.pageLoaded().isElementLoaded(this.getClass(), btnCreateDept);
 	}
 	
 	// *****************************************

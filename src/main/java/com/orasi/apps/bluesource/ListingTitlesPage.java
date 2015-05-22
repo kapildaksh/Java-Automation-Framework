@@ -40,7 +40,7 @@ public class ListingTitlesPage {
 	}	
 	
 	public boolean pageLoaded(){
-	    return te.pageLoaded(this.getClass(), lnkNewTitle);
+	    return te.pageLoaded().isElementLoaded(this.getClass(), lnkNewTitle);
 	}
 
 	// *****************************************

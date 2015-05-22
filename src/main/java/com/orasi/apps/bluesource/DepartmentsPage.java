@@ -39,7 +39,7 @@ public class DepartmentsPage {
 	
 	
 	public boolean pageLoaded(){
-	    return te.pageLoaded(this.getClass(), lnkAddDept);
+	    return te.pageLoaded().isElementLoaded(this.getClass(), lnkAddDept);
 	}
 	
 	//Methods

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Suite" parallel="instances" thread-count="8">
+<suite name="Suite" parallel="instances" thread-count="5">
 	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
 	<parameter name="runLocation" value="local" />
@@ -9,7 +9,7 @@
 	<!-- <parameter name="runLocation" value="remote"</parameter> -->
 	<test name="Test">
 		<classes>
-			<class name="com.orasi.bluesource.features.TestLogin" />
+			<class name="com.orasi.bluesource.features.TestManageEmployees" />
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

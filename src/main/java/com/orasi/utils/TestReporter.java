@@ -1,5 +1,4 @@
 package com.orasi.utils;
-import java.sql.Timestamp;
 
 import org.testng.Assert;
 import org.testng.Reporter;
@@ -57,12 +56,16 @@ public class TestReporter {
 	Reporter.log(getTimestamp() + " <i><b>" + message + "</b></i><br />");
 	if(getPrintToConsole()) System.out.println(getTimestamp() + trimHtml(message));
     }
+    
+    public static void logFailure(String message){
+	Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u> FAILURE: " + message + "</font></u></b><br />");
+    }
 
     public static void assertTrue(boolean condition, String description) {	
 	try{
 	    Assert.assertTrue(condition, description);
 	}catch (AssertionError failure){
-	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert True - " + description + "</font></u></b><br />");
+	    logFailure("Assert True - " + description );
 	    if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert True - " + trimHtml(description));
 	    Assert.fail(description);
 	}
@@ -74,7 +77,7 @@ public class TestReporter {
    	try{
    	    Assert.assertFalse(condition, description);
    	}catch (AssertionError failure){
-   	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert False - " + description + "</font></u></b><br />");
+   	 logFailure("Assert False - " + description );
    	 if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert False - " + trimHtml(description));
    	    Assert.fail(description);
    	}
@@ -86,7 +89,7 @@ public class TestReporter {
    	try{
    	    Assert.assertEquals(condition, description);
    	}catch (AssertionError failure){
-   	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert Equals - " + description + "</font></u></b><br />");
+   	 logFailure("Assert Equals - " + description );
    	 if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert Equals - " + trimHtml(description));
    	    Assert.fail(description);
    	}
@@ -98,7 +101,7 @@ public class TestReporter {
    	try{
    	    Assert.assertNotEquals(condition, description);
    	}catch (AssertionError failure){
-   	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert Not Equals - " + description + "</font></u></b><br />");
+   	 logFailure("Assert Not Equals - " + description );
    	 if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert Not Equals - " + trimHtml(description));
    	    Assert.fail(description);
    	}
@@ -110,7 +113,7 @@ public class TestReporter {
    	try{
    	    Assert.assertTrue(value > 0);
    	}catch (AssertionError failure){
-   	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert Greater Than Zero - Assert " + value + " is greater than zero</font></u></b><br />");
+   	 logFailure("Assert Greater Than Zero - " + value );
    	 if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert Greater Than Zero - Assert " + value + " is greater than zero");
    	    Assert.fail("Assert " + value + " is greater than zero");
    	}
@@ -119,34 +122,18 @@ public class TestReporter {
        }
     
     public static void assertGreaterThanZero(float value) {
-   	try{
-   	    Assert.assertTrue(value > 0);
-   	}catch (AssertionError failure){
-   	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert Greater Than Zero - Assert " + value + " is greater than zero</font></u></b><br />");
-   	 if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert Greater Than Zero - Assert " + value + " is greater than zero");
-   	    Assert.fail("Assert " + value + " is greater than zero");
-   	}
-   	Reporter.log(getTimestamp() + " <font size = 2 color=\"green\"><b><u>Assert Greater Than Zero - Assert " + value + " is greater than zero</font></u></b><br />");
-   	if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert Greater Than Zero - Assert " + value + " is greater than zero");
-       }
+	assertGreaterThanZero((int)value);
+    }
     
     public static void assertGreaterThanZero(double value) {
-   	try{
-   	    Assert.assertTrue(value > 0);
-   	}catch (AssertionError failure){
-   	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert Greater Than Zero - Assert " + value + " is greater than zero</font></u></b><br />");
-   	 if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert Greater Than Zero - Assert " + value + " is greater than zero");
-   	    Assert.fail("Assert " + value + " is greater than zero");
-   	}
-   	Reporter.log(getTimestamp() + " <font size = 2 color=\"green\"><b><u>Assert Greater Than Zero - Assert " + value + " is greater than zero</font></u></b><br />");
-   	if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert Greater Than Zero - Assert " + value + " is greater than zero");
-       }
+	assertGreaterThanZero((int)value);
+    }
     
     public static void assertNull(boolean condition, String description) {
    	try{
    	    Assert.assertNull(condition, description);
    	}catch (AssertionError failure){
-   	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert Null - " + description + "</font></u></b><br />");
+   	 logFailure("Assert Null - " + description );
    	 if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert Null - " + trimHtml(description));
    	    Assert.fail(description);
    	}
@@ -158,7 +145,7 @@ public class TestReporter {
    	try{
    	    Assert.assertNotNull(condition, description);
    	}catch (AssertionError failure){
-   	    Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u>Assert Not Null - " + description + "</font></u></b><br />");
+   	 logFailure("Assert Not Null - " + description );
    	 if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert Not Null - " + trimHtml(description));
    	    Assert.fail(description);
    	}
