@@ -82,7 +82,7 @@ public class TestManageDepartments  extends TestEnvironment {
 	
 	// Login
 	LoginPage loginPage = new LoginPage(this);
-	TestReporter.assertTrue(pageLoaded(),"Verify login page is displayed");
+	TestReporter.assertTrue(loginPage.pageLoaded(),"Verify login page is displayed");
 	loginPage.login(role);
 
 	// Verify user is logged in
@@ -95,12 +95,12 @@ public class TestManageDepartments  extends TestEnvironment {
 
 	// Verify navigated to the dept page
 	DepartmentsPage deptPage = new DepartmentsPage(this);
-	TestReporter.assertTrue(pageLoaded(),"Verify list of departments page is displayed");
+	TestReporter.assertTrue(deptPage.pageLoaded(),"Verify list of departments page is displayed");
 
 	// Add a new dept
 	deptPage.clickAddDeptLink();
 	NewDeptPage newDeptPage = new NewDeptPage(this);
-	TestReporter.assertTrue(pageLoaded(), "Verify add new department page is displayed");
+	TestReporter.assertTrue(newDeptPage.pageLoaded(), "Verify add new department page is displayed");
 	newDeptPage.CreateNewDept(newDept);
 
 	// Verify the dept is added

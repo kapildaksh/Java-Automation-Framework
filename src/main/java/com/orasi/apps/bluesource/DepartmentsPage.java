@@ -37,7 +37,11 @@ public class DepartmentsPage {
 		ElementFactory.initElements(te.getDriver(), this);
 	}
 	
-
+	
+	public boolean pageLoaded(){
+	    return te.pageLoaded(this.getClass(), lnkAddDept);
+	}
+	
 	//Methods
 	
 	//click add dept link

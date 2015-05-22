@@ -31,6 +31,10 @@ public class NewTitlePage {
 		this.te = te;
 		ElementFactory.initElements(te.getDriver(), this);
 	}
+	
+	public boolean pageLoaded(){
+	    return te.pageLoaded(this.getClass(), txtTitle);
+	}
 
 	// *****************************************
 	// ***Page Interactions ***

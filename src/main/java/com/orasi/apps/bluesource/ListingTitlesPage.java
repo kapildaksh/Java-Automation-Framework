@@ -37,8 +37,11 @@ public class ListingTitlesPage {
 	public ListingTitlesPage(TestEnvironment te){
 	    this.te = te;
 	    ElementFactory.initElements(te.getDriver(), this);
-	}
+	}	
 	
+	public boolean pageLoaded(){
+	    return te.pageLoaded(this.getClass(), lnkNewTitle);
+	}
 
 	// *****************************************
 	// ***Page Interactions ***

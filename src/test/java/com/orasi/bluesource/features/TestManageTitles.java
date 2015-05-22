@@ -82,7 +82,7 @@ public class TestManageTitles extends TestEnvironment{
 	
 	// Login
 	LoginPage loginPage = new LoginPage(this);
-	TestReporter.assertTrue(pageLoaded(), "Verify login page is displayed");
+	TestReporter.assertTrue(loginPage.pageLoaded(), "Verify login page is displayed");
 	loginPage.login(role);
 
 	// Verify user is logged in
@@ -95,14 +95,14 @@ public class TestManageTitles extends TestEnvironment{
 
 	// Verify navigated to the title page
 	ListingTitlesPage listingTitlesPage = new ListingTitlesPage(this);
-	TestReporter.assertTrue(pageLoaded(),"Verify listing titles page is displayed");
+	TestReporter.assertTrue(listingTitlesPage.pageLoaded(),"Verify listing titles page is displayed");
 
 	// Click new title
 	listingTitlesPage.clickNewTitle();
 
 	// Instantiate the New titles page and create a new title
 	NewTitlePage newTitlePage = new NewTitlePage(this);
-	TestReporter.assertTrue(pageLoaded(),"Verify create new title page is displayed");
+	TestReporter.assertTrue(newTitlePage.pageLoaded(),"Verify create new title page is displayed");
 	newTitlePage.createNewTitle(newTitle);
 
 	// Verify the title was created

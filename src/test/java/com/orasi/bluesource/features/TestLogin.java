@@ -76,7 +76,7 @@ public class TestLogin  extends TestEnvironment {
      */
     @Features("Login")
     @Stories("Given when I login as with a valid role, I can land on the Homepage")
-    @Title("Login")
+    @Title("Login with correct information")
     @Test(dataProvider = "dataScenario", groups = { "regression" })
     public void testLogin(@Parameter String testScenario, @Parameter String role) {
 	
@@ -87,7 +87,7 @@ public class TestLogin  extends TestEnvironment {
 	
 	// Login
 	LoginPage loginPage = new LoginPage(this);
-	TestReporter.assertTrue(pageLoaded(),"Verify login page is displayed");
+	TestReporter.assertTrue(loginPage.pageLoaded(),"Verify login page is displayed");
 	loginPage.login(role);
 
 	// Verify user is logged in
@@ -107,8 +107,8 @@ public class TestLogin  extends TestEnvironment {
      * @Return: N/A
      */
     @Features("Login")
-    @Stories("Given when I login as with a valid role, I can land on the Homepage")
-    @Title("Negative Login")
+    @Stories("Given when I login as with incorrect information, I fail to leave the Login page")
+    @Title("Login with incorrect information")
     @Test(dataProvider = "negativeDataScenario", groups = { "regression" })
     public void testFailedLogin(@Parameter String testScenario, @Parameter String role) {
 	
@@ -119,7 +119,7 @@ public class TestLogin  extends TestEnvironment {
 	
 	// Login
 	LoginPage loginPage = new LoginPage(this);
-	TestReporter.assertTrue(pageLoaded(),"Verify login page is displayed");
+	TestReporter.assertTrue(loginPage.pageLoaded(),"Verify login page is displayed");
 	loginPage.login(role);
 	TestReporter.assertTrue(loginPage.isNotLoggedIn(), "Validate the user did not log in successfully");
 

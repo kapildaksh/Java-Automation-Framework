@@ -34,6 +34,10 @@ public class NewDeptPage {
 		ElementFactory.initElements(te.getDriver(), this);
 	}
 	
+	public boolean pageLoaded(){
+	    return te.pageLoaded(this.getClass(), btnCreateDept);
+	}
+	
 	// *****************************************
 	// ***Page Interactions ***
 	// *****************************************

@@ -37,6 +37,10 @@ public class LoginPage {
 		ElementFactory.initElements(te.getDriver(), this);
 	}
 	
+	public boolean pageLoaded(){
+	    return te.pageLoaded(this.getClass(), btnLogin);
+	}
+	
 	// *****************************************
 	// ***Page Interactions ***
 	// *****************************************
