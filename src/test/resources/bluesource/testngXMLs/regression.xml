@@ -3,7 +3,7 @@
 <suite name="Bluesource_Regression" parallel="instances" thread-count="5">
 	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="local" />
+	<parameter name="runLocation" value="remote" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
 	<!-- <parameter name="runLocation" value="remote"</parameter> -->
