@@ -52,7 +52,7 @@
 							<jenkinsBrowserVersion></jenkinsBrowserVersion>
 						</systemPropertyVariables> 
 					<suiteXmlFiles>
-						<suiteXmlFile>${testNGSourceDirectory}/bluesource/testngXMLS/TestAddNewTitle.xml</suiteXmlFile>		
+						<suiteXmlFile>${testNGSourceDirectory}/bluesource/testngXMLS/regression.xml</suiteXmlFile>		
 					</suiteXmlFiles>
                 </configuration>
                 <dependencies>
