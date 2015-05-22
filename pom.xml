@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.orasi</groupId>
-	<artifactId>Toyota</artifactId>
-	<version>1.0.4</version>
+	<artifactId>Bluesource</artifactId>
+	<version>1.0.1</version>
 
 	<properties>
 		<testNGSourceDirectory>src/test/resources</testNGSourceDirectory>
@@ -52,7 +52,7 @@
 							<jenkinsBrowserVersion></jenkinsBrowserVersion>
 						</systemPropertyVariables> 
 					<suiteXmlFiles>
-						<suiteXmlFile>${testNGSourceDirectory}/bluesource/testngXMLS/regression.xml</suiteXmlFile>		
+						<suiteXmlFile>${testNGSourceDirectory}/bluesource/testngXMLs/regression.xml</suiteXmlFile>		
 					</suiteXmlFiles>
                 </configuration>
                 <dependencies>
