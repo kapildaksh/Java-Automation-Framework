@@ -3,6 +3,8 @@ package com.orasi.bluesource;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.extensions.TestSetup;
+
 import org.testng.Assert;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
@@ -14,7 +16,11 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+
 import com.orasi.utils.Constants;
+import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.Screenshot;
 import com.orasi.utils.WebDriverSetup;
@@ -24,16 +30,10 @@ import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 
-public class TestAddNewDept {
+public class TestAddNewDept  extends TestEnvironment {
 
     private String application = "";
-    private String browserUnderTest = "";
-    private String browserVersion = "";
-    private String operatingSystem = "";
-    private String runLocation = "";
-    private String environment = "";
-    private Map<String, WebDriver> drivers = new HashMap<String, WebDriver>();
-
+    
     @DataProvider(name = "dataScenario")
     public Object[][] scenarios() {
 	return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
@@ -45,24 +45,17 @@ public class TestAddNewDept {
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
 	    String browserVersion, String operatingSystem, String environment) {
-	this.application = "Bluesource";
-	this.runLocation = runLocation;
-	this.browserUnderTest = browserUnderTest;
-	this.browserVersion = browserVersion;
-	this.operatingSystem = operatingSystem;
-	this.environment = environment;
-
+	setApplicationUnderTest("Bluesource");
+	setBrowserUnderTest(browserUnderTest);
+	setBrowserVersion(browserVersion);
+	setOperatingSystem(operatingSystem);
+	setRunLocation(runLocation);
+	setTestEnvironment(environment);
     }
 
     @AfterMethod(groups = { "regression" })
     public synchronized void closeSession(ITestResult test) {
-	WebDriver driver = drivers.get(test.getMethod().getMethodName());
-
-	// if is a failure, then take a screenshot
-	if (test.getStatus() == ITestResult.FAILURE) {
-	    new Screenshot().takeScreenShot(test, driver);
-	}
-	driver.quit();
+	endTest(testName);
     }
 
     /**
@@ -73,6 +66,8 @@ public class TestAddNewDept {
      * @Version: 10/6/2014
      * @Return: N/A
      */
+    @Features("Manage Departments")
+    @Stories("Given when I login as the \"{1}\" role, I can add and delete Departments")
     @Test(dataProvider = "dataScenario", groups = { "regression" })
     public void testCreateNewDept(String testScenario, String role,
 	    String newDept) {
@@ -80,19 +75,15 @@ public class TestAddNewDept {
 	String testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 
-	WebDriverSetup setup = new WebDriverSetup(application,
-		browserUnderTest, browserVersion, operatingSystem, runLocation,
-		environment);
-	WebDriver driver = setup.initialize();
-
+	testStart(testName);
+	
 	// Login
-	LoginPage loginPage = new LoginPage(driver);
-	TestReporter.assertTrue(loginPage.pageLoaded(),
-		"Verify login page is displayed");
+	LoginPage loginPage = new LoginPage(this);
+	TestReporter.assertTrue(pageLoaded(),"Verify login page is displayed");
 	loginPage.login(role);
 
 	// Verify user is logged in
-	TopNavigationBar topNavigationBar = new TopNavigationBar(driver);
+	TopNavigationBar topNavigationBar = new TopNavigationBar(this);
 	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
 
 	// Navigate to the dept page
@@ -100,15 +91,13 @@ public class TestAddNewDept {
 	topNavigationBar.clickDepartmentsLink();
 
 	// Verify navigated to the dept page
-	DepartmentsPage deptPage = new DepartmentsPage(driver);
-	TestReporter.assertTrue(deptPage.pageLoaded(),
-		"Verify list of departments page is displayed");
+	DepartmentsPage deptPage = new DepartmentsPage(this);
+	TestReporter.assertTrue(pageLoaded(),"Verify list of departments page is displayed");
 
 	// Add a new dept
 	deptPage.clickAddDeptLink();
-	NewDeptPage newDeptPage = new NewDeptPage(driver);
-	TestReporter.assertTrue(newDeptPage.pageLoaded(),
-		"Verify add new department page is displayed");
+	NewDeptPage newDeptPage = new NewDeptPage(this);
+	TestReporter.assertTrue(pageLoaded(), "Verify add new department page is displayed");
 	newDeptPage.CreateNewDept(newDept);
 
 	// Verify the dept is added
@@ -122,7 +111,7 @@ public class TestAddNewDept {
 	deptPage.deleteDept(newDept);
 
 	// Verify the title is deleted
-	DepartmentsPage refreshedPage = new DepartmentsPage(driver);
+	DepartmentsPage refreshedPage = new DepartmentsPage(this);
 	TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(), "Validate success message appears");
 
 	// logout

@@ -5,9 +5,6 @@ import com.orasi.utils.TestReporter;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
-import org.testng.Reporter;
-
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -15,7 +12,7 @@ import java.util.List;
  */
 public class ListboxImpl extends ElementImpl implements Listbox {
     private final org.openqa.selenium.support.ui.Select innerSelect;
-    private java.util.Date date= new java.util.Date();
+//    private java.util.Date date= new java.util.Date();
     
     /**
      * @summary - Wraps a WebElement with listbox functionality.
@@ -61,6 +58,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      * @summary - Wraps Selenium's method.
      * @see org.openqa.selenium.support.ui.Select#deselectAll()
      */
+    @Override
     public void deselectAll() { 
         innerSelect.deselectAll();
     }
@@ -70,6 +68,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      * @return list of all options in the select.
      * @see org.openqa.selenium.support.ui.Select#getOptions()
      */
+    @Override
     public List<WebElement> getOptions() {
         return innerSelect.getOptions();
     }
@@ -79,6 +78,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      * @param text text to deselect by visible text
      * @see org.openqa.selenium.support.ui.Select#deselectByVisibleText(String)
      */
+    @Override
     public void deselectByVisibleText(String text) {
         innerSelect.deselectByVisibleText(text);
     }
@@ -89,6 +89,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      * @return WebElement of the first selected option.
      * @see org.openqa.selenium.support.ui.Select#getFirstSelectedOption()
      */
+    @Override
     public WebElement getFirstSelectedOption() {
         return innerSelect.getFirstSelectedOption();
     }
@@ -96,6 +97,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     /**
      * @see org.openqa.selenium.WebElement#isSelected()
      */
+    @Override
     public boolean isSelected() {
         return ((WebElement) innerSelect).isSelected();
     }

@@ -51,5 +51,6 @@ public interface Listbox extends Element {
      * @return {@link boolean} TRUE if element is currently select 
      * @see org.openqa.selenium.WebElement#isSelected()
      */
+    @Override
     boolean isSelected();
 }

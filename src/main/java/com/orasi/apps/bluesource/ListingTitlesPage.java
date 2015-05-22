@@ -10,14 +10,16 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import ru.yandex.qatools.allure.annotations.Step;
+
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
+import com.orasi.utils.TestEnvironment;
 
 public class ListingTitlesPage {
-	
-	private WebDriver driver;
+    	private TestEnvironment te = null;
 	
 	//All the page elements
 	@FindBy(linkText = "New Title")	
@@ -32,45 +34,39 @@ public class ListingTitlesPage {
 	// *********************
 	// ** Build page area **
 	// *********************
-	public ListingTitlesPage(WebDriver driver){
-		this.driver = driver;
-		ElementFactory.initElements(driver, this);
+	public ListingTitlesPage(TestEnvironment te){
+	    this.te = te;
+	    ElementFactory.initElements(te.getDriver(), this);
 	}
 	
-	public boolean pageLoaded(){
-		//return new PageLoaded().isElementLoaded(this.getClass(), driver, lnkNewTitle); 
-		return new PageLoaded().isDomInteractive(driver);
-		  
-	}
-	
-	public ListingTitlesPage initialize() {
-		return ElementFactory.initElements(driver,
-				this.getClass());       
-	 }
 
 	// *****************************************
 	// ***Page Interactions ***
 	// *****************************************
 
+	@Step("And I click the \"New Title\" link")
 	public void clickNewTitle(){
 		lnkNewTitle.click();
 	}
+	
 	
 	public boolean isTitleHeaderDisplayed(){
 		return lblTitle.isDisplayed();
 	}
 	
+	@Step("Then an alert should appear for conformation")
 	public boolean isSuccessMsgDisplayed() {
-		WebDriverWait wait = new WebDriverWait(driver, 5);
+		WebDriverWait wait = new WebDriverWait(te.getDriver(), 5);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".alert-success.alert-dismissable")));
 		//wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".alert-success.alert-dismissable")));
 		return lblSuccessMsg.isDisplayed();
 	}
 	
+	@Step("And the title \"{0}\" should be found on the Titles table")
 	public boolean searchTableByTitle(String title){
 		
 		//Get all the rows in the table by CSS
-		List<WebElement> elementList = driver.findElements(By.cssSelector("td"));
+		List<WebElement> elementList = te.getDriver().findElements(By.cssSelector("td"));
 		for(WebElement element:elementList){
 			//if it matches the title, then return true
 			if(element.getText().equals(title)){
@@ -81,9 +77,10 @@ public class ListingTitlesPage {
 		return false;
 	}
 	
+	@Step("And I can delete the title from the table")
 	public boolean deleteTitle(String title){
 		//Get all the rows in the table by CSS
-		List<WebElement> elementList = driver.findElements(By.cssSelector("td"));
+		List<WebElement> elementList = te.getDriver().findElements(By.cssSelector("td"));
 		for(WebElement element:elementList){
 			
 			//if it matches the title, then click on the trash element
@@ -93,7 +90,7 @@ public class ListingTitlesPage {
 				element.findElement(By.cssSelector("a[data-method = 'delete']")).click();
 				
 				//accept the alert that pops up
-				Alert alert = driver.switchTo().alert();
+				Alert alert = te.getDriver().switchTo().alert();
 				alert.accept();
 				return true;
 			}

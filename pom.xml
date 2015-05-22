@@ -2,130 +2,161 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.orasi</groupId>
-	<artifactId>Java-Automation-Framework</artifactId>
-	<version>1.0</version>
-	<!-- Usually specified in .m2/settings.xml, we'll have to revisit later -->
+	<artifactId>Toyota</artifactId>
+	<version>1.0.4</version>
+
+	<properties>
+		<testNGSourceDirectory>src/test/resources</testNGSourceDirectory>
+		<allure.version>1.4.13</allure.version>
+        <aspectj.version>1.8.5</aspectj.version>
+	</properties>
+
 	<repositories>
 		<repository>
 			<id>eviware</id>
 			<url>http://www.eviware.com/repository/maven2/</url>
 		</repository>
+		<repository>
+			<id>maven</id>
+			<url>http://repo.maven.apache.org/maven2/</url>
+		</repository>
 	</repositories>
 
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.3</version>
+					<configuration>
+						<source>1.7</source> 
+						
+						<target>1.7</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+		<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12</version>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+                    <systemPropertyVariables>
+							<jenkinsOperatingSystem></jenkinsOperatingSystem>
+							<jenkinsBrowser></jenkinsBrowser>
+							<jenkinsBrowserVersion></jenkinsBrowserVersion>
+						</systemPropertyVariables> 
+					<suiteXmlFiles>
+						<suiteXmlFile>${testNGSourceDirectory}/bluesource/testngXMLS/TestAddNewTitle.xml</suiteXmlFile>		
+					</suiteXmlFiles>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>	
+              <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.2.9.v20150224</version>
+                <configuration>
+                    <webAppSourceDirectory>${project.build.directory}/site/allure-maven-plugin</webAppSourceDirectory>
+                    
+                </configuration>
+            </plugin>	
+		</plugins>
+	</build>
+	    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>ru.yandex.qatools.allure</groupId>
+                <artifactId>allure-maven-plugin</artifactId>
+                <version>2.0</version>
+            </plugin>
+        </plugins>
+    </reporting>
 	<dependencies>
-		<dependency>
-			<groupId>com.jayway.restassured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>2.4.0</version>
-			<scope>test</scope>
-		</dependency>
+	        <dependency>
+            <groupId>ru.yandex.qatools.allure</groupId>
+            <artifactId>allure-testng-adaptor</artifactId>
+            <version>${allure.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+		<!-- Start Selenium requirements -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>2.42.2</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>guava</artifactId>
-					<groupId>com.google.guava</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>15.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ant</groupId>
-			<artifactId>ant</artifactId>
-			<version>1.8.0</version>
-		</dependency>
-		<dependency>
-			<groupId>ant-contrib</groupId>
-			<artifactId>ant-contrib</artifactId>
-			<version>1.0b3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-ant-tasks</artifactId>
-			<version>2.1.3</version>
+			<version>2.43.1</version> 
+			<!--  Selenium Versions not to use
+			2.44.0 - Issues with OS Platform Capabilities 
+				https://code.google.com/p/selenium/issues/detail?id=8083  
+				https://code.google.com/p/selenium/issues/detail?id=8333
+			
+			2.45.0 - Issues with Test Execution speed
+				https://code.google.com/p/selenium/issues/detail?id=8551 
+			 -->
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>6.8.7</version>
+			<version>6.8.21</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpmime</artifactId>
-			<version>4.3.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.3.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
-			<version>4.3.2</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>1.3.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.21</version>
-		</dependency>
-		<dependency>
-			<groupId>xml-apis</groupId>
-			<artifactId>xml-apis</artifactId>
-			<version>1.4.01</version>
-		</dependency>
-		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
-			<version>0.9.8</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-lgpl</artifactId>
-			<version>1.9.13</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>3.10-FINAL</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.jexcelapi</groupId>
-			<artifactId>jxl</artifactId>
-			<version>2.6.12</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fifesoft</groupId>
-			<artifactId>languagesupport</artifactId>
-			<version>r751</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
 		</dependency>
 
+		<!-- End Selenium requirements -->
+
+		<!-- Start Sauce Labs requirements -->
+		<dependency>
+			<groupId>com.saucelabs</groupId>
+			<artifactId>sauce_java_common</artifactId>
+			<version>2.1.18</version>
+		</dependency>
+		<dependency>
+			<groupId>com.saucelabs</groupId>
+			<artifactId>sauce_junit</artifactId>
+			<version>2.1.18</version>
+		</dependency>
+		<dependency>
+			<groupId>com.saucelabs</groupId>
+			<artifactId>sauce_testng</artifactId>
+			<version>2.1.18</version>
+		</dependency>
+		<dependency>
+			<groupId>com.saucelabs.selenium</groupId>
+			<artifactId>sauce-ondemand-driver</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.saucelabs.selenium</groupId>
+			<artifactId>selenium-client-factory</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.saucelabs</groupId>
+			<artifactId>saucerest</artifactId>
+			<version>1.0.22</version>
+		</dependency>
+		<!-- End Sauce Labs requirements -->
+
+		<!-- Start HTML Unit Driver requirements -->
 
 		<dependency>
 			<groupId>net.sourceforge.htmlunit</groupId>
@@ -135,13 +166,76 @@
 		<dependency>
 			<groupId>net.sourceforge.htmlunit</groupId>
 			<artifactId>htmlunit</artifactId>
-			<version>2.15</version>
+			<version>2.6</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.htmlunit</groupId>
 			<artifactId>webdriver</artifactId>
 			<version>2.6</version>
 		</dependency>
+
+		<!-- End HTML Unit Driver requirements -->
+
+		<!-- Start General requirements -->
+		<dependency>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>1.4.01</version>
+		</dependency>
+
+		<!-- End General requirements -->
+
+		<!-- Start Excel Document Reader requirements -->
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.11</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6.12</version>
+		</dependency>
+
+		<!-- End Excel Document Reader requirements -->
+
+		<!-- Start Database drivers requirements -->
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.21</version>
+		</dependency>
+
+		<!-- End Database drivers requirements -->
+
+		<!-- Start REST Core requirements -->
+
+		<dependency>
+			<groupId>com.jayway.restassured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-lgpl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+
+		<!-- End REST Core requirements -->
+
+		<!-- Start Soap Core requirements -->
 		<dependency>
 			<groupId>eviware</groupId>
 			<artifactId>soapui</artifactId>
@@ -151,6 +245,11 @@
 			<groupId>eviware</groupId>
 			<artifactId>soapui-xmlbeans</artifactId>
 			<version>4.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fifesoft</groupId>
+			<artifactId>languagesupport</artifactId>
+			<version>r751</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-cli</groupId>
@@ -178,71 +277,10 @@
 			<version>1.8.0</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
-		</dependency>
-		<dependency>
 			<groupId>jaxen</groupId>
 			<artifactId>jaxen</artifactId>
 			<version>1.1</version>
 		</dependency>
+		<!-- End Soap Core requirements -->
 	</dependencies>
-	<properties>
-		<testNGSourceDirectory>src/test/resources/bluesource/testngXMLs</testNGSourceDirectory>
-	</properties>
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.12.4</version>
-					<executions>
-						<execution>
-							<phase>test</phase>
-							<goals>
-								<goal>test</goal>
-							</goals>
-							<configuration>
-								<skip>true</skip>
-								<includes>
-									<!-- <include>**/Suite_Room_Only_E2E.java</include> -->
-								</includes>
-							</configuration>
-						</execution>
-					</executions>
-					<configuration>
-
-						<!-- Run a specific testNG suite <suiteXmlFiles> <suiteXmlFile>${project.build.testOutputDirectory}/suite_room_only_e2e.xml</suiteXmlFile> 
-							</suiteXmlFiles> -->
-
-						<!-- parameterized testNG suite via maven <suiteXmlFiles> -->
-						<suiteXmlFiles>
-							<suiteXmlFile>${testNGSourceDirectory}/TestAddNewTitle.xml</suiteXmlFile>
-						</suiteXmlFiles>
-						<!-- <suiteXmlFiles> <suiteXmlFile>${testNGSourceDirectory}/suite_housekeeping.xml</suiteXmlFile> 
-							</suiteXmlFiles> -->
-					</configuration>
-				</plugin>
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
-					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.12.4</version>
-			</plugin>
-		</plugins>
-	</reporting>
 </project>

@@ -1,23 +1,17 @@
 package com.orasi.core.interfaces.impl;
 
-import java.sql.Timestamp;
-
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.testng.Reporter;
-
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.utils.Base64Coder;
 import com.orasi.utils.TestReporter;
-import com.orasi.utils.WebDriverSetup;
 
 /**
  * TextInput  wrapper.
  */
-@SuppressWarnings("unused")
 public class TextboxImpl extends ElementImpl implements Textbox {
     private WebElement element;
 	/**
@@ -35,13 +29,13 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      */
     @Override
     public void clear() {
-	try{	    	
-	    getWrappedElement().clear();
-	    TestReporter.interfaceLog(" Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
-	}catch(RuntimeException rte){
-	    TestReporter.interfaceLog("Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo()  + " </b>]", true);
-	    throw rte;
-	}
+		try {
+			getWrappedElement().clear();
+			TestReporter.interfaceLog(" Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]");
+		} catch (RuntimeException rte) {
+			TestReporter.interfaceLog("Clear text from Textbox [<b>@FindBy: " + getElementLocatorInfo() + " </b>]", true);
+			throw rte;
+		}
     }
 
     /**
@@ -52,18 +46,18 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      */
     @Override
     public void set(String text) {
-        if (!text.isEmpty()){   
-            try{        	
-        	getWrappedElement().clear();
-        	getWrappedElement().sendKeys(text);
-        	TestReporter.log(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
-            }catch(RuntimeException rte){
-                TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
-                throw rte;
-            }
-	}else{
-	    TestReporter.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
-        }
+		if (!text.isEmpty()) {
+			try {
+				getWrappedElement().clear();
+				getWrappedElement().sendKeys(text);
+				TestReporter.log(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+			} catch (RuntimeException rte) {
+				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
+				throw rte;
+			}
+		} else {
+			TestReporter.interfaceLog(" Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+		}
     }
     
     /**
@@ -74,6 +68,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * @param driver - Current active WebDriver object
      * @param text - text to enter into the field
      */
+    @Override
     public void set(WebDriver driver, String text) {
         if (!text.isEmpty()){
             try{
@@ -100,10 +95,11 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * 		string, this step is skipped. 
      * @param text - text to enter into the field
      */
+    @Override
     public void safeSet(String text) {
         if (!text.isEmpty()){
             try{
-        	getWrappedElement().click();        	
+        	getWrappedElement().click();     	
         	getWrappedElement().sendKeys(Keys.CONTROL + "a");
         	getWrappedElement().sendKeys(text);
         	getWrappedElement().sendKeys(Keys.TAB);
@@ -123,6 +119,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * 		text parameter is an empty string, this step is skipped. 
      * @param text - text to enter into the field
      */
+    @Override
     public void setSecure(String text) {
         if (!text.isEmpty()){
             try{
@@ -146,6 +143,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * 		step is skipped. 
      * @param text - text to enter into the field
      */
+    @Override
     public void safeSetSecure(String text) {
         if (!text.isEmpty()){
             try{
@@ -174,6 +172,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * @param driver - Current active WebDriver object
      * @param text - text to enter into the field
      */
+    @Override
     public void setValidate( WebDriver driver, String text){
     	if(!text.isEmpty()){
         	try{
@@ -205,6 +204,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * @param driver - Current active WebDriver object
      * @param text - text to enter into the field
      */
+    @Override
     public void safeSetValidate(WebDriver driver, String text){
     	if(!text.isEmpty()){
     	    try{

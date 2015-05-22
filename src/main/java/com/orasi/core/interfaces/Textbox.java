@@ -14,6 +14,7 @@ public interface Textbox extends Element {
 	/**
 	 * @see org.openqa.selenium.WebElement#clear()
 	 */
+	@Override
 	public void clear(); 
 	
     /**
@@ -50,6 +51,7 @@ public interface Textbox extends Element {
     /** 
      * @see org.openqa.selenium.WebElement#getText()
      */
+    @Override
     public String getText();
     
     /**

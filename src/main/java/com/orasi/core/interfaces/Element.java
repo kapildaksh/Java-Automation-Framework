@@ -27,6 +27,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#clear()
      * @summary - used to clear text entry areas; has not effect on any other elements
      */
+    @Override
     void clear();
     
     /**
@@ -40,6 +41,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      * @see org.openqa.selenium.WebElement#click()
      * @summary - default Selenium click
      */
+    @Override
     void click();	
     
     /**
@@ -62,6 +64,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#sendKeys(java.lang.CharSequence...)
      * @summary - sends the char sequence to the element if the sequnce is not an empty string
      */
+    @Override
     void sendKeys(CharSequence... keysToSend);
     
     /**
@@ -69,6 +72,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      * @see org.openqa.selenium.WebElement#submit
      * @summary - submits form to remote server; exception thrown if the element is not within a form
      */
+    @Override
     void submit();
 
     /**
@@ -77,6 +81,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      * @return {@link WebElement}
      * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#findElement()
      */
+    @Override
     WebElement findElement(By by);
 
     /**
@@ -85,6 +90,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      * @return {@link List} 
      * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#findElements()
      */
+    @Override
     List<WebElement> findElements(By by);
     
 
@@ -94,6 +100,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      * @return {@link String} Value of specified attribute
      * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#getAttribute()
      */    
+    @Override
     String getAttribute(String name);
 
     /**
@@ -102,56 +109,64 @@ public interface Element extends WebElement, WrapsElement, Locatable {
      * @return {@link String} Value of specified property
      * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#getCssValue()
      */
-   String getCssValue(String propertyName);
+   @Override
+String getCssValue(String propertyName);
 
 
    /**
     * @return {@link Coordinates} 
     * @see org.orasi.chameleon.interfaces.impl.ElementImpl#getCoordinates();
     */
-  Coordinates getCoordinates();
+  @Override
+Coordinates getCoordinates();
 
    /**
     * @author Justin
     * @return {@link Point} Return x and y location
     * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#getLocation()
     */
-   Point getLocation();
+   @Override
+Point getLocation();
    
    /**
     * @author Justin
     * @return {@link Dimension} Return height and width of element
     * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#getSize()
     */
-   Dimension getSize();
+   @Override
+Dimension getSize();
 
    /**
     * @author Justin
     * @return {@link String} Text value in element
     * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#getText()
     */
-   String getText();
+   @Override
+String getText();
 
    /**
     * @author Justin
     * @return {@link String} Tag value in element
     * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#getTagName()
     */
-   String getTagName();
+   @Override
+String getTagName();
    
    /**
     * @author Justin
     * @return {@link Boolean} Return TRUE if element is enabled, FALSE if it is not 
     * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#isEnabled()
     */
-   boolean isEnabled();
+   @Override
+boolean isEnabled();
    
    /**
     * @author Justin
     * @return {@link Boolean} Return TRUE if element is Displayed, FALSE if it is not  
     * @see main.java.com.orasi.core.interfaces.impl.ElementImpl#isDisplayed()
     */
-   boolean isDisplayed();
+   @Override
+boolean isDisplayed();
    
     /**
      * @summary - Returns true when the inner element is ready to be used.

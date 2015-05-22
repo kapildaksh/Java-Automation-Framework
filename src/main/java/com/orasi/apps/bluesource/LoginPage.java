@@ -4,15 +4,17 @@ import java.util.ResourceBundle;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
+import ru.yandex.qatools.allure.annotations.Step;
+
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Constants;
+import com.orasi.utils.TestEnvironment;
 
 public class LoginPage {
-	private WebDriver driver;
-	
+	private TestEnvironment te = null;
 	//all the page elements
 	@FindBy(id = "employee_username")
 	private Textbox txtUsername;
@@ -26,43 +28,27 @@ public class LoginPage {
 	// *********************
 	// ** Build page area **
 	// *********************
-	public LoginPage(WebDriver driver){
-		this.driver = driver;
-		ElementFactory.initElements(driver, this);
+	public LoginPage(TestEnvironment te){
+		this.te = te;
+		ElementFactory.initElements(te.getDriver(), this);
 	}
 	
-	public boolean pageLoaded(){
-		return new PageLoaded().isElementLoaded(this.getClass(), driver, btnLogin); 
-		//return new PageLoaded().isDomComplete(driver);  
-	}
-	
-	public LoginPage initialize() {
-		return ElementFactory.initElements(driver,
-				this.getClass());       
-	 }
-
 	// *****************************************
 	// ***Page Interactions ***
 	// *****************************************
 
-	
+	@Step("Given I login with the role \"{0}\"")
 	public void login(String role) {
-	
-		
-		
 		final String username;
 		final String password;
 		final ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
 		username = userCredentialRepo.getString("BLUESOURCE_" + role.toUpperCase());
-		//password = userCredentialRepo.getString("BLUESOURCE_PASSWORD");
 		password = userCredentialRepo.getString("BLUESOURCE_ENCODED_PASSWORD");
-		
-		 
-		driver.switchTo().defaultContent();
+				
+		te.getDriver().switchTo().defaultContent();
 		
 		txtUsername.safeSet(username);
-		//txtPassword.safeSet(password);
 		txtPassword.setSecure(password);
 		btnLogin.click();
 	}

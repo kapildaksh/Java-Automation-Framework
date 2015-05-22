@@ -24,15 +24,14 @@ public class ButtonImpl extends ElementImpl implements Button {
     @Override
     public void click() {
 
-    	//TestReporter.log("Click Button [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
- 	try{
+    	try{
  	   getWrappedElement().click(); 
     	}catch(RuntimeException rte){
     	    TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() + "</b>]", true);
     	    throw rte;
     	}
  	
- 	TestReporter.interfaceLog(" Clicked [ <b>@FindBy: " + getElementLocatorInfo() + "</b>]");
+ 	TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() + "</b>]");
     	
     }
     
@@ -46,7 +45,7 @@ public class ButtonImpl extends ElementImpl implements Button {
      	    TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() +"</b>]", true);
      	    throw rte;
      	}
-  	 TestReporter.interfaceLog(" Clicked [ <b>@FindBy: " + getElementLocatorInfo() + "</b>]");
+  	 TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo() + "</b>]");
     	
     }
 }

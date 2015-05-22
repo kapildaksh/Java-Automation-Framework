@@ -45,6 +45,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	 * @summary - Defines the number of radio buttons in the group by the 
 	 * 		number of 'input' tags found in the wrapped object
 	 */
+	@Override
 	public void setNumberOfRadioButtons() {
 		numberOfRadioButtons = radioButtons.size();
 	}
@@ -52,6 +53,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	/**
 	 * @summary - Defines the number of radio buttons and return the integer count
 	 */
+	@Override
 	public int getNumberOfRadioButtons() {
 		setNumberOfRadioButtons();
 		return numberOfRadioButtons;
@@ -61,6 +63,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	 * @summary - Sets the current index for this instance, selects the radio button 
 	 * 		by index and sets the selected option for this instance
 	 */
+	@Override
 	public void selectByIndex(int index) {
 		currentIndex = index;
 		try{
@@ -77,10 +80,11 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	/**
 	 * @summary - Defines and returns a List<String> of all options for the radio group
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<String> getAllOptions() {
 		List<WebElement> options = radGroup.findElements(By.xpath("label"));
-		stringOptions = (List<String>) FixedSizeList.decorate(Arrays.asList(new String[options.size()]));
+		stringOptions = FixedSizeList.decorate(Arrays.asList(new String[options.size()]));
 		int loopCounter = 0;
 
 		for (WebElement option : options) {
@@ -95,6 +99,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	 * @summary - Defines a List<String> of all options for this instance as well as the 
 	 * 		number of options for the radio group 
 	 */
+	@Override
 	public void setNumberOfOptions() {
 		getAllOptions();
 		numberOfOptions = stringOptions.size();
@@ -103,6 +108,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	/**
 	 * @summary - Defines the number of options and return the integer count
 	 */
+	@Override
 	public int getNumberOfOptions() {
 		setNumberOfOptions();
 		return numberOfOptions;
@@ -112,6 +118,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	 * @summary - Defines all options for this instance, selects an option by the string parameter 
 	 * 		and sets the selected option for this instance
 	 */
+	@Override
 	public void selectByOption(String option) {
 		getAllOptions();
 		for (int loopCounter = 0; loopCounter < stringOptions.size(); loopCounter++) {
@@ -138,6 +145,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	 * @summary - Defines a List<String> of all options for this instance and defines the currently 
 	 * 		selected option, if any
 	 */
+	@Override
 	public void setSelectedOption() {
 		getAllOptions();
 		selectedOption = stringOptions.get(currentIndex).toString();
@@ -147,6 +155,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	 * @summary - Defines a List<String> of all options for this instance and defines the currently 
 	 * 		selected option, if any and returns the String value of the selected option
 	 */
+	@Override
 	public String getSelectedOption() {
 		setSelectedOption();
 		return this.selectedOption;
@@ -155,6 +164,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	/**
 	 * @summary - Returns the integer index of the currently selected radio button
 	 */
+	@Override
 	public int getSelectedIndex() {
 		return currentIndex;
 	}

@@ -4,14 +4,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import ru.yandex.qatools.allure.annotations.Step;
+
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
+import com.orasi.utils.TestEnvironment;
 public class NewDeptPage {
 
-	private WebDriver driver;
+    	private TestEnvironment te = null;
 
 	//All the page elements
 	@FindBy(id = "department_name")
@@ -26,27 +29,18 @@ public class NewDeptPage {
 	// *********************
 	// ** Build page area **
 	// *********************
-	public NewDeptPage(WebDriver driver){
-		this.driver = driver;
-		ElementFactory.initElements(driver, this);
+	public NewDeptPage(TestEnvironment te){
+		this.te = te;
+		ElementFactory.initElements(te.getDriver(), this);
 	}
 	
-	public boolean pageLoaded(){
-		return new PageLoaded().isElementLoaded(this.getClass(), driver, txtDept); 
-		  
-	}
-	
-	public NewDeptPage initialize() {
-		return ElementFactory.initElements(driver,
-				this.getClass());       
-	 }
-
 	// *****************************************
 	// ***Page Interactions ***
 	// *****************************************
 	
 	
 	//method to create a new title
+	@Step("When I create the new department \"{0}\"")
 	public void CreateNewDept(String dept){
 		txtDept.safeSet(dept);
 		btnCreateDept.click();

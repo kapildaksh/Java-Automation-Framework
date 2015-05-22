@@ -16,8 +16,8 @@ import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
 import org.openqa.selenium.support.pagefactory.internal.LocatingElementListHandler;
 
-import com.orasi.core.by.angular.FindByNG;
 import com.orasi.core.interfaces.Element;
+import com.orasi.core.by.angular.FindByNG;
 
 /**
  * WrappedElementDecorator recognizes a few things that DefaultFieldDecorator does not.
