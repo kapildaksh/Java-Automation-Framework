@@ -108,7 +108,7 @@ public class TestLogin  extends TestEnvironment {
      */
     @Features("Login")
     @Stories("Given when I login as with a valid role, I can land on the Homepage")
-    @Title("Login")
+    @Title("Negative Login")
     @Test(dataProvider = "negativeDataScenario", groups = { "regression" })
     public void testFailedLogin(@Parameter String testScenario, @Parameter String role) {
 	
