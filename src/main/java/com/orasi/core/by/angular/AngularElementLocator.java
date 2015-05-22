@@ -32,6 +32,8 @@ public class AngularElementLocator implements ElementLocator {
 			  element = (RemoteWebElement) driver.findElement(ng.repeater(ngLocator.ngRepeater()));
 		  }else if(!ngLocator.ngButtonText().toString().isEmpty()){
 			  element = (RemoteWebElement) driver.findElement(ng.buttonText(ngLocator.ngButtonText()));
+		  }else if(!ngLocator.ngShow().toString().isEmpty()){
+			  element = (RemoteWebElement) driver.findElement(ng.show(ngLocator.ngShow()));
 		  }
 		 // return element.findElement(ng.model(ngLocator.ngModel()));
 		  return element;
@@ -47,9 +49,9 @@ public class AngularElementLocator implements ElementLocator {
 			  elements = driver.findElements(ng.repeater(ngLocator.ngRepeater()));
 		  }else if(!ngLocator.ngButtonText().toString().isEmpty()){
 			  elements = driver.findElements(ng.buttonText(ngLocator.ngButtonText()));
-
+		  }else if(!ngLocator.ngShow().toString().isEmpty()){
+			  elements = driver.findElements(ng.show(ngLocator.ngShow()));
 		  }
-		  
 		  return elements;
 	  }
 }

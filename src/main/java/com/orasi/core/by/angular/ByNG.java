@@ -418,6 +418,38 @@ public abstract class ByNG {
     }
   }
   
+  public static class ByNGShow extends ByNG implements Serializable {
+
+      private static final long serialVersionUID = 376317282960469555L;
+
+      private final String name;
+
+      public ByNGShow(String name) {
+        this.name = name;
+      }
+
+      @Override
+      public List<WebElement> findElements(SearchContext context) {
+        if (context instanceof FindsByNGModel)
+          return ((FindsByNGShow) context).findElementsByNGShow(name);
+        return ((FindsByXPath) context).findElementsByXPath(".//*[@name = '"
+            + name + "']");
+      }
+
+      @Override
+      public WebElement findElement(SearchContext context) {
+        if (context instanceof FindsByNGModel)
+          return ((FindsByNGShow) context).findElementByNGShow(name);
+        return (WebElement) ((FindsByXPath) context).findElementsByXPath(".//*[@name = '"
+            + name + "']");
+      }
+
+      @Override
+      public String toString() {
+        return "By.name: " + name;
+      }
+    }
+  
   public static class ByNGController extends ByNG implements Serializable {
 
 	    private static final long serialVersionUID = 376317282960469555L;

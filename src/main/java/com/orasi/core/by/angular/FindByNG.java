@@ -14,4 +14,5 @@ public @interface FindByNG {
   String ngController() default "";
   String ngModel() default "";
   String ngRepeater() default "";
+  String ngShow() default "";
 }

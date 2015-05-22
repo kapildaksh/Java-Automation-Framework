@@ -31,6 +31,10 @@ public class ByAngular {
         return new ByAngularController(jse, controller);
     }
     
+    public static ByAngularShow show(String show) {
+        return new ByAngularShow(jse, show);
+    }
+    
     public static ByAngularButtonText buttonText(String text) {
         return new ByAngularButtonText(jse, text);
     }
