@@ -72,10 +72,10 @@ public class TestManageDepartments  extends TestEnvironment {
     @Stories("Given when I login as an admin role, I can add and delete Departments")
     @Title("Manage Departments")
     @Test(dataProvider = "dataScenario", groups = { "regression" })
-    public void testCreateNewDept(@Parameter String testScenario, @Parameter String role,
+    public void testManageDept(@Parameter String testScenario, @Parameter String role,
 	    @Parameter String newDept) {
 	
-	String testName = new Object() {
+	testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 
 	testStart(testName);

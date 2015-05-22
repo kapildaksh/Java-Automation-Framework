@@ -74,9 +74,9 @@ public class TestManageTitles extends TestEnvironment{
     @Stories("Given when I login as an admin role, I can add and delete Titles")
     @Title("Manage Titles")
     @Test(dataProvider = "dataScenario", groups = { "regression" })
-    public void testCreateNewTitle(@Parameter String testScenario, @Parameter String role,
+    public void testManageTitle(@Parameter String testScenario, @Parameter String role,
 	    @Parameter String newTitle) {
-	String testName = new Object() {
+	testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	testStart(testName);
 	
