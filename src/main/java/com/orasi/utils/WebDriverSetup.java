@@ -27,93 +27,108 @@ import org.testng.Assert;
 
 public class WebDriverSetup {
 
-	public WebDriver driver;
-	private String testEnvironment = "";
-	private String testApplication = "";
-	private String driverWindow = "";
-	private String operatingSystem = "";
-	private String browserVersion = "";
-	private String browser = null;
-	private String location = null;
-	private ResourceBundle appURLRepository = ResourceBundle.getBundle(Constants.ENVIRONMENT_URL_PATH);
-	private URL seleniumHubURL = null;
+	protected WebDriver driver;
+	protected String testEnvironment = "";
+	protected String testApplication = "";
+	protected String driverWindow = "";
+	protected String operatingSystem = "";
+	protected String browserVersion = "";
+	protected String browser = null;
+	protected String runLocation = null;
+	protected ResourceBundle appURLRepository = ResourceBundle.getBundle(Constants.ENVIRONMENT_URL_PATH);
+	protected URL seleniumHubURL = null;
 	
 	//Define a variable to house the Linux OS username
 	String username = "";
 		
+
+	/*
+	 * Constructors for web driver setup class
+	 */
+	
 	public WebDriverSetup(){}
 
 	public WebDriverSetup(	String application, String browserUnderTest, 
 							String browserVersion, String operatingSystem,
-							String runLocation, String environment){
-		
-		this.testApplication = application;
-		this.browser = browserUnderTest;
+							String location, String environment){
+		setTestApplication(application);
 		setBrowserUnderTest(browserUnderTest);
-		this.browserVersion = browserVersion;
 		setBrowserVersion(browserVersion);
-		this.operatingSystem = operatingSystem;
 		setOperatingSystem(operatingSystem);
-		this.location = runLocation;
-		setRunLocation(runLocation);
-		this.testEnvironment = environment;
+		setRunLocation(location);
+		setTestEnvironment(environment);
 		
 		verifyExpectedAndActualOS();
 	}
 	
-	//Getters & Setters
-	public void setTestEnvironment(String environment){
-		testEnvironment = environment;
+	public WebDriverSetup(WebDriverSetup webDriverSetup){
+		
+	}
+	
+	/*
+	 * Getters & Setters
+	 */
+	
+	//Test environment
+	protected void setTestEnvironment(String env){
+		testEnvironment = env;
 	}
 	
 	public  String getTestEnvironment(){
 		return testEnvironment;
 	}
 
-	public static void setTestApplication(String application){
-		System.setProperty("testApplication",application);
+	//test application
+	protected void setTestApplication(String app){
+		testApplication = app;
 	}
 
-	public static String getTestApplication(){
-		return System.getProperty("testApplication");
+	public String getTestApplication(){
+		return testApplication;
 	}
 
-	public void setDriverWindow(String window){
+	//driver window
+	protected void setDriverWindow(String window){
 		driverWindow= window;
 	}
 
 	public String getDriverWindow(){
 		return driverWindow;
 	}
-
-	public static String getOperatingSystem() {
-		return System.getProperty("operatingSystem");
-	}
-
-	public static void setOperatingSystem(String operatingSystem) {
-		System.setProperty("operatingSystem", operatingSystem);
-	}
-
-	public static void setBrowserUnderTest(String browser) {
-		System.setProperty("browser", browser);
+	
+	//operating system
+	protected void setOperatingSystem(String os) {
+		operatingSystem = os;
 	}
 	
-	public static String getBrowserUnderTest(){
-		return System.getProperty("browser");
-	}
-	
-	public static String getBrowserVersion() {
-		return System.getProperty("browserVersion");
+	public String getOperatingSystem() {
+		return operatingSystem;
 	}
 
-	public static void setBrowserVersion(String browserVersion) {
-		System.setProperty("browserVersion", browserVersion);
+	//browser
+	protected void setBrowserUnderTest(String brwsr) {
+		browser = brwsr;
 	}
 	
+	public String getBrowserUnderTest(){
+		return browser;
+	}
+	
+	//browser version
+	public String getBrowserVersion() {
+		return browserVersion;
+	}
+
+	protected void setBrowserVersion(String bv) {
+		browserVersion = bv;
+	}
+	
+	//URLs
 	public  ResourceBundle getEnvironmentURLRepository(){
 		return appURLRepository;
 	}
 
+	//default test timeouts
 	public static void setDefaultTestTimeout(int timeout){
 		System.setProperty(Constants.TEST_DRIVER_TIMEOUT, Integer.toString(timeout));
 	}
@@ -122,7 +137,8 @@ public class WebDriverSetup {
 		return Integer.parseInt(System.getProperty(Constants.TEST_DRIVER_TIMEOUT));
 	}
 	
-	public void setDriver(WebDriver driverSession){
+	//WebDriver
+	private void setDriver(WebDriver driverSession){
 		driver = driverSession;
 	}
 	
@@ -130,12 +146,13 @@ public class WebDriverSetup {
 		return driver;
 	}
 	
-	public static String getRunLocation() {
-		return System.getProperty("runLocation");
+	//run location (local runs or on remote machines)
+	public String getRunLocation() {
+		return runLocation;
 	}
 
-	public static void setRunLocation(String location) {
-		System.setProperty("runLocation", location);
+	protected void setRunLocation(String rl) {
+		runLocation = rl;
 	}
 	
 	/**
@@ -150,8 +167,10 @@ public class WebDriverSetup {
 	 * @throws InterruptedException 
 	 */
 	public WebDriver initialize() throws InterruptedException, IOException{
+		System.setProperty("org.uncommons.reportng.escape-output", "false");
 		driverSetup();
 		launchApplication();
+		//setDriver
 		return this.driver;
 	}
 	
@@ -332,7 +351,7 @@ public class WebDriverSetup {
 
 		driver.manage().timeouts().setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT, TimeUnit.SECONDS).implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);	
 		setDefaultTestTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
-		//driver.manage().deleteAllCookies();
+		driver.manage().deleteAllCookies();
 		driver.manage().window().maximize();
 		setDriverWindow(driver.getWindowHandle());
 	}

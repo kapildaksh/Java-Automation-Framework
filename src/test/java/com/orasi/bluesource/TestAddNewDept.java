@@ -55,6 +55,7 @@ public class TestAddNewDept {
 
     }
 
+    /*
     @AfterMethod(groups = { "regression" })
     public synchronized void closeSession(ITestResult test) {
 	WebDriver driver = drivers.get(test.getMethod().getMethodName());
@@ -65,6 +66,7 @@ public class TestAddNewDept {
 	}
 	driver.quit();
     }
+    */
 
     /**
      * @throws IOException 
