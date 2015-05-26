@@ -3,12 +3,12 @@ package com.orasi.sandbox;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Test;
+
 
 import com.orasi.utils.dataProviders.JSONDataProvider;
 
 public class JSONTest {
-    @Test()
+    @org.testng.annotations.Test()
     public void main() throws JSONException{
         String str = "[{\"nameColumn\":\"name1\",\"urlColumn\":\"url1\"},{\"nameColumn\":\"name2\",\"urlColumn\":\"url2\"},{\"nameColumn\":\"name3\",\"urlColumn\":\"url3\"}]";
         JSONArray jsonarray = new JSONArray(str);

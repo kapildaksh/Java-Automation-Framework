@@ -1,4 +1,4 @@
-package com.orasi.bluesource;
+package com.orasi.sandbox;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,16 +13,16 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.utils.TestReporter;
-import com.orasi.utils.Screenshot;
-import com.orasi.utils.WebDriverSetup;
-import com.orasi.utils.dataProviders.DatabaseDataProvider;
 import com.orasi.apps.bluesource.ListingTitlesPage;
 import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.NewTitlePage;
 import com.orasi.apps.bluesource.TopNavigationBar;
+import com.orasi.utils.Screenshot;
+import com.orasi.utils.TestReporter;
+import com.orasi.utils.WebDriverSetup;
+import com.orasi.utils.dataProviders.DatabaseDataProvider;
 
-public class TestAddNewTitleDbData {
+public class WaitsSandbox {
 
     private String application = "";
     private String browserUnderTest = "";
