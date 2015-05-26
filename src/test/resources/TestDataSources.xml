@@ -3,7 +3,7 @@
 <suite name="Suite" parallel="false" thread-count="5">
 	<parameter name="browserUnderTest" value="chrome" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="remote" />
+	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="31.0" />
 	<parameter name="operatingSystem" value="VISTA" />
 	<test name="Test">
