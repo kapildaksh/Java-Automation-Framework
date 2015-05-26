@@ -245,7 +245,7 @@
 					<configuration>				
 						<suiteXmlFiles>
 							<suiteXmlFile>${testNGSourceDirectory}/TestDataSources.xml</suiteXmlFile>
-							<suiteXmlFile>${testNGSourceDirectory}/MavenBuild.xml</suiteXmlFile>
+							<!-- <suiteXmlFile>${testNGSourceDirectory}/MavenBuild.xml</suiteXmlFile> -->
 						</suiteXmlFiles>
 						
 						<!-- Property configurations for reportNG -->
