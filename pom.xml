@@ -243,27 +243,11 @@
 					<version>2.12.4</version>
 
 					<configuration>				
+						<suiteXmlFiles>
 
-						<!-- Run a specific testNG suite 	
-						<suiteXmlFiles>
-							<suiteXmlFile>${project.build.testOutputDirectory}/suite_room_only_e2e.xml</suiteXmlFile>
-						</suiteXmlFiles>-->
-
-						<!-- parameterized testNG suite via maven 
-						<suiteXmlFiles>
-							<suiteXmlFile>${testNGSourceDirectory}/${suiteXmlFile}</suiteXmlFile>
-						</suiteXmlFiles>
-						-->
-						<suiteXmlFiles>
-<<<<<<< HEAD
-<<<<<<< HEAD
-							<suiteXmlFile>${testNGSourceDirectory}/MavenBuild.xml</suiteXmlFile>
-=======
 							<suiteXmlFile>${testNGSourceDirectory}/TestDataSources.xml</suiteXmlFile>
->>>>>>> dc062f0706538ccf5620e3701c0c797534338ae9
-=======
 							<suiteXmlFile>${testNGSourceDirectory}/MavenBuild.xml</suiteXmlFile>
->>>>>>> 2f914b7b0b56285f32cd62ac0bdfaba2deca7355
+							<suiteXmlFile>${testNGSourceDirectory}/MavenBuild.xml</suiteXmlFile>
 						</suiteXmlFiles>
 						
 						<!-- Property configurations for reportNG -->
