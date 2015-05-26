@@ -58,6 +58,7 @@ public class TestAddNewTitleDbData {
 
     }
     
+    /*
     @AfterMethod(groups = { "regression" })
     public synchronized void closeSession(ITestResult test){
 	System.out.println(test.getMethod().getMethodName());
@@ -69,6 +70,7 @@ public class TestAddNewTitleDbData {
 	}
 	driver.quit();
     }
+    */
 
     /**
      * @throws IOException 

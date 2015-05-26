@@ -9,9 +9,11 @@ import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Constants;
+import com.orasi.utils.WebDriverSetup;
 
 public class LoginPage {
 	private WebDriver driver;
+	private String browserType;
 	
 	//all the page elements
 	@FindBy(id = "employee_username")
@@ -27,6 +29,12 @@ public class LoginPage {
 	// ** Build page area **
 	// *********************
 	public LoginPage(WebDriver driver) {
+		this.driver = driver;
+		ElementFactory.initElements(driver, this);
+	}
+	
+	public LoginPage(WebDriver driver, String browser) {
+		this.browserType = browser;
 		this.driver = driver;
 		ElementFactory.initElements(driver, this);
 	}
@@ -54,11 +62,13 @@ public class LoginPage {
 		 
 		driver.switchTo().defaultContent();
 		
-		if(System.getProperty("browser").equalsIgnoreCase("safari")){
+		//For the safari browser, will need to do a different set method
+		if(browserType.equalsIgnoreCase("safari")){
 			txtUsername.set(username);	
 		}else{
 			txtUsername.safeSet(username);
 		}
+		
 		//txtPassword.safeSet(password);
 		txtPassword.setSecure(password);
 		btnLogin.click();
