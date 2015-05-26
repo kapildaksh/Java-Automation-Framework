@@ -1,4 +1,4 @@
-package com.orasi.sandbox;
+package com.orasi.bluesource;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import com.orasi.utils.TestReporter;
 import com.orasi.utils.WebDriverSetup;
 import com.orasi.utils.dataProviders.DatabaseDataProvider;
 
-public class WaitsSandbox {
+public class TestAddNewTitleDbData {
 
     private String application = "";
     private String browserUnderTest = "";
