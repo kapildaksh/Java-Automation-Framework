@@ -1,98 +1,139 @@
 package com.orasi.sandbox;
 
-import javax.xml.bind.ValidationException;
-import javax.xml.xpath.XPathExpressionException;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-import com.orasi.api.SoapExamples.predict8.CRMServicePTBinding.operations.*;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.openqa.selenium.WebDriver;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+import com.orasi.apps.bluesource.ListingTitlesPage;
+import com.orasi.apps.bluesource.LoginPage;
+import com.orasi.apps.bluesource.NewTitlePage;
+import com.orasi.apps.bluesource.TopNavigationBar;
+import com.orasi.utils.Screenshot;
+import com.orasi.utils.TestReporter;
+import com.orasi.utils.WebDriverSetup;
+import com.orasi.utils.dataProviders.DatabaseDataProvider;
 
 public class WaitsSandbox {
-	String personId;
-	String personFirstName;
-	String personLastName;
-	String personAddressStreet;
-	String personAddressCity;
-	String personAddressZipCode;
-	String personAddressCountry;
-	String personAge;
-	String addressStreet;
-	String addressCity;
-	String addressZipCode;
-	String addressCountry;
-	String addressCompanyName;
-	String id;
-	String[] attributes;
+
+    private String application = "";
+    private String browserUnderTest = "";
+    private String browserVersion = "";
+    private String operatingSystem = "";
+    private String runLocation = "";
+    private String environment = "";
+    private Map<String, WebDriver> drivers = new HashMap<String, WebDriver>();
+
+    @DataProvider(name = "dataScenario")
+    public Object[][] scenarios() {	
+	return new DatabaseDataProvider(DatabaseDataProvider.MYSQL).getTestData("TestAddNewTitle");
+    }
+
+    @BeforeTest(groups = { "regression" })
+    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
+	    "operatingSystem", "environment" })
+    public void setup(@Optional String runLocation, String browserUnderTest,
+	    String browserVersion, String operatingSystem, String environment) {
+	this.application = "Bluesource";
+	this.runLocation = runLocation;
+	this.browserUnderTest = browserUnderTest;
+	this.browserVersion = browserVersion;
+	this.operatingSystem = operatingSystem;
+	this.environment = environment;
+
+    }
+    
+    @AfterMethod(groups = { "regression" })
+    public synchronized void closeSession(ITestResult test){
+	System.out.println(test.getMethod().getMethodName());
+	WebDriver driver = drivers.get(test.getMethod().getMethodName());   
 	
-	@Test()
-	public void main() throws XPathExpressionException, ValidationException{
-		Create create = new Create("stage","Main");
-		attributes = setCustomerValues(create);
-		create.sendRequest();
-		Assert.assertEquals(create.getResponseStatusCode(), "200");
-		
-		Get get = new Get("stage","Main");
-		get.setRequestId(id);
-		get.sendRequest();
-		Assert.assertEquals(get.getResponseStatusCode(), "200");
-		validateResponseValues(get);
-		
-		GetAll getAll = new GetAll("stage","Main");
-		getAll.sendRequest();
-		Assert.assertEquals(getAll.getResponseStatusCode(), "200");
-		getAll.verifyPresenceOfCustomer(attributes, "/Envelope/Body/getAllResponse/customer", true);
+	//if is a failure, then take a screenshot
+	if (test.getStatus() == ITestResult.FAILURE){
+		new Screenshot().takeScreenShot(test, driver);
 	}
+	driver.quit();
+    }
+
+    /**
+     * @throws IOException 
+     * @throws InterruptedException 
+     * @throws Exception
+     * @Summary: Adds a housekeeper to the schedule
+     * @Precondition:NA
+     * @Author: Jessica Marshall
+     * @Version: 10/6/2014
+     * @Return: N/A
+     */
+    @Test(dataProvider = "dataScenario", groups = { "regression" })
+    public void testCreateNewTitle(String testScenario, String role,
+	    String newTitle) throws InterruptedException, IOException {
 	
-	private String[] setCustomerValues(Create localCreate){
-		System.out.println();
-		personId = localCreate.getPersonId();
-		System.out.println("Person ID: " + personId);
-		personFirstName = localCreate.getPersonFirstName();
-		System.out.println("Person First Name: " + personFirstName);
-		personLastName = localCreate.getPersonLastName();
-		System.out.println("Person Last Name: " + personLastName);
-		personAddressStreet = localCreate.getPersonAddressStreet();
-		System.out.println("Person Address Street: " + personAddressStreet);
-		personAddressCity = localCreate.getPersonAddressCity();
-		System.out.println("Person Address City: " + personAddressCity);
-		personAddressZipCode = localCreate.getPersonAddressZipCode();
-		System.out.println("Person Address Zip Code: " + personAddressZipCode);
-		personAddressCountry = localCreate.getPersonAddressCountry();
-		System.out.println("Person Address Country: " + personAddressCountry);
-		personAge = localCreate.getPersonAge();
-		System.out.println("Person Age: " + personAge);
-		addressStreet = localCreate.getAddressStreet();
-		System.out.println("Address Street: " + addressStreet);
-		addressCity = localCreate.getAddressCity();
-		System.out.println("Address City: " + addressCity);
-		addressZipCode = localCreate.getAddressZipCode();
-		System.out.println("Address Zip Code: " + addressZipCode);
-		addressCountry = localCreate.getAddressCountry();
-		System.out.println("Address Country: " + addressCountry);
-		addressCompanyName = localCreate.getAddressCompanyName();
-		System.out.println("Address Company Name: " + addressCompanyName);
-		id = localCreate.getId();
-		System.out.println("ID: " + id);
-		System.out.println();
-		String[] attributes = {personId, personFirstName, personLastName, personAddressStreet, personAddressCity,
-				personAddressZipCode, personAddressCountry, personAge, addressStreet, addressCity,
-				addressZipCode, addressCountry, addressCompanyName, id};
-		return attributes;
-	}
+	String testName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
 	
-	private void validateResponseValues(Get localGet){
-		Assert.assertEquals(localGet.getResponsePersonId(), personId, "The response person ID ["+localGet.getResponsePersonId()+"] was not that which was expected ["+personId+"].");
-		Assert.assertEquals(localGet.getResponsePersonFirstName(), personFirstName, "The response person first name ["+localGet.getResponsePersonFirstName()+"] was not that which was expected ["+personFirstName+"].");
-		Assert.assertEquals(localGet.getResponsePersonLastName(), personLastName, "The response person last name ["+localGet.getResponsePersonLastName()+"] was not that which was expected ["+personLastName+"].");
-		Assert.assertEquals(localGet.getResponsePersonAddressStreet(), personAddressStreet, "The response person address street ["+localGet.getResponsePersonAddressStreet()+"] was not that which was expected ["+personAddressStreet+"].");
-		Assert.assertEquals(localGet.getResponsePersonAddressCity(), personAddressCity, "The response person address city ["+localGet.getResponsePersonAddressCity()+"] was not that which was expected ["+personAddressCity+"].");
-		Assert.assertEquals(localGet.getResponsePersonAddressZipCode(), personAddressZipCode, "The response person address zip code ["+localGet.getResponsePersonAddressZipCode()+"] was not that which was expected ["+personAddressZipCode+"].");
-		Assert.assertEquals(localGet.getResponsePersonAddressCountry(), personAddressCountry, "The response person address country ["+localGet.getResponsePersonAddressCountry()+"] was not that which was expected ["+personAddressCountry+"].");
-		Assert.assertEquals(localGet.getResponsePersonAge(), personAge, "The response person age ["+localGet.getResponsePersonAge()+"] was not that which was expected ["+personAge+"].");
-		Assert.assertEquals(localGet.getResponseAddressStreet(), addressStreet, "The response address street ["+localGet.getResponseAddressStreet()+"] was not that which was expected ["+addressStreet+"].");
-		Assert.assertEquals(localGet.getResponseAddressCity(), addressCity, "The response address street ["+localGet.getResponseAddressCity()+"] was not that which was expected ["+addressCity+"].");
-		Assert.assertEquals(localGet.getResponseAddressZipCode(), addressZipCode, "The response address street ["+localGet.getResponseAddressZipCode()+"] was not that which was expected ["+addressZipCode+"].");
-		Assert.assertEquals(localGet.getResponseAddressCountry(), addressCountry, "The response address street ["+localGet.getResponseAddressCountry()+"] was not that which was expected ["+addressCountry+"].");
-		Assert.assertEquals(localGet.getResponseAddressCompanyName(), addressCompanyName, "The response address street ["+localGet.getResponseAddressCompanyName()+"] was not that which was expected ["+addressCompanyName+"].");
-	}
+	TestReporter.setPrintToConsole(true);
+	
+	WebDriverSetup setup = new WebDriverSetup(application,
+		browserUnderTest, browserVersion, operatingSystem, runLocation,
+		environment);
+	WebDriver driver = setup.initialize();
+	System.out.println(testName);
+	drivers.put(testName, driver);
+
+	// Login
+	LoginPage loginPage = new LoginPage(driver);
+	TestReporter.assertTrue(loginPage.pageLoaded(),
+		"Verify login page is displayed");
+	loginPage.login(role);
+
+	// Verify user is logged in
+	TopNavigationBar topNavigationBar = new TopNavigationBar(driver);
+	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
+
+	// Navigate to the title page
+	topNavigationBar.clickAdminLink();
+	topNavigationBar.clickTitlesLink();
+
+	// Verify navigated to the title page
+	ListingTitlesPage listingTitlesPage = new ListingTitlesPage(driver);
+	TestReporter.assertTrue(listingTitlesPage.pageLoaded(),
+		"Verify listing titles page is displayed");
+
+	// Click new title
+	listingTitlesPage.clickNewTitle();
+
+	// Instantiate the New titles page and create a new title
+	NewTitlePage newTitlePage = new NewTitlePage(driver);
+	TestReporter.assertTrue(newTitlePage.pageLoaded(),
+		"Verify create new title page is displayed");
+	newTitlePage.createNewTitle(newTitle);
+
+	// Verify the title was created
+	TestReporter.assertTrue(listingTitlesPage.isSuccessMsgDisplayed(), "Validate success message appears");
+	TestReporter.log("New Title was created: " + newTitle);
+
+	// Verify the title is displayed on the title results table
+	TestReporter.assertTrue(listingTitlesPage.searchTableByTitle(newTitle), "Validate new title appears in table");
+
+	// Delete the new title
+	listingTitlesPage.deleteTitle(newTitle);
+
+	// Verify the title is deleted
+	ListingTitlesPage refreshedPage = new ListingTitlesPage(driver);
+	TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(), "Validate success message appears");
+
+	// logout
+	topNavigationBar.logout();
+
+    }
+
 }
