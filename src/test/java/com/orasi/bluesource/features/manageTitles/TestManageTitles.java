@@ -1,4 +1,4 @@
-package com.orasi.bluesource.features;
+package com.orasi.bluesource.features.manageTitles;
 
 import java.util.HashMap;
 import java.util.Map;

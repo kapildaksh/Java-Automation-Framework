@@ -1,4 +1,4 @@
-package com.orasi.bluesource.features;
+package com.orasi.bluesource.features.manageEmployees;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +22,7 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 
 import com.orasi.utils.Constants;
+import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.Screenshot;
@@ -31,24 +32,19 @@ import com.orasi.apps.bluesource.DepartmentsPage;
 import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
+import com.orasi.apps.bluesource.employeesPage.EmployeesPage;
 
-public class TestLogin  extends TestEnvironment {
+public class SearchForEmployee  extends TestEnvironment {
 
     private String application = "";
     
     @DataProvider(name = "dataScenario")
     public Object[][] scenarios() {
 	return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
-		+ "TestLogin.xlsx", "TestLogin").getTestData();
-    }
-    
-    @DataProvider(name = "negativeDataScenario")
-    public Object[][] negativeScenarios() {
-	return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
-		+ "TestLogin.xlsx", "TestLoginNegative").getTestData();
+		+ "ManageEmployees.xlsx", "SearchForEmployees").getTestData();
     }
 
-    @BeforeTest(groups = { "regression" })
+    @BeforeTest(groups = { "regression", "manageEmployees", "searchEmployees" })
     @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
@@ -61,7 +57,7 @@ public class TestLogin  extends TestEnvironment {
 	setTestEnvironment(environment);
     }
 
-    @AfterMethod(groups = { "regression" })
+    @AfterMethod(groups = { "regression", "manageEmployees", "searchEmployees" })
     public synchronized void closeSession(ITestResult test) {
 	endTest(testName);
     }
@@ -74,11 +70,11 @@ public class TestLogin  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("Login")
-    @Stories("Given when I login as with a valid role, I can land on the Homepage")
-    @Title("Login with correct information")
-    @Test(dataProvider = "dataScenario", groups = { "regression" })
-    public void testLogin(@Parameter String testScenario, @Parameter String role) {
+    @Features("ManageEmployees")
+    @Stories("Given when I login as with a valid role, I can search for an Employee on the Employee Page using any criteria")
+    @Title("SearchForEmployee")
+    @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "searchEmployees" })
+    public void testSearchEmployee(@Parameter String testScenario, @Parameter String role, @Parameter String searchText, @Parameter String column) {
 	
 	testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -94,34 +90,17 @@ public class TestLogin  extends TestEnvironment {
 	TopNavigationBar topNavigationBar = new TopNavigationBar(this);
 	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
 
+	//Navigate to Employees Page
+	topNavigationBar.clickEmployeesLink();
+	EmployeesPage employeesPage = new EmployeesPage(this);
+	TestReporter.assertTrue(employeesPage.pageLoaded(),"Verify Employees page is displayed");
+	
+	//Search for Employee
+	employeesPage.enterSearchText(searchText);
+	TestReporter.assertTrue(employeesPage.validateTextInTable(searchText, column), "Validate " + searchText + " was found under the " + column + " column");
+
 	// logout
 	topNavigationBar.clickLogout();
     }
     
-    /**
-     * @throws Exception
-     * @Summary: Adds a housekeeper to the schedule
-     * @Precondition:NA
-     * @Author: Jessica Marshall
-     * @Version: 10/6/2014
-     * @Return: N/A
-     */
-    @Features("Login")
-    @Stories("Given when I login as with incorrect information, I fail to leave the Login page")
-    @Title("Login with incorrect information")
-    @Test(dataProvider = "negativeDataScenario", groups = { "regression" })
-    public void testFailedLogin(@Parameter String testScenario, @Parameter String role) {
-	
-	testName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-
-	testStart(testName);
-	
-	// Login
-	LoginPage loginPage = new LoginPage(this);
-	TestReporter.assertTrue(loginPage.pageLoaded(),"Verify login page is displayed");
-	loginPage.login(role);
-	TestReporter.assertTrue(loginPage.isNotLoggedIn(), "Validate the user did not log in successfully");
-
-    }
 }

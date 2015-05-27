@@ -1,4 +1,4 @@
-package com.orasi.bluesource.features;
+package com.orasi.bluesource.features.manageDepartments;
 
 import java.util.HashMap;
 import java.util.Map;

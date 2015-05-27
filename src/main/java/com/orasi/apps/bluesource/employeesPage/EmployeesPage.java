@@ -1,4 +1,4 @@
-package com.orasi.apps.bluesource;
+package com.orasi.apps.bluesource.employeesPage;
 
 import java.util.List;
 
@@ -10,6 +10,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 
+import ru.yandex.qatools.allure.annotations.Step;
+import ru.yandex.qatools.allure.model.SeverityLevel;
+
+import com.orasi.apps.bluesource.commons.BluesourceTables;
+import com.orasi.apps.bluesource.commons.SortOrder;
 import com.orasi.core.by.angular.FindByNG;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
@@ -24,6 +29,7 @@ import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 
 public class EmployeesPage {
+	
 	private TestEnvironment te;
 	
 	//All the page elements
@@ -42,32 +48,8 @@ public class EmployeesPage {
 	@FindBy(className = "table")
 	private Webtable tabEmployeeTable;
 	
-	@FindByNG(ngShow = "showFirstName" )
-	private Link lnkFirstNameSort;
-
-	@FindByNG(ngShow = "showLastName" )
-	private Link lnkLastNameSort;
-
-	@FindByNG(ngShow = "showTitle" )
-	private Link lnkTitleSort;
-
-	@FindByNG(ngShow = "showSupervisor" )
-	private Link lnkSupervisorSort;
-
-	@FindByNG(ngShow = "showProject" )
-	private Link lnkProjectSort;
-
-	@FindByNG(ngShow = "showLocation" )
-	private Link lnkLocationSort;
-
-	@FindByNG(ngShow = "showVacation" )
-	private Link lnkVacationSort;
-
-	@FindByNG(ngShow = "showSick" )
-	private Link lnkSickSort;
-
-	@FindByNG(ngShow = "showFloatingHoliday" )
-	private Link lnkFloatingHolidaySort;
+	@FindBy(id = "loading-section")
+	private Element loadingModal;
 	
 	// *********************
 	// ** Build page area **
@@ -76,10 +58,10 @@ public class EmployeesPage {
 		this.te = te;
 		ElementFactory.initElements(te.getDriver(), this);
 	}
+	public EmployeesPage(){}
 	
 	public boolean pageLoaded(){
-	    return te.pageLoaded().isElementLoaded(this.getClass(), btnAdd); 
-		 
+	    return te.pageLoaded().isElementLoaded(this.getClass(), txtSearch); 	    
 	}
 	
 	// *****************************************
@@ -92,6 +74,7 @@ public class EmployeesPage {
 		btnAdd.click();
 	}
 	
+	
 	public boolean isSuccessMsgDisplayed(){
 	    return lblSuccessMsg.isDisplayed();
 	}
@@ -100,47 +83,44 @@ public class EmployeesPage {
 	    return lblSuccessMsg.getText();
 	}
 	
-	public void sortOnFirstName(){
-	    lnkFirstNameSort.click();
-	}
-	
-	public void sortOnLastName(){
-	    lnkLastNameSort.click();
-	}
-	
-	public void sortOnSupervisor(){
-	    lnkSupervisorSort.click();
-	}
-	
-	public void sortOnTitle(){
-	    lnkTitleSort.click();
-	}
-	
-	public void sortOnProject(){
-	    lnkProjectSort.click();
-	}
-	
-	public void sortOnLocation(){
-	    lnkLocationSort.click();
-	}
-	
-	public void sortOnVacationDaysLeft(){
-	    lnkVacationSort.click();
-	}
-	
-	public void sortOnSickDaysLeft(){
-	    lnkSickSort.click();
-	}
-	
-	public void sortFloatingHolidayLeft(){
-	    lnkFloatingHolidaySort.click();
-	}
-	
+	@Step("When I search for \"{0}\" on the Employees Page")
 	public void enterSearchText(String text){
+	    loadingModal.syncHidden(te.getDriver());
 	    txtSearch.syncVisible(te.getDriver());
-	    txtSearch.click();
-	    txtSearch.safeSet(text);
-	    tabEmployeeTable.syncTextInElement(te.getDriver(), text);
+	    txtSearch.safeSet(text);    
+	}
+	
+	@Step("Then Employees with the value \"{0}\" in the \"{0}\" column are displayed")
+	public boolean validateTextInTable(String text, String column){
+	    BluesourceTables table = new BluesourceTables(te);
+	    String columnName = EmployeesTableColumns.valueOf(column).toString();	    
+	    return table.validateTextInTable(text, columnName);
+	}
+	
+	@Step("When I sort the \"{0}\" column in \"{0}\" order")	
+	public void sortColumn(String column, String order){
+	    BluesourceTables table = new BluesourceTables(te);
+	    String columnName = EmployeesTableColumns.valueOf(column).toString();
+	    table.sortColumn(columnName, SortOrder.valueOf(order));	
+	}
+	
+	@Step("Then the \"{0}\" column is displayed in \"{0}\" order")
+	public boolean validateSortColumn(String column, String order){
+	    BluesourceTables table = new BluesourceTables(te);	    
+	    String columnName = EmployeesTableColumns.valueOf(column).toString();
+	    return table.validateSortColumn(columnName, SortOrder.valueOf(order));	
+	}
+	
+	@Step("When I set the number of rows to be \"{0}\"")
+	public void setRowsPerPageDisplayed(String numberOfRows){
+	    BluesourceTables table = new BluesourceTables(te);
+	    table.setRowsPerPageDisplayed(numberOfRows);
+	}
+	
+	@Step("Then the number of rows displayed should be \"{0}\"")
+	public boolean validateRowsPerPageDisplayed(String numberOfRows){
+	    BluesourceTables table = new BluesourceTables(te);
+	    return table.validateRowsPerPageDisplayed(numberOfRows);
 	}
 	
 	
@@ -196,5 +176,5 @@ public class EmployeesPage {
 		//click on the first one
 		elementList.get(0).click();
 	}
-
 }
+

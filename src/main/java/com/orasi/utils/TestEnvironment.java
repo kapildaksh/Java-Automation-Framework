@@ -511,6 +511,7 @@ public class TestEnvironment {
     public PageLoaded pageLoaded() {
  	return new PageLoaded(this);
      }
+    
     /**
      * @summary loops for a predetermined amount of time (defined by
      *          WebDriverSetup.getDefaultTestTimeout()) to determine if the DOM
@@ -520,12 +521,12 @@ public class TestEnvironment {
      *            /A
      */
   
-  /*  public void initializePage(Class<?> clazz) {
+    public void initializePage(Class<?> clazz) {
 	try {
 	    ElementFactory.initElements(driver,clazz);
 	} catch (SecurityException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-    }*/
+    }
 }

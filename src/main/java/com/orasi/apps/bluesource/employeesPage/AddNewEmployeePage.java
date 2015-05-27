@@ -1,4 +1,4 @@
-package com.orasi.apps.bluesource;
+package com.orasi.apps.bluesource.employeesPage;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,9 +12,6 @@ import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
-
-
-
 
 public class AddNewEmployeePage {
 
