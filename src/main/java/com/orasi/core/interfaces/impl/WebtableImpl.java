@@ -55,7 +55,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @throws NoSuchAttributeException 
      */
 	@Override
-	public int getColumnCount( WebDriver driver, int row) throws NoSuchAttributeException {
+	public int getColumnCount( WebDriver driver, int row){
     	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		List<WebElement> rowCollection = this.element.findElements(By.xpath("tr"));
 		boolean rowFound = false;
@@ -79,7 +79,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        	}else if(rowElement.findElements(By.xpath("td")).size() != 0){
 	        		xpath = "td";
 	        	}else{
-	        		throw new NoSuchAttributeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+	        		throw new RuntimeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 	        	}
 	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 	        	
@@ -109,7 +109,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @throws NoSuchAttributeException 
      */
 	@Override
-	public WebElement getCell( WebDriver driver, int row, int column) throws NoSuchAttributeException{
+	public WebElement getCell( WebDriver driver, int row, int column){
     	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		List<WebElement> rowCollection = this.element.findElements(By.xpath("tr"));
 
@@ -136,7 +136,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        	{
 	        		xpath = "td";
 	        	}else{
-	        		throw new NoSuchAttributeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+	        		throw new RuntimeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 	        	}
 	        	
 	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
@@ -174,7 +174,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @throws NoSuchAttributeException 
      */
 	@Override
-	public void clickCell( WebDriver driver, int row, int column) throws NoSuchAttributeException{
+	public void clickCell( WebDriver driver, int row, int column) {
     	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		List<WebElement> rowCollection = this.element.findElements(By.xpath("tr"));
 
@@ -200,7 +200,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        	{
 	        		xpath = "td";
 	        	}else{
-	        		throw new NoSuchAttributeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+	        		throw new RuntimeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 	        	}
 	        	
 	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
@@ -236,7 +236,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * @throws NoSuchAttributeException 
      */
 	@Override
-	public String getCellData( WebDriver driver, int row, int column) throws NoSuchAttributeException{
+	public String getCellData( WebDriver driver, int row, int column) {
     	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		List<WebElement> rowCollection = this.element.findElements(By.xpath("tr"));
 
@@ -262,7 +262,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        	{
 	        		xpath = "td";
 	        	}else{
-	        		throw new NoSuchAttributeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+	        		throw new RuntimeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
 	        	}
 	        	
 	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
@@ -636,7 +636,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	            for(WebElement cell : columnCollection)
 	            {	            	
 	            	if (currentColumn == columnPosition){
-		            		if(cell.getText().trim().contains(text)){
+		            		if(cell.getText().trim().toUpperCase().contains(text.toUpperCase())){
 		            			rowFound = currentRow;	            	
 		            			found = true;
 		            			break;
