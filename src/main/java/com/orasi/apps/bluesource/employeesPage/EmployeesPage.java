@@ -33,7 +33,16 @@ public class EmployeesPage {
 	private TestEnvironment te;
 	
 	//All the page elements
-	@FindByNG(ngButtonText= "Add")	
+	@FindBy(css= "#all-content > div.header-btn-section > div > div:nth-child(1) > label:nth-child(1)")	
+	private Button btnAll;
+
+	@FindBy(css= "#all-content > div.header-btn-section > div > div:nth-child(1) > label:nth-child(2)")	
+	private Button btnDirect;
+
+	@FindBy(css= "#all-content > div.header-btn-section > div > div:nth-child(2) > label")	
+	private Button btnShowInactive;
+	
+	@FindBy(css= "#all-content > div.header-btn-section > div > div:nth-child(4) > button")	
 	private Button btnAdd;
 	
 	@FindBy(css = "input[id = 'search-bar']")
@@ -50,6 +59,9 @@ public class EmployeesPage {
 	
 	@FindBy(id = "loading-section")
 	private Element loadingModal;
+	
+	@FindBy(css = "#resource-content > div:nth-child(2) > p")
+	private Label lblTotalEmployeeLabel;
 	
 	// *********************
 	// ** Build page area **
@@ -69,12 +81,12 @@ public class EmployeesPage {
 	// *****************************************
 	
 	//Click the add button
-	public void clickAddNewEmployee(){
+	/*public void clickAddNewEmployee(){
 		//Click add
 		btnAdd.click();
-	}
+	}*/
 	
-	
+	@Step("Then a success message is displayed")
 	public boolean isSuccessMsgDisplayed(){
 	    return lblSuccessMsg.isDisplayed();
 	}
@@ -123,6 +135,50 @@ public class EmployeesPage {
 	    return table.validateRowsPerPageDisplayed(numberOfRows);
 	}
 	
+	public int getTotalDisplayedEmployees(){
+	    loadingModal.syncHidden(te.getDriver());
+	    lblTotalEmployeeLabel.syncVisible(te.getDriver());
+	    String total = lblTotalEmployeeLabel.getText();
+	    return Integer.parseInt(total.substring(total.indexOf("of")+3, total.length()));
+	}
+	
+	@Step("When I click the All Button on the Employees Page")
+	public void clickAllButton(){
+	    loadingModal.syncHidden(te.getDriver());
+	    btnAll.click();
+	    te.pageLoaded().isDomComplete();
+	}
+	
+	@Step("When I click the Add Button on the Employees Page")
+	public void clickAddEmployeeButton(){
+	    loadingModal.syncHidden(te.getDriver());
+	    btnAdd.click();
+	    te.pageLoaded().isDomComplete();
+	}
+	
+	@Step("When I click the Direct Button on the Employees Page")
+	public void clickDirectButton(){
+	    loadingModal.syncHidden(te.getDriver());
+	    btnDirect.click();
+	    te.pageLoaded().isDomComplete();
+	}
+	
+	@Step("When I click the Show Inactive Button on the Employees Page")
+	public void clickInactiveButton(){
+	    loadingModal.syncHidden(te.getDriver());
+	    btnDirect.click();
+	    te.pageLoaded().isDomComplete();
+	} 
+	
+	@Step("Then the Employees table should update the employees displayed")
+	public boolean validateEmployeeTableResultsUpdated(int previousCount){
+	    return  (previousCount != getTotalDisplayedEmployees());
+	}
+	
+	
+	public boolean validateLastnameFoundInTable(String username){
+	    return validateTextInTable(username, "LASTNAME");
+	}
 	
 	//search the employee results table by first & last name & click on it
 	public boolean searchTableByFirstAndLastName(String firstName, String lastName){

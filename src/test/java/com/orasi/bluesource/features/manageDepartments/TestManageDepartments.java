@@ -18,8 +18,10 @@ import org.testng.annotations.Test;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
+import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestEnvironment;
@@ -70,6 +72,7 @@ public class TestManageDepartments  extends TestEnvironment {
      */
     @Features("Manage Departments")
     @Stories("Given when I login as an admin role, I can add and delete Departments")
+    @Severity(SeverityLevel.BLOCKER)
     @Title("Manage Departments")
     @Test(dataProvider = "dataScenario", groups = { "regression" })
     public void testManageDept(@Parameter String testScenario, @Parameter String role,

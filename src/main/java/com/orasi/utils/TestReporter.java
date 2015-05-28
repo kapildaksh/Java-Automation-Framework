@@ -85,9 +85,9 @@ public class TestReporter {
    	if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert False - " + trimHtml(description));
        }
     
-    public static void assertEquals(boolean condition, String description) {
+    public static void assertEquals(Object value1, Object value2, String description) {
    	try{
-   	    Assert.assertEquals(condition, description);
+   	    Assert.assertEquals(value1, value2,  description);
    	}catch (AssertionError failure){
    	 logFailure("Assert Equals - " + description );
    	 if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert Equals - " + trimHtml(description));
@@ -97,9 +97,9 @@ public class TestReporter {
    	if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert Equals - " + trimHtml(description));
        }
     
-    public static void assertNotEquals(boolean condition, String description) {
+    public static void assertNotEquals(Object value1, Object value2, String description) {
    	try{
-   	    Assert.assertNotEquals(condition, description);
+   	    Assert.assertNotEquals(value1, value2,  description);
    	}catch (AssertionError failure){
    	 logFailure("Assert Not Equals - " + description );
    	 if(getPrintToConsole()) System.out.println(getTimestamp() + "Assert Not Equals - " + trimHtml(description));
