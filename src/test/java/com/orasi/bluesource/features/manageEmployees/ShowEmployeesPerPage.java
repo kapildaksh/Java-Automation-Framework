@@ -97,7 +97,7 @@ public class ShowEmployeesPerPage  extends TestEnvironment {
 	
 	//Search for Employee
 	employeesPage.setRowsPerPageDisplayed(numberOfRows);
-	TestReporter.assertTrue(employeesPage.validateRowsPerPageDisplayed(numberOfRows), "Validate " + numberOfRows + " were displayed on the Employee Table");
+	TestReporter.assertTrue(employeesPage.validateRowsPerPageDisplayed(numberOfRows), "Validate " + numberOfRows + " rows was displayed on the Employee Table");
 
 	// logout
 	topNavigationBar.clickLogout();
