@@ -335,7 +335,7 @@ public class ElementImpl implements Element {
 		loopTimeout = Integer.valueOf(timeout) * 10;
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
-				+ "</b> ] to be <b>VISIBLE/<b> within [ " + timeout
+				+ "</b> ] to be <b>VISIBLE<b> within [ " + timeout
 				+ " ] seconds.</i>");
 
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
