@@ -70,7 +70,7 @@ public class NegativeLogin  extends TestEnvironment {
      * @Return: N/A
      */
     @Features("Login")
-    @Stories("Given when I login as with incorrect information, I fail to leave the Login page")
+    @Stories("Failing to login will not let me leave the Login page")
     @Title("Login with incorrect information")
     @Test(dataProvider = "negativeDataScenario", groups = { "regression", "login" })
     public void testFailedLogin(@Parameter String testScenario, @Parameter String role) {

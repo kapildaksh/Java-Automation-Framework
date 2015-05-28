@@ -70,7 +70,7 @@ public class Login  extends TestEnvironment {
      * @Return: N/A
      */
     @Features("Login")
-    @Stories("Given when I login as with a valid role, I can land on the Homepage")
+    @Stories("Logging in will land me on the Homepage")
     @Title("Login with correct information")
     @Test(dataProvider = "dataScenario", groups = { "regression" , "login" })
     public void testLogin(@Parameter String testScenario, @Parameter String role) {

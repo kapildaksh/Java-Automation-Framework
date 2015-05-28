@@ -34,17 +34,17 @@ import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 import com.orasi.apps.bluesource.employeesPage.EmployeesPage;
 
-public class SearchEmployeeTableColumns  extends TestEnvironment {
+public class SortEmployeeTableColumns  extends TestEnvironment {
 
     private String application = "";
     
     @DataProvider(name = "dataScenario")
     public Object[][] scenarios() {
 	return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
-		+ "ManageEmployees.xlsx", "SearchEmployeeTableColumns").getTestData();
+		+ "ManageEmployees.xlsx", "SortEmployeeTableColumns").getTestData();
     }
 
-    @BeforeTest(groups = { "regression", "manageEmployees", "searchEmployeeTableColumns" })
+    @BeforeTest(groups = { "regression", "manageEmployees", "sortEmployeeTableColumns" })
     @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
@@ -57,7 +57,7 @@ public class SearchEmployeeTableColumns  extends TestEnvironment {
 	setTestEnvironment(environment);
     }
 
-    @AfterMethod(groups = { "regression", "manageEmployees", "searchEmployeeTableColumns" })
+    @AfterMethod(groups = { "regression", "manageEmployees", "sortEmployeeTableColumns" })
     public synchronized void closeSession(ITestResult test) {
 	endTest(testName);
     }
@@ -71,9 +71,9 @@ public class SearchEmployeeTableColumns  extends TestEnvironment {
      * @Return: N/A
      */
     @Features("ManageEmployees")
-    @Stories("Given when I login as with a valid role, I can on a column an Employee on the Employee Page")
-    @Title("SearchEmployeeTableColumns")
-    @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "searchEmployeeTableColumns" })
+    @Stories("Sort on a column an Employee on the Employee Page")
+    @Title("SortEmployeeTableColumns")
+    @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "sortEmployeeTableColumns" })
     public void testSortColumns(@Parameter String testScenario, @Parameter String role, @Parameter String column, @Parameter String order) {
 	
 	testName = new Object() {

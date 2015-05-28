@@ -71,10 +71,10 @@ public class ShowEmployeesPerPage  extends TestEnvironment {
      * @Return: N/A
      */
     @Features("ManageEmployees")
-    @Stories("Given when I login as with a valid role, select the number of Employees that is displayed")
+    @Stories("I can select the number of Employees that is displayed")
     @Title("ShowEmployeesPerPage")
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "showEmployeesPerPage" })
-    public void testSearchEmployee(@Parameter String testScenario, @Parameter String role, @Parameter String numberOfRows) {
+    public void testShowEmployeesPerPage(@Parameter String testScenario, @Parameter String role, @Parameter String numberOfRows) {
 	
 	testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
