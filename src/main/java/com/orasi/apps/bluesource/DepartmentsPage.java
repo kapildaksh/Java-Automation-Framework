@@ -8,9 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Step;
-import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
@@ -48,7 +46,6 @@ public class DepartmentsPage {
 	
 	//click add dept link
 	@Step("And I click the \"New Department\" link")
-	@Severity(SeverityLevel.CRITICAL)
 	public void clickAddDeptLink(){
 		lnkAddDept.click();
 	}
@@ -59,14 +56,12 @@ public class DepartmentsPage {
 	
 	//return if the success message is displayed
 	@Step("Then an alert should appear for conformation")
-	@Severity(SeverityLevel.TRIVIAL)
 	public boolean isSuccessMsgDisplayed(){
 		return lblSuccessMsg.isDisplayed();
 	}
 	
 	//search page for a dept, return if displayed
 	@Step("And the department \"{0}\" should be found on the Titles table")
-	@Severity(SeverityLevel.CRITICAL)
 	public boolean searchTableByDept(String dept){
 		//Get all the rows in the table by CSS
 		List<WebElement> elementList = te.getDriver().findElements(By.cssSelector(".list-group-item"));
@@ -81,7 +76,6 @@ public class DepartmentsPage {
 	}
 	
 	@Step("And I can delete the department from the table")
-	@Severity(SeverityLevel.NORMAL)
 	public boolean deleteDept(String dept){
 		//Get all the rows in the table by CSS
 		List<WebElement> elementList = te.getDriver().findElements(By.cssSelector(".list-group-item"));

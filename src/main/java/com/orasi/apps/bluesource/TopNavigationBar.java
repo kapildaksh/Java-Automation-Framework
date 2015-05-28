@@ -5,9 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Step;
-import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.PageLoaded;
@@ -60,43 +58,36 @@ public class TopNavigationBar {
 	// *****************************************
 
 	@Step("And I click the \"Admin Link\"")
-	@Severity(SeverityLevel.BLOCKER)
 	public void clickAdminLink(){
 		lnkAdminDrop.click();
 	}
 	
 	@Step("And I navigate to the \"Departments Page\"")
-	@Severity(SeverityLevel.BLOCKER)
 	public void clickDepartmentsLink(){
 		lnkDept.click();
 	}
 	
 	@Step("And I navigate to the \"Titles Page\"")
-	@Severity(SeverityLevel.BLOCKER)
 	public void clickTitlesLink(){
 		lnkTitle.click();
 	}
 	
 	@Step("And I navigate to the \"Directory Page\"")
-	@Severity(SeverityLevel.BLOCKER)
 	public void clickDirectoryLink(){
 		lnkDirectory.click();
 	}
 	
 	@Step("And I navigate to the \"Projects Page\"")
-	@Severity(SeverityLevel.BLOCKER)
 	public void clickProjectsLink(){
 		lnkProjects.click();
 	}
 	
 	@Step("And I navigate to the \"Employees Page\"")
-	@Severity(SeverityLevel.BLOCKER)
 	public void clickEmployeesLink(){
 		lnkEmployees.click();
 	}
 	//Verify logout link is displayed
 	@Step("And I log in successfully")
-	@Severity(SeverityLevel.BLOCKER)
 	public boolean isLoggedIn(){
 		return lnkLogout.isDisplayed();
 	}

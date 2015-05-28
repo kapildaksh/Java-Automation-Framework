@@ -18,8 +18,10 @@ import org.testng.annotations.Test;
 import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
+import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.utils.Base64Coder;
 import com.orasi.utils.Constants;
@@ -73,6 +75,7 @@ public class TestManageTitles extends TestEnvironment{
     @Features("Manage Titles")
     @Stories("Given when I login as an admin role, I can add and delete Titles")
     @Title("Manage Titles")
+    @Severity(SeverityLevel.CRITICAL)
     @Test(dataProvider = "dataScenario", groups = { "regression" })
     public void testManageTitle(@Parameter String testScenario, @Parameter String role,
 	    @Parameter String newTitle) {

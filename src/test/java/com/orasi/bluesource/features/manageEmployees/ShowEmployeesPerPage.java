@@ -18,8 +18,10 @@ import org.testng.annotations.Test;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
+import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.utils.Constants;
 import com.orasi.utils.Sleeper;
@@ -72,6 +74,7 @@ public class ShowEmployeesPerPage  extends TestEnvironment {
      */
     @Features("ManageEmployees")
     @Stories("I can select the number of Employees that is displayed")
+    @Severity(SeverityLevel.MINOR)
     @Title("ShowEmployeesPerPage")
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "showEmployeesPerPage" })
     public void testShowEmployeesPerPage(@Parameter String testScenario, @Parameter String role, @Parameter String numberOfRows) {

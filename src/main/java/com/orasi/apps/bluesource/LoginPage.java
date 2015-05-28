@@ -4,9 +4,7 @@ import java.util.ResourceBundle;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
-import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Step;
-import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
@@ -48,7 +46,6 @@ public class LoginPage {
 	// *****************************************
 
 	@Step("Given I login with the role \"{0}\"")
-	@Severity(SeverityLevel.BLOCKER)
 	public void login(String role) {
 		String username = "";
 		String password = "";
@@ -70,7 +67,6 @@ public class LoginPage {
 	}
 	
 	@Step("Then I did not log in successfully")
-	@Severity(SeverityLevel.NORMAL)
 	public boolean isNotLoggedIn(){
 		return btnLogin.isDisplayed();
 	}

@@ -18,8 +18,10 @@ import org.testng.annotations.Test;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
+import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.utils.Constants;
 import com.orasi.utils.Sleeper;
@@ -73,6 +75,7 @@ public class SortEmployeeTableColumns  extends TestEnvironment {
     @Features("ManageEmployees")
     @Stories("I can sort on a column an Employee on the Employee Page")
     @Title("SortEmployeeTableColumns")
+    @Severity(SeverityLevel.TRIVIAL)
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "sortEmployeeTableColumns" })
     public void testSortColumns(@Parameter String testScenario, @Parameter String role, @Parameter String column, @Parameter String order) {
 	

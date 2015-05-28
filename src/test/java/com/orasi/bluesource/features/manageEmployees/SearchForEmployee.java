@@ -18,8 +18,10 @@ import org.testng.annotations.Test;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
+import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.utils.Constants;
 import com.orasi.utils.Sleeper;
@@ -72,6 +74,7 @@ public class SearchForEmployee  extends TestEnvironment {
      */
     @Features("ManageEmployees")
     @Stories("I can search for an Employee on the Employee Page using any criteria")
+    @Severity(SeverityLevel.CRITICAL)
     @Title("SearchForEmployee")
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "searchEmployees" })
     public void testSearchEmployee(@Parameter String testScenario, @Parameter String role, @Parameter String searchText, @Parameter String column) {

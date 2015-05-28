@@ -18,8 +18,10 @@ import org.testng.annotations.Test;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
+import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestEnvironment;
@@ -71,6 +73,7 @@ public class Login  extends TestEnvironment {
      */
     @Features("Login")
     @Stories("Logging in will land me on the Homepage")
+    @Severity(SeverityLevel.BLOCKER)
     @Title("Login with correct information")
     @Test(dataProvider = "dataScenario", groups = { "regression" , "login" })
     public void testLogin(@Parameter String testScenario, @Parameter String role) {
