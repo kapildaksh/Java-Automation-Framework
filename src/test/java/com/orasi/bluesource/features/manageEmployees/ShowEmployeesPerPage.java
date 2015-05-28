@@ -71,7 +71,7 @@ public class ShowEmployeesPerPage  extends TestEnvironment {
      * @Return: N/A
      */
     @Features("ManageEmployees")
-    @Stories("Given when I login as with a valid role, I can search for an Employee on the Employee Page using any criteria")
+    @Stories("Given when I login as with a valid role, select the number of Employees that is displayed")
     @Title("ShowEmployeesPerPage")
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "showEmployeesPerPage" })
     public void testSearchEmployee(@Parameter String testScenario, @Parameter String role, @Parameter String numberOfRows) {

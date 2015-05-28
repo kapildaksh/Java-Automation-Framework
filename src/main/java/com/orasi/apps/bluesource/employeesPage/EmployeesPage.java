@@ -90,28 +90,28 @@ public class EmployeesPage {
 	    txtSearch.safeSet(text);    
 	}
 	
-	@Step("Then Employees with the value \"{0}\" in the \"{0}\" column are displayed")
+	@Step("Then Employees with the value \"{0}\" in the \"{1}\" column are displayed")
 	public boolean validateTextInTable(String text, String column){
 	    BluesourceTables table = new BluesourceTables(te);
 	    String columnName = EmployeesTableColumns.valueOf(column).toString();	    
 	    return table.validateTextInTable(text, columnName);
 	}
 	
-	@Step("When I sort the \"{0}\" column in \"{0}\" order")	
+	@Step("When I sort the \"{0}\" column in \"{1}\" order")	
 	public void sortColumn(String column, String order){
 	    BluesourceTables table = new BluesourceTables(te);
 	    String columnName = EmployeesTableColumns.valueOf(column).toString();
 	    table.sortColumn(columnName, SortOrder.valueOf(order));	
 	}
 	
-	@Step("Then the \"{0}\" column is displayed in \"{0}\" order")
+	@Step("Then the \"{0}\" column is displayed in \"{1}\" order")
 	public boolean validateSortColumn(String column, String order){
 	    BluesourceTables table = new BluesourceTables(te);	    
 	    String columnName = EmployeesTableColumns.valueOf(column).toString();
 	    return table.validateSortColumn(columnName, SortOrder.valueOf(order));	
 	}
 	
-	@Step("When I set the number of rows to be \"{0}\"")
+	@Step("When I set the number of rows to be \"{1}\"")
 	public void setRowsPerPageDisplayed(String numberOfRows){
 	    BluesourceTables table = new BluesourceTables(te);
 	    table.setRowsPerPageDisplayed(numberOfRows);

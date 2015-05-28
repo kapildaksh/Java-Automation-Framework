@@ -203,6 +203,8 @@ public class BluesourceTables {
     }
     
     public void setRowsPerPageDisplayed(String value){
+	loadingDone();
+	lstRowsPerPage.syncEnabled(te.getDriver());
 	lstRowsPerPage.select(value);
     }
     
