@@ -3,13 +3,13 @@
 <suite name="Suite" parallel="instances" thread-count="8">
 	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="remote" />
+	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
 	<!-- <parameter name="runLocation" value="remote"</parameter> -->
 	<test name="Test">
 		<classes>
-			<class name="com.orasi.bluesource.features.manageEmployees.SearchForEmployee" />
+			<class name="com.orasi.bluesource.features.manageEmployees.SortEmployeeTableColumns" />
 		</classes>
 <!-- 
 		<groups>

@@ -155,7 +155,7 @@ public class BluesourceTables {
 	    }
 	    
 	    if(currentRow==numberRows+1) {
-		currentRow = 3;
+		currentRow = 2;
 		movedPage = new Pagination(te).moveNext();
 		te.pageLoaded().isDomComplete();
 		numberRows = table.getRowCount(te.getDriver());

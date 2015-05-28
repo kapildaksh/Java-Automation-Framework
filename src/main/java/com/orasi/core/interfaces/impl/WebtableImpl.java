@@ -9,6 +9,7 @@ import com.orasi.core.interfaces.Webtable;
 import com.orasi.utils.TestEnvironment;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -237,20 +238,36 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      */
 	@Override
 	public String getCellData( WebDriver driver, int row, int column) {
-    	driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-		List<WebElement> rowCollection = this.element.findElements(By.xpath("tr"));
+	    driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+	    String cellData = "";
+    	    cellData = this.element.findElement(By.xpath("tbody/tr["+row+"]/td["+column+"]|tbody/tr["+row+"]/th["+column+"]|tr["+row+"]/td["+column+"]|tr["+row+"]/th["+column+"]")).getText();
+    	    driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
+    	    return cellData;
+	/*
+    	List<WebElement> rowCollection = this.element.findElements(By.xpath("tr"));
 
 		if (rowCollection.size() == 0) {
 			rowCollection = this.element.findElements(By.xpath("tbody/tr"));
 		}
-    	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
-
-        int currentRow = 1,currentColumn = 1;
-        String xpath = null, cellData = "";        
-        Boolean found = false;
-        List<WebElement> columnCollection = null;
-        
-        for(WebElement rowElement : rowCollection)
+    	
+*/
+       /*// String xpath = null, cellData = "";     
+        if(rowCollection.get(row-1).findElements(By.xpath("th")).size() != 0)
+	{
+		xpath = "th";
+	}else if(rowCollection.get(row-1).findElements(By.xpath("td")).size() != 0)
+	{
+		xpath = "td";
+	}else{
+		throw new RuntimeException("No child element with the HTML tag \"th\" or \"td\" were found for the parent webtable [ <b>@FindBy: " + getElementLocatorInfo()  + " </b>]");
+	}
+        driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
+       // List<WebElement> columnCollection = rowCollection.get(row-1).findElements(By.xpath(xpath));
+       
+        //cellData = columnCollection.get(column -1).getText();
+       // cellData = rowCollection.get(row-1).findElement(By.xpath(xpath+"["+column+"]")).getText();
+        /*for(WebElement rowElement : rowCollection)
+         * //*[@id="resource-content"]/div[1]/table/tbody/tr[3]/td[2]
         {        	
         	if(row != currentRow){currentRow++;}
         	else{
@@ -267,7 +284,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	        	
 	        	driver.manage().timeouts().implicitlyWait(TestEnvironment.getDefaultTestTimeout(), TimeUnit.SECONDS);
 	        	
-	            columnCollection = rowElement.findElements(By.xpath(xpath));          
+	            columnCollection = rowElement.findElements(By.xpath(xpath));    
+	            cellData = columnCollection.get(column -1).getText();
 	            for(WebElement cell : columnCollection)
 	            {	            	
 					if (column != currentColumn){currentColumn++;}
@@ -279,10 +297,11 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 	            	}										
 	            }
 	            if (found){break;}
+	            
         	}        	
         }
-        Assert.assertEquals(Boolean.valueOf(found), Boolean.TRUE, "No cell was found for row ["+String.valueOf(row)+"] and column ["+String.valueOf(column)+"]. The column count for row ["+String.valueOf(row)+"] is ["+String.valueOf(columnCollection.size())+"]");
-		return cellData;     	
+       // Assert.assertEquals(Boolean.valueOf(found), Boolean.TRUE, "No cell was found for row ["+String.valueOf(row)+"] and column ["+String.valueOf(column)+"]. The column count for row ["+String.valueOf(row)+"] is ["+String.valueOf(columnCollection.size())+"]");
+	*/     	
 	}
 	
     /**

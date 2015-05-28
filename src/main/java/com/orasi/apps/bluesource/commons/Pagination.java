@@ -82,8 +82,7 @@ public class Pagination {
 	if(!pagination.isDisplayed()) return false;
 	String currentPage = getCurrentPage();
 	
-	List<WebElement> button = pagination.findElements(By.cssSelector("li>a"));
-	new ButtonImpl(button.get(button.size()-1)).click();	
+	new ButtonImpl(pagination.findElement(By.cssSelector("li:last-child > a"))).click();		
 	String nextPage = getCurrentPage();
 	if (currentPage.equals(nextPage)) return false;
 	return true;
@@ -98,8 +97,7 @@ public class Pagination {
     public boolean movePrevious(){
 	if(!pagination.isDisplayed()) return false;
 	String currentPage = getCurrentPage();
-	List<WebElement> button = pagination.findElements(By.cssSelector("li>a"));
-	new ButtonImpl(button.get(button.size()-1)).click();
+	new ButtonImpl(pagination.findElement(By.cssSelector("li:first-child > a"))).click();
 	String nextPage = getCurrentPage();
 	if (currentPage.equals(nextPage)) return false;
 	return true;	
