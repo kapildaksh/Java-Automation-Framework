@@ -111,7 +111,7 @@ public class EmployeesPage {
 	    return table.validateSortColumn(columnName, SortOrder.valueOf(order));	
 	}
 	
-	@Step("When I set the number of rows to be \"{1}\"")
+	@Step("When I set the number of rows to be \"{0}\"")
 	public void setRowsPerPageDisplayed(String numberOfRows){
 	    BluesourceTables table = new BluesourceTables(te);
 	    table.setRowsPerPageDisplayed(numberOfRows);

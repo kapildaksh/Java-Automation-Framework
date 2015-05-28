@@ -31,6 +31,7 @@ import com.orasi.apps.bluesource.DepartmentsPage;
 import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
+import com.orasi.apps.bluesource.commons.Pagination;
 
 public class Login  extends TestEnvironment {
 

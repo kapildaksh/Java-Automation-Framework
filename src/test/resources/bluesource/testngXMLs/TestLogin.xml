@@ -9,7 +9,7 @@
 	<!-- <parameter name="runLocation" value="remote"</parameter> -->
 	<test name="Test">
 		<classes>
-			<class name="com.orasi.bluesource.features.TestLogin" />
+			<class name="com.orasi.bluesource.features.login.Login" />
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

@@ -50,7 +50,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
 			try {
 				getWrappedElement().clear();
 				getWrappedElement().sendKeys(text);
-				TestReporter.log(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+				TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
 			} catch (RuntimeException rte) {
 				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
 				throw rte;

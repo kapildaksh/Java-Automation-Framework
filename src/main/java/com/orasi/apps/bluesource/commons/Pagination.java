@@ -1,5 +1,7 @@
 package com.orasi.apps.bluesource.commons;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -36,7 +38,7 @@ public class Pagination {
  	ElementFactory.initElements(te.getDriver(), this);
  	te.pageLoaded().isElementLoaded(this.getClass(), pagination);
     } 	
-    
+  
     /**
      * 
      * @param {@link TestEnvironment} te
@@ -79,8 +81,9 @@ public class Pagination {
     public boolean moveNext(){
 	if(!pagination.isDisplayed()) return false;
 	String currentPage = getCurrentPage();
-	Button button = new ButtonImpl(pagination.findElement(By.xpath("//a[text()='»']")));
-	button.click();	
+	
+	List<WebElement> button = pagination.findElements(By.cssSelector("li>a"));
+	new ButtonImpl(button.get(button.size()-1)).click();	
 	String nextPage = getCurrentPage();
 	if (currentPage.equals(nextPage)) return false;
 	return true;
@@ -95,8 +98,8 @@ public class Pagination {
     public boolean movePrevious(){
 	if(!pagination.isDisplayed()) return false;
 	String currentPage = getCurrentPage();
-	Button button = new ButtonImpl(pagination.findElement(By.xpath("//a[text()='«']")));
-	button.click();	
+	List<WebElement> button = pagination.findElements(By.cssSelector("li>a"));
+	new ButtonImpl(button.get(button.size()-1)).click();
 	String nextPage = getCurrentPage();
 	if (currentPage.equals(nextPage)) return false;
 	return true;	
