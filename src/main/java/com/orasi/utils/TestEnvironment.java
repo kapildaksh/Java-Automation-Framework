@@ -287,7 +287,7 @@ public class TestEnvironment {
      * @author Justin Phlegar
      * @return Nothing
      */
-    @Step("Launch \"{0}\"")
+   // @Step("Launch \"{0}\"")
     protected void launchApplication(String URL) {
 	driver.get(URL);
     }

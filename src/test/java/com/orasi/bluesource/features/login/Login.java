@@ -40,7 +40,7 @@ public class Login  extends TestEnvironment {
     @DataProvider(name = "dataScenario")
     public Object[][] scenarios() {
 	return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
-		+ "TestLogin.xlsx", "TestLogin").getTestData();
+		+ "Login.xlsx", "Login").getTestData();
     }
 
     @BeforeTest(groups = { "regression", "login"  })

@@ -18,8 +18,10 @@ import org.testng.annotations.Test;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
+import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestEnvironment;
@@ -39,7 +41,7 @@ public class NegativeLogin  extends TestEnvironment {
     @DataProvider(name = "negativeDataScenario")
     public Object[][] negativeScenarios() {
 	return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
-		+ "TestLogin.xlsx", "TestLoginNegative").getTestData();
+		+ "Login.xlsx", "LoginNegative").getTestData();
     }
 
     @BeforeTest(groups = { "regression", "login"  })
@@ -71,6 +73,7 @@ public class NegativeLogin  extends TestEnvironment {
      */
     @Features("Login")
     @Stories("Failing to login will not let me leave the Login page")
+    @Severity(SeverityLevel.BLOCKER)
     @Title("Login with incorrect information")
     @Test(dataProvider = "negativeDataScenario", groups = { "regression", "login" })
     public void testFailedLogin(@Parameter String testScenario, @Parameter String role) {

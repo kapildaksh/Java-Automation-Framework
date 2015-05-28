@@ -10,7 +10,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Step;
+import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
@@ -48,6 +50,7 @@ public class ListingTitlesPage {
 	// *****************************************
 
 	@Step("And I click the \"New Title\" link")
+	@Severity(SeverityLevel.CRITICAL)
 	public void clickNewTitle(){
 		lnkNewTitle.click();
 	}
@@ -58,6 +61,7 @@ public class ListingTitlesPage {
 	}
 	
 	@Step("Then an alert should appear for conformation")
+	@Severity(SeverityLevel.TRIVIAL)
 	public boolean isSuccessMsgDisplayed() {
 		WebDriverWait wait = new WebDriverWait(te.getDriver(), 5);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".alert-success.alert-dismissable")));
@@ -66,6 +70,7 @@ public class ListingTitlesPage {
 	}
 	
 	@Step("And the title \"{0}\" should be found on the Titles table")
+	@Severity(SeverityLevel.CRITICAL)
 	public boolean searchTableByTitle(String title){
 		
 		//Get all the rows in the table by CSS
@@ -81,6 +86,7 @@ public class ListingTitlesPage {
 	}
 	
 	@Step("And I can delete the title from the table")
+	@Severity(SeverityLevel.NORMAL)
 	public boolean deleteTitle(String title){
 		//Get all the rows in the table by CSS
 		List<WebElement> elementList = te.getDriver().findElements(By.cssSelector("td"));

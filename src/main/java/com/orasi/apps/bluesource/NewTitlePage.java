@@ -5,7 +5,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Step;
+import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Listbox;
@@ -43,6 +45,7 @@ public class NewTitlePage {
 	
 	//method to create a new title
 	@Step("When I create the new title \"{0}\"")
+	@Severity(SeverityLevel.CRITICAL)
 	public void createNewTitle(@Parameter String newTitle){
 		txtTitle.safeSet(newTitle);
 		btnCreateTitle.click();

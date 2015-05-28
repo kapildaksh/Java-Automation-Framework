@@ -4,7 +4,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Step;
+import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Listbox;
@@ -45,6 +47,7 @@ public class NewDeptPage {
 	
 	//method to create a new title
 	@Step("When I create the new department \"{0}\"")
+	@Severity(SeverityLevel.CRITICAL)
 	public void CreateNewDept(String dept){
 		txtDept.safeSet(dept);
 		btnCreateDept.click();

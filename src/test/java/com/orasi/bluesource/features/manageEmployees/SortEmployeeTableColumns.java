@@ -71,7 +71,7 @@ public class SortEmployeeTableColumns  extends TestEnvironment {
      * @Return: N/A
      */
     @Features("ManageEmployees")
-    @Stories("Sort on a column an Employee on the Employee Page")
+    @Stories("I can sort on a column an Employee on the Employee Page")
     @Title("SortEmployeeTableColumns")
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "sortEmployeeTableColumns" })
     public void testSortColumns(@Parameter String testScenario, @Parameter String role, @Parameter String column, @Parameter String order) {

@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Step;
 import ru.yandex.qatools.allure.model.SeverityLevel;
 
@@ -84,6 +85,7 @@ public class EmployeesPage {
 	}
 	
 	@Step("When I search for \"{0}\" on the Employees Page")
+	@Severity(SeverityLevel.BLOCKER)
 	public void enterSearchText(String text){
 	    loadingModal.syncHidden(te.getDriver());
 	    txtSearch.syncVisible(te.getDriver());
@@ -91,13 +93,15 @@ public class EmployeesPage {
 	}
 	
 	@Step("Then Employees with the value \"{0}\" in the \"{1}\" column are displayed")
+	@Severity(SeverityLevel.CRITICAL)
 	public boolean validateTextInTable(String text, String column){
 	    BluesourceTables table = new BluesourceTables(te);
 	    String columnName = EmployeesTableColumns.valueOf(column).toString();	    
 	    return table.validateTextInTable(text, columnName);
 	}
 	
-	@Step("When I sort the \"{0}\" column in \"{1}\" order")	
+	@Step("When I sort the \"{0}\" column in \"{1}\" order")
+	@Severity(SeverityLevel.TRIVIAL)
 	public void sortColumn(String column, String order){
 	    BluesourceTables table = new BluesourceTables(te);
 	    String columnName = EmployeesTableColumns.valueOf(column).toString();
@@ -105,6 +109,7 @@ public class EmployeesPage {
 	}
 	
 	@Step("Then the \"{0}\" column is displayed in \"{1}\" order")
+	@Severity(SeverityLevel.TRIVIAL)
 	public boolean validateSortColumn(String column, String order){
 	    BluesourceTables table = new BluesourceTables(te);	    
 	    String columnName = EmployeesTableColumns.valueOf(column).toString();
@@ -112,12 +117,14 @@ public class EmployeesPage {
 	}
 	
 	@Step("When I set the number of rows to be \"{0}\"")
+	@Severity(SeverityLevel.MINOR)
 	public void setRowsPerPageDisplayed(String numberOfRows){
 	    BluesourceTables table = new BluesourceTables(te);
 	    table.setRowsPerPageDisplayed(numberOfRows);
 	}
 	
 	@Step("Then the number of rows displayed should be \"{0}\"")
+	@Severity(SeverityLevel.MINOR)
 	public boolean validateRowsPerPageDisplayed(String numberOfRows){
 	    BluesourceTables table = new BluesourceTables(te);
 	    return table.validateRowsPerPageDisplayed(numberOfRows);
