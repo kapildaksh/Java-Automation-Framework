@@ -52,13 +52,13 @@ public class WaitsSandbox {
     }
     
     @AfterMethod(groups = { "regression" })
-    public synchronized void closeSession(ITestResult test){
+    public synchronized void closeSession(ITestResult test) throws IOException{
 	System.out.println(test.getMethod().getMethodName());
 	WebDriver driver = drivers.get(test.getMethod().getMethodName());   
 	
 	//if is a failure, then take a screenshot
 	if (test.getStatus() == ITestResult.FAILURE){
-		new Screenshot().takeScreenShot(test, driver);
+		new Screenshot().takeScreenShot(test);
 	}
 	driver.quit();
     }

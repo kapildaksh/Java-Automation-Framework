@@ -11,7 +11,8 @@ import com.orasi.utils.PageLoaded;
 public class NewTitlePage {
 	
 	private WebDriver driver;
-
+	private String browserType;
+	
 	//All the page elements
 	@FindBy(id = "title_name")
 	private Textbox txtTitle;
@@ -23,6 +24,12 @@ public class NewTitlePage {
 	// ** Build page area **
 	// *********************
 	public NewTitlePage(WebDriver driver) {
+		this.driver = driver;
+		ElementFactory.initElements(driver, this);
+	}
+	
+	public NewTitlePage(WebDriver driver, String browser) {
+		this.browserType = browser;
 		this.driver = driver;
 		ElementFactory.initElements(driver, this);
 	}
@@ -41,7 +48,7 @@ public class NewTitlePage {
 
 	//method to create a new title
 	public void createNewTitle(String newTitle){
-		if(System.getProperty("browser").equalsIgnoreCase("safari")){
+		if(browserType.equalsIgnoreCase("safari")){
 			txtTitle.set(newTitle);	
 		}else{
 			txtTitle.safeSet(newTitle);
