@@ -80,12 +80,6 @@ public class EmployeesPage {
 	// ***Page Interactions ***
 	// *****************************************
 	
-	//Click the add button
-	/*public void clickAddNewEmployee(){
-		//Click add
-		btnAdd.click();
-	}*/
-	
 	@Step("Then a success message is displayed")
 	public boolean isSuccessMsgDisplayed(){
 	    return lblSuccessMsg.isDisplayed();
@@ -172,12 +166,12 @@ public class EmployeesPage {
 	
 	@Step("Then the Employees table should update the employees displayed")
 	public boolean validateEmployeeTableResultsUpdated(int previousCount){
-	    return  (previousCount != getTotalDisplayedEmployees());
+	    return (previousCount != getTotalDisplayedEmployees());
 	}
 	
 	
 	public boolean validateLastnameFoundInTable(String username){
-	    return validateTextInTable(username, "LASTNAME");
+	    return validateTextInTable(username, EmployeesTableColumns.LASTNAME.toString());
 	}
 	
 	//search the employee results table by first & last name & click on it

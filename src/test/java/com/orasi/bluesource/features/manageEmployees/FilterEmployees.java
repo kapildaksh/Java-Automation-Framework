@@ -36,7 +36,7 @@ import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 import com.orasi.apps.bluesource.employeesPage.EmployeesPage;
 
-public class FilterDirectEmployees  extends TestEnvironment {
+public class FilterEmployees  extends TestEnvironment {
 
     private String application = "";
     
@@ -101,7 +101,7 @@ public class FilterDirectEmployees  extends TestEnvironment {
 	//Record the current amount of employees displayed and click Direct
 	int currentAmount = employeesPage.getTotalDisplayedEmployees();
 	employeesPage.clickDirectButton();
-	TestReporter.assertNotEquals(currentAmount, employeesPage.getTotalDisplayedEmployees(), "Verify Employee table updated successfully");
+	TestReporter.assertTrue(employeesPage.validateEmployeeTableResultsUpdated(currentAmount), "Verify Employee table updated successfully");
 	
 	// logout
 	topNavigationBar.clickLogout();
@@ -136,7 +136,7 @@ public class FilterDirectEmployees  extends TestEnvironment {
 	//Record the current amount of employees displayed and click Direct
 	int currentAmount = employeesPage.getTotalDisplayedEmployees();
 	employeesPage.clickInactiveButton();
-	TestReporter.assertNotEquals(currentAmount, employeesPage.getTotalDisplayedEmployees(), "Verify Employee table updated successfully");
+	TestReporter.assertTrue(employeesPage.validateEmployeeTableResultsUpdated(currentAmount), "Verify Employee table updated successfully");
 	
 	// logout
 	topNavigationBar.clickLogout();
@@ -173,7 +173,7 @@ public class FilterDirectEmployees  extends TestEnvironment {
 	employeesPage.clickDirectButton();
 	int currentAmount = employeesPage.getTotalDisplayedEmployees();
 	employeesPage.clickAllButton();
-	TestReporter.assertNotEquals(currentAmount, employeesPage.getTotalDisplayedEmployees(), "Verify Employee table updated successfully");
+	TestReporter.assertTrue(employeesPage.validateEmployeeTableResultsUpdated(currentAmount), "Verify Employee table updated successfully");
 	
 	// logout
 	topNavigationBar.clickLogout();

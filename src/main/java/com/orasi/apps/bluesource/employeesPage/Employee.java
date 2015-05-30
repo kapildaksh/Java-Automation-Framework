@@ -55,8 +55,8 @@ public class Employee {
     public void setDepartment(String department) {this.department = department;}
     
     public Employee (){
-	this.firstName = Randomness.randomAlphaNumeric(8);
-	this.lastName = Randomness.randomAlphaNumeric(8);
+	this.firstName = Randomness.randomAlphaNumeric(8).toLowerCase();
+	this.lastName = Randomness.randomAlphaNumeric(8).toLowerCase();
 	this.username = getFirstName() + "." + getLastName();
 	this.title = "Contractor";
 	this.role = "Base";

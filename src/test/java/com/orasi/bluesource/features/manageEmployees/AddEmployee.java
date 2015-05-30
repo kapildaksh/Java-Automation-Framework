@@ -65,7 +65,7 @@ public class AddEmployee  extends TestEnvironment {
     }
 
     @AfterTest(groups = { "regression", "manageEmployees", "addEmployee" })
-    public synchronized void closeSession(ITestResult test) {
+    public synchronized void closeSession() {
 	endTest(testName);
     }
 
