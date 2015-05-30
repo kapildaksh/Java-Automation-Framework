@@ -31,10 +31,12 @@ public class PageLoaded {
 	public PageLoaded(){
 		this.timeout = WebDriverSetup.getDefaultTestTimeout();
 	}
+	
 	public PageLoaded(TestEnvironment te){
 	    	this.driver = te.getDriver();
 		this.timeout = te.getDefaultTestTimeout();
 	}
+	
 	private void initialize() {
 	    ElementFactory.initElements(driver, clazz);	        
 	}

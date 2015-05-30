@@ -22,24 +22,24 @@ public interface Webtable extends Element {
     /**
      * @summary - Get the column count for the Webtable on a specified Row
      */
-    int getColumnCount(WebDriver driver, int row) throws NoSuchAttributeException;
+    int getColumnCount(WebDriver driver, int row) ;
 
     /**
      * @summary - Get cell data of the specified row and Column in a Webtable
      */
-    String getCellData( WebDriver driver, int row, int column) throws NoSuchAttributeException;
+    String getCellData( WebDriver driver, int row, int column) ;
     
 
     /**
      * @summary - Return the Cell of the specified row and Column in a Webtable
      */
-    WebElement getCell( WebDriver driver, int row, int column) throws NoSuchAttributeException;
+    WebElement getCell( WebDriver driver, int row, int column) ;
     
 
     /**
      * @summary - Click cell in the specified row and Column in a Webtable
      */
-    void clickCell( WebDriver driver, int row, int column) throws NoSuchAttributeException;
+    void clickCell( WebDriver driver, int row, int column)  ;
     
     
     /**

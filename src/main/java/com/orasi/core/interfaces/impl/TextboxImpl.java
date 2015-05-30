@@ -4,9 +4,11 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.utils.Base64Coder;
+import com.orasi.utils.Randomness;
 import com.orasi.utils.TestReporter;
 
 /**
@@ -47,10 +49,11 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     @Override
     public void set(String text) {
 		if (!text.isEmpty()) {
-			try {
+		    if(text.contains("#RANDOM_TEXT#")) text = Randomness.randomAlphaNumeric(16);
+		    try {
 				getWrappedElement().clear();
-				getWrappedElement().sendKeys(text);
-				TestReporter.log(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
+			    	getWrappedElement().sendKeys(text);
+			    	TestReporter.interfaceLog(" Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]");
 			} catch (RuntimeException rte) {
 				TestReporter.interfaceLog("Send Keys [ <b>" + text.toString() + "</b> ] to Textbox [ <b>@FindBy: " + getElementLocatorInfo() + " </b> ]", true);
 				throw rte;
@@ -71,6 +74,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     @Override
     public void set(WebDriver driver, String text) {
         if (!text.isEmpty()){
+            if(text.contains("#RANDOM_TEXT#")) text = Randomness.randomAlphaNumeric(16);
             try{
         	JavascriptExecutor executor = (JavascriptExecutor)driver; 
                 executor.executeScript("arguments[0].scrollIntoView(true);arguments[0].click();", element);
@@ -98,6 +102,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     @Override
     public void safeSet(String text) {
         if (!text.isEmpty()){
+            if(text.contains("#RANDOM_TEXT#")) text = Randomness.randomAlphaNumeric(16);
             try{
         	getWrappedElement().click();     	
         	getWrappedElement().sendKeys(Keys.CONTROL + "a");
@@ -175,6 +180,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     @Override
     public void setValidate( WebDriver driver, String text){
     	if(!text.isEmpty()){
+    	    if(text.contains("#RANDOM_TEXT#")) text = Randomness.randomAlphaNumeric(16);
         	try{
         	    Element obj = new ElementImpl(getWrappedElement());
         	    obj.syncEnabled(driver);
@@ -207,6 +213,7 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     @Override
     public void safeSetValidate(WebDriver driver, String text){
     	if(!text.isEmpty()){
+    	    if(text.contains("#RANDOM_TEXT#")) text = Randomness.randomAlphaNumeric(16);
     	    try{
         	Element obj = new ElementImpl(getWrappedElement());
         	obj.syncEnabled(driver);

@@ -50,12 +50,10 @@ public class ElementImpl implements Element {
 	    	try{
 	    	    element.click();
 	    	}catch(RuntimeException rte){
-	    	    TestReporter.interfaceLog(SimpleDate.getTimestamp()
-        		+ " :: Clicked [ <font size = 2 color=\"red\"><b>@FindBy: " + getElementLocatorInfo()
+	    	    TestReporter.interfaceLog("Clicked [ <font size = 2 color=\"red\"><b>@FindBy: " + getElementLocatorInfo()
         		+ " </font></b>]");
 	    	}
-		TestReporter.interfaceLog(SimpleDate.getTimestamp()
-				+ " :: Clicked [ <b>@FindBy: " + getElementLocatorInfo()
+		TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo()
 				+ " </b>]");
 	}
 
@@ -65,8 +63,7 @@ public class ElementImpl implements Element {
 		executor.executeScript(
 				"arguments[0].scrollIntoView(true);arguments[0].click();",
 				element);
-		TestReporter.interfaceLog(SimpleDate.getTimestamp()
-				+ " :: Clicked [ <b>@FindBy: " + getElementLocatorInfo()
+		TestReporter.interfaceLog("Clicked [ <b>@FindBy: " + getElementLocatorInfo()
 				+ " </b>]");
 	}
 
@@ -78,8 +75,7 @@ public class ElementImpl implements Element {
 	@Override
 	public void focusClick(WebDriver driver) {
 		new Actions(driver).moveToElement(element).click().perform();
-		TestReporter.interfaceLog(SimpleDate.getTimestamp()
-				+ " :: Focus Clicked [ <b>@FindBy: " + getElementLocatorInfo()
+		TestReporter.interfaceLog("Focus Clicked [ <b>@FindBy: " + getElementLocatorInfo()
 				+ " </b>]");
 	}
 
@@ -339,7 +335,7 @@ public class ElementImpl implements Element {
 		loopTimeout = Integer.valueOf(timeout) * 10;
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
-				+ "</b> ] to be <b>VISIBLE/<b> within [ " + timeout
+				+ "</b> ] to be <b>VISIBLE<b> within [ " + timeout
 				+ " ] seconds.</i>");
 
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {

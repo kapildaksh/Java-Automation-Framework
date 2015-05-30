@@ -1,7 +1,9 @@
-package com.orasi.bluesource.features;
+package com.orasi.bluesource.features.manageEmployees;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import junit.extensions.TestSetup;
 
 import org.testng.Assert;
 import org.openqa.selenium.WebDriver;
@@ -10,41 +12,41 @@ import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
+import ru.yandex.qatools.allure.model.SeverityLevel;
 
-import com.orasi.utils.Base64Coder;
 import com.orasi.utils.Constants;
+import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.Screenshot;
 import com.orasi.utils.WebDriverSetup;
-import com.orasi.utils.dataProviders.CSVDataProvider;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
-import com.orasi.apps.bluesource.ListingTitlesPage;
+import com.orasi.apps.bluesource.DepartmentsPage;
 import com.orasi.apps.bluesource.LoginPage;
-import com.orasi.apps.bluesource.NewTitlePage;
+import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
+import com.orasi.apps.bluesource.employeesPage.EmployeesPage;
 
-public class TestManageTitles extends TestEnvironment{
+public class SearchForEmployee  extends TestEnvironment {
 
     private String application = "";
     
     @DataProvider(name = "dataScenario")
     public Object[][] scenarios() {
 	return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
-		+ "TestAddNewTitle.xlsx", "TestAddNewTitle").getTestData();
+		+ "ManageEmployees.xlsx", "SearchForEmployees").getTestData();
     }
 
-    @BeforeTest(groups = { "regression" })
+    @BeforeTest(groups = { "regression", "manageEmployees", "searchEmployees" })
     @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
@@ -56,9 +58,9 @@ public class TestManageTitles extends TestEnvironment{
 	setRunLocation(runLocation);
 	setTestEnvironment(environment);
     }
-    
-    @AfterMethod(groups = { "regression" })
-    public synchronized void closeSession(){
+
+    @AfterMethod(groups = { "regression", "manageEmployees", "searchEmployees" })
+    public synchronized void closeSession(ITestResult test) {
 	endTest(testName);
     }
 
@@ -70,58 +72,38 @@ public class TestManageTitles extends TestEnvironment{
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("Manage Titles")
-    @Stories("Given when I login as an admin role, I can add and delete Titles")
-    @Title("Manage Titles")
-    @Test(dataProvider = "dataScenario", groups = { "regression" })
-    public void testManageTitle(@Parameter String testScenario, @Parameter String role,
-	    @Parameter String newTitle) {
+    @Features("ManageEmployees")
+    @Stories("I can search for an Employee on the Employee Page using any criteria")
+    @Severity(SeverityLevel.CRITICAL)
+    @Title("SearchForEmployee")
+    @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "searchEmployees" })
+    public void testSearchEmployee(@Parameter String testScenario, @Parameter String role, @Parameter String searchText, @Parameter String column) {
+	
 	testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
+
 	testStart(testName);
 	
 	// Login
 	LoginPage loginPage = new LoginPage(this);
-	TestReporter.assertTrue(loginPage.pageLoaded(), "Verify login page is displayed");
+	TestReporter.assertTrue(loginPage.pageLoaded(),"Verify login page is displayed");
 	loginPage.login(role);
 
 	// Verify user is logged in
 	TopNavigationBar topNavigationBar = new TopNavigationBar(this);
 	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
 
-	// Navigate to the title page
-	topNavigationBar.clickAdminLink();
-	topNavigationBar.clickTitlesLink();
-
-	// Verify navigated to the title page
-	ListingTitlesPage listingTitlesPage = new ListingTitlesPage(this);
-	TestReporter.assertTrue(listingTitlesPage.pageLoaded(),"Verify listing titles page is displayed");
-
-	// Click new title
-	listingTitlesPage.clickNewTitle();
-
-	// Instantiate the New titles page and create a new title
-	NewTitlePage newTitlePage = new NewTitlePage(this);
-	TestReporter.assertTrue(newTitlePage.pageLoaded(),"Verify create new title page is displayed");
-	newTitlePage.createNewTitle(newTitle);
-
-	// Verify the title was created
-	TestReporter.assertTrue(listingTitlesPage.isSuccessMsgDisplayed(), "Validate success message appears");
-	TestReporter.log("New Title was created: " + newTitle);
-
-	// Verify the title is displayed on the title results table
-	TestReporter.assertTrue(listingTitlesPage.searchTableByTitle(newTitle), "Validate new title appears in table");
-
-	// Delete the new title
-	listingTitlesPage.deleteTitle(newTitle);
-
-	// Verify the title is deleted
-	ListingTitlesPage refreshedPage = new ListingTitlesPage(this);
-	TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(), "Validate success message appears");
+	//Navigate to Employees Page
+	topNavigationBar.clickEmployeesLink();
+	EmployeesPage employeesPage = new EmployeesPage(this);
+	TestReporter.assertTrue(employeesPage.pageLoaded(),"Verify Employees page is displayed");
+	
+	//Search for Employee
+	employeesPage.enterSearchText(searchText);
+	TestReporter.assertTrue(employeesPage.validateTextInTable(searchText, column), "Validate " + searchText + " was found under the " + column + " column");
 
 	// logout
 	topNavigationBar.clickLogout();
-
     }
-
+    
 }

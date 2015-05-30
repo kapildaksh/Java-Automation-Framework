@@ -1,4 +1,4 @@
-package com.orasi.bluesource.features;
+package com.orasi.bluesource.features.manageEmployees;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
@@ -18,10 +19,14 @@ import org.testng.annotations.Test;
 
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Severity;
 import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
+import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.utils.Constants;
+import com.orasi.utils.Randomness;
+import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.Screenshot;
@@ -31,18 +36,22 @@ import com.orasi.apps.bluesource.DepartmentsPage;
 import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
+import com.orasi.apps.bluesource.employeesPage.AddNewEmployeePage;
+import com.orasi.apps.bluesource.employeesPage.Employee;
+import com.orasi.apps.bluesource.employeesPage.EmployeesPage;
 
-public class TestManageDepartments  extends TestEnvironment {
+public class AddEmployee  extends TestEnvironment {
 
     private String application = "";
+    private Employee employee = new Employee();
     
     @DataProvider(name = "dataScenario")
     public Object[][] scenarios() {
 	return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
-		+ "TestAddNewDept.xlsx", "TestAddNewDept").getTestData();
+		+ "ManageEmployees.xlsx", "AddEmployee").getTestData();
     }
 
-    @BeforeTest(groups = { "regression" })
+    @BeforeTest(groups = { "regression", "manageEmployees", "addEmployee" })
     @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
@@ -55,7 +64,7 @@ public class TestManageDepartments  extends TestEnvironment {
 	setTestEnvironment(environment);
     }
 
-    @AfterMethod(groups = { "regression" })
+    @AfterTest(groups = { "regression", "manageEmployees", "addEmployee" })
     public synchronized void closeSession(ITestResult test) {
 	endTest(testName);
     }
@@ -68,12 +77,12 @@ public class TestManageDepartments  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("Manage Departments")
-    @Stories("Given when I login as an admin role, I can add and delete Departments")
-    @Title("Manage Departments")
-    @Test(dataProvider = "dataScenario", groups = { "regression" })
-    public void testManageDept(@Parameter String testScenario, @Parameter String role,
-	    @Parameter String newDept) {
+    @Features("ManageEmployees")
+    @Stories("I can create a new Employee")
+    @Severity(SeverityLevel.BLOCKER)
+    @Title("AddEmployee")
+    @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "addEmployee" })
+    public void testAddEmployee(@Parameter String testScenario, @Parameter String role) {
 	
 	testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -89,35 +98,31 @@ public class TestManageDepartments  extends TestEnvironment {
 	TopNavigationBar topNavigationBar = new TopNavigationBar(this);
 	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
 
-	// Navigate to the dept page
-	topNavigationBar.clickAdminLink();
-	topNavigationBar.clickDepartmentsLink();
-
-	// Verify navigated to the dept page
-	DepartmentsPage deptPage = new DepartmentsPage(this);
-	TestReporter.assertTrue(deptPage.pageLoaded(),"Verify list of departments page is displayed");
-
-	// Add a new dept
-	deptPage.clickAddDeptLink();
-	NewDeptPage newDeptPage = new NewDeptPage(this);
-	TestReporter.assertTrue(newDeptPage.pageLoaded(), "Verify add new department page is displayed");
-	newDeptPage.CreateNewDept(newDept);
-
-	// Verify the dept is added
-	TestReporter.assertTrue(deptPage.isSuccessMsgDisplayed(), "Validate success message appears");
-	TestReporter.log("New Dept was created: " + newDept);
-
-	// Verify the dept is displayed on the dept results table
-	TestReporter.assertTrue(deptPage.searchTableByDept(newDept), "Validate new department exists in table");
-
-	// Delete the new dept
-	deptPage.deleteDept(newDept);
-
-	// Verify the title is deleted
-	DepartmentsPage refreshedPage = new DepartmentsPage(this);
-	TestReporter.assertTrue(refreshedPage.isSuccessMsgDisplayed(), "Validate success message appears");
-
+	//Navigate to Employees Page
+	topNavigationBar.clickEmployeesLink();
+	EmployeesPage employeesPage = new EmployeesPage(this);
+	TestReporter.assertTrue(employeesPage.pageLoaded(),"Verify Employees page is displayed");
+	
+	employeesPage.clickAddEmployeeButton();
+	AddNewEmployeePage newEmployee = new AddNewEmployeePage(this);	
+	
+	newEmployee.addEmployee(employee);
+	//newEmployee.addEmployee(username, firstName, lastName, title, userRole, manager, status, location, startDate, cellPhone, officePhone, email, imName, imClient, department);
 	// logout
+	TestReporter.assertTrue(employeesPage.isSuccessMsgDisplayed(), "Verify Success message appears after creating new employee");
+	
+	employeesPage.enterSearchText(employee.getLastName());
+	TestReporter.assertTrue(employeesPage.validateLastnameFoundInTable(employee.getLastName()), "Verify Employee " + employee.getLastName() + " appeared in the Employee Table");
+	
 	topNavigationBar.clickLogout();
-    }
+    }    
+    
+  /*  @Features("ManageEmployees")
+    @Stories("I can modify an Employee's General Info")
+    @Severity(SeverityLevel.NORMAL)
+    @Title("ModifyEmployeeInfo")
+    @Test(groups = { "regression", "manageEmployees", "addEmployee" })
+    public void testModifyEmployee(@Parameter String testScenario, @Parameter String role) {
+    
+    }*/
 }

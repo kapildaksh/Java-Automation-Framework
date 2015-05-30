@@ -94,7 +94,7 @@ public class TopNavigationBar {
 	
 	
 	//Click logout
-	@Step("And I Log Out")
+	//@Step("And I Log Out")
 	public void clickLogout(){
 		lnkLogout.click();
 	}

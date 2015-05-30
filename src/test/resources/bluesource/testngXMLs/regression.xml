@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Bluesource_Regression" parallel= "instances" thread-count="5">
-	<parameter name="browserUnderTest" value="chrome" />
+<suite name="Bluesource_Regression" parallel= "instances" thread-count="8">
+	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
 	<parameter name="runLocation" value="remote" />
 	<parameter name="browserVersion" value="" />
@@ -14,7 +14,7 @@
 			</run>
 		</groups>
 		<packages>
-			<package name="com.orasi.bluesource.features">
+			<package name="com.orasi.bluesource.features.*">
 			</package>
 		</packages>
 		
