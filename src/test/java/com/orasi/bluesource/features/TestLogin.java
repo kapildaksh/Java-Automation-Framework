@@ -79,7 +79,6 @@ public class TestLogin  extends TestEnvironment {
     @Title("Login with correct information")
     @Test(dataProvider = "dataScenario", groups = { "regression" })
     public void testLogin(@Parameter String testScenario, @Parameter String role) {
-	
 	testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 

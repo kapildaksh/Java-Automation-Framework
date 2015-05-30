@@ -141,6 +141,7 @@ public class EmployeesPage {
 	    txtSearch.click();
 	    txtSearch.safeSet(text);
 	    tabEmployeeTable.syncTextInElement(te.getDriver(), text);
+	    
 	}
 	
 	
