@@ -1,16 +1,19 @@
 package com.orasi.api.soapServices.core;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringBufferInputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -506,8 +509,9 @@ public abstract class SoapService{
 					.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
 
 			// Convert XML Request to SoapMessage
-			request = messageFactory.createMessage(new MimeHeaders(),
-					new StringBufferInputStream(getRequest()));
+			InputStream in = new ByteArrayInputStream(getRequest().getBytes(Charset.defaultCharset()));
+			
+			request = messageFactory.createMessage(new MimeHeaders(),in);					 
 			request.writeTo(System.out);
 			System.out.println();
 
