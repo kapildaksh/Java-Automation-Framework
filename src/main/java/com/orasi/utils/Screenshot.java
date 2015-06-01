@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.apache.commons.io.FileUtils;
@@ -13,107 +14,70 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Augmenter;
+import org.testng.IReporter;
+import org.testng.ISuite;
 import org.testng.ITestResult;
 import org.testng.Reporter;
+import org.testng.TestListenerAdapter;
+import org.testng.xml.XmlSuite;
 
-public class Screenshot  {
-	private int Count = 0;
-	
-	//Constructor
-	public Screenshot(){
+import ru.yandex.qatools.allure.annotations.Attachment;
+
+public class Screenshot extends TestListenerAdapter implements IReporter{
+
+	@Override
+	public void onTestFailure(ITestResult result) {
+		String slash = Constants.DIR_SEPARATOR;
+		File directory = new File(".");
+		Object currentClass = result.getInstance();
+		WebDriver driver = ((TestEnvironment) currentClass).getDriver();
+		String runLocation = ((TestEnvironment) currentClass).getRunLocation()
+				.toLowerCase();		
 		
-	}
-		
-	/**
-	 * Uses the selenium TakesScreenshot to take a screenshot.  If the folders do not exist
-	 * in the project structure to store the screenshots, then it will create them 
-	 * (test-output/screenshots).  Uses the Augementer driver so that it call take screenshots
-	 * locally & remotely on selenium grid.  
-	 * 
-	 * @param	None
-	 * @version	12/16/2014
-	 * @author 	Justin Phlegar
-	 * @return 	Nothing
-	 */
-	public void takeScreenShot(ITestResult testResult, WebDriver driver) {
-		
-		if (driver instanceof TakesScreenshot){
-			try {
-				
-				driver = new Augmenter().augment(driver);
-				String NewFileNamePath;
-
-				//Get the dir path
-				File directory = new File (".");
-				
-				//get current date time with Date() to create unique file name
-				DateFormat dateFormat = new SimpleDateFormat("dd_MMM_yyyy__hh_mm_ssaa");
-				
-				//get current date time with Date()
-				Date date = new Date();
-				
-				//To identify the system
-				InetAddress ownIP=InetAddress.getLocalHost();
-				File dirScreenshots = new File(directory.getCanonicalPath()+ "\\test-output\\");//");
-				
-				// if the directory for test output does not exist, then create it
-				if (!dirScreenshots.exists()) {
-
-					try {
-						dirScreenshots.mkdir();
-					} catch (SecurityException se) {
-						se.printStackTrace();
-					}       
-				}
-				
-				// if the directory for the screenshots folder does not exist, then create it
-				dirScreenshots = new File(directory.getCanonicalPath()+ "\\test-output\\screenshots\\");
-				if (!dirScreenshots.exists()) {
-					try {
-						dirScreenshots.mkdir();
-					} catch (SecurityException se) {
-						se.printStackTrace();
-					}        
-				}
-				
-				//if the directory for the test name folder does not exist, then create it
-				dirScreenshots = new File(directory.getCanonicalPath()+ "\\test-output\\screenShots\\" +  testResult.getName() );
-				if (!dirScreenshots.exists()) {
-					try {
-						dirScreenshots.mkdir();
-					} catch (SecurityException se) {
-						se.printStackTrace();
-					}    
-				}
-				
-				//create file name using path and current date/time & ip address
-				NewFileNamePath = directory.getCanonicalPath()+ "\\test-output\\screenShots\\" +  testResult.getName() +"\\" + dateFormat.format(date) + "_" + ownIP.getHostAddress() + ".png";
-				System.out.println(NewFileNamePath);
-				
-				//Take the screenshot
-				File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE); 
-				
-				try {
-					FileUtils.copyFile(scrFile, new File(NewFileNamePath));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				Count++;//Assign each screen shot a number
-				NewFileNamePath = "<img src=\"file:///" + NewFileNamePath + "\" alt=\"\"/><br />";
-				
-				//Place the reference in TestNG web report 
-				Reporter.log("<br /> <br /> Failed step screenshot <br /> <br /> ");
-				Reporter.log(NewFileNamePath);
-			
-			
-			} 
-
-			catch (IOException e) {
-				e.printStackTrace();
-			} catch (NoSuchElementException e) {
-
-			}
+		String destDir = null;
+		try {
+			destDir = directory.getCanonicalPath()
+					+ slash + "selenium-reports" + slash + "html" + slash + "screenshots";
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		if (runLocation == "remote"){
+			driver = new Augmenter().augment(driver);
+		}
+		Reporter.setCurrentTestResult(result);
+
+		new File(destDir).mkdirs();
+		DateFormat dateFormat = new SimpleDateFormat("dd_MMM_yyyy__hh_mm_ssaa");
+
+		String destFile = dateFormat.format(new Date()) + ".png";
+
+		//Capture a screenshot for TestNG reporting
+		//TestReporter.logScreenshot(driver, destDir + slash + destFile, slash, runLocation);
+		
+		//Capture a screenshot for Allure reporting
+		FailedScreenshot(driver);
 	}
+
+	@Override
+	public void onTestSkipped(ITestResult result) {
+		// will be called after test will be skipped
+	}
+
+	@Override
+	public void onTestSuccess(ITestResult result) {
+		// will be called after test will pass
+	}
+
+	@Attachment(type = "image/png")
+	public static byte[] FailedScreenshot(WebDriver driver) {
+		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+	}
+
+	@Override
+	public void generateReport(List<XmlSuite> xmlSuites,
+		List<ISuite> suites, String outputDirectory) {
+	    // TODO Auto-generated method stub
+	    
+	}
+
 }
