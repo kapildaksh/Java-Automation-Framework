@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -13,7 +12,6 @@ import ru.yandex.qatools.allure.annotations.Step;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
-import com.orasi.utils.PageLoaded;
 import com.orasi.utils.TestEnvironment;
 public class DepartmentsPage {
 	

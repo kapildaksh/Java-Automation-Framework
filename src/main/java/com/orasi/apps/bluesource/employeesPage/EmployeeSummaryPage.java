@@ -1,19 +1,8 @@
 package com.orasi.apps.bluesource.employeesPage;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.support.FindBy;
+
+import ru.yandex.qatools.allure.annotations.Step;
 
 import com.orasi.core.by.angular.FindByNG;
 import com.orasi.core.interfaces.Button;
@@ -24,7 +13,6 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.date.DateTimeConversion;
-import com.orasi.utils.date.SimpleDate;
 
 public class EmployeeSummaryPage {
 	private TestEnvironment te;
@@ -118,25 +106,19 @@ public class EmployeeSummaryPage {
 		if(lblTimeOffInfoBody.getAttribute("class").equals("panel-collapse collapse")) lblTimeOffInfo.click();
 	}
 	
+	@Step("Then the Employees General Information is correct")
 	public boolean validateGeneralInfo(Employee employee){
 		viewGeneralInfo();
-		Map<TimeUnit, Long> result = null;
-		SimpleDateFormat date = new SimpleDateFormat("MMMM dd, yyyy",Locale.ENGLISH);
-		try {
-			date.parse(employee.getStartDate());
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		result = SimpleDate.computeDiff(employee.getStartDate(), new Date());
-		DateTimeConversion.format(employee.getStartDate(), "mmmm dd, yyyy");
+		
+		String convertedStartDate = DateTimeConversion.convert(employee.getStartDate(), "yyyy-MM-dd", "MMMM dd, yyyy");
+
 		if (!employee.getUsername().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), USERNAME, 2))) {TestReporter.logFailure("User name did not match"); return false;}
 		if (!employee.getRole().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), ROLE, 2))) {TestReporter.logFailure("Role did not match"); return false;}
 		if (!employee.getTitle().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), TITLE, 2))) {TestReporter.logFailure("Title did not match"); return false;}
 		if (!employee.getManager().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), MANAGER, 2))) {TestReporter.logFailure("Manager did not match"); return false;}
 		if (!employee.getStatus().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), STATUS, 2))) {TestReporter.logFailure("Status did not match"); return false;}
 		if (!employee.getLocation().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), LOCATION, 2))) {TestReporter.logFailure("Location did not match"); return false;}
-		if (!employee.getStartDate().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), START_DATE, 2))) {TestReporter.logFailure("Start Date did not match"); return false;}
+		if (!convertedStartDate.equals(tabGeneralInfoTable.getCellData(te.getDriver(), START_DATE, 2))) {TestReporter.logFailure("Start Date did not match"); return false;}
 		//if (!employee.getStartDate().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), TIME_WITH_ORASI, 2))) {TestReporter.logFailure("Time With Orasi did not match"); return false;}
 		if (!employee.getCellPhone().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), CELLPHONE, 2))) {TestReporter.logFailure("Cell Phone did not match"); return false;}
 		if (!employee.getOfficePhone().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), OFFICEPHONE, 2))) {TestReporter.logFailure("Office Phone did not match"); return false;}
@@ -144,10 +126,12 @@ public class EmployeeSummaryPage {
 		if (!employee.getImName().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), IM_USER, 2))) {TestReporter.logFailure("IM Username did not match"); return false;}
 		if (!employee.getImClient().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), IM_CLIENT, 2))) {TestReporter.logFailure("IM Client did not match"); return false;}
 		if (!employee.getDepartment().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te.getDriver(), DEPARTMENT, 2))) {TestReporter.logFailure("Department did not match"); return false;}
-		
-		
+				
 		return true;
 	}
 	
-	
+	@Step("And I click Manage General Info")
+	public void clickManageGeneralInfo(){
+	    btnManageGeneralInfo.click();
+	}
 }

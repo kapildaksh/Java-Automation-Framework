@@ -4,8 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import com.orasi.apps.bluesource.employeesPage.EmployeesTableColumns;
-import com.orasi.core.by.angular.ByNG;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.Listbox;

@@ -7,12 +7,9 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
-import com.orasi.utils.Sleeper;
-import com.orasi.utils.WebDriverSetup;
 
 /**
  * Several different methods of waiting for a page to finish loading.  
@@ -29,7 +26,7 @@ public class PageLoaded {
 	private int timeout = 0;
 	
 	public PageLoaded(){
-		this.timeout = WebDriverSetup.getDefaultTestTimeout();
+		this.timeout = TestEnvironment.getDefaultTestTimeout();
 	}
 	
 	public PageLoaded(TestEnvironment te){

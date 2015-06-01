@@ -1,11 +1,11 @@
 package com.orasi.core.interfaces.impl;
 
-import com.orasi.core.interfaces.Link;
-import com.orasi.utils.TestReporter;
-
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import com.orasi.core.interfaces.Link;
+import com.orasi.utils.TestReporter;
 
 /**
  * Wraps a label on a html form with some behavior.

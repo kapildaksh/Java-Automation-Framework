@@ -1,15 +1,5 @@
 package com.orasi.bluesource.features.manageEmployees;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import junit.extensions.TestSetup;
-
-import org.testng.Assert;
-import org.openqa.selenium.WebDriver;
-import org.testng.ITestResult;
-import org.testng.Reporter;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
@@ -24,26 +14,21 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 import ru.yandex.qatools.allure.model.SeverityLevel;
 
-import com.orasi.utils.Constants;
-import com.orasi.utils.Randomness;
-import com.orasi.utils.Sleeper;
-import com.orasi.utils.TestEnvironment;
-import com.orasi.utils.TestReporter;
-import com.orasi.utils.Screenshot;
-import com.orasi.utils.WebDriverSetup;
-import com.orasi.utils.dataProviders.ExcelDataProvider;
-import com.orasi.apps.bluesource.DepartmentsPage;
 import com.orasi.apps.bluesource.LoginPage;
-import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
-import com.orasi.apps.bluesource.employeesPage.AddNewEmployeePage;
 import com.orasi.apps.bluesource.employeesPage.Employee;
 import com.orasi.apps.bluesource.employeesPage.EmployeeSummaryPage;
 import com.orasi.apps.bluesource.employeesPage.EmployeesPage;
+import com.orasi.apps.bluesource.employeesPage.ManageEmployeeModal;
+import com.orasi.utils.Constants;
+import com.orasi.utils.Randomness;
+import com.orasi.utils.TestEnvironment;
+import com.orasi.utils.TestReporter;
+import com.orasi.utils.dataProviders.ExcelDataProvider;
 
 public class AddEmployee  extends TestEnvironment {
 
-    private String application = "";
+    private String application = "Bluesource";
     private Employee employee = new Employee();
     
     @DataProvider(name = "dataScenario")
@@ -57,7 +42,7 @@ public class AddEmployee  extends TestEnvironment {
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
 	    String browserVersion, String operatingSystem, String environment) {
-	setApplicationUnderTest("Bluesource");
+	setApplicationUnderTest(application);
 	setBrowserUnderTest(browserUnderTest);
 	setBrowserVersion(browserVersion);
 	setOperatingSystem(operatingSystem);
@@ -71,8 +56,7 @@ public class AddEmployee  extends TestEnvironment {
     }
 
     /**
-     * @throws Exception
-     * @Summary: Adds a housekeeper to the schedule
+     * @Summary: Creates an Employee
      * @Precondition:NA
      * @Author: Jessica Marshall
      * @Version: 10/6/2014
@@ -85,8 +69,7 @@ public class AddEmployee  extends TestEnvironment {
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "addEmployee" })
     public void testAddEmployee(@Parameter String testScenario, @Parameter String role) {
 	
-	testName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
+	setTestName(new Object() {}.getClass().getEnclosingMethod().getName());
 
 	testStart(testName);
 	
@@ -104,31 +87,81 @@ public class AddEmployee  extends TestEnvironment {
 	EmployeesPage employeesPage = new EmployeesPage(this);
 	TestReporter.assertTrue(employeesPage.pageLoaded(),"Verify Employees page is displayed");
 
+	// Open New Employee Modal 
 	employeesPage.clickAddEmployeeButton();
-	AddNewEmployeePage newEmployee = new AddNewEmployeePage(this);	
+	ManageEmployeeModal newEmployee = new ManageEmployeeModal(this);	
+	TestReporter.assertTrue(newEmployee.pageLoaded(),"Verify New Employee Popup Modal is displayed");
 	
+	//Enter Employee Info
 	newEmployee.addEmployee(employee);
-	//newEmployee.addEmployee(username, firstName, lastName, title, userRole, manager, status, location, startDate, cellPhone, officePhone, email, imName, imClient, department);
-	// logout
 	TestReporter.assertTrue(employeesPage.isSuccessMsgDisplayed(), "Verify Success message appears after creating new employee");
 	
+	//Validate new Employee created and visible
 	employeesPage.enterSearchText(employee.getLastName());
 	TestReporter.assertTrue(employeesPage.validateLastnameFoundInTable(employee.getLastName()), "Verify Employee " + employee.getLastName() + " appeared in the Employee Table");
-
+    }    
+    
+    
+    @Features("ManageEmployees")
+    @Stories("I can see an Employee's General Info after creating Employee")
+    @Severity(SeverityLevel.NORMAL)
+    @Title("ModifyEmployeeInfo")
+    @Test(groups = { "regression", "manageEmployees" },
+    	  dependsOnMethods = {"testAddEmployee"})
+    public void testViewEmployeeGeneralInfo() {
+	EmployeesPage employeesPage = new EmployeesPage(this);
 	employeesPage.selectEmployeeName(employee.getLastName());
 	
 	EmployeeSummaryPage summary = new EmployeeSummaryPage(this);
+	TestReporter.assertTrue(summary.pageLoaded(),"Verify Employees Summary page is displayed");
 	TestReporter.assertTrue(summary.validateGeneralInfo(employee), "Verify Employee's General Information is correct");
 	
-	topNavigationBar.clickLogout();
-    }    
+    }
     
-  /*  @Features("ManageEmployees")
-    @Stories("I can modify an Employee's General Info")
-    @Severity(SeverityLevel.NORMAL)
+    
+    @Features("ManageEmployees")
+    @Stories("I can Modify an Employee's General Info and view changes")
+    @Severity(SeverityLevel.MINOR)
     @Title("ModifyEmployeeInfo")
-    @Test(groups = { "regression", "manageEmployees", "addEmployee" })
-    public void testModifyEmployee(@Parameter String testScenario, @Parameter String role) {
+    @Test(groups = { "regression", "manageEmployees" },
+    	  dependsOnMethods = {"testViewEmployeeGeneralInfo"})
+    public void testModifyEmployeeGeneralInfo() {
+	EmployeeSummaryPage summary = new EmployeeSummaryPage(this);
+	summary.clickManageGeneralInfo();
+	
+	ManageEmployeeModal modifyEmployee = new ManageEmployeeModal(this);
+	TestReporter.assertTrue(modifyEmployee.pageLoaded(),"Verify Manage Employee Popup Modal is displayed");
+	
+	employee.setLastName(Randomness.randomAlphaNumeric(8));
+	employee.setTitle("Software Consultant");
+	modifyEmployee.modifyEmployee(employee);
+	TestReporter.assertTrue(summary.validateGeneralInfo(employee), "Verify Employee's General Information is correct");
+    }
     
-    }*/
+    
+    @Features("ManageEmployees")
+    @Stories("I can mark an Employee as Inactive")
+    @Severity(SeverityLevel.MINOR)
+    @Title("ModifyEmployeeInfo")
+    @Test(groups = { "regression", "manageEmployees" },
+    	  dependsOnMethods = {"testModifyEmployeeGeneralInfo"})
+    public void testDeactivateEmployee() {
+	EmployeeSummaryPage summary = new EmployeeSummaryPage(this);
+	summary.clickManageGeneralInfo();
+	
+	ManageEmployeeModal modifyEmployee = new ManageEmployeeModal(this);
+	TestReporter.assertTrue(modifyEmployee.pageLoaded(),"Verify Manage Employee Popup Modal is displayed");
+	
+	employee.setStatus("Inactive");
+	modifyEmployee.modifyEmployee(employee);
+	TestReporter.assertTrue(summary.validateGeneralInfo(employee), "Verify Employee's General Information is correct");
+	
+	TopNavigationBar topNavigationBar = new TopNavigationBar(this);
+	topNavigationBar.clickEmployeesLink();
+	
+	EmployeesPage employeesPage = new EmployeesPage(this);
+	TestReporter.assertTrue(employeesPage.pageLoaded(),"Verify Employees page is displayed");
+	employeesPage.enterSearchText(employee.getLastName());
+	TestReporter.assertTrue(employeesPage.validateNoRowsFound(),"Verify Employees Table does not have Employee as active");
+    }
 }

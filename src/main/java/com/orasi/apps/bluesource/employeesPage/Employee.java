@@ -21,8 +21,8 @@ public class Employee {
     private String department;
     
     public String getUsername() {return username;}
-    public String getFirstName() {return firstName;}
-    public String getLastName() {return lastName;}
+    public String getFirstName() {return firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();}
+    public String getLastName() {return lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();}
     public String getTitle() {return title;}
     public String getRole() {return role;}
     public String getManager() {return manager;}
@@ -30,6 +30,7 @@ public class Employee {
     public String getBridgeTime() {return bridgeTime;}
     public String getLocation() {return location;}
     public String getStartDate() {return startDate;}
+  //  public Date getStartDateAsDate() {return startDate;}    
     public String getCellPhone() {return cellPhone;}
     public String getOfficePhone() {return officePhone;}
     public String getEmail() {return email;}
@@ -38,8 +39,8 @@ public class Employee {
     public String getDepartment() {return department;}
     
     public void setUsername(String username) {this.username = username;}
-    public void setFirstName(String firstName) {this.firstName = firstName;}
-    public void setLastName(String lastName) {this.lastName = lastName;}
+    public void setFirstName(String firstName) {this.firstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();}
+    public void setLastName(String lastName) {this.lastName = lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();}
     public void setTitle(String title) {this.title = title;}
     public void setRole(String role) {this.role = role;}
     public void setManager(String manager) {this.manager = manager;}
@@ -67,7 +68,7 @@ public class Employee {
 	this.startDate = "2013-01-20";
 	this.cellPhone = "(336) 358-1321";
 	this.officePhone = "(336) 358-1321";
-	this.email = getFirstName() + "." + getLastName() + "@random.com";
+	this.email = getUsername() + "@random.com";
 	this.imName = getEmail();
 	this.imClient = "Skype";
 	this.department = "Services";	

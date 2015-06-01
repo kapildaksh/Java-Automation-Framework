@@ -5,14 +5,13 @@ import java.util.concurrent.TimeUnit;
 
 import javax.naming.directory.NoSuchAttributeException;
 
-import com.orasi.core.interfaces.Webtable;
-import com.orasi.utils.TestEnvironment;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+
+import com.orasi.core.interfaces.Webtable;
+import com.orasi.utils.TestEnvironment;
 
 /**
  * Wrapper class like Select that wraps basic checkbox functionality.

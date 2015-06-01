@@ -3,6 +3,7 @@ package com.orasi.core.interfaces.impl;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.core.interfaces.Element;
 import com.orasi.utils.TestReporter;

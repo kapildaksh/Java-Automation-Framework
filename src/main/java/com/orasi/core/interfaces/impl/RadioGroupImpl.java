@@ -1,18 +1,18 @@
 package com.orasi.core.interfaces.impl;
 
-import com.orasi.core.interfaces.RadioGroup;
-import com.orasi.core.interfaces.Element;
-import com.orasi.utils.TestReporter;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.naming.directory.NoSuchAttributeException;
 
 import org.apache.commons.collections.list.FixedSizeList;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.naming.directory.NoSuchAttributeException;
+import com.orasi.core.interfaces.Element;
+import com.orasi.core.interfaces.RadioGroup;
+import com.orasi.utils.TestReporter;
 
 /**
  * Wrapper around a WebElement for the Select class in Selenium.

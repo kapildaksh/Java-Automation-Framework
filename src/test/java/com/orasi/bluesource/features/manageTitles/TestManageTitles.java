@@ -1,21 +1,12 @@
 package com.orasi.bluesource.features.manageTitles;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.testng.Assert;
-import org.openqa.selenium.WebDriver;
-import org.testng.ITestResult;
-import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Parameter;
 import ru.yandex.qatools.allure.annotations.Severity;
@@ -23,18 +14,14 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 import ru.yandex.qatools.allure.model.SeverityLevel;
 
-import com.orasi.utils.Base64Coder;
-import com.orasi.utils.Constants;
-import com.orasi.utils.TestEnvironment;
-import com.orasi.utils.TestReporter;
-import com.orasi.utils.Screenshot;
-import com.orasi.utils.WebDriverSetup;
-import com.orasi.utils.dataProviders.CSVDataProvider;
-import com.orasi.utils.dataProviders.ExcelDataProvider;
 import com.orasi.apps.bluesource.ListingTitlesPage;
 import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.NewTitlePage;
 import com.orasi.apps.bluesource.TopNavigationBar;
+import com.orasi.utils.Constants;
+import com.orasi.utils.TestEnvironment;
+import com.orasi.utils.TestReporter;
+import com.orasi.utils.dataProviders.ExcelDataProvider;
 
 public class TestManageTitles extends TestEnvironment{
 

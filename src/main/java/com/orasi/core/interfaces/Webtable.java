@@ -1,12 +1,10 @@
 package com.orasi.core.interfaces;
 
-import javax.naming.directory.NoSuchAttributeException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import com.orasi.core.interfaces.impl.WebtableImpl;
 import com.orasi.core.interfaces.impl.internal.ImplementedBy;
-
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 /**
  * Interface that wraps a WebElement in CheckBox functionality.

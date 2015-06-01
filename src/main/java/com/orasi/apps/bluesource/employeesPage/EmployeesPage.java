@@ -3,7 +3,6 @@ package com.orasi.apps.bluesource.employeesPage;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,20 +10,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 
 import ru.yandex.qatools.allure.annotations.Step;
-import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.apps.bluesource.commons.BluesourceTables;
 import com.orasi.apps.bluesource.commons.SortOrder;
-import com.orasi.core.by.angular.FindByNG;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
-import com.orasi.core.interfaces.Link;
-import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
-import com.orasi.utils.PageLoaded;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 
@@ -169,11 +163,16 @@ public class EmployeesPage {
 	    return (previousCount != getTotalDisplayedEmployees());
 	}	
 	
+	@Step("Then the Employee will display no rows found")
+	public boolean validateNoRowsFound(){
+	    return (tabEmployeeTable.getRowCount(te.getDriver()) == 1);
+	}
+	
 	public boolean validateLastnameFoundInTable(String username){
 	    return validateTextInTable(username.substring(0, 1).toUpperCase() + username.substring(1).toLowerCase(), EmployeesTableColumns.LASTNAME.name());
 	}
 	
-	@Step("And I click the \"{0}\" Name link")
+	@Step("When I click the \"{0}\" Name link")
 	public void selectEmployeeName(String name){
 		BluesourceTables table = new BluesourceTables(te);
 		table.selectFieldLink(name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase());

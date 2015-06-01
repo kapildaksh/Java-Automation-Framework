@@ -1,11 +1,11 @@
 package com.orasi.core.interfaces;
 
-import com.orasi.core.interfaces.impl.ListboxImpl;
-import com.orasi.core.interfaces.impl.internal.ImplementedBy;
+import java.util.List;
 
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
+import com.orasi.core.interfaces.impl.ListboxImpl;
+import com.orasi.core.interfaces.impl.internal.ImplementedBy;
 
 /**
  * Interface for a select element.

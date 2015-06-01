@@ -7,19 +7,19 @@ public class WindowHandler {
 	private String currentWindow;	
 	
 
-	public void setCurrentWindow(WebDriver driver){
-		currentWindow = driver.getWindowHandle(); // get the current window handle	
+	public void setCurrentWindow(TestEnvironment te){
+		currentWindow = te.getDriver().getWindowHandle(); // get the current window handle	
 	}
 	
 		
-	public void waitUntilWindowExists(WebDriver driver, String window){
+	public void waitUntilWindowExists(TestEnvironment te, String window){
 		int time = 0 ;
 		boolean found = false;
 		while(!found)
-			for (String winHandle : driver.getWindowHandles()) {
+			for (String winHandle : te.getDriver().getWindowHandles()) {
 				try{
-						driver.switchTo().window(winHandle); // switch focus of WebDriver to the next found window handle (that's your newly opened window)
-						if (driver.getTitle().toUpperCase().contains(window.toUpperCase())){
+				    te.getDriver().switchTo().window(winHandle); // switch focus of WebDriver to the next found window handle (that's your newly opened window)
+						if (te.getDriver().getTitle().toUpperCase().contains(window.toUpperCase())){
 							found = true;
 							break;
 						}
@@ -29,15 +29,15 @@ public class WindowHandler {
 			}		
 			time++;
 			
-			if (time == WebDriverSetup.getDefaultTestTimeout()) found = true;
+			if (time == te.getDefaultTestTimeout()) found = true;
 		
 	}
 	
 
 	
-	public WebDriver swapToParentWindow(WebDriver driver){
-		driver.switchTo().window(currentWindow); // switch back to the original window
-		   return driver;
+	public WebDriver swapToParentWindow(TestEnvironment te){
+	    te.getDriver().switchTo().window(currentWindow); // switch back to the original window
+		   return te.getDriver();
 	}
 	
 	

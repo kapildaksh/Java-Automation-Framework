@@ -1,16 +1,17 @@
 package com.orasi.core.interfaces.impl.internal;
 
-import com.orasi.core.interfaces.Element;
-
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.pagefactory.ElementLocator;
+import static com.orasi.core.interfaces.impl.internal.ImplementedByProcessor.getWrapperClass;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import static com.orasi.core.interfaces.impl.internal.ImplementedByProcessor.getWrapperClass;
+
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.pagefactory.ElementLocator;
+
+import com.orasi.core.interfaces.Element;
 
 /**
  * Replaces DefaultLocatingElementHandler. Simply opens it up to descendants of the WebElement interface, and other

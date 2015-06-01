@@ -1,14 +1,6 @@
 package com.orasi.bluesource.features.manageEmployees;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import junit.extensions.TestSetup;
-
-import org.testng.Assert;
-import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
-import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
@@ -23,18 +15,13 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 import ru.yandex.qatools.allure.model.SeverityLevel;
 
-import com.orasi.utils.Constants;
-import com.orasi.utils.Sleeper;
-import com.orasi.utils.TestEnvironment;
-import com.orasi.utils.TestReporter;
-import com.orasi.utils.Screenshot;
-import com.orasi.utils.WebDriverSetup;
-import com.orasi.utils.dataProviders.ExcelDataProvider;
-import com.orasi.apps.bluesource.DepartmentsPage;
 import com.orasi.apps.bluesource.LoginPage;
-import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 import com.orasi.apps.bluesource.employeesPage.EmployeesPage;
+import com.orasi.utils.Constants;
+import com.orasi.utils.TestEnvironment;
+import com.orasi.utils.TestReporter;
+import com.orasi.utils.dataProviders.ExcelDataProvider;
 
 public class SearchForEmployee  extends TestEnvironment {
 

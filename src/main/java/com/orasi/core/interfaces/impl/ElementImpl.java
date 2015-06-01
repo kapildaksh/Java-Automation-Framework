@@ -1,7 +1,6 @@
 package com.orasi.core.interfaces.impl;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByClassName;
@@ -23,9 +22,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Element;
 import com.orasi.utils.Constants;
-import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
-import com.orasi.utils.date.SimpleDate;
 
 /**
  * An implementation of the Element interface. Delegates its work to an

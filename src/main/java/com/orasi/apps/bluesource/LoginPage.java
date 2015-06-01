@@ -1,7 +1,6 @@
 package com.orasi.apps.bluesource;
 import java.util.ResourceBundle;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
 import ru.yandex.qatools.allure.annotations.Step;
@@ -10,7 +9,6 @@ import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
-import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestEnvironment;
 
