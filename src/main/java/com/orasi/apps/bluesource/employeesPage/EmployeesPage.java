@@ -80,12 +80,6 @@ public class EmployeesPage {
 	// ***Page Interactions ***
 	// *****************************************
 	
-	//Click the add button
-	/*public void clickAddNewEmployee(){
-		//Click add
-		btnAdd.click();
-	}*/
-	
 	@Step("Then a success message is displayed")
 	public boolean isSuccessMsgDisplayed(){
 	    return lblSuccessMsg.isDisplayed();
@@ -172,12 +166,17 @@ public class EmployeesPage {
 	
 	@Step("Then the Employees table should update the employees displayed")
 	public boolean validateEmployeeTableResultsUpdated(int previousCount){
-	    return  (previousCount != getTotalDisplayedEmployees());
-	}
-	
+	    return (previousCount != getTotalDisplayedEmployees());
+	}	
 	
 	public boolean validateLastnameFoundInTable(String username){
-	    return validateTextInTable(username, "LASTNAME");
+	    return validateTextInTable(username.substring(0, 1).toUpperCase() + username.substring(1).toLowerCase(), EmployeesTableColumns.LASTNAME.name());
+	}
+	
+	@Step("And I click the \"{0}\" Name link")
+	public void selectEmployeeName(String name){
+		BluesourceTables table = new BluesourceTables(te);
+		table.selectFieldLink(name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase());
 	}
 	
 	//search the employee results table by first & last name & click on it
@@ -233,4 +232,3 @@ public class EmployeesPage {
 		elementList.get(0).click();
 	}
 }
-

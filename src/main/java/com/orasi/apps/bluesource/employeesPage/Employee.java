@@ -64,13 +64,12 @@ public class Employee {
 	this.status = "Contractor";
 	this.bridgeTime = "1";
 	this.location = "Remote";
-	this.startDate = "2015-05-09";
+	this.startDate = "2013-01-20";
 	this.cellPhone = "(336) 358-1321";
 	this.officePhone = "(336) 358-1321";
 	this.email = getFirstName() + "." + getLastName() + "@random.com";
 	this.imName = getEmail();
 	this.imClient = "Skype";
 	this.department = "Services";	
-    }
-    
+    }   
 }

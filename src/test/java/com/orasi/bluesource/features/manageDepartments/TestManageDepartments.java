@@ -78,8 +78,8 @@ public class TestManageDepartments  extends TestEnvironment {
     public void testManageDept(@Parameter String testScenario, @Parameter String role,
 	    @Parameter String newDept) {
 	
-	testName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
+	setTestName( new Object() {
+	}.getClass().getEnclosingMethod().getName());
 
 	testStart(testName);
 	

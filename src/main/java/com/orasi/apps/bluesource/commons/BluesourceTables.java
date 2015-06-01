@@ -188,12 +188,15 @@ public class BluesourceTables {
 	return result;
     }   
     
+    public void selectFieldLink(String fieldText){
+    	new LinkImpl(table.findElements(By.xpath("tbody/tr/td/a[text()='" + fieldText + "']")).get(0)).click();
+    }
  
     public boolean validateTextInTable(String text, String column){
 	loadingDone();
 	int row = 0;
 	int columnPosition = getColumnPosition(column);
-	row = table.getRowThatContainsCellText(te.getDriver(), text,columnPosition );
+	row = table.getRowThatContainsCellText(te.getDriver(), text, columnPosition );
 	
 	if(row != 0) return true;
 	return false;

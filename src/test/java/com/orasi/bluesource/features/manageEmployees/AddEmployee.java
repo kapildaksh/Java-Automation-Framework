@@ -38,6 +38,7 @@ import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 import com.orasi.apps.bluesource.employeesPage.AddNewEmployeePage;
 import com.orasi.apps.bluesource.employeesPage.Employee;
+import com.orasi.apps.bluesource.employeesPage.EmployeeSummaryPage;
 import com.orasi.apps.bluesource.employeesPage.EmployeesPage;
 
 public class AddEmployee  extends TestEnvironment {
@@ -65,7 +66,7 @@ public class AddEmployee  extends TestEnvironment {
     }
 
     @AfterTest(groups = { "regression", "manageEmployees", "addEmployee" })
-    public synchronized void closeSession(ITestResult test) {
+    public synchronized void closeSession() {
 	endTest(testName);
     }
 
@@ -102,7 +103,7 @@ public class AddEmployee  extends TestEnvironment {
 	topNavigationBar.clickEmployeesLink();
 	EmployeesPage employeesPage = new EmployeesPage(this);
 	TestReporter.assertTrue(employeesPage.pageLoaded(),"Verify Employees page is displayed");
-	
+
 	employeesPage.clickAddEmployeeButton();
 	AddNewEmployeePage newEmployee = new AddNewEmployeePage(this);	
 	
@@ -113,6 +114,11 @@ public class AddEmployee  extends TestEnvironment {
 	
 	employeesPage.enterSearchText(employee.getLastName());
 	TestReporter.assertTrue(employeesPage.validateLastnameFoundInTable(employee.getLastName()), "Verify Employee " + employee.getLastName() + " appeared in the Employee Table");
+
+	employeesPage.selectEmployeeName(employee.getLastName());
+	
+	EmployeeSummaryPage summary = new EmployeeSummaryPage(this);
+	TestReporter.assertTrue(summary.validateGeneralInfo(employee), "Verify Employee's General Information is correct");
 	
 	topNavigationBar.clickLogout();
     }    
