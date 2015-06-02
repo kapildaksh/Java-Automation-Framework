@@ -285,6 +285,9 @@ public class TestEnvironment {
      */
    // @Step("Launch \"{0}\"")
     protected void launchApplication(String URL) {
+	String reportInfo = getBrowserUnderTest().toUpperCase() ;
+	if (!getBrowserVersion().isEmpty()) reportInfo += " v." + getBrowserVersion();
+	TestReporter.log("Launch " + reportInfo + " in OS " + getOperatingSystem().toUpperCase() + " with URL: " + URL);
 	driver.get(URL);
     }
 
