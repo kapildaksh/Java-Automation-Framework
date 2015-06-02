@@ -1,5 +1,7 @@
 package com.orasi.bluesource.features.manageEmployees;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
@@ -37,7 +39,7 @@ public class AddEmployee  extends TestEnvironment {
 		+ "ManageEmployees.xlsx", "AddEmployee").getTestData();
     }
 
-    @BeforeTest(groups = { "regression", "manageEmployees", "addEmployee" })
+    @BeforeTest(groups = { "regression", "manageEmployees", "employeeCRUD" })
     @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
@@ -50,8 +52,7 @@ public class AddEmployee  extends TestEnvironment {
 	setTestEnvironment(environment);
     }
 
-    @Test(groups = { "regression", "manageEmployees", "addEmployee" },
-	    	  dependsOnMethods = {"testDeactivateEmployee"}, alwaysRun=true)
+    @AfterSuite(groups = { "regression", "manageEmployees", "employeeCRUD" })
     public void closeSession() {
 	endTest(testName);
     }
@@ -67,7 +68,7 @@ public class AddEmployee  extends TestEnvironment {
     @Stories("I can create a new Employee")
     @Severity(SeverityLevel.BLOCKER)
     @Title("AddEmployee")
-    @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "addEmployee" })
+    @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "employeeCRUD" })
     public void testAddEmployee(@Parameter String testScenario, @Parameter String role) {
 	
 	setTestName(new Object() {}.getClass().getEnclosingMethod().getName());
@@ -107,7 +108,7 @@ public class AddEmployee  extends TestEnvironment {
     @Stories("I can see an Employee's General Info after creating Employee")
     @Severity(SeverityLevel.NORMAL)
     @Title("ModifyEmployeeInfo")
-    @Test(groups = { "regression", "manageEmployees" },
+    @Test(groups = { "regression", "manageEmployees", "employeeCRUD" },
     	  dependsOnMethods = {"testAddEmployee"})
     public void testViewEmployeeGeneralInfo() {
 	EmployeesPage employeesPage = new EmployeesPage(this);
@@ -124,7 +125,7 @@ public class AddEmployee  extends TestEnvironment {
     @Stories("I can Modify an Employee's General Info and view changes")
     @Severity(SeverityLevel.MINOR)
     @Title("ModifyEmployeeInfo")
-    @Test(groups = { "regression", "manageEmployees" },
+    @Test(groups = { "regression", "manageEmployees", "employeeCRUD" },
     	  dependsOnMethods = {"testViewEmployeeGeneralInfo"})
     public void testModifyEmployeeGeneralInfo() {
 	EmployeeSummaryPage summary = new EmployeeSummaryPage(this);
@@ -144,7 +145,7 @@ public class AddEmployee  extends TestEnvironment {
     @Stories("I can mark an Employee as Inactive")
     @Severity(SeverityLevel.MINOR)
     @Title("MarkEmployeeInactive")
-    @Test(groups = { "regression", "manageEmployees" },
+    @Test(groups = { "regression", "manageEmployees", "employeeCRUD" },
     	  dependsOnMethods = {"testModifyEmployeeGeneralInfo"})
     public void testDeactivateEmployee() {
 	EmployeeSummaryPage summary = new EmployeeSummaryPage(this);

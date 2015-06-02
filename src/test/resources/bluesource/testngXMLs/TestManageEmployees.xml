@@ -7,8 +7,14 @@
 	<parameter name="browserVersion" value="32" />
 	<parameter name="operatingSystem" value="windows" />
 	<test name="Test">
-		<classes>
-			<class name="com.orasi.bluesource.features.manageEmployees.AddEmployee" />
-		</classes>
+		<groups>
+			<run>
+				<include name="employeeCRUD" />
+			</run>
+		</groups>
+		<packages>
+			<package name="com.orasi.bluesource.features.*">
+			</package>
+		</packages>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->
