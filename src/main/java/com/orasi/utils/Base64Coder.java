@@ -30,6 +30,11 @@ package com.orasi.utils;
  */
 public class Base64Coder {
 
+    public static void main(String[] args) {
+	byte[] toEncode = "OrasiBluesource".getBytes();
+        System.out.println(encode(toEncode)); // Display the string.
+    }
+    
 // The line separator string of the operating system.
     private static final String systemLineSeparator = System.getProperty("line.separator");
 
@@ -295,5 +300,4 @@ public class Base64Coder {
 // Dummy constructor.
     public Base64Coder() {
     }
-
 } // end class Base64Coder
