@@ -1,5 +1,6 @@
 package com.orasi.bluesource.features.manageEmployees;
 
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.AfterTest;
@@ -52,8 +53,9 @@ public class AddEmployee  extends TestEnvironment {
 	setTestEnvironment(environment);
     }
 
-    @AfterSuite(groups = { "regression", "manageEmployees", "employeeCRUD" })
-    public void closeSession() {
+    @AfterMethod(groups = { "regression", "manageEmployees", "employeeCRUD" })
+    public void closeSession(ITestResult result) {
+	if(!result.isSuccess() || result.getMethod().getMethodName().equals("testDeactivateEmployee"))
 	endTest(testName);
     }
 
