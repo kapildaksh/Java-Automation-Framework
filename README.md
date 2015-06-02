@@ -1,4 +1,4 @@
-## Toyota Selenium-Java Project
+## BlueSource Selenium-Java Project with Feature Reporting
 
 This is the homepage for the Orasi-developed Selenium-Java Bluesource project. These libraries contain both original code created by Orasi developers and open source code from various other projects which are listed further down. With these libraries, consumers have access to extended functionality for creating testing suites for Web Applications and API Web Services.
 
@@ -42,6 +42,8 @@ The capabilities of the Sauce Labs VM farm are harnessed to test the OS-Browser 
 * <strong>Test NG:</strong> Contains results for individual tests using the TestNG-extended Orasi reporter.
 
 * <strong>Jenkins CI:</strong> Contains results for individual tests using the TestNG-extended Orasi reporter.  Also, keeps a build history to show the relative stability of past builds.
+
+* <strong>Allure Reports:</strong> Contains results for individual tests using Allure Reporter. Reports generate can range from Automation issues, Application issues, grouping by Features and Stories as well is high level Steps.  
 
 * <strong>Sauce Labs:</strong> Contains results for individual tests as well as captures videos and screenshots.
 
