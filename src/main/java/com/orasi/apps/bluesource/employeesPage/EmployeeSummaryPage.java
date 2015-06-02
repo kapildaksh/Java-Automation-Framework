@@ -130,7 +130,7 @@ public class EmployeeSummaryPage {
 		return true;
 	}
 	
-	@Step("And I click Manage General Info")
+	@Step("When I click Manage General Info")
 	public void clickManageGeneralInfo(){
 	    btnManageGeneralInfo.click();
 	}
