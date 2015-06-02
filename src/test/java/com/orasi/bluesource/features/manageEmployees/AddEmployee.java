@@ -51,7 +51,7 @@ public class AddEmployee  extends TestEnvironment {
     }
 
     @AfterTest(groups = { "regression", "manageEmployees", "addEmployee" })
-    public synchronized void closeSession() {
+    public void closeSession() {
 	endTest(testName);
     }
 
@@ -142,7 +142,7 @@ public class AddEmployee  extends TestEnvironment {
     @Features("ManageEmployees")
     @Stories("I can mark an Employee as Inactive")
     @Severity(SeverityLevel.MINOR)
-    @Title("ModifyEmployeeInfo")
+    @Title("MarkEmployeeInactive")
     @Test(groups = { "regression", "manageEmployees" },
     	  dependsOnMethods = {"testModifyEmployeeGeneralInfo"})
     public void testDeactivateEmployee() {
@@ -163,5 +163,6 @@ public class AddEmployee  extends TestEnvironment {
 	TestReporter.assertTrue(employeesPage.pageLoaded(),"Verify Employees page is displayed");
 	employeesPage.enterSearchText(employee.getLastName());
 	TestReporter.assertTrue(employeesPage.validateNoRowsFound(),"Verify Employees Table does not have Employee as active");
+	topNavigationBar.clickLogout();
     }
 }
