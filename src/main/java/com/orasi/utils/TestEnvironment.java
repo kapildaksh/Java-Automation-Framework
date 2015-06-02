@@ -326,7 +326,7 @@ public class TestEnvironment {
 
     protected void endTest(String testName){
 	WebDriver driver = drivers.get(testName);
-	if (driver != null && driver.getWindowHandles().size() > 0) {
+	if (driver != null ) {
 		driver.quit();
 	}
     }
