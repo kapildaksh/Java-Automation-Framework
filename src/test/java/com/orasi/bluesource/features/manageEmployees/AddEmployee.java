@@ -50,7 +50,8 @@ public class AddEmployee  extends TestEnvironment {
 	setTestEnvironment(environment);
     }
 
-    @AfterTest(groups = { "regression", "manageEmployees", "addEmployee" })
+    @Test(groups = { "regression", "manageEmployees", "addEmployee" },
+	    	  dependsOnMethods = {"testDeactivateEmployee"}, alwaysRun=true)
     public void closeSession() {
 	endTest(testName);
     }

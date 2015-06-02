@@ -7,7 +7,7 @@
 	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
 	<parameter name="runLocation" value="remote" />
-	<parameter name="browserVersion" value="34" />
+	<parameter name="browserVersion" value="32" />
 	<parameter name="operatingSystem" value="windows" />
 	<test name="Test">
 		<groups>
