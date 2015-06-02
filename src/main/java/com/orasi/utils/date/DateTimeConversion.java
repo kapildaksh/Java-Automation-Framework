@@ -34,7 +34,6 @@ public class DateTimeConversion {
 	 * @return String future date in desired format
 	 */
 	public static String getDaysOut(String daysOut, String format){
-		String date = "";
 		DateFormat dateFormat = new SimpleDateFormat(format);
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DATE, Integer.parseInt(daysOut));
@@ -50,10 +49,8 @@ public class DateTimeConversion {
 	 */
 	@Deprecated
 	public static String ConvertToDate(String daysOut){
-		String date = "";
 		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		Calendar cal = Calendar.getInstance();
-		String currentDate = dateFormat.format(cal.getTime());
 		cal.add(Calendar.DATE, Integer.parseInt(daysOut));
 		String convertedDate=dateFormat.format(cal.getTime());    
 		
@@ -67,10 +64,8 @@ public class DateTimeConversion {
 	 */
 	@Deprecated
 	public String ConvertToDateMMDDYY(String daysOut){
-		String date = "";
 		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		Calendar cal = Calendar.getInstance();
-		String currentDate = dateFormat.format(cal.getTime());
 		cal.add(Calendar.DATE, Integer.parseInt(daysOut));
 		String convertedDate=dateFormat.format(cal.getTime());    
 		
@@ -96,10 +91,8 @@ public class DateTimeConversion {
 	 */
 	@Deprecated
 	public String ConvertToDateYYYYMMDD(String daysOut){
-		String date = "";
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar cal = Calendar.getInstance();
-		String currentDate = dateFormat.format(cal.getTime());
 		cal.add(Calendar.DATE, Integer.parseInt(daysOut));
 		String convertedDate=dateFormat.format(cal.getTime());    
 		

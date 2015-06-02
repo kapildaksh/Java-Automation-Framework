@@ -14,10 +14,10 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import ru.yandex.qatools.allure.annotations.Title;
 import ru.yandex.qatools.allure.model.SeverityLevel;
 
-import com.orasi.apps.bluesource.ListingTitlesPage;
 import com.orasi.apps.bluesource.LoginPage;
-import com.orasi.apps.bluesource.NewTitlePage;
 import com.orasi.apps.bluesource.TopNavigationBar;
+import com.orasi.apps.bluesource.titlesPage.ListingTitlesPage;
+import com.orasi.apps.bluesource.titlesPage.NewTitlePage;
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
@@ -25,7 +25,7 @@ import com.orasi.utils.dataProviders.ExcelDataProvider;
 
 public class TestManageTitles extends TestEnvironment{
 
-    private String application = "";
+    private String application = "Bluesource";
     
     @DataProvider(name = "dataScenario")
     public Object[][] scenarios() {
@@ -38,7 +38,7 @@ public class TestManageTitles extends TestEnvironment{
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
 	    String browserVersion, String operatingSystem, String environment) {
-	setApplicationUnderTest("Bluesource");
+	setApplicationUnderTest(application);
 	setBrowserUnderTest(browserUnderTest);
 	setBrowserVersion(browserVersion);
 	setOperatingSystem(operatingSystem);

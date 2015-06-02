@@ -24,7 +24,7 @@ import com.orasi.utils.dataProviders.ExcelDataProvider;
 
 public class Login  extends TestEnvironment {
 
-    private String application = "";
+    private String application = "Bluesource";
     
     @DataProvider(name = "dataScenario")
     public Object[][] scenarios() {
@@ -37,7 +37,7 @@ public class Login  extends TestEnvironment {
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
 	    String browserVersion, String operatingSystem, String environment) {
-	setApplicationUnderTest("Bluesource");
+	setApplicationUnderTest(application);
 	setBrowserUnderTest(browserUnderTest);
 	setBrowserVersion(browserVersion);
 	setOperatingSystem(operatingSystem);

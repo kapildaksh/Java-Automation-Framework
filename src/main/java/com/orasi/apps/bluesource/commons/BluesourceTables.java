@@ -92,7 +92,7 @@ public class BluesourceTables {
      * @doc.description Just wrapping a reusable action for quicker usability 
      */
     public int getColumnPosition(String column){
-	return table.getColumnWithCellText(te.getDriver(), column);
+	return table.getColumnWithCellText(te, column);
     }
     
     /**
@@ -108,7 +108,7 @@ public class BluesourceTables {
 	// Create two elements. First is the cell itself. The cell contains a link and an icon.
 	// The link is created from its parent cell. To sort, the link needs to be clicked. Once 
 	// clicked, an icon in the cell will update with its current sort order  
-	Element cell = new ElementImpl(table.getCell(te.getDriver(), 1, columnPosition));
+	Element cell = new ElementImpl(table.getCell(te, 1, columnPosition));
 	Link cellLink = new LinkImpl(cell.findElement(By.xpath("a")));
 	
 	cellLink.click();
@@ -131,20 +131,20 @@ public class BluesourceTables {
     public boolean validateSortColumn(String column, SortOrder order){
 	loadingDone();
 	int columnPosition = getColumnPosition(column);
-	int numberRows = table.getRowCount(te.getDriver());
+	int numberRows = table.getRowCount(te);
 	int currentRow = 3;
 	boolean movedPage = true;
 	boolean result = false;
 	String firstValidationValue = "";
 	String secondValidationValue = "";
-	firstValidationValue = table.getCellData(te.getDriver(), 2, columnPosition);
+	firstValidationValue = table.getCellData(te, 2, columnPosition);
 	
 	// Loop through the specified column until it finds a value different from the first cell
 	// If it reaches the end of the table, it will click the next button to move to the next
 	// page of table values. If it is the last page or the Pagination buttons are not displayed,
 	// then all values were equivalent.
 	do {	    
-	    secondValidationValue = table.getCellData(te.getDriver(), currentRow, columnPosition);
+	    secondValidationValue = table.getCellData(te, currentRow, columnPosition);
 	    currentRow++;
 	    
 	    if(!firstValidationValue.equals(secondValidationValue)){
@@ -156,7 +156,7 @@ public class BluesourceTables {
 		currentRow = 2;
 		movedPage = new Pagination(te).moveNext();
 		te.pageLoaded().isDomComplete();
-		numberRows = table.getRowCount(te.getDriver());
+		numberRows = table.getRowCount(te);
 	    }
 	} while (movedPage);	
 	
@@ -194,8 +194,7 @@ public class BluesourceTables {
 	loadingDone();
 	int row = 0;
 	int columnPosition = getColumnPosition(column);
-	row = table.getRowThatContainsCellText(te.getDriver(), text, columnPosition );
-	
+	row = table.getRowWithCellText(te, text, columnPosition, 2, false );
 	if(row != 0) return true;
 	return false;
     }
@@ -211,7 +210,7 @@ public class BluesourceTables {
     }
     
     public boolean validateRowsPerPageDisplayed(String numberOfRows){
-	return numberOfRows.equals(String.valueOf(table.getRowCount(te.getDriver()) - 1));
+	return numberOfRows.equals(String.valueOf(table.getRowCount(te) - 1));
     }
     
     

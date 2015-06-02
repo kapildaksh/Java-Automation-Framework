@@ -23,7 +23,7 @@ import com.orasi.utils.dataProviders.ExcelDataProvider;
 
 public class NegativeLogin  extends TestEnvironment {
 
-    private String application = "";
+    private String application = "Bluesource";
     
     @DataProvider(name = "negativeDataScenario")
     public Object[][] negativeScenarios() {
@@ -36,7 +36,7 @@ public class NegativeLogin  extends TestEnvironment {
 	    "operatingSystem", "environment" })
     public void setup(@Optional String runLocation, String browserUnderTest,
 	    String browserVersion, String operatingSystem, String environment) {
-	setApplicationUnderTest("Bluesource");
+	setApplicationUnderTest(application);
 	setBrowserUnderTest(browserUnderTest);
 	setBrowserVersion(browserVersion);
 	setOperatingSystem(operatingSystem);

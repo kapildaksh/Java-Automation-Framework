@@ -7,6 +7,11 @@ import org.openqa.selenium.WebDriverException;
  */
 
 public class VariableNotInScopeException extends WebDriverException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 6602127720663559390L;
+
     public VariableNotInScopeException(String msg) {
         super(msg);
     }

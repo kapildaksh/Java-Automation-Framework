@@ -20,6 +20,7 @@ public class Pagination {
     @FindBy(className = "pagination")
     private Element pagination;
     
+    @SuppressWarnings("unused")
     private TestEnvironment te = null;
 
     // *********************

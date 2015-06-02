@@ -7,8 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringBufferInputStream;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -57,7 +55,6 @@ import com.eviware.soapui.impl.wsdl.support.wsdl.WsdlImporter;
 import com.eviware.soapui.support.SoapUIException;
 import com.orasi.utils.XMLTools;
 
-@SuppressWarnings("deprecation")
 public abstract class SoapService{
 
 	private String strEnvironment = null;

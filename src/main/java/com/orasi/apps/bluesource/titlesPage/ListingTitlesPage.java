@@ -1,4 +1,4 @@
-package com.orasi.apps.bluesource;
+package com.orasi.apps.bluesource.titlesPage;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ import ru.yandex.qatools.allure.annotations.Step;
 
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
+import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.TestEnvironment;
 
@@ -29,6 +30,8 @@ public class ListingTitlesPage {
 	@FindBy(css = ".alert-success.alert-dismissable")
 	private Label lblSuccessMsg;
 	
+	@FindBy(className = "table")
+	private Webtable tabTitles;
 	// *********************
 	// ** Build page area **
 	// *********************
@@ -55,11 +58,13 @@ public class ListingTitlesPage {
 		return lblTitle.isDisplayed();
 	}
 	
+	public void modifyTitle(String title){
+	    //tabTitles.getRowWithCellText(driver, text, columnPosition)
+	}
 	@Step("Then an alert should appear for conformation")
 	public boolean isSuccessMsgDisplayed() {
 		WebDriverWait wait = new WebDriverWait(te.getDriver(), 5);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".alert-success.alert-dismissable")));
-		//wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".alert-success.alert-dismissable")));
 		return lblSuccessMsg.isDisplayed();
 	}
 	

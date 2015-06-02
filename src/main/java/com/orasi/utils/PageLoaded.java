@@ -34,6 +34,7 @@ public class PageLoaded {
 		this.timeout = te.getDefaultTestTimeout();
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void initialize() {
 	    ElementFactory.initElements(driver, clazz);	        
 	}

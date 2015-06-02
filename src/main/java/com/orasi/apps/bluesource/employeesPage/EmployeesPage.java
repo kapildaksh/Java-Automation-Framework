@@ -165,7 +165,7 @@ public class EmployeesPage {
 	
 	@Step("Then the Employee will display no rows found")
 	public boolean validateNoRowsFound(){
-	    return (tabEmployeeTable.getRowCount(te.getDriver()) == 1);
+	    return (tabEmployeeTable.getRowCount(te) == 1);
 	}
 	
 	public boolean validateLastnameFoundInTable(String username){
