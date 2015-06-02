@@ -43,7 +43,7 @@ The capabilities of the Sauce Labs VM farm are harnessed to test the OS-Browser 
 
 * <strong>Jenkins CI:</strong> Contains results for individual tests using the TestNG-extended Orasi reporter.  Also, keeps a build history to show the relative stability of past builds.
 
-* <strong>Allure Reports:</strong> Contains results for individual tests using Allure Reporter. Reports generate can range from Automation issues, Application issues, grouping by Features and Stories as well is high level Steps.  
+* <strong>Allure Reports:</strong> Contains results for individual tests using Allure Reporter. Reports generate can range from Automation issues, Application issues, grouping by Features and Stories as well is high level Steps giving high level Executive Reports.  
 
 * <strong>Sauce Labs:</strong> Contains results for individual tests as well as captures videos and screenshots.
 
@@ -115,5 +115,6 @@ These resources are being used directly, or have been extended upon.
 * [Selenium 2.43.1](https://github.com/SeleniumHQ/selenium): The base library that allows for automation of web browsers.
 * [TestNG 6.8.21](https://github.com/cbeust/testng/): Test execution framework that extends JUnit tests and allows more flexibility for testing.
 * [Smartbear SoapUI 4.5.0](https://github.com/SmartBear/soapui): Allows consumer to build requests files at runtime and sends request through HTTPClient
-* [Sauce Labs 2.1.18](https://github.com/saucelabs/sauce-java): Facilitates the  use of using the Sauce Lab VM farm as a remote Selenium grid on which to execute tests.
+* [Sauce Labs 2.1.18](https://github.com/saucelabs/sauce-java): Facilitates the use of using the Sauce Lab VM farm as a remote Selenium grid on which to execute tests.
 * [Apache HttpClient 4.3.1](https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/index.html) Used to transmit and receive SOAP and REST message requests and responses.
+* [Allure Reports for TestNG 1.4.13](http://allure.qatools.ru/): Generates high level executive reporting
