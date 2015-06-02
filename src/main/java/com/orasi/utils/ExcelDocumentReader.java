@@ -85,7 +85,7 @@ public class ExcelDocumentReader {
 		
 		for (int i = startRow; i <= totalRows; i++, ci++) {
 			cj = 0;
-			System.out.println("Test Scenario: " + getCellData(i, 1));
+			//System.out.println("Test Scenario: " + getCellData(i, 1));
 			for (int j = startCol; j < totalCols; j++, cj++) {					
 				tabArray[ci][cj] = getCellData(i, j);
 			//	System.out.println(getCellData(0,j) + ": " + tabArray[ci][cj]);
