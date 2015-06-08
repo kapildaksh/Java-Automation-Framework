@@ -61,6 +61,7 @@ public class ListingTitlesPage {
 	public void modifyTitle(String title){
 	    //tabTitles.getRowWithCellText(driver, text, columnPosition)
 	}
+	
 	@Step("Then an alert should appear for conformation")
 	public boolean isSuccessMsgDisplayed() {
 		WebDriverWait wait = new WebDriverWait(te.getDriver(), 5);

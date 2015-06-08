@@ -66,8 +66,7 @@ public class TestEnvironment {
     /*
      * Selenium Hub Field
      */
-    protected String seleniumHubURL = "http://"
-	    + Base64Coder.decodeString(appURLRepository
+    protected String seleniumHubURL = "http://" + Base64Coder.decodeString(appURLRepository
 		    .getString("SAUCELABS_USERNAME"))
 	    + ":"
 	    + Base64Coder.decodeString(appURLRepository
@@ -522,8 +521,8 @@ public class TestEnvironment {
   
     public void initializePage(Class<?> clazz) {
 	try {
-	    ElementFactory.initElements(driver,clazz);
-	} catch (SecurityException e) {
+	    ElementFactory.initElements(driver,clazz.getConstructor(TestEnvironment.class));
+	} catch (SecurityException | NoSuchMethodException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}

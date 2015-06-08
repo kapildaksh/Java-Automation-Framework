@@ -3,7 +3,7 @@
 <suite name="Suite" parallel="tests" thread-count="8">
 	<parameter name="browserUnderTest" value="firefox" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="remote" />
+	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="32" />
 	<parameter name="operatingSystem" value="windows" />
 	<test name="Test">

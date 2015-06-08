@@ -8,7 +8,7 @@
 	<properties>
 		<testNGSourceDirectory>src/test/resources</testNGSourceDirectory>
 		<allure.version>1.4.13</allure.version>
-        <aspectj.version>1.8.5</aspectj.version>
+		<aspectj.version>1.8.5</aspectj.version>
 	</properties>
 
 	<repositories>
@@ -29,86 +29,71 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.3</version>
 					<configuration>
-						<source>1.7</source> 
-						
+						<source>1.7</source>
+
 						<target>1.7</target>
 					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
-		<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12</version>
-                <configuration>
-                    <testFailureIgnore>true</testFailureIgnore>
-                    <argLine>
-                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
-                    </argLine>
-                    <systemPropertyVariables>
-							<jenkinsOperatingSystem></jenkinsOperatingSystem>
-							<jenkinsBrowser></jenkinsBrowser>
-							<jenkinsBrowserVersion></jenkinsBrowserVersion>
-						</systemPropertyVariables> 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12</version>
+				<configuration>
+					<testFailureIgnore>true</testFailureIgnore>
+					<argLine>
+						-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+					</argLine>
+					<systemPropertyVariables>
+						<jenkinsOperatingSystem></jenkinsOperatingSystem>
+						<jenkinsBrowser></jenkinsBrowser>
+						<jenkinsBrowserVersion></jenkinsBrowserVersion>
+					</systemPropertyVariables>
 					<suiteXmlFiles>
-						<suiteXmlFile>${testNGSourceDirectory}/bluesource/testngXMLs/regression.xml</suiteXmlFile>		
+						<suiteXmlFile>${testNGSourceDirectory}/bluesource/testngXMLs/regression.xml</suiteXmlFile>
 					</suiteXmlFiles>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.aspectj</groupId>
-                        <artifactId>aspectjweaver</artifactId>
-                        <version>${aspectj.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>	
-              <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.2.9.v20150224</version>
-                <configuration>
-                    <webAppSourceDirectory>${project.build.directory}/site/allure-maven-plugin</webAppSourceDirectory>
-                    
-                </configuration>
-            </plugin>	
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjweaver</artifactId>
+						<version>${aspectj.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.2.9.v20150224</version>
+				<configuration>
+					<webAppSourceDirectory>${project.build.directory}/site/allure-maven-plugin</webAppSourceDirectory>
+
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-	    <reporting>
-        <excludeDefaults>true</excludeDefaults>
-        <plugins>
-            <plugin>
-                <groupId>ru.yandex.qatools.allure</groupId>
-                <artifactId>allure-maven-plugin</artifactId>
-                <version>2.0</version>
-            </plugin>
-        </plugins>
-    </reporting>
+	<reporting>
+		<excludeDefaults>true</excludeDefaults>
+		<plugins>
+			<plugin>
+				<groupId>ru.yandex.qatools.allure</groupId>
+				<artifactId>allure-maven-plugin</artifactId>
+				<version>2.0</version>
+			</plugin>
+		</plugins>
+	</reporting>
 	<dependencies>
-	        <dependency>
-            <groupId>ru.yandex.qatools.allure</groupId>
-            <artifactId>allure-testng-adaptor</artifactId>
-            <version>${allure.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+		
 		<!-- Start Selenium requirements -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>2.43.1</version> 
-			<!--  Selenium Versions not to use
-			2.44.0 - Issues with OS Platform Capabilities 
-				https://code.google.com/p/selenium/issues/detail?id=8083  
-				https://code.google.com/p/selenium/issues/detail?id=8333
-			
-			2.45.0 - Issues with Test Execution speed
-				https://code.google.com/p/selenium/issues/detail?id=8551 
-			 -->
+			<version>2.43.1</version>
+			<!-- Selenium Versions not to use 2.44.0 - Issues with OS Platform Capabilities 
+				https://code.google.com/p/selenium/issues/detail?id=8083 https://code.google.com/p/selenium/issues/detail?id=8333 
+				2.45.0 - Issues with Test Execution speed https://code.google.com/p/selenium/issues/detail?id=8551 -->
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -123,6 +108,21 @@
 
 		<!-- End Selenium requirements -->
 
+		<!-- Start Allure Reports requirements -->
+		<dependency>
+			<groupId>ru.yandex.qatools.allure</groupId>
+			<artifactId>allure-testng-adaptor</artifactId>
+			<version>${allure.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency> 
+
+		<!-- End Allure Reports requirements -->
+		
 		<!-- Start Sauce Labs requirements -->
 		<dependency>
 			<groupId>com.saucelabs</groupId>

@@ -109,7 +109,7 @@ public class AddEmployee  extends TestEnvironment {
     @Features("ManageEmployees")
     @Stories("I can see an Employee's General Info after creating Employee")
     @Severity(SeverityLevel.NORMAL)
-    @Title("ModifyEmployeeInfo")
+    @Title("ValidateEmployeeInfo")
     @Test(groups = { "regression", "manageEmployees", "employeeCRUD" },
     	  dependsOnMethods = {"testAddEmployee"})
     public void testViewEmployeeGeneralInfo() {
