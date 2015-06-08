@@ -17,6 +17,7 @@ import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.utils.Constants;
+import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -70,11 +71,16 @@ public class NegativeLogin  extends TestEnvironment {
 
 	testStart(testName);
 	
+	Page page = new Page(this);
+	page.loginPage().login(role);
+	TestReporter.assertTrue(page.loginPage().isNotLoggedIn(), "Validate the user did not log in successfully");
+	
+	/*
 	// Login
 	LoginPage loginPage = new LoginPage(this);
 	TestReporter.assertTrue(loginPage.pageLoaded(),"Verify login page is displayed");
 	loginPage.login(role);
-	TestReporter.assertTrue(loginPage.isNotLoggedIn(), "Validate the user did not log in successfully");
+	TestReporter.assertTrue(loginPage.isNotLoggedIn(), "Validate the user did not log in successfully");*/
 
     }
 }

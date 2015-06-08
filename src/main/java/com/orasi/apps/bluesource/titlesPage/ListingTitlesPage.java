@@ -15,9 +15,10 @@ import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 
-public class ListingTitlesPage {
+public class ListingTitlesPage extends Page{
     	private TestEnvironment te = null;
 	
 	//All the page elements
@@ -36,8 +37,8 @@ public class ListingTitlesPage {
 	// ** Build page area **
 	// *********************
 	public ListingTitlesPage(TestEnvironment te){
-	    this.te = te;
-	    ElementFactory.initElements(te.getDriver(), this);
+	    super(te);
+	    initElements(te.getDriver(), this);
 	}	
 	
 	public boolean pageLoaded(){

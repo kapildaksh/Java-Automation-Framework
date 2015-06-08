@@ -19,6 +19,7 @@ import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 import com.orasi.apps.bluesource.employeesPage.EmployeesPage;
 import com.orasi.utils.Constants;
+import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -72,6 +73,23 @@ public class SearchForEmployee  extends TestEnvironment {
 	testStart(testName);
 	
 	// Login
+	Page page = new Page(this);
+	page.loginPage().login(role);
+	TestReporter.assertTrue(page.topNavigationBar().isLoggedIn(), "Validate the user logged in successfully");
+
+	
+	//Navigate to Employees Page
+	page.topNavigationBar().clickEmployeesLink();
+		
+	//Search for Employee
+	page.employeesPage().enterSearchText(searchText);
+	TestReporter.assertTrue(page.employeesPage().validateTextInTable(searchText, column), "Validate " + searchText + " was found under the " + column + " column");
+
+	// logout
+	page.topNavigationBar().clickLogout();
+	
+	/* OLD CODE
+	// Login
 	LoginPage loginPage = new LoginPage(this);
 	TestReporter.assertTrue(loginPage.pageLoaded(),"Verify login page is displayed");
 	loginPage.login(role);
@@ -91,6 +109,7 @@ public class SearchForEmployee  extends TestEnvironment {
 
 	// logout
 	topNavigationBar.clickLogout();
+	*/
     }
     
 }

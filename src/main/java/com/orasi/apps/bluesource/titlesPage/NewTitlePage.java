@@ -8,10 +8,10 @@ import ru.yandex.qatools.allure.annotations.Step;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 
-public class NewTitlePage {
-    	private TestEnvironment te = null;
+public class NewTitlePage extends Page{
 
 	//All the page elements
 	@FindBy(id = "title_name")
@@ -24,8 +24,8 @@ public class NewTitlePage {
 	// ** Build page area **
 	// *********************
 	public NewTitlePage(TestEnvironment te){
-		this.te = te;
-		ElementFactory.initElements(te.getDriver(), this);
+		super(te);
+		initElements(te.getDriver(), this);
 	}
 	
 	public boolean pageLoaded(){

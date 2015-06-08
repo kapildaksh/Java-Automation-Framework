@@ -12,11 +12,11 @@ import ru.yandex.qatools.allure.annotations.Step;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
-public class DepartmentsPage {
-	
-    	private TestEnvironment te = null;
-	
+import com.orasi.utils.TestReporter;
+public class DepartmentsPage extends Page{
+		
 	//All the page elements
 	@FindBy(linkText = "Add Department")
 	private Link lnkAddDept;
@@ -31,8 +31,9 @@ public class DepartmentsPage {
 	// ** Build page area **
 	// *********************
 	public DepartmentsPage(TestEnvironment te){
-		this.te = te;
-		ElementFactory.initElements(te.getDriver(), this);
+		super(te);
+		TestReporter.assertTrue(pageLoaded(),"Verify list of departments page is displayed");
+		initElements(te.getDriver(), this);
 	}
 	
 	

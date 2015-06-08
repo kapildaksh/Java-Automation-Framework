@@ -7,11 +7,11 @@ import ru.yandex.qatools.allure.annotations.Step;
 
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 
-public class TopNavigationBar {
-    	private TestEnvironment te = null;
-	
+public class TopNavigationBar extends Page{
+    	
 	//All the page elements:
 	@FindBy(linkText = "Logout")
 	private Link lnkLogout;
@@ -39,8 +39,8 @@ public class TopNavigationBar {
 	// ** Build page area **
 	// *********************
 	public TopNavigationBar(TestEnvironment te){
-	    this.te = te;
-	    ElementFactory.initElements(te.getDriver(), this);
+	    super(te);
+	    initElements(te.getDriver(), this);
 	}
 	
 	public boolean pageLoaded(){
@@ -57,11 +57,13 @@ public class TopNavigationBar {
 	
 	@Step("And I navigate to the \"Departments Page\"")
 	public void clickDepartmentsLink(){
+	    	clickAdminLink();
 		lnkDept.click();
 	}
 	
 	@Step("And I navigate to the \"Titles Page\"")
 	public void clickTitlesLink(){
+	    	clickAdminLink();
 		lnkTitle.click();
 	}
 	

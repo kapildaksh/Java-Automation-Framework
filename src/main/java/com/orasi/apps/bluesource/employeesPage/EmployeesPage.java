@@ -19,12 +19,11 @@ import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 
-public class EmployeesPage {
-	
-	private TestEnvironment te;
+public class EmployeesPage extends Page{
 	
 	//All the page elements
 	@FindBy(css= "#all-content > div.header-btn-section > div > div:nth-child(1) > label:nth-child(1)")	
@@ -61,8 +60,9 @@ public class EmployeesPage {
 	// ** Build page area **
 	// *********************
 	public EmployeesPage(TestEnvironment te){
-		this.te = te;
-		ElementFactory.initElements(te.getDriver(), this);
+		super(te);
+		TestReporter.assertTrue(pageLoaded(),"Verify Employees page is displayed");
+		initElements(te.getDriver(), this);
 	}
 	public EmployeesPage(){}
 	

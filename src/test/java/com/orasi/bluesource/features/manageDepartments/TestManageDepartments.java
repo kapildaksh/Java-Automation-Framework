@@ -20,6 +20,7 @@ import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.NewDeptPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 import com.orasi.utils.Constants;
+import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -73,11 +74,43 @@ public class TestManageDepartments  extends TestEnvironment {
 
 	testStart(testName);
 	
+	Page page = new Page(this);
+	
 	// Login
+	page.loginPage().login(role);
+
+	// Verify user is logged in
+	TestReporter.assertTrue(page.topNavigationBar().isLoggedIn(), "Validate the user logged in successfully");
+	
+	// Navigate to the dept page
+	page.topNavigationBar().clickDepartmentsLink();
+
+	// Add a new dept
+	page.departmentsPage().clickAddDeptLink();
+	page.newDeptPage().createNewDept(newDept);
+	
+	// Verify the dept is added
+	TestReporter.assertTrue(page.departmentsPage().isSuccessMsgDisplayed(), "Validate success message appears");
+	TestReporter.log("New Dept was created: " + newDept);
+
+	// Verify the dept is displayed on the dept results table
+	TestReporter.assertTrue(page.departmentsPage().searchTableByDept(newDept), "Validate new department exists in table");
+
+	// Delete the new dept
+	page.departmentsPage().deleteDept(newDept);
+
+	// Verify the title is deleted
+	TestReporter.assertTrue(page.departmentsPage().isSuccessMsgDisplayed(), "Validate success message appears");
+	// logout
+	page.topNavigationBar().clickLogout();
+	
+	/* OLD Code
+	// Login	
 	LoginPage loginPage = new LoginPage(this);
 	TestReporter.assertTrue(loginPage.pageLoaded(),"Verify login page is displayed");
 	loginPage.login(role);
 
+	
 	// Verify user is logged in
 	TopNavigationBar topNavigationBar = new TopNavigationBar(this);
 	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
@@ -94,7 +127,7 @@ public class TestManageDepartments  extends TestEnvironment {
 	deptPage.clickAddDeptLink();
 	NewDeptPage newDeptPage = new NewDeptPage(this);
 	TestReporter.assertTrue(newDeptPage.pageLoaded(), "Verify add new department page is displayed");
-	newDeptPage.CreateNewDept(newDept);
+	newDeptPage.createNewDept(newDept);
 
 	// Verify the dept is added
 	TestReporter.assertTrue(deptPage.isSuccessMsgDisplayed(), "Validate success message appears");
@@ -112,5 +145,5 @@ public class TestManageDepartments  extends TestEnvironment {
 
 	// logout
 	topNavigationBar.clickLogout();
-    }
+*/    }
 }

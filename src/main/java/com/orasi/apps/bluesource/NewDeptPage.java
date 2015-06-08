@@ -7,10 +7,9 @@ import ru.yandex.qatools.allure.annotations.Step;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
-public class NewDeptPage {
-
-    	private TestEnvironment te = null;
+public class NewDeptPage extends Page{
 
 	//All the page elements
 	@FindBy(id = "department_name")
@@ -26,8 +25,8 @@ public class NewDeptPage {
 	// ** Build page area **
 	// *********************
 	public NewDeptPage(TestEnvironment te){
-		this.te = te;
-		ElementFactory.initElements(te.getDriver(), this);
+		super(te);
+		initElements(te.getDriver(), this);
 	}
 	
 	public boolean pageLoaded(){
@@ -41,7 +40,7 @@ public class NewDeptPage {
 	
 	//method to create a new title
 	@Step("When I create the new department \"{0}\"")
-	public void CreateNewDept(String dept){
+	public void createNewDept(String dept){
 		txtDept.safeSet(dept);
 		btnCreateDept.click();
 	}

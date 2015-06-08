@@ -10,10 +10,11 @@ import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Constants;
+import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
+import com.orasi.utils.TestReporter;
 
-public class LoginPage {
-	private TestEnvironment te = null;
+public class LoginPage extends Page{
 	//all the page elements
 	@FindBy(id = "employee_username")
 	private Textbox txtUsername;
@@ -31,8 +32,9 @@ public class LoginPage {
 	// ** Build page area **
 	// *********************
 	public LoginPage(TestEnvironment te){
-		this.te = te;		
-		ElementFactory.initElements(te.getDriver(), this);
+		super(te);	
+		TestReporter.assertTrue(pageLoaded(),"Verify login page is displayed");
+		initElements(te.getDriver(), this);
 	}
 	
 	public boolean pageLoaded(){

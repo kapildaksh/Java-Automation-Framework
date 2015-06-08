@@ -18,6 +18,7 @@ import ru.yandex.qatools.allure.model.SeverityLevel;
 import com.orasi.apps.bluesource.LoginPage;
 import com.orasi.apps.bluesource.TopNavigationBar;
 import com.orasi.utils.Constants;
+import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -70,6 +71,12 @@ public class Login  extends TestEnvironment {
 
 	testStart(testName);
 	
+	Page page = new Page(this);
+	page.loginPage().login(role);
+	TestReporter.assertTrue(page.topNavigationBar().isLoggedIn(), "Validate the user logged in successfully");
+	page.topNavigationBar().clickLogout();
+
+	/* OLD CODE
 	// Login
 	LoginPage loginPage = new LoginPage(this);
 	TestReporter.assertTrue(loginPage.pageLoaded(),"Verify login page is displayed");
@@ -80,6 +87,6 @@ public class Login  extends TestEnvironment {
 	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
 
 	// logout
-	topNavigationBar.clickLogout();
+	topNavigationBar.clickLogout();*/
     }
 }

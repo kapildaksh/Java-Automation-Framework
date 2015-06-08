@@ -10,11 +10,11 @@ import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 
-public class ManageEmployeeModal {
+public class ManageEmployeeModal extends Page{
 
-	private TestEnvironment te;
 	private StringBuffer verificationErrors = new StringBuffer();
 
 	//All the page elements:
@@ -74,8 +74,8 @@ public class ManageEmployeeModal {
 	// ** Build page area **
 	// *********************
 	public ManageEmployeeModal(TestEnvironment te){
-		this.te = te;
-		ElementFactory.initElements(te.getDriver(), this);
+	    	super(te);	
+		initElements(te.getDriver(), this);
 	}
 	
 	public boolean pageLoaded(){
