@@ -23,8 +23,8 @@ import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 
-public class EmployeesPage extends Page{
-	
+public class EmployeesPage{
+    	private TestEnvironment te = null;
 	//All the page elements
 	@FindBy(css= "#all-content > div.header-btn-section > div > div:nth-child(1) > label:nth-child(1)")	
 	private Button btnAll;
@@ -60,9 +60,9 @@ public class EmployeesPage extends Page{
 	// ** Build page area **
 	// *********************
 	public EmployeesPage(TestEnvironment te){
-		super(te);
+		this.te = te;
 		TestReporter.assertTrue(pageLoaded(),"Verify Employees page is displayed");
-		initElements(te.getDriver(), this);
+		ElementFactory.initElements(te.getDriver(), this);
 	}
 	public EmployeesPage(){}
 	

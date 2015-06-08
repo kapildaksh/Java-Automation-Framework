@@ -11,8 +11,8 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 
-public class NewTitlePage extends Page{
-
+public class NewTitlePage {
+    	private TestEnvironment te = null;
 	//All the page elements
 	@FindBy(id = "title_name")
 	private Textbox txtTitle;
@@ -24,8 +24,8 @@ public class NewTitlePage extends Page{
 	// ** Build page area **
 	// *********************
 	public NewTitlePage(TestEnvironment te){
-		super(te);
-		initElements(te.getDriver(), this);
+		this.te = te;
+		ElementFactory.initElements(te.getDriver(), this);
 	}
 	
 	public boolean pageLoaded(){

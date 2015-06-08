@@ -15,8 +15,8 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
-public class DepartmentsPage extends Page{
-		
+public class DepartmentsPage{
+    	private TestEnvironment te = null;
 	//All the page elements
 	@FindBy(linkText = "Add Department")
 	private Link lnkAddDept;
@@ -31,9 +31,9 @@ public class DepartmentsPage extends Page{
 	// ** Build page area **
 	// *********************
 	public DepartmentsPage(TestEnvironment te){
-		super(te);
+		this.te = te;
 		TestReporter.assertTrue(pageLoaded(),"Verify list of departments page is displayed");
-		initElements(te.getDriver(), this);
+		ElementFactory.initElements(te.getDriver(), this);
 	}
 	
 	

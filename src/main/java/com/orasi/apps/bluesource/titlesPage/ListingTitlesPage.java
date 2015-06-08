@@ -18,7 +18,7 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 
-public class ListingTitlesPage extends Page{
+public class ListingTitlesPage {
     	private TestEnvironment te = null;
 	
 	//All the page elements
@@ -37,8 +37,8 @@ public class ListingTitlesPage extends Page{
 	// ** Build page area **
 	// *********************
 	public ListingTitlesPage(TestEnvironment te){
-	    super(te);
-	    initElements(te.getDriver(), this);
+	   this.te = te;
+	    ElementFactory.initElements(te.getDriver(), this);
 	}	
 	
 	public boolean pageLoaded(){

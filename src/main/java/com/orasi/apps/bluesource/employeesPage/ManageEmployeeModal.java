@@ -13,8 +13,8 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 
-public class ManageEmployeeModal extends Page{
-
+public class ManageEmployeeModal{
+    	private TestEnvironment te = null;
 	private StringBuffer verificationErrors = new StringBuffer();
 
 	//All the page elements:
@@ -74,8 +74,8 @@ public class ManageEmployeeModal extends Page{
 	// ** Build page area **
 	// *********************
 	public ManageEmployeeModal(TestEnvironment te){
-	    	super(te);	
-		initElements(te.getDriver(), this);
+	    	this.te = te;
+		ElementFactory.initElements(te.getDriver(), this);
 	}
 	
 	public boolean pageLoaded(){

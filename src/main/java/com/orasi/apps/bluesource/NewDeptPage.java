@@ -9,8 +9,8 @@ import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
-public class NewDeptPage extends Page{
-
+public class NewDeptPage{
+    	private TestEnvironment te = null;
 	//All the page elements
 	@FindBy(id = "department_name")
 	private Textbox txtDept;
@@ -25,8 +25,8 @@ public class NewDeptPage extends Page{
 	// ** Build page area **
 	// *********************
 	public NewDeptPage(TestEnvironment te){
-		super(te);
-		initElements(te.getDriver(), this);
+		this.te = te;
+		ElementFactory.initElements(te.getDriver(), this);
 	}
 	
 	public boolean pageLoaded(){

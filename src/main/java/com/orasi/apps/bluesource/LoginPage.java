@@ -14,7 +14,8 @@ import com.orasi.utils.Page;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 
-public class LoginPage extends Page{
+public class LoginPage{
+    	private TestEnvironment te = null;
 	//all the page elements
 	@FindBy(id = "employee_username")
 	private Textbox txtUsername;
@@ -31,10 +32,10 @@ public class LoginPage extends Page{
 	// *********************
 	// ** Build page area **
 	// *********************
-	public LoginPage(TestEnvironment te){
-		super(te);	
+	public LoginPage(TestEnvironment te){	
+	    	this.te = te;
 		TestReporter.assertTrue(pageLoaded(),"Verify login page is displayed");
-		initElements(te.getDriver(), this);
+		ElementFactory.initElements(te.getDriver(), this);
 	}
 	
 	public boolean pageLoaded(){
