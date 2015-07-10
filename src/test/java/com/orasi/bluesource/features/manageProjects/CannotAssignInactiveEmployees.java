@@ -48,8 +48,6 @@ public class CannotAssignInactiveEmployees  extends TestEnvironment {
 
     @AfterMethod(groups = { "regression",  "manageProjects", "CannotAssignInactiveEmployees" })
     public void closeSession(ITestResult result) {
-	if( result.getMethod().getMethodName().equals("testCannotAssignInactiveEmployeesAsTestLead"))
-		
 	endTest(testName);
     }
 
@@ -98,9 +96,30 @@ public class CannotAssignInactiveEmployees  extends TestEnvironment {
     @Stories("Ensure inactive Employees are not selectable for projects")
     @Severity(SeverityLevel.MINOR)
     @Title("Manage Projects - Cannot Assign Inactive Employees as Test Lead")
-    @Test(alwaysRun=true, groups = { "regression", "manageProjects", "CannotAssignInactiveEmployees" }, dependsOnMethods="testCannotAssignInactiveEmployeesAsClientPartner")
+    @Test(groups = { "regression", "manageProjects", "CannotAssignInactiveEmployees" })
     public void testCannotAssignInactiveEmployeesAsTestLead() {
+	setTestName(new Object() {}.getClass().getEnclosingMethod().getName());
+
+	testStart(testName);
+	
+	// Login
+	LoginPage loginPage = new LoginPage(this);
+	TestReporter.assertTrue(loginPage.pageLoaded(),"Verify login page is displayed");
+	loginPage.login("COMPANY_ADMIN");
+
+	// Verify user is logged in
+	TopNavigationBar topNavigationBar = new TopNavigationBar(this);
+	TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
+
+	//Navigate to Employees Page
+	topNavigationBar.clickProjectsLink();
+	ProjectsPage projectsPage = new ProjectsPage(this);
+	TestReporter.assertTrue(projectsPage.pageLoaded(),"Verify Projects page is displayed");
+
+	// Open New Project Modal 
+	projectsPage.clickAddProjectButton();
 	ManageProjectModal newProject = new ManageProjectModal(this);	
+	TestReporter.assertTrue(newProject.pageLoaded(),"Verify New Project Popup Modal is displayed");
 	TestReporter.assertTrue(newProject.validateTeamLeadIsAvailible(activeEmployee), "Validate " + activeEmployee + " is selectable as a Team Lead");
 	TestReporter.assertTrue(newProject.validateTeamLeadIsNotAvailible(inactiveEmployee), "Validate " + inactiveEmployee + " is not selectable as a Team Lead");
     }    
