@@ -151,7 +151,7 @@ public class ManageProjectModal {
     
     @Step("Then the Client Partner \"{0}\" is not availible for selection")
     public boolean validateClientPartnerIsNotAvailible(String name){
-	return isOptionAvailible(lstClientPartner, name);
+	return !isOptionAvailible(lstClientPartner, name);
     }
     
     @Step("Then the Team Lead \"{0}\" is availible for selection")
@@ -165,7 +165,7 @@ public class ManageProjectModal {
     public boolean validateTeamLeadIsNotAvailible(String name){
 	btnAddTeamLead.click();
 	Listbox box = new ListboxImpl(lstTeamLeads.get(0));
-	return isOptionAvailible(box, name);
+	return !isOptionAvailible(box, name);
     }
     
     private boolean isOptionAvailible(Listbox listbox, String name){
