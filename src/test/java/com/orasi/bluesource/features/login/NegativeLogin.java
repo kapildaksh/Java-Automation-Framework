@@ -61,7 +61,7 @@ public class NegativeLogin  extends TestEnvironment {
     @Features("Login")
     @Stories("Failing to login will not let me leave the Login page")
     @Severity(SeverityLevel.BLOCKER)
-    @Title("Login with incorrect information")
+    @Title("Login - Login with incorrect information")
     @Test(dataProvider = "negativeDataScenario", groups = { "regression", "login" })
     public void testFailedLogin(@Parameter String testScenario, @Parameter String role) {
 	

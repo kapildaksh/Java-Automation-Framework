@@ -59,10 +59,10 @@ public class SearchForEmployee  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can search for an Employee on the Employee Page using any criteria")
     @Severity(SeverityLevel.CRITICAL)
-    @Title("SearchForEmployee")
+    @Title("Manage Employees - Search For Employee")
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "searchEmployees" })
     public void testSearchEmployee(@Parameter String testScenario, @Parameter String role, @Parameter String searchText, @Parameter String column) {
 	

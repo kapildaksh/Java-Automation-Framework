@@ -60,9 +60,9 @@ public class SortProjectsTableColumns  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("ManageProjects")
+    @Features("Manage Projects")
     @Stories("I can sort on a column on the Projects Page")
-    @Title("SortProjectTableColumns")
+    @Title("Manage Projects - Sort Project Table Columns")
     @Severity(SeverityLevel.TRIVIAL)
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageProjects", "sortProjectsTableColumns" })
     public void testSortProjectsColumns(@Parameter String testScenario, @Parameter String role, @Parameter String column, @Parameter String order) {

@@ -55,10 +55,10 @@ public class ShowProjectsPerPage  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("ManageProjects")
+    @Features("Manage Projects")
     @Stories("I can select the number of Projects that is displayed")
     @Severity(SeverityLevel.MINOR)
-    @Title("ShowProjectsPerPage - 5")
+    @Title("Manage Projects - Show 5 Projects Per Page")
     @Test(groups = { "regression", "manageProjects", "showProjectsPerPage" })
     public void testShow5ProjectsPerPage() {
 	
@@ -90,10 +90,10 @@ public class ShowProjectsPerPage  extends TestEnvironment {
 	//topNavigationBar.clickLogout();
     }
     
-    @Features("ManageProjects")
+    @Features("Manage Projects")
     @Stories("I can select the number of Projects that is displayed")
     @Severity(SeverityLevel.MINOR)
-    @Title("ShowProjectsPerPage - 10")
+    @Title("Manage Projects - Show 10 Projects Per Page")
     @Test(groups = { "regression", "manageProjects", "showProjectsPerPage" }, dependsOnMethods="testShow5ProjectsPerPage")
     public void testShow10ProjectsPerPage() {
 	
@@ -106,10 +106,10 @@ public class ShowProjectsPerPage  extends TestEnvironment {
 	//topNavigationBar.clickLogout();
     }
     
-    @Features("ManageProjects")
+    @Features("Manage Projects")
     @Stories("I can select the number of Projects that is displayed")
     @Severity(SeverityLevel.MINOR)
-    @Title("ShowProjectsPerPage - 15")
+    @Title("Manage Projects - Show 15 Projects Per Page")
     @Test(groups = { "regression", "manageProjects", "showProjectsPerPage" }, dependsOnMethods="testShow10ProjectsPerPage")
     public void testShow15ProjectsPerPage() {
 	
@@ -122,10 +122,10 @@ public class ShowProjectsPerPage  extends TestEnvironment {
 	//topNavigationBar.clickLogout();
     }
     
-    @Features("ManageProjects")
+    @Features("Manage Projects")
     @Stories("I can select the number of Projects that is displayed")
     @Severity(SeverityLevel.MINOR)
-    @Title("ShowProjectsPerPage - 20")
+    @Title("Manage Projects - Show 20 Projects Per Page")
     @Test(groups = { "regression", "manageProjects", "showProjectsPerPage" }, dependsOnMethods="testShow15ProjectsPerPage")
     public void testShow20ProjectsPerPage() {
 	

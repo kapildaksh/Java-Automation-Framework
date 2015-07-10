@@ -66,10 +66,10 @@ public class EmployeeCRUD  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can create a new Employee")
     @Severity(SeverityLevel.BLOCKER)
-    @Title("AddEmployee")
+    @Title("Manage Employees - Create Employee")
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "employeeCRUD" })
     public void testAddEmployee(@Parameter String testScenario, @Parameter String role) {
 	
@@ -106,10 +106,10 @@ public class EmployeeCRUD  extends TestEnvironment {
     }    
     
     
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can see an Employee's General Info after creating Employee")
     @Severity(SeverityLevel.NORMAL)
-    @Title("ValidateEmployeeInfo")
+    @Title("Manage Employees - View Employee Summary")
     @Test(groups = { "regression", "manageEmployees", "employeeCRUD" },
     	  dependsOnMethods = {"testAddEmployee"})
     public void testViewEmployeeGeneralInfo() {
@@ -124,10 +124,10 @@ public class EmployeeCRUD  extends TestEnvironment {
     }
     
     
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can Modify an Employee's General Info and view changes")
     @Severity(SeverityLevel.MINOR)
-    @Title("ModifyEmployeeInfo")
+    @Title("Manage Employees Employeesmployees - Modify Employee Information")
     @Test(groups = { "regression", "manageEmployees", "employeeCRUD" },
     	  dependsOnMethods = {"testViewEmployeeGeneralInfo"})
     public void testModifyEmployeeGeneralInfo() {
@@ -144,10 +144,10 @@ public class EmployeeCRUD  extends TestEnvironment {
     }
     
     
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can mark an Employee as Inactive")
     @Severity(SeverityLevel.MINOR)
-    @Title("MarkEmployeeInactive")
+    @Title("Manage Employees - Mark Employee Inactive")
     @Test(groups = { "regression", "manageEmployees", "employeeCRUD" },
     	  dependsOnMethods = {"testModifyEmployeeGeneralInfo"})
     public void testDeactivateEmployee() {

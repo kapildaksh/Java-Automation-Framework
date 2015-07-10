@@ -66,7 +66,7 @@ public class TestManageDepartments  extends TestEnvironment {
     @Features("Manage Departments")
     @Stories("Given when I login as an admin role, I can create a Department")
     @Severity(SeverityLevel.BLOCKER)
-    @Title("Manage Departments - Create")
+    @Title("ManageDepartments - Create Department")
     @Test(dataProvider = "dataScenario", groups = { "regression","manageDeartments"  })
     public void testAddDepartment(@Parameter String testScenario, @Parameter String role,
 	    @Parameter String newDept) {
@@ -108,7 +108,7 @@ public class TestManageDepartments  extends TestEnvironment {
     @Features("Manage Departments")
     @Stories("Given when I login as an admin role, I can modify a Departments name")
     @Severity(SeverityLevel.BLOCKER)
-    @Title("Manage Departments - Modify Name")
+    @Title("ManageDepartments - Modify Department Name")
     @Test(groups = { "regression","manageDeartments"  },dependsOnMethods= "testAddDepartment")
     public void testModifyDepartmentName() {
 	
@@ -134,7 +134,7 @@ public class TestManageDepartments  extends TestEnvironment {
     @Features("Manage Departments")
     @Stories("Given when I login as an admin role, I can modify a Departments parent")
     @Severity(SeverityLevel.NORMAL)
-    @Title("Manage Departments - Modify Parent")
+    @Title("ManageDepartments - Modify Department Parent")
     @Test(groups = { "regression","manageDeartments" },dependsOnMethods= "testModifyDepartmentName")
     public void testModifyDepartmentParent() {
 	
@@ -162,7 +162,7 @@ public class TestManageDepartments  extends TestEnvironment {
     @Features("Manage Departments")
     @Stories("Given when I login as an admin role, I can modify a Departments Increment Hours")
     @Severity(SeverityLevel.NORMAL)
-    @Title("Manage Departments - Modify Increment Hours")
+    @Title("ManageDepartments - Modify Department Increment Hours")
     @Test(groups = { "regression","manageDeartments" },dependsOnMethods= "testModifyDepartmentParent")
     public void testModifyDeparmentIncrementHours() {
 	
@@ -190,7 +190,7 @@ public class TestManageDepartments  extends TestEnvironment {
     @Features("Manage Departments")
     @Stories("Given when I login as an admin role, I can add a Subdepartment")
     @Severity(SeverityLevel.NORMAL)
-    @Title("Manage Departments - Add Subdepartment")
+    @Title("ManageDepartments - Add Subdepartment")
     @Test(groups = { "regression","manageDeartments"},dependsOnMethods= "testModifyDeparmentIncrementHours")
     public void testAddSubdepartment() {
 	
@@ -216,7 +216,7 @@ public class TestManageDepartments  extends TestEnvironment {
     @Features("Manage Departments")
     @Stories("Given when I login as an admin role, I can delete departments")
     @Severity(SeverityLevel.NORMAL)
-    @Title("Manage Departments - Delete Department")
+    @Title("ManageDepartments - Delete Department")
     @Test(groups = { "regression","manageDeartments"},dependsOnMethods= "testAddSubdepartment")
     public void testDeleteDepartment() {
 	

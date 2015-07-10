@@ -58,7 +58,7 @@ public class CannotAssignInactiveEmployees  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("ManageProjects")
+    @Features("Manage Projects")
     @Stories("Ensure inactive Employees are not selectable for projects")
     @Severity(SeverityLevel.MINOR)
     @Title("Manage Projects - Cannot Assign Inactive Employees as Client Partner")
@@ -92,7 +92,7 @@ public class CannotAssignInactiveEmployees  extends TestEnvironment {
 	
     }    
     
-    @Features("ManageProjects")
+    @Features("Manage Projects")
     @Stories("Ensure inactive Employees are not selectable for projects")
     @Severity(SeverityLevel.MINOR)
     @Title("Manage Projects - Cannot Assign Inactive Employees as Test Lead")

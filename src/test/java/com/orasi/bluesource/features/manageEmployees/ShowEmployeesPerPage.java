@@ -54,10 +54,10 @@ public class ShowEmployeesPerPage  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can select the number of Employees that is displayed")
     @Severity(SeverityLevel.MINOR)
-    @Title("ShowEmployeesPerPage - 5")
+    @Title("Manage Employees - Show 5 Employees Per Page")
     @Test(groups = { "regression", "manageEmployees", "showEmployeesPerPage" })
     public void testShow5EmployeesPerPage() {
 	
@@ -86,10 +86,10 @@ public class ShowEmployeesPerPage  extends TestEnvironment {
 
     }
     
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can select the number of Employees that is displayed")
     @Severity(SeverityLevel.MINOR)
-    @Title("ShowEmployeesPerPage - 10")
+    @Title("Manage Employees - Show 10 Employees Per Page")
     @Test(groups = { "regression", "manageEmployees", "showEmployeesPerPage" }, dependsOnMethods="testShow5EmployeesPerPage")
     public void testShow10EmployeesPerPage() {
 	
@@ -101,10 +101,10 @@ public class ShowEmployeesPerPage  extends TestEnvironment {
 	//topNavigationBar.clickLogout();
     }
     
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can select the number of Employees that is displayed")
     @Severity(SeverityLevel.MINOR)
-    @Title("ShowEmployeesPerPage - 15")
+    @Title("Manage Employees - Show 15 Employees Per Page")
     @Test(groups = { "regression", "manageEmployees", "showEmployeesPerPage" }, dependsOnMethods="testShow10EmployeesPerPage")
     public void testShow15EmployeesPerPage() {
 	
@@ -116,10 +116,10 @@ public class ShowEmployeesPerPage  extends TestEnvironment {
 	//topNavigationBar.clickLogout();
     }
     
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can select the number of Employees that is displayed")
     @Severity(SeverityLevel.MINOR)
-    @Title("ShowEmployeesPerPage - 20")
+    @Title("Manage Employees - Show 20 Employees Per Page")
     @Test(groups = { "regression", "manageEmployees", "showEmployeesPerPage" }, dependsOnMethods="testShow15EmployeesPerPage")
     public void testShow20EmployeesPerPage() {
 	

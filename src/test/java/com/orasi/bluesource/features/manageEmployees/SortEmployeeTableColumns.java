@@ -59,9 +59,9 @@ public class SortEmployeeTableColumns  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can sort on a column an Employee on the Employee Page")
-    @Title("SortEmployeeTableColumns")
+    @Title("Manage Employees - Sort Employee Table Columns")
     @Severity(SeverityLevel.TRIVIAL)
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "sortEmployeeTableColumns" })
     public void testSortColumns(@Parameter String testScenario, @Parameter String role, @Parameter String column, @Parameter String order) {

@@ -59,10 +59,10 @@ public class FilterEmployees  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can filter on the Employee Page for Employees that I supervise")
     @Severity(SeverityLevel.MINOR)
-    @Title("FilterDirectEmployee")
+    @Title("Manage Employees - Filter on Direct Employees")
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "filterEmployees" })
     public void testFilterDirectEmployee(@Parameter String testScenario, @Parameter String role) {
 	
@@ -94,10 +94,10 @@ public class FilterEmployees  extends TestEnvironment {
 	topNavigationBar.clickLogout();
     }
     
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can filter on the Employee Page for Employees that are labelled inactive")
     @Severity(SeverityLevel.MINOR)
-    @Title("FilterInactiveEmployee")
+    @Title("Manage Employees - Filter Inactive Employees")
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "filterEmployees" })
     public void testFilterInactiveEmployee(@Parameter String testScenario, @Parameter String role) {
 	
@@ -129,10 +129,10 @@ public class FilterEmployees  extends TestEnvironment {
 	topNavigationBar.clickLogout();
     }
     
-    @Features("ManageEmployees")
+    @Features("Manage Employees")
     @Stories("I can filter back to all Employees after filtering Direct Employees")
     @Severity(SeverityLevel.MINOR)
-    @Title("FilterShowAllEmployee")
+    @Title("Manage Employees - Show All Employees")
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "filterEmployees" })
     public void testFilterShowAllEmployee(@Parameter String testScenario, @Parameter String role) {
 	

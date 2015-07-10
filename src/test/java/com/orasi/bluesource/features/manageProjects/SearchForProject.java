@@ -60,10 +60,10 @@ public class SearchForProject  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("ManageProjects")
+    @Features("Manage Projects")
     @Stories("I can search for an Project on the Projects Page using any criteria")
     @Severity(SeverityLevel.CRITICAL)
-    @Title("SearchForProject")
+    @Title("Manage Projects - Search For Project")
     @Test(dataProvider = "dataScenario", groups = { "regression", "manageProjects", "searchProject" })
     public void testSearchProject(@Parameter String testScenario, @Parameter String role, @Parameter String searchText, @Parameter String column) {
 	

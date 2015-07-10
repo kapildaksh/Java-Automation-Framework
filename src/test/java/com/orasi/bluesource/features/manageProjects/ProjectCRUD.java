@@ -63,7 +63,7 @@ public class ProjectCRUD  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("ManageProjects")
+    @Features("Manage Projects")
     @Stories("I can create a new Project")
     @Severity(SeverityLevel.BLOCKER)
     @Title("Manage Projects - Create Project")
@@ -103,7 +103,7 @@ public class ProjectCRUD  extends TestEnvironment {
     }    
     
   
-    @Features("ManageProjects")
+    @Features("Manage Projects")
     @Stories("I can see an Project's Info after creating project")
     @Severity(SeverityLevel.NORMAL)
     @Title("Manage Projects - Verify Project Details Information")
@@ -120,7 +120,7 @@ public class ProjectCRUD  extends TestEnvironment {
     }
  
      
-    @Features("ManageProjects")
+    @Features("Manage Projects")
     @Stories("I can Modify an Project's Info and view changes")
     @Severity(SeverityLevel.MINOR)
     @Title("Manage Projects - Modify Project")
@@ -141,7 +141,7 @@ public class ProjectCRUD  extends TestEnvironment {
     }
     
     
-    @Features("ManageProjects")
+    @Features("Manage Projects")
     @Stories("I can mark an Project as Inactive")
     @Severity(SeverityLevel.MINOR)
     @Title("Manage Projects - Mark Project Inactive")
