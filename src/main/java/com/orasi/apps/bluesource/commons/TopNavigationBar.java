@@ -44,7 +44,7 @@ public class TopNavigationBar {
 	}
 	
 	public boolean pageLoaded(){
-	    return te.pageLoaded().isDomComplete();
+	    return te.pageLoaded().isElementLoaded(this.getClass(), lnkLogout); 
 	}
 	// *****************************************
 	// ***Page Interactions ***
