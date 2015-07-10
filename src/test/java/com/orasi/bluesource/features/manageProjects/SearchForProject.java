@@ -60,7 +60,7 @@ public class SearchForProject  extends TestEnvironment {
      * @Version: 10/6/2014
      * @Return: N/A
      */
-    @Features("ManageProject")
+    @Features("ManageProjects")
     @Stories("I can search for an Project on the Projects Page using any criteria")
     @Severity(SeverityLevel.CRITICAL)
     @Title("SearchForProject")
