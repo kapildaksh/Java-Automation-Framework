@@ -1,11 +1,11 @@
 package com.orasi.core.interfaces;
 
-import java.util.List;
+import com.orasi.core.interfaces.impl.ListboxImpl;
+import com.orasi.core.interfaces.impl.internal.ImplementedBy;
 
 import org.openqa.selenium.WebElement;
 
-import com.orasi.core.interfaces.impl.ListboxImpl;
-import com.orasi.core.interfaces.impl.internal.ImplementedBy;
+import java.util.List;
 
 /**
  * Interface for a select element.
@@ -48,9 +48,17 @@ public interface Listbox extends Element {
     
     /**
      * @author Justin
+     * @return WebElement list of all selected options in a given listbox 
+     * @see org.openqa.selenium.WebElement#isSelected()
+     */
+    List<WebElement> getAllSelectedOptions();
+    
+    /**
+     * @author Justin
      * @return {@link boolean} TRUE if element is currently select 
      * @see org.openqa.selenium.WebElement#isSelected()
      */
-    @Override
-    boolean isSelected();
+    boolean isSelected(String option);
+    
+    boolean isMultiple();
 }

@@ -1,11 +1,11 @@
 package com.orasi.core.interfaces.impl;
 
+import com.orasi.core.interfaces.Link;
+import com.orasi.utils.TestReporter;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import com.orasi.core.interfaces.Link;
-import com.orasi.utils.TestReporter;
 
 /**
  * Wraps a label on a html form with some behavior.
@@ -25,7 +25,8 @@ public class LinkImpl extends ElementImpl implements Link {
     public void jsClick(WebDriver driver) {
     	JavascriptExecutor executor = (JavascriptExecutor)driver;
     	try{
-    	    executor.executeScript("arguments[0].click();", element);
+    	    executor.executeScript("if( document.createEvent ) {var click_ev = document.createEvent('MouseEvents'); click_ev.initEvent('click', true , true )"
+    	    	+ ";arguments[0].dispatchEvent(click_ev);} else { arguments[0].click();}", element);
     	}catch(RuntimeException rte){
     	    TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]", true);
     	    throw rte;
@@ -43,6 +44,9 @@ public class LinkImpl extends ElementImpl implements Link {
             throw rte;
         }
     	TestReporter.interfaceLog(" Click Link [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
-    	
+    }
+    
+    public String getURL(){
+	return getWrappedElement().getAttribute("href");
     }
 }

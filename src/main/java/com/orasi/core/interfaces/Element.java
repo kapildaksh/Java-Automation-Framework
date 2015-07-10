@@ -1,5 +1,6 @@
 package com.orasi.core.interfaces;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -103,6 +104,7 @@ public interface Element extends WebElement, WrapsElement, Locatable {
     @Override
     String getAttribute(String name);
 
+    ArrayList getAllAttributes(WebDriver driver);
     /**
      * @author Justin
      * @param propertyName - Search for specified property and return it's value

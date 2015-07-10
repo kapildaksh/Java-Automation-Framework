@@ -53,7 +53,7 @@ public class ByAngularModel  extends ByAngular.BaseBy {
         try {
         	privateStringField = o.getClass().getDeclaredField("foundBy");
         	privateStringField.setAccessible(true);
-            privateStringField.set(o, o.toString().replace("unknown locator", "ng-modal: " + model));
+        	privateStringField.set(o, o.toString().replace("unknown locator", "ng-modal: " + model));
 		} catch (NoSuchFieldException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

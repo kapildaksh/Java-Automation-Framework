@@ -16,7 +16,7 @@ import ru.yandex.qatools.allure.annotations.Title;
 import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.apps.bluesource.LoginPage;
-import com.orasi.apps.bluesource.TopNavigationBar;
+import com.orasi.apps.bluesource.commons.TopNavigationBar;
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;

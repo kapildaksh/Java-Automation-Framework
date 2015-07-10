@@ -1,12 +1,11 @@
 package com.orasi.core.interfaces.impl;
 
-import java.util.List;
+import com.orasi.core.interfaces.Listbox;
+import com.orasi.utils.TestReporter;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
-
-import com.orasi.core.interfaces.Listbox;
-import com.orasi.utils.TestReporter;
+import java.util.List;
 
 /**
  * Wrapper around a WebElement for the Select class in Selenium.
@@ -51,7 +50,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
 				throw new NoSuchElementException("The value of [ " + text + " ] was not found in Listbox [  @FindBy: " + getElementLocatorInfo()  + " ]. Acceptable values are " + optionList );
 			}       	
 		}else{
-		    TestReporter.interfaceLog("Skipping input to Textbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
+		    TestReporter.interfaceLog("Skipping input to Listbox [ <b>@FindBy: " + getElementLocatorInfo()  + " </b> ]");
 		}
     }
 
@@ -92,15 +91,30 @@ public class ListboxImpl extends ElementImpl implements Listbox {
      */
     @Override
     public WebElement getFirstSelectedOption() {
-        return innerSelect.getFirstSelectedOption();
+	try{
+	    return innerSelect.getFirstSelectedOption();
+	}catch(NoSuchElementException nse){
+	    return null;
+	}
     }
     
     /**
      * @see org.openqa.selenium.WebElement#isSelected()
      */
     @Override
-    public boolean isSelected() {
-        return ((WebElement) innerSelect).isSelected();
+    public boolean isSelected(String option) {
+	List<WebElement> selectedOptions = innerSelect.getAllSelectedOptions();
+	for( WebElement selectOption : selectedOptions){
+	    if (selectOption.getText().equals(option)) return true;
+	}
+	return false;
+    }
+  
+    public List<WebElement> getAllSelectedOptions() {
+   	return innerSelect.getAllSelectedOptions();
     }
 
+    public boolean isMultiple() {
+   	return innerSelect.isMultiple();
+    }
 }

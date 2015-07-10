@@ -4,11 +4,11 @@
 	<listeners>
 		<listener class-name="com.orasi.utils.Screenshot" />
 	</listeners>
-	<parameter name="browserUnderTest" value="firefox" />
+	<parameter name="browserUnderTest" value="chrome" />
 	<parameter name="environment" value="staging" />
-	<parameter name="runLocation" value="remote" />
-	<parameter name="browserVersion" value="32" />
-	<parameter name="operatingSystem" value="windows" />
+	<parameter name="runLocation" value="sauce" />
+	<parameter name="browserVersion" value="43" />
+	<parameter name="operatingSystem" value="XP" />
 	<test name="Test">
 		<groups>
 			<run>

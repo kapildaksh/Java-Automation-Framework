@@ -1,18 +1,18 @@
 package com.orasi.core.interfaces.impl;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.naming.directory.NoSuchAttributeException;
+import com.orasi.core.interfaces.RadioGroup;
+import com.orasi.core.interfaces.Element;
+import com.orasi.utils.TestReporter;
 
 import org.apache.commons.collections.list.FixedSizeList;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
-import com.orasi.core.interfaces.Element;
-import com.orasi.core.interfaces.RadioGroup;
-import com.orasi.utils.TestReporter;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.naming.directory.NoSuchAttributeException;
 
 /**
  * Wrapper around a WebElement for the Select class in Selenium.
@@ -45,8 +45,7 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	 * @summary - Defines the number of radio buttons in the group by the 
 	 * 		number of 'input' tags found in the wrapped object
 	 */
-	@Override
-	public void setNumberOfRadioButtons() {
+	private void setNumberOfRadioButtons() {
 		numberOfRadioButtons = radioButtons.size();
 	}
 
@@ -83,12 +82,11 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<String> getAllOptions() {
-		List<WebElement> options = radGroup.findElements(By.xpath("label"));
-		stringOptions = FixedSizeList.decorate(Arrays.asList(new String[options.size()]));
+		stringOptions = FixedSizeList.decorate(Arrays.asList(new String[radioButtons.size()]));
 		int loopCounter = 0;
 
-		for (WebElement option : options) {
-			stringOptions.set(loopCounter, option.getText());
+		for (WebElement option : radioButtons) {
+			stringOptions.set(loopCounter, option.getAttribute("value"));
 			loopCounter++;
 		}
 
@@ -99,8 +97,8 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	 * @summary - Defines a List<String> of all options for this instance as well as the 
 	 * 		number of options for the radio group 
 	 */
-	@Override
-	public void setNumberOfOptions() {
+	
+	private void setNumberOfOptions() {
 		getAllOptions();
 		numberOfOptions = stringOptions.size();
 	}
@@ -145,8 +143,8 @@ public class RadioGroupImpl extends ElementImpl implements RadioGroup {
 	 * @summary - Defines a List<String> of all options for this instance and defines the currently 
 	 * 		selected option, if any
 	 */
-	@Override
-	public void setSelectedOption() {
+	
+	private void setSelectedOption() {
 		getAllOptions();
 		selectedOption = stringOptions.get(currentIndex).toString();
 	}

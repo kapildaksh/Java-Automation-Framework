@@ -15,7 +15,7 @@ public enum EmployeesTableColumns {
     PROJECT("Project"),
     LOCATION("Location"),
     VACATION_DAYS_LEFT("Vacation Left"),
-    SICK_DAYS_LEFT("Sick Left"),
+    SICK_DAYS_LEFT("Sick\\Personal Left"),
     FLOATING_DAYS_LEFT("Floating Left");
     
     private String text = "";

@@ -4,6 +4,8 @@ import org.openqa.selenium.support.FindBy;
 
 import ru.yandex.qatools.allure.annotations.Step;
 
+import com.orasi.api.restServices.blueSource.BlueSource;
+import com.orasi.api.restServices.blueSource.employees.EmployeeDetails;
 import com.orasi.core.by.angular.FindByNG;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Label;
@@ -19,37 +21,37 @@ public class EmployeeSummaryPage {
 	
 	//All the page elements
 	
-	@FindBy( xpath= "//div[contains(@class, 'panel-heading') and contains(@data-target,'#panel_body_1')]")
+	@FindBy( xpath= "//div[contains(@class, 'panel-heading') and contains(@data-target,'#panel_body_2')]")
 	private Label lblGeneralInfo;
 	
-	@FindBy(id = "panel_body_1")
+	@FindBy(id = "panel_body_2")
 	private Label lblGeneralInfoBody;
 	
-	@FindBy(xpath = "//div[@id='panel_body_1']/div/table")
+	@FindBy(xpath = "//div[@id='panel_body_2']/div/table")
 	private Webtable tabGeneralInfoTable;
 	
-	@FindByNG(ngButtonText = "Manage")
+	@FindBy(xpath = "//h4[text()='General Info']/../button")
 	private Button btnManageGeneralInfo;
 	
-	@FindBy( xpath= "//div[contains(@class, 'panel-heading') and contains(@data-target,'#panel_body_2')]")
+	@FindBy( xpath= "//div[contains(@class, 'panel-heading') and contains(@data-target,'#panel_body_3')]")
 	private Label lblProjectInfo;
 	
-	@FindBy(id = "panel_body_2")
+	@FindBy(id = "panel_body_3")
 	private Label lblProjectInfoBody;
 	
-	@FindBy(partialLinkText = "projects" )
+	@FindBy(xpath = "//h4[text()='Project Info']/../a" )
 	private Button btnManageProjectInfo;
 	
-	@FindBy( xpath= "//div[contains(@class, 'panel-heading') and contains(@data-target,'#panel_body_3')]")
+	@FindBy( xpath= "//div[contains(@class, 'panel-heading') and contains(@data-target,'#panel_body_1')]")
 	private Label lblTimeOffInfo;
 	
-	@FindBy(id = "panel_body_3")
+	@FindBy(id = "panel_body_1")
 	private Label lblTimeOffInfoBody;
 	
-	@FindBy(xpath = "//*[@id='accordion']/div/div[6]/div[1]/a[2]")
-	private Link lnkManageTimeOff;
+	@FindBy(xpath = "//h4[text()='Time Off Info']/../a")
+	private Button lnkManageTimeOff;
 	
-	@FindBy(linkText = "View")
+	@FindBy(linkText = "Manage")
 	private Link lnkViewTimeOff;
 	
 	
@@ -104,6 +106,34 @@ public class EmployeeSummaryPage {
 	
 	public void viewTimeOffInfo(){
 		if(lblTimeOffInfoBody.getAttribute("class").equals("panel-collapse collapse")) lblTimeOffInfo.click();
+	}
+	
+	//@Step("Then the Employees General Information is correct")
+	public boolean validateAPIGeneralInfo(Employee employee){
+		viewGeneralInfo();
+		BlueSource blueSource = new BlueSource("Company.admin");
+		String url = te.getDriver().getCurrentUrl();
+		int startTrim = url.lastIndexOf('/') + 1;
+		int employeeID = Integer.parseInt(url.substring(startTrim, url.length()));
+		EmployeeDetails apiEmployee = blueSource.employees().getEmployeeDetails(employeeID);
+		
+		if (!employee.getUsername().equalsIgnoreCase(apiEmployee.getUsername())) {TestReporter.logFailure("User name in API did not match"); return false;}
+		if (!employee.getRole().equalsIgnoreCase(apiEmployee.getRole())) {TestReporter.logFailure("Role in API did not match"); return false;}
+		if (!employee.getStatus().equalsIgnoreCase(apiEmployee.getStatus())) {TestReporter.logFailure("Status in API did not match"); return false;}
+		if (!employee.getLocation().equalsIgnoreCase(apiEmployee.getLocation())) {TestReporter.logFailure("Location in API did not match"); return false;}
+		if (!employee.getStartDate().equals(apiEmployee.getStart_date())) {TestReporter.logFailure("Start Date in API did not match"); return false;}
+		if (!employee.getCellPhone().equalsIgnoreCase(apiEmployee.getCell_phone())) {TestReporter.logFailure("Cell Phone in API did not match"); return false;}
+		if (!employee.getOfficePhone().equalsIgnoreCase(apiEmployee.getOffice_phone())) {TestReporter.logFailure("Office Phone in API did not match"); return false;}
+		if (!employee.getEmail().equalsIgnoreCase(apiEmployee.getEmail())) {TestReporter.logFailure("Email in API did not match"); return false;}
+		if (!employee.getImName().equalsIgnoreCase(apiEmployee.getIm_name())) {TestReporter.logFailure("IM Username in API did not match"); return false;}
+		if (!employee.getImClient().equalsIgnoreCase(apiEmployee.getIm_client())) {TestReporter.logFailure("IM Client in API did not match"); return false;}
+		/*
+		 *  This items are returned as ID's 
+		 *if (!employee.getDepartment().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te, DEPARTMENT, 2))) {TestReporter.logFailure("Department did not match"); return false;}
+		 *if (!employee.getTitle().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te, TITLE, 2))) {TestReporter.logFailure("Title did not match"); return false;}
+		 *if (!employee.getManager().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te, MANAGER, 2))) {TestReporter.logFailure("Manager did not match"); return false;}
+		*/				
+		return true;
 	}
 	
 	@Step("Then the Employees General Information is correct")

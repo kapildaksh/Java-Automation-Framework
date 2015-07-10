@@ -1,6 +1,8 @@
 package com.orasi.core.interfaces.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.By.ByClassName;
@@ -66,7 +68,7 @@ public class ElementImpl implements Element {
 
 	@Override
 	public void focus(WebDriver driver) {
-		new Actions(driver).moveToElement(element).perform();
+		new Actions(driver).moveToElement(element).click().perform();
 	}
 
 	@Override
@@ -225,7 +227,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean syncPresent(WebDriver driver) {
-		return syncPresent(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+		return syncPresent(driver, Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -253,13 +255,14 @@ public class ElementImpl implements Element {
 			boolean returnError) {
 		boolean found = false;
 		double loopTimeout = 0;
+		
 		By locator = getElementLocator();
-		loopTimeout = timeout * 10;
+		loopTimeout = timeout ;
 		TestReporter.interfaceLog("<i> Syncing to element [ <b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>PRESENT</b> in DOM within [ " + timeout
 				+ " ] seconds.</i>");
-
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (webElementPresent(driver, locator)) {
@@ -267,12 +270,12 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(100);
+				Thread.sleep(250);
 
 			} catch (Exception e) {
 			}
 		}
-
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -300,7 +303,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean syncVisible(WebDriver driver) {
-	    return syncVisible(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	    return syncVisible(driver, Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -329,12 +332,12 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 
-		loopTimeout = Integer.valueOf(timeout) * 10;
+		loopTimeout = timeout *4;
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>VISIBLE<b> within [ " + timeout
 				+ " ] seconds.</i>");
-
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (webElementVisible(driver, element)) {
@@ -342,11 +345,11 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(100);
+				Thread.sleep(250);
 			} catch (Exception e) {
 			}
 		}
-
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -373,7 +376,7 @@ public class ElementImpl implements Element {
 	 * */
 	@Override
 	public boolean syncHidden(WebDriver driver) {
-	    return syncHidden(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	    return syncHidden(driver, Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -401,12 +404,12 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		long loopTimeout = 0;
 
-		loopTimeout = Long.valueOf(timeout) * 10;
+		loopTimeout = timeout *4;
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>HIDDEN</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
-
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (!webElementVisible(driver, element)) {
@@ -414,12 +417,12 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(100);
+				Thread.sleep(250);
 			} catch (Exception e) {
 			}
 
 		}
-
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -447,7 +450,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean syncEnabled(WebDriver driver) {
-	    return syncEnabled(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	    return syncEnabled(driver, Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -478,12 +481,12 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 
-		loopTimeout = Integer.valueOf(timeout) * 10;
+		loopTimeout = timeout *4 ;
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>ENABLED</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
-
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (webElementEnabled(driver, element)) {
@@ -491,12 +494,12 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(100);
+				Thread.sleep(250);
 			} catch (Exception e) {
 			}
 
 		}
-
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -524,7 +527,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean syncDisabled(WebDriver driver) {
-	    return syncDisabled(driver, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	    return syncDisabled(driver, Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -556,12 +559,12 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 
-		loopTimeout = Integer.valueOf(timeout) * 10;
+		loopTimeout = timeout*4 ;
 		TestReporter.interfaceLog("<i>Syncing to element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be <b>DISABLED</b> within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
-
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (!webElementEnabled(driver, element)) {
@@ -569,12 +572,12 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(100);
+				Thread.sleep(250);
 			} catch (Exception e) {
 			}
 
 		}
-
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -602,7 +605,7 @@ public class ElementImpl implements Element {
 	 */
 	@Override
 	public boolean syncTextInElement(WebDriver driver, String text) {
-	    return syncTextInElement(driver, text, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+	    return syncTextInElement(driver, text, Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -616,7 +619,7 @@ public class ElementImpl implements Element {
 	 * 
 	 */
 	public boolean syncTextInElement(WebDriver driver, String text, int timeout) {		
-	    return syncTextInElement(driver, text, Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT, true);
+	    return syncTextInElement(driver, text, Constants.ELEMENT_TIMEOUT, true);
 	}
 
 	/**
@@ -634,12 +637,12 @@ public class ElementImpl implements Element {
 		boolean found = false;
 		double loopTimeout = 0;
 
-		loopTimeout = Integer.valueOf(timeout) * 10;
+		loopTimeout = timeout*4 ;
 		TestReporter.interfaceLog("<i>Syncing to text [<b>" + text  + "</b> ] in element [<b>@FindBy: "
 				+ getElementLocatorInfo()
 				+ "</b> ] to be displayed within [ <b>" + timeout
 				+ "</b> ] seconds.</i>");
-
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		for (double seconds = 0; seconds < loopTimeout; seconds += 1) {
 
 			if (webElementTextPresent(driver, element, text)) {
@@ -647,12 +650,12 @@ public class ElementImpl implements Element {
 				break;
 			}
 			try {
-				Thread.sleep(100);
+				Thread.sleep(250);
 			} catch (Exception e) {
 			}
 
 		}
-
+		driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT, TimeUnit.SECONDS);
 		if (!found && returnError) {
 			dateAfter = new java.util.Date();
 			TestReporter.interfaceLog("<i>Element [<b>@FindBy: "
@@ -710,11 +713,14 @@ public class ElementImpl implements Element {
 			Point location = element.getLocation();
 
 			Dimension size = element.getSize();
-			if ((location.getX() > 0 & location.getY() > 0)
-					| (size.getHeight() > 0 & size.getWidth() > 0)) {
-				return true;
+			if ((location.getX() > 0 & location.getY() > 0)	| (size.getHeight() > 0 & size.getWidth() > 0)) {
+			    if(element.getAttribute("hidden") != null) return false;
+			    if(element.getAttribute("type") != null ) {
+				if(element.getAttribute("type").equals("hidden")) return false;
+			    }
+			    return true;
 			} else {
-				return false;
+			    return false;
 			}
 
 		} catch (WebDriverException | ClassCastException e) {
@@ -804,10 +810,7 @@ public class ElementImpl implements Element {
 		String locator = "";
 		int startPosition = 0;
 		try {
-			startPosition = element.toString().lastIndexOf("->") + 3;
-			locator = element.toString().substring(startPosition,
-					element.toString().lastIndexOf(":"));
-			locator = locator.trim();
+			locator = getElementLocatorAsString();
 			switch (locator) {
 			case "className":
 				by = new ByClassName(getElementIdentifier());
@@ -842,10 +845,17 @@ public class ElementImpl implements Element {
 	public String getElementIdentifier() {
 		String locator = "";
 		int startPosition = 0;
-		startPosition = element.toString().lastIndexOf(": ") + 2;
-		locator = element.toString().substring(startPosition,
-				element.toString().lastIndexOf("]"));
-
+		int endPosition = 0;
+		if(element.getClass().toString().contains("htmlunit")){
+		    startPosition = element.toString().indexOf("=\"") + 2;
+		    endPosition = element.toString().indexOf("\"",element.toString().indexOf("=\"") + 3);
+		    if (startPosition == -1 | endPosition == -1) locator = element.toString();
+		    else locator = element.toString().substring(startPosition, endPosition);
+		}else{
+		    startPosition = element.toString().lastIndexOf(": ") + 2;
+		    locator = element.toString().substring(startPosition,
+			    		element.toString().lastIndexOf("]"));
+		}
 		return locator.trim();
 	}
 
@@ -858,10 +868,15 @@ public class ElementImpl implements Element {
 	private String getElementLocatorAsString() {
 		int startPosition = 0;
 		String locator = "";
+		if(element.getClass().toString().contains("htmlunit")){
+		    startPosition =element.toString().indexOf(" ");	
+		    if (startPosition == -1) locator = element.toString();
+		    else locator = element.toString().substring(startPosition, element.toString().indexOf("="));
+		}else{
 		startPosition = element.toString().lastIndexOf("->") + 3;
 		locator = element.toString().substring(startPosition,
 				element.toString().lastIndexOf(":"));
-
+		}
 		locator = locator.trim();
 		return locator;
 
@@ -882,5 +897,9 @@ public class ElementImpl implements Element {
 	public void scrollIntoView(WebDriver driver) {
 		((JavascriptExecutor) driver).executeScript(
 				"arguments[0].scrollIntoView(true);", element);
+	}
+	
+	public ArrayList getAllAttributes(WebDriver driver){
+	    return (ArrayList)((JavascriptExecutor) driver).executeScript("var s = []; var attrs = arguments[0].attributes; for (var l = 0; l < attrs.length; ++l) { var a = attrs[l]; s.push(a.name + ':' + a.value); } ; return s;",getWrappedElement());
 	}
 }

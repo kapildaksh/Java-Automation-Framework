@@ -6,6 +6,6 @@ public enum HowNG {
 	  NGCONTROLLER,
 	  NGMODEL,
 	  NGREPEAT,
-	  
+	  NGSHOW
 
 	}

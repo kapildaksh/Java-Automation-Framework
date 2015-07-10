@@ -1,6 +1,9 @@
 package com.orasi.core.interfaces.impl.internal;
 
-import static com.orasi.core.interfaces.impl.internal.ImplementedByProcessor.getWrapperClass;
+import com.orasi.core.interfaces.Element;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
@@ -9,10 +12,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.pagefactory.ElementLocator;
-
-import com.orasi.core.interfaces.Element;
+import static com.orasi.core.interfaces.impl.internal.ImplementedByProcessor.getWrapperClass;
 
 /**
  * Wraps a list of WebElements in multiple wrapped elements.

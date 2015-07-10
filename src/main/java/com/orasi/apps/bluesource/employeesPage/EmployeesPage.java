@@ -41,10 +41,7 @@ public class EmployeesPage {
 	
 	@FindBy(css = "input[id = 'search-bar']")
 	private Textbox txtSearch;
-	
-	@FindBy(css = "a.ng-binding")
-	private Element tableCell;
-	
+		
 	@FindBy(css = ".alert-success.alert-dismissable")
 	private Label lblSuccessMsg;
 	
@@ -154,7 +151,7 @@ public class EmployeesPage {
 	@Step("When I click the Show Inactive Button on the Employees Page")
 	public void clickInactiveButton(){
 	    loadingModal.syncHidden(te.getDriver());
-	    btnDirect.click();
+	    btnShowInactive.click();
 	    te.pageLoaded().isDomComplete();
 	} 
 	

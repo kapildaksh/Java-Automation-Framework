@@ -16,7 +16,7 @@ import ru.yandex.qatools.allure.annotations.Title;
 import ru.yandex.qatools.allure.model.SeverityLevel;
 
 import com.orasi.apps.bluesource.LoginPage;
-import com.orasi.apps.bluesource.TopNavigationBar;
+import com.orasi.apps.bluesource.commons.TopNavigationBar;
 import com.orasi.apps.bluesource.employeesPage.EmployeesPage;
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestEnvironment;
@@ -26,12 +26,6 @@ import com.orasi.utils.dataProviders.ExcelDataProvider;
 public class ShowEmployeesPerPage  extends TestEnvironment {
 
     private String application = "Bluesource";
-    
-    @DataProvider(name = "dataScenario")
-    public Object[][] scenarios() {
-	return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH
-		+ "ManageEmployees.xlsx", "ShowEmployeesPerPage").getTestData();
-    }
 
     @BeforeTest(groups = { "regression", "manageEmployees", "showEmployeesPerPage" })
     @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
@@ -47,7 +41,8 @@ public class ShowEmployeesPerPage  extends TestEnvironment {
     }
 
     @AfterMethod(groups = { "regression", "manageEmployees", "showEmployeesPerPage" })
-    public synchronized void closeSession(ITestResult test) {
+    public synchronized void closeSession(ITestResult result) {
+	if(!result.isSuccess() || result.getMethod().getMethodName().equals("testShow20EmployeesPerPage"))
 	endTest(testName);
     }
 
@@ -62,9 +57,9 @@ public class ShowEmployeesPerPage  extends TestEnvironment {
     @Features("ManageEmployees")
     @Stories("I can select the number of Employees that is displayed")
     @Severity(SeverityLevel.MINOR)
-    @Title("ShowEmployeesPerPage")
-    @Test(dataProvider = "dataScenario", groups = { "regression", "manageEmployees", "showEmployeesPerPage" })
-    public void testShowEmployeesPerPage(@Parameter String testScenario, @Parameter String role, @Parameter String numberOfRows) {
+    @Title("ShowEmployeesPerPage - 5")
+    @Test(groups = { "regression", "manageEmployees", "showEmployeesPerPage" })
+    public void testShow5EmployeesPerPage() {
 	
 	testName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -74,7 +69,7 @@ public class ShowEmployeesPerPage  extends TestEnvironment {
 	// Login
 	LoginPage loginPage = new LoginPage(this);
 	TestReporter.assertTrue(loginPage.pageLoaded(),"Verify login page is displayed");
-	loginPage.login(role);
+	loginPage.login("COMPANY_ADMIN");
 
 	// Verify user is logged in
 	TopNavigationBar topNavigationBar = new TopNavigationBar(this);
@@ -86,10 +81,54 @@ public class ShowEmployeesPerPage  extends TestEnvironment {
 	TestReporter.assertTrue(employeesPage.pageLoaded(),"Verify Employees page is displayed");
 	
 	//Search for Employee
-	employeesPage.setRowsPerPageDisplayed(numberOfRows);
-	TestReporter.assertTrue(employeesPage.validateRowsPerPageDisplayed(numberOfRows), "Validate " + numberOfRows + " rows was displayed on the Employee Table");
+	employeesPage.setRowsPerPageDisplayed("5");
+	TestReporter.assertTrue(employeesPage.validateRowsPerPageDisplayed("5"), "Validate 5 rows was displayed on the Employee Table");
+
+    }
+    
+    @Features("ManageEmployees")
+    @Stories("I can select the number of Employees that is displayed")
+    @Severity(SeverityLevel.MINOR)
+    @Title("ShowEmployeesPerPage - 10")
+    @Test(groups = { "regression", "manageEmployees", "showEmployeesPerPage" }, dependsOnMethods="testShow5EmployeesPerPage")
+    public void testShow10EmployeesPerPage() {
+	
+	EmployeesPage employeesPage = new EmployeesPage(this);
+	employeesPage.setRowsPerPageDisplayed("10");
+	TestReporter.assertTrue(employeesPage.validateRowsPerPageDisplayed("10"), "Validate 10 rows was displayed on the Employee Table");
 
 	// logout
+	//topNavigationBar.clickLogout();
+    }
+    
+    @Features("ManageEmployees")
+    @Stories("I can select the number of Employees that is displayed")
+    @Severity(SeverityLevel.MINOR)
+    @Title("ShowEmployeesPerPage - 15")
+    @Test(groups = { "regression", "manageEmployees", "showEmployeesPerPage" }, dependsOnMethods="testShow10EmployeesPerPage")
+    public void testShow15EmployeesPerPage() {
+	
+	EmployeesPage employeesPage = new EmployeesPage(this);
+	employeesPage.setRowsPerPageDisplayed("15");
+	TestReporter.assertTrue(employeesPage.validateRowsPerPageDisplayed("15"), "Validate 15 rows was displayed on the Employee Table");
+
+	// logout
+	//topNavigationBar.clickLogout();
+    }
+    
+    @Features("ManageEmployees")
+    @Stories("I can select the number of Employees that is displayed")
+    @Severity(SeverityLevel.MINOR)
+    @Title("ShowEmployeesPerPage - 20")
+    @Test(groups = { "regression", "manageEmployees", "showEmployeesPerPage" }, dependsOnMethods="testShow15EmployeesPerPage")
+    public void testShow20EmployeesPerPage() {
+	
+	EmployeesPage employeesPage = new EmployeesPage(this);
+	employeesPage.setRowsPerPageDisplayed("20");
+	TestReporter.assertTrue(employeesPage.validateRowsPerPageDisplayed("20"), "Validate 20 rows was displayed on the Employee Table");
+
+	// logout
+	TopNavigationBar topNavigationBar = new TopNavigationBar(this);
 	topNavigationBar.clickLogout();
     }
     

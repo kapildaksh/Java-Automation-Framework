@@ -31,7 +31,7 @@ package com.orasi.utils;
 public class Base64Coder {
 
     public static void main(String[] args) {
-	byte[] toEncode = "OrasiBluesource".getBytes();
+	byte[] toEncode = "bluesourcetesting".getBytes();
         System.out.println(encode(toEncode)); // Display the string.
     }
     

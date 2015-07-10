@@ -1,7 +1,7 @@
 package com.orasi.core.by.angular;
-import java.util.List;
-
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 	public interface FindsByNGModel {
 	  WebElement findElementByNGModel(String using);

@@ -270,10 +270,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 		}
 	    }
 	}
-	Assert.assertEquals(Boolean.valueOf(found), Boolean.TRUE,
-		"No cell in column [" + String.valueOf(columnPosition)
-			+ "] was found to contain the text [" + text + "].");
-	return rowFound;
+	
+	return 0;
     }
 
     /**

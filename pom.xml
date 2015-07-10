@@ -85,12 +85,11 @@
 		</plugins>
 	</reporting>
 	<dependencies>
-		
-		<!-- Start Selenium requirements -->
+		<!-- Start Selenium requirements: Up-to-date as of 6-11-2015 -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>2.43.1</version>
+			<version>2.46.0</version>
 			<!-- Selenium Versions not to use 2.44.0 - Issues with OS Platform Capabilities 
 				https://code.google.com/p/selenium/issues/detail?id=8083 https://code.google.com/p/selenium/issues/detail?id=8333 
 				2.45.0 - Issues with Test Execution speed https://code.google.com/p/selenium/issues/detail?id=8551 -->
@@ -107,37 +106,35 @@
 		</dependency>
 
 		<!-- End Selenium requirements -->
-
 		<!-- Start Allure Reports requirements -->
 		<dependency>
 			<groupId>ru.yandex.qatools.allure</groupId>
 			<artifactId>allure-testng-adaptor</artifactId>
-			<version>${allure.version}</version>
+			<version>1.4.13</version>
 			<exclusions>
 				<exclusion>
 					<groupId>junit</groupId>
 					<artifactId>junit</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency> 
+		</dependency>
 
 		<!-- End Allure Reports requirements -->
-		
-		<!-- Start Sauce Labs requirements -->
+		<!-- Start Sauce Labs requirements: Up-to-date as of 6-11-2015 -->
 		<dependency>
 			<groupId>com.saucelabs</groupId>
 			<artifactId>sauce_java_common</artifactId>
-			<version>2.1.18</version>
+			<version>2.1.19</version>
 		</dependency>
 		<dependency>
 			<groupId>com.saucelabs</groupId>
 			<artifactId>sauce_junit</artifactId>
-			<version>2.1.18</version>
+			<version>2.1.19</version>
 		</dependency>
 		<dependency>
 			<groupId>com.saucelabs</groupId>
 			<artifactId>sauce_testng</artifactId>
-			<version>2.1.18</version>
+			<version>2.1.19</version>
 		</dependency>
 		<dependency>
 			<groupId>com.saucelabs.selenium</groupId>
@@ -155,42 +152,72 @@
 			<version>1.0.22</version>
 		</dependency>
 		<!-- End Sauce Labs requirements -->
-
-		<!-- Start HTML Unit Driver requirements -->
-
+		<dependency>
+    		<groupId>com.codeborne</groupId>
+    		<artifactId>phantomjsdriver</artifactId>
+   			<version>1.2.1</version>
+		</dependency>
+		<!-- Start HTML Unit Driver requirements: Up-to-date as of 6-11-2015 -->
 		<dependency>
 			<groupId>net.sourceforge.htmlunit</groupId>
 			<artifactId>htmlunit-core-js</artifactId>
-			<version>2.6</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.htmlunit</groupId>
-			<artifactId>htmlunit</artifactId>
-			<version>2.6</version>
+			<version>2.17</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.htmlunit</groupId>
 			<artifactId>webdriver</artifactId>
 			<version>2.6</version>
 		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.46.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>net.sourceforge.htmlunit</groupId>
+					<artifactId>htmlunit</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpcore</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.htmlunit</groupId>
+			<artifactId>htmlunit</artifactId>
+			<version>2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.4</version>
+		</dependency>
 
-		<!-- End HTML Unit Driver requirements -->
+		<!-- End HTML Unit Driver requirements: Up-to-date as of 6-11-2015 -->
 
 		<!-- Start General requirements -->
 		<dependency>
 			<groupId>xml-apis</groupId>
 			<artifactId>xml-apis</artifactId>
 			<version>1.4.01</version>
+			<!-- IMPORTANT!: Please verify release date. Versions are not in order 
+				Version 2.x are outdated being release in 2002 -->
 		</dependency>
 
 		<!-- End General requirements -->
 
-		<!-- Start Excel Document Reader requirements -->
+		<!-- Start Excel Document Reader requirements: Up-to-date as of 6-11-2015 -->
 
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>3.11</version>
+			<version>3.12</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.jexcelapi</groupId>
@@ -198,19 +225,19 @@
 			<version>2.6.12</version>
 		</dependency>
 
-		<!-- End Excel Document Reader requirements -->
+		<!-- End Excel Document Reader requirements: Up-to-date as of 6-11-2015 -->
 
 		<!-- Start Database drivers requirements -->
 
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.21</version>
+			<version>5.1.35</version>
 		</dependency>
 
 		<!-- End Database drivers requirements -->
 
-		<!-- Start REST Core requirements -->
+		<!-- Start REST Core requirements: Up-to-date as of 6-11-2015 -->
 
 		<dependency>
 			<groupId>com.jayway.restassured</groupId>
@@ -225,17 +252,17 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.4.0</version>
+			<version>2.5.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
-			<version>2.4.0</version>
+			<version>2.5.4</version>
 		</dependency>
 
 		<!-- End REST Core requirements -->
 
-		<!-- Start Soap Core requirements -->
+		<!-- Start Soap Core requirements: Up-to-date as of 6-11-2015 -->
 		<dependency>
 			<groupId>eviware</groupId>
 			<artifactId>soapui</artifactId>
@@ -249,12 +276,12 @@
 		<dependency>
 			<groupId>com.fifesoft</groupId>
 			<artifactId>languagesupport</artifactId>
-			<version>r751</version>
+			<version>r795</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-cli</groupId>
 			<artifactId>commons-cli</artifactId>
-			<version>1.2</version>
+			<version>1.3</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-ssl</groupId>
@@ -262,24 +289,24 @@
 			<version>0.3.11</version>
 		</dependency>
 		<dependency>
-			<groupId>bouncycastle</groupId>
-			<artifactId>bcprov-jdk15</artifactId>
-			<version>144</version>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk16</artifactId>
+			<version>1.46</version>
 		</dependency>
 		<dependency>
 			<groupId>wsdl4j</groupId>
 			<artifactId>wsdl4j</artifactId>
-			<version>1.6.2</version>
+			<version>1.6.3</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<version>1.8.0</version>
+			<version>1.9.2</version>
 		</dependency>
 		<dependency>
 			<groupId>jaxen</groupId>
 			<artifactId>jaxen</artifactId>
-			<version>1.1</version>
+			<version>1.1.6</version>
 		</dependency>
 		<!-- End Soap Core requirements -->
 	</dependencies>

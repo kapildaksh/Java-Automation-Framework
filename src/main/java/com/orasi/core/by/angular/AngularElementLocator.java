@@ -9,10 +9,10 @@ import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import com.orasi.core.angular.ByAngular;
-
+@SuppressWarnings("unused")
 public class AngularElementLocator implements ElementLocator {
 	  private final WebDriver driver;
-	  private final FindByNG ngLocator;
+	  private final FindByNG ngLocator;	  
 	  private static ByAngular ng;
 		
 	  
@@ -23,35 +23,34 @@ public class AngularElementLocator implements ElementLocator {
 	  }
 	  
 	  //@Override
-	  @SuppressWarnings("static-access")
+	  @Override
 	public WebElement findElement() {
 		  RemoteWebElement element = null;
 		  if (!ngLocator.ngModel().toString().isEmpty()){
-			  element = (RemoteWebElement) driver.findElement(ng.model(ngLocator.ngModel()));
+			  element = (RemoteWebElement) driver.findElement(ByAngular.model(ngLocator.ngModel()));
 		  }else if(!ngLocator.ngRepeater().toString().isEmpty()){
-			  element = (RemoteWebElement) driver.findElement(ng.repeater(ngLocator.ngRepeater()));
+			  element = (RemoteWebElement) driver.findElement(ByAngular.repeater(ngLocator.ngRepeater()));
 		  }else if(!ngLocator.ngButtonText().toString().isEmpty()){
-			  element = (RemoteWebElement) driver.findElement(ng.buttonText(ngLocator.ngButtonText()));
-		  }else if(!ngLocator.ngShow().toString().isEmpty()){
-			  element = (RemoteWebElement) driver.findElement(ng.show(ngLocator.ngShow()));
+			  element = (RemoteWebElement) driver.findElement(ByAngular.buttonText(ngLocator.ngButtonText()));
 		  }
 		 // return element.findElement(ng.model(ngLocator.ngModel()));
 		  return element;
 	  }
 	  
-	  @SuppressWarnings({ "static-access" })// @Override
+	  @Override
+	@SuppressWarnings({ })// @Override
 	  public List<WebElement> findElements() {
 		  
 		  List<WebElement> elements = null;
 		  if (!ngLocator.ngModel().toString().isEmpty()){
-			  elements = driver.findElements(ng.model(ngLocator.ngModel()));
+			  elements = driver.findElements(ByAngular.model(ngLocator.ngModel()));
 		  }else if(!ngLocator.ngRepeater().toString().isEmpty()){
-			  elements = driver.findElements(ng.repeater(ngLocator.ngRepeater()));
+			  elements = driver.findElements(ByAngular.repeater(ngLocator.ngRepeater()));
 		  }else if(!ngLocator.ngButtonText().toString().isEmpty()){
-			  elements = driver.findElements(ng.buttonText(ngLocator.ngButtonText()));
-		  }else if(!ngLocator.ngShow().toString().isEmpty()){
-			  elements = driver.findElements(ng.show(ngLocator.ngShow()));
+			  elements = driver.findElements(ByAngular.buttonText(ngLocator.ngButtonText()));
+
 		  }
+		  
 		  return elements;
 	  }
 }

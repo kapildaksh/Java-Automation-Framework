@@ -66,6 +66,7 @@ public class TestReporter {
     
     public static void logFailure(String message){
 	Reporter.log(getTimestamp() + " <font size = 2 color=\"red\"><b><u> FAILURE: " + message + "</font></u></b><br />");
+	if(getPrintToConsole()) System.out.println(getTimestamp() + "FAILURE: " + message);
     }
 
     public static void assertTrue(boolean condition, String description) {	

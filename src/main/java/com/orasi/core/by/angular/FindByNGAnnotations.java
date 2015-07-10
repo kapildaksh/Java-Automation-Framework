@@ -31,6 +31,8 @@ public class FindByNGAnnotations extends Annotations {
 			return ByNG.ngButtonText(using);
 		case NGCONTROLLER:
 			return ByNG.ngController(using);
+		case NGSHOW:
+			return ByNG.ngShow(using);
 		default:
 			// Note that this shouldn't happen (eg, the above matches all
 			// possible values for the How enum)
@@ -48,7 +50,9 @@ public class FindByNGAnnotations extends Annotations {
 		if (!"".equals(findBy.ngButtonText()))
 			return ByNG.ngButtonText(findBy.ngButtonText());
 		if (!"".equals(findBy.ngController()))
-			return ByNG.ngButtonText(findBy.ngController());
+			return ByNG.ngController(findBy.ngController());
+		if (!"".equals(findBy.ngShow()))
+			return ByNG.ngShow(findBy.ngShow());
 		// Fall through
 		return null;
 	}
@@ -69,6 +73,10 @@ public class FindByNGAnnotations extends Annotations {
 			finders.add("ngModel: " + findBy.ngModel());
 		if (!"".equals(findBy.ngButtonText()))
 			finders.add("ngButton: " + findBy.ngButtonText());
+		if (!"".equals(findBy.ngController()))
+			finders.add("ngController: " + findBy.ngController());
+		if (!"".equals(findBy.ngShow()))
+			finders.add("ngShow: " + findBy.ngShow());
 		// A zero count is okay: it means to look by name or id.
 		if (finders.size() > 1) {
 			throw new IllegalArgumentException(

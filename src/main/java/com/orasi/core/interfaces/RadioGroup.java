@@ -15,7 +15,7 @@ public interface RadioGroup extends Element {
 	 * @author - Waits
 	 * @summary - Sets the number of radio buttons found in the group
 	 */
-	public void setNumberOfRadioButtons();
+	//public void setNumberOfRadioButtons();
 	
 	/**
 	 * @author - Waits
@@ -47,7 +47,7 @@ public interface RadioGroup extends Element {
 	 * @author - Waits
 	 * @summary - Sets the number of values/options found in the radio group
 	 */
-	public void setNumberOfOptions();
+	//public void setNumberOfOptions();
 	
 	/**
 	 * @author - Waits
@@ -60,7 +60,7 @@ public interface RadioGroup extends Element {
 	 * @author - Waits
 	 * @summary - Sets the value/option of the selected radio button
 	 */
-	public void setSelectedOption();
+	//public void setSelectedOption();
 	
 	/**
 	 * @author - Waits

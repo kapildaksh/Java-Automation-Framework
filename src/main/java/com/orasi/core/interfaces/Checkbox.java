@@ -30,7 +30,7 @@ public interface Checkbox extends Element {
     /**
      * @summary - Un-checks checkbox if checked.
      */
-    void uncheck();
+    void uncheck(); 
 
     /**
      * @summary - Check if an element is selected, and return boolean.
@@ -42,11 +42,11 @@ public interface Checkbox extends Element {
      * @summary - Check if an element is selected, and return boolean.
      * @param driver - Current active WebDriver object
      */
-    void checkValidate(WebDriver driver);
+    boolean checkValidate(WebDriver driver);
     
     /**
-     * @summary - Check if an element is selected, toggles it if it is and verifies that the checkbox is selected.
+     * @summary - Check if an element is not selected, and return boolean.
      * @param driver - Current active WebDriver object
      */
-    void uncheckValidate(WebDriver driver);
+    boolean uncheckValidate(WebDriver driver);
 }
